@@ -8,9 +8,27 @@ Add references only after they have been read or locally verified.
 
 ## Local Evidence
 
-- Active framework evidence pending.
-- macOS 27 beta SDK evidence pending.
+- `research/MediaRemote/baseline-2026-07-15.md`
+- Active system framework shell: `/System/Library/PrivateFrameworks/MediaRemote.framework`
+- Active system support binaries: `mediaremoted`, `mediaremoteagent`
+- Selected Xcode 26 SDK stub: `MediaRemote.tbd`
+- Xcode 27 beta SDK stub: `MediaRemote.tbd`
 
 ## Related Surfaces
 
 Track related frameworks, daemons, XPC services, and public APIs discovered during the first pass.
+
+Initial related surfaces from `mediaremoted` linkage and entitlements:
+
+- `MediaControl.framework`
+- `AVRouting.framework`
+- `Rapport.framework`
+- `IDS.framework`
+- `HomeKit.framework`
+- `SystemStatus.framework`
+- `AppIntentsServices.framework`
+- `BiomeLibrary.framework`
+- `BiomeStreams.framework`
+- `MediaServices.framework`
+- `iTunesCloud.framework`
+- CoreMedia endpoint, routing context, volume controller, and route discoverer XPC services
