@@ -15,6 +15,11 @@ The first research target is `MediaRemote.framework` on macOS 26.5 and the insta
 - `Tests/`: Swift package tests for reusable helpers.
 - `tools/`: standalone scripts and helper notes that are not SwiftPM targets yet.
 
+## Current Tools
+
+- `spelunk`: prints the current seeded research target paths.
+- `mr-now-playing-probe`: read-only dynamic `MediaRemote.framework` probe for `MRMediaRemoteGetNowPlayingInfo`.
+
 ## Research Shape
 
 Every target should answer the same core questions:

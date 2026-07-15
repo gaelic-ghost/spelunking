@@ -8,8 +8,15 @@ Initial SDK stub counts:
 
 | Surface | Xcode 26 SDK | Xcode 27 beta SDK |
 | --- | ---: | ---: |
-| `MediaRemote.tbd` | 3,907 | 3,955 |
-| `MediaRemoteDaemonServices.tbd` | 4 | 4 |
+| `MediaRemote.tbd` | 3,906 | 3,954 |
+| `MediaRemoteDaemonServices.tbd` | 3 | 3 |
+
+Live dyld-cache counts:
+
+| Surface | Count |
+| --- | ---: |
+| `MediaRemote` live exports | 5,131 |
+| `MediaRemoteDaemonServices` live exports | 3 |
 
 Notable Xcode 27 beta additions include:
 
@@ -29,7 +36,7 @@ Notable Xcode 27 beta additions include:
 
 ## Objective-C Runtime Surface
 
-Capture classes, protocols, selectors, categories, and notification names here.
+`dyld_info -objc` cannot print live Objective-C metadata from dyld shared-cache dylibs, but exported symbols expose representative class names. See `live-dyld-cache.md`.
 
 ## Constants and Notifications
 

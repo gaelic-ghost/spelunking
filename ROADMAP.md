@@ -12,10 +12,12 @@
 - [ ] Locate active macOS 26.5 framework paths and installed macOS 27 beta SDK framework paths.
 - [ ] Record framework metadata: install names, architectures, linked libraries, entitlements, strings, exported symbols, Objective-C classes, protocols, selectors, and notifications.
 - [ ] Compare macOS 26.5 and macOS 27 beta SDK symbol surfaces.
+- [x] Query the live dyld shared-cache export surface for `MediaRemote.framework`.
 - [ ] Identify public wrappers, private headers, generated headers, XPC services, launchd jobs, daemons, and related frameworks.
 - [ ] Document userland-callable APIs for now-playing metadata, playback commands, queue information, origin discovery, and route or destination behavior.
 - [ ] Mark calls that require entitlements, elevated privileges, SIP-disabled conditions, or private-framework linking.
-- [ ] Build one small Swift or C helper that can safely print discovered media state without mutating playback.
+- [x] Build one small Swift helper that safely probes now-playing state without mutating playback.
+- [ ] Confirm non-empty now-playing dictionary shape while active media is playing.
 
 ## Phase 2: Media Control Experiments
 

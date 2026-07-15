@@ -25,8 +25,8 @@ The first evidence capture is recorded in `../../../research/MediaRemote/baselin
 - [x] Active framework path
 - [x] Beta SDK framework path
 - [ ] `otool` metadata for extracted framework binary
-- [ ] exported symbols
-- [ ] Objective-C classes
+- [x] exported symbols from live dyld cache
+- [x] Objective-C class names from exported symbols
 - [ ] protocols
 - [ ] selectors
 - [ ] strings
@@ -35,7 +35,7 @@ The first evidence capture is recorded in `../../../research/MediaRemote/baselin
 - [x] related daemons and agents
 - [ ] related services and XPC endpoints
 - [ ] generated headers or interfaces
-- [ ] runtime experiments
+- [x] first read-only runtime experiment
 
 ## Interesting Areas
 
@@ -56,3 +56,5 @@ Keep raw captures in `research/MediaRemote/`. Promote stable findings into the t
 Start with read-only discovery before sending playback commands or mutating routes.
 
 Initial local evidence shows the active framework directories are dyld-cache framework shells rather than ordinary binary-bearing framework directories. Live binary inspection should use dyld shared-cache tooling or extracted cache images.
+
+See `live-dyld-cache.md` for the first live export classification and read-only now-playing probe result.
