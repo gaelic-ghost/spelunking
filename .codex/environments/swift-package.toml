@@ -1,0 +1,11 @@
+[environment]
+name = "Swift Package"
+description = "Build and test the Spelunking Swift package."
+
+[[actions]]
+name = "Build"
+command = "swift build"
+
+[[actions]]
+name = "Test"
+command = "swift test"

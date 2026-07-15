@@ -1,0 +1,15 @@
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Local-only research output that may be large, noisy, or machine-specific.
+research/**/captures/
+research/**/generated/
+research/**/*.log
+research/**/*.tmp
+
+# Keep package resolution generated unless this repo later needs pinned dependencies.
+Package.resolved
