@@ -38,11 +38,33 @@ Use these sources together:
 - generated Swift interfaces when available
 - runtime class listing from a small read-only helper
 
+## Generated Interface Status
+
+No generated private framework interfaces have been produced yet.
+
+Local tool availability checked on 2026-07-16:
+
+- `dyld_shared_cache_util`: not found on PATH or through `xcrun --find`
+- `class-dump`: not found
+- `class-dump-swift`: not found
+- `swift-reflection-dump`: not found
+- `jtool2`: not found
+- available: `dyld_info`, `nm`, and `otool`
+
+SDK representation checked in the macOS 27.0 SDK:
+
+- `CallsXPC.framework` exposes `CallsXPC.tbd`
+- `CallsPersistence.framework` exposes `CallsPersistence.tbd`
+- `PhoneAppIntents.framework` exposes `PhoneAppIntents.tbd`
+
+Boundary: the current repository has exported symbols, `.tbd` metadata, and Objective-C runtime metadata, but not full generated headers/interfaces for these private frameworks. The next interface-generation lane needs a dyld shared cache extractor or equivalent metadata tool before the remaining checklist item can be closed.
+
 ## Objective-C Runtime Capture
 
 Raw capture:
 
 - `research/Phone/runtime/objc-runtime-callservices-macos-26.5.2.json`
+- `research/Phone/runtime/objc-runtime-callsxpc-phoneintents-macos-26.5.2.json`
 
 The runtime capture loaded `TelephonyUtilities`, `CallHistory`, and public `CallKit`. It attempted `CallHistoryDB`, but dyld reported that install name was not present as a file or in the dyld cache on this machine.
 
@@ -50,6 +72,11 @@ The `TU*`, `CH*`, `Call*`, `CX*`, and `Phone*` capture found:
 
 - 439 matching classes
 - 181 matching protocols
+
+The `Calls*`, `CX*`, `CH*`, `Phone*`, and selected `TU*` capture loaded `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents` and found:
+
+- 225 matching classes
+- 97 matching protocols
 
 Notable observed classes include:
 

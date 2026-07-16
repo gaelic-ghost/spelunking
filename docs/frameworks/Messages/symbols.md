@@ -24,7 +24,7 @@ Inference: the macOS app is a UIKit/iOSSupport-style app shell using ChatKit and
 
 ## Framework Availability Notes
 
-Framework directories exist for `IMCore`, `IMDPersistence`, `IMDaemonCore`, `CallsXPC`, and related private frameworks. Many root Mach-O paths are dyld-cache install names rather than ordinary on-disk files; `dlopen` can still resolve some of them through the active dyld shared cache.
+Framework directories exist for `IMCore`, `IMDPersistence`, `IMDaemonCore`, `MessagesKit`, and related private frameworks. Many root Mach-O paths are dyld-cache install names rather than ordinary on-disk files; `dlopen` can still resolve some of them through the active dyld shared cache.
 
 Use these sources together:
 
@@ -33,12 +33,34 @@ Use these sources together:
 - generated Swift interfaces when available
 - runtime class listing from a small read-only helper
 
+## Generated Interface Status
+
+No generated private framework interfaces have been produced yet.
+
+Local tool availability checked on 2026-07-16:
+
+- `dyld_shared_cache_util`: not found on PATH or through `xcrun --find`
+- `class-dump`: not found
+- `class-dump-swift`: not found
+- `swift-reflection-dump`: not found
+- `jtool2`: not found
+- available: `dyld_info`, `nm`, and `otool`
+
+SDK representation checked in the macOS 27.0 SDK:
+
+- `IMDPersistence.framework` exposes `IMDPersistence.tbd`
+- `IMDaemonCore.framework` exposes `IMDaemonCore.tbd`
+- `MessagesKit.framework` exposes `MessagesKit.tbd`
+
+Boundary: the current repository has exported symbols, `.tbd` metadata, and Objective-C runtime metadata, but not full generated headers/interfaces for these private frameworks. The next interface-generation lane needs a dyld shared cache extractor or equivalent metadata tool before the remaining checklist item can be closed.
+
 ## Objective-C Runtime Capture
 
 Raw captures:
 
 - `research/Messages/runtime/objc-runtime-im-macos-26.5.2.json`
 - `research/Messages/runtime/objc-runtime-imcore-macos-26.5.2.json`
+- `research/Messages/runtime/objc-runtime-imd-messageskit-macos-26.5.2.json`
 
 The narrow `IM*` runtime capture loaded `IMCore`, `IMSharedUtilities`, and `IMFoundation` and found:
 

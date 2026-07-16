@@ -77,6 +77,18 @@ plutil -p /System/Library/LaunchAgents/com.apple.imtransferagent.plist
 notifyutil -g com.apple.imautomatichistorydeletionagent.prefchange
 notifyutil -g com.apple.idstransfers.idslaunchnotification
 notifyutil -g control.random.spelunking.nonexistent.26.5.2
+command -v dyld_shared_cache_util || true
+xcrun --find dyld_shared_cache_util 2>/dev/null || true
+command -v class-dump || true
+command -v class-dump-swift || true
+command -v swift-reflection-dump || true
+command -v jtool2 || true
+command -v nm || true
+command -v dyld_info || true
+command -v otool || true
+ls -la /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMDPersistence.framework/Versions/A
+ls -la /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMDaemonCore.framework/Versions/A
+ls -la /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/MessagesKit.framework/Versions/A
 ```
 
 Privacy note: the SQLite commands captured table and column names only. No row data, message text, handles, attachment names, or counts were captured.
