@@ -56,6 +56,26 @@ Mach lookup allowlist highlights:
 
 Interpretation: userland experiments should treat direct framework calls as a client surface, not as equivalent to daemon authority. Most route mutation, nearby-device, group-session, and UI service capabilities are daemon-owned.
 
+## Runtime Observation
+
+`tools/mediaremote-daemon-observe.zsh` captures focused unified-log evidence while running a probe command.
+
+Current observation with `mr-internal-probe` and active Spotify playback:
+
+- `mediaremoted` adds a daemon-side client for the probe process.
+- The client is logged with `entitlements=0`.
+- `handlePlaybackQueueRequest` is logged by `mediaremoted` and returns Code 3 `Operation not permitted`.
+- The client is invalidated and removed after the probe exits.
+- The same probe run returns Code 3 for `playerProperties` and `playbackQueue`.
+
+Current observation with `mr-now-playing-probe --origins --application` and active Spotify playback:
+
+- Origin/player-path identity remains readable.
+- `mediaremoted` still logs the probe client with `entitlements=0`.
+- Playback state, client properties, and playback queue hydration paths return Code 3 in the unified log.
+
+See `daemon-observation.md` for the capture workflow and current evidence.
+
 ## `mediaremoteagent`
 
 `mediaremoteagent` is much smaller. Its filtered strings show an XPC event-stream listener and a launch-agent identity:

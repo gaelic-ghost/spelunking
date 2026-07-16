@@ -94,6 +94,30 @@ Follow-up:
 
 Next useful path is daemon-side observation, an Apple-signed host process, or a non-entitlement metadata route. Normal local signing identities are not enough to satisfy these restricted entitlement checks.
 
+### Daemon Observation Runner
+
+Status: baseline run complete
+
+Command:
+
+```sh
+tools/mediaremote-daemon-observe.zsh
+```
+
+Observed behavior:
+
+Capture `research/MediaRemote/experiments/daemon-observation/20260716T084110Z` ran the built `mr-internal-probe` while Spotify was playing. The probe resolved one Spotify player path and returned Code 3 for both `playerProperties` and `playbackQueue`. The focused unified-log capture shows `mediaremoted` adding a client for the probe with `entitlements=0`, logging `handlePlaybackQueueRequest`, returning Code 3 for that request, then invalidating and removing the client after the probe exits.
+
+Capture `research/MediaRemote/experiments/daemon-observation/20260716T084206Z` ran the built `mr-now-playing-probe --origins --application` while Spotify was playing. The probe resolved the local Mac origin and Spotify player path while the global now-playing app/client/info surface remained empty. The focused unified-log capture shows the probe client with `entitlements=0`, Code 3 responses for playback state/client properties, and daemon-side Code 3 responses for playback queue requests.
+
+Permissions, entitlements, or SIP notes:
+
+This proves the probes reach the daemon as real clients, but not as entitled MediaRemote clients. It also proves the playback queue Code 3 is emitted on the daemon side, while playback state and client properties also fail under the same zero-entitlement client condition.
+
+Follow-up:
+
+Add narrower daemon predicates or safe helper interposition around entitlement-copy functions before exploring mutating commands.
+
 ## Mutating Experiments
 
 Run only after the read-only baseline is documented.

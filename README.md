@@ -23,6 +23,7 @@ The first research target is `MediaRemote.framework` on macOS 26.5 and the insta
 - `now-playing-fixture`: metadata-only fixture for testing whether `MPNowPlayingInfoCenter` publication appears through MediaRemote.
 - `tools/mediaremote-inventory.zsh`: repeatable local capture script for dyld-cache exports, imports, strings, ObjC names, SDK diffs, support binaries, resources, and entitlements.
 - `tools/mediaremote-entitlement-experiment.zsh`: repeatable local runner that builds `mr-internal-probe`, signs copied variants with candidate private entitlements, and captures runtime differences.
+- `tools/mediaremote-daemon-observe.zsh`: repeatable local runner that executes a probe and captures focused `mediaremoted`/unified-log evidence for the same time window.
 
 ## Research Shape
 
@@ -57,4 +58,5 @@ swift run mr-internal-probe
 swift run mr-now-playing-probe --observe 10 --application
 tools/mediaremote-inventory.zsh
 tools/mediaremote-entitlement-experiment.zsh
+tools/mediaremote-daemon-observe.zsh
 ```
