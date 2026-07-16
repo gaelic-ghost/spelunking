@@ -108,6 +108,10 @@ swift run spelunk string-constants --image /System/Library/PrivateFrameworks/Tel
 swift run spelunk string-constants --image /System/Library/PrivateFrameworks/CallHistory.framework/CallHistory --kind nsstring --symbol '<notification symbol>' --json
 swift run spelunk string-constants --image /System/Library/PrivateFrameworks/CallHistory.framework/CallHistory --kind c-string-pointer --symbol CHCallInteractionsDidChangeDarwinNotification --json
 (sleep 1; /usr/bin/open -g -a Phone) & swift run spelunk notification-observe --seconds 6 --darwin com.apple.CallHistoryPluginHelper.launchnotification --darwin com.apple.callhistorysync.idslaunchnotification --darwin com.apple.callhistory.notification.call-interactions-changed --darwin com.apple.telephonyutilities.callservicesd.fakeincomingmessage --darwin com.apple.telephonyutilities.callservicesd.fakeoutgoingmessage --distributed com.apple.callhistory.save.distributed.notification --distributed kCallHistoryDatabaseChangedNotification --json > research/Phone/notifications/observer-app-open-macos-26.5.2.json
+file /System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e /System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e.map
+rg -n '(/System/Library/PrivateFrameworks/(TelephonyUtilities|CallHistory|CallsXPC|CallsPersistence|PhoneAppIntents)\.framework|/System/iOSSupport/System/Library/PrivateFrameworks/(PhoneKit|CallsAppUI|CallsAppServices|CallsDialer|CallsSearch)\.framework)' /System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e.map
+find /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks -maxdepth 4 \( -name '*.swiftinterface' -o -name '*.private.swiftinterface' -o -name '*.swiftmodule' \) | rg '/(CallsXPC|CallsPersistence|PhoneAppIntents|TelephonyUtilities|CallHistory)\.framework/' | sort
+find /System/Library/PrivateFrameworks -maxdepth 3 \( -name '*.swiftinterface' -o -name '*.private.swiftinterface' -o -name '*.swiftmodule' \) 2>/dev/null | rg '/(CallsXPC|CallsPersistence|PhoneAppIntents|TelephonyUtilities|CallHistory)\.framework/' | sort
 ```
 
 Observed `sdef` result:
@@ -120,7 +124,7 @@ Privacy note: no call-history rows, phone numbers, contacts, voicemail metadata,
 
 ## Next Raw Captures
 
-- dyld shared cache extraction command and output paths
-- generated interfaces for call private frameworks
-- notification observer/logging proof
+- dyld shared cache extraction with a capable external/local extractor
+- generated interfaces for call private frameworks after an extractor or equivalent metadata path is available
+- controlled notification observer/logging proof for call-history/call-state/test-flow events
 - logging baseline

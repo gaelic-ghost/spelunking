@@ -42,6 +42,10 @@ Use these sources together:
 
 No generated private framework interfaces have been produced yet.
 
+Raw capture:
+
+- `research/Phone/runtime/dyld-cache-interface-boundary-macos-26.5.2.txt`
+
 Local tool availability checked on 2026-07-16:
 
 - `dyld_shared_cache_util`: not found on PATH or through `xcrun --find`
@@ -49,7 +53,20 @@ Local tool availability checked on 2026-07-16:
 - `class-dump-swift`: not found
 - `swift-reflection-dump`: not found
 - `jtool2`: not found
-- available: `dyld_info`, `nm`, and `otool`
+- available: `dyld_info`, `nm`, `otool`, `swift-api-digester`, and `swift-symbolgraph-extract`
+
+Live dyld shared cache map entries confirmed these target images in the active arm64e shared cache:
+
+- `/System/Library/PrivateFrameworks/TelephonyUtilities.framework/Versions/A/TelephonyUtilities`
+- `/System/Library/PrivateFrameworks/CallHistory.framework/Versions/A/CallHistory`
+- `/System/Library/PrivateFrameworks/CallsPersistence.framework/Versions/A/CallsPersistence`
+- `/System/Library/PrivateFrameworks/CallsXPC.framework/Versions/A/CallsXPC`
+- `/System/Library/PrivateFrameworks/PhoneAppIntents.framework/Versions/A/PhoneAppIntents`
+- `/System/iOSSupport/System/Library/PrivateFrameworks/CallsAppServices.framework/Versions/A/CallsAppServices`
+- `/System/iOSSupport/System/Library/PrivateFrameworks/CallsAppUI.framework/Versions/A/CallsAppUI`
+- `/System/iOSSupport/System/Library/PrivateFrameworks/CallsDialer.framework/Versions/A/CallsDialer`
+- `/System/iOSSupport/System/Library/PrivateFrameworks/CallsSearch.framework/Versions/A/CallsSearch`
+- `/System/iOSSupport/System/Library/PrivateFrameworks/PhoneKit.framework/Versions/A/PhoneKit`
 
 SDK representation checked in the macOS 27.0 SDK:
 
@@ -57,7 +74,9 @@ SDK representation checked in the macOS 27.0 SDK:
 - `CallsPersistence.framework` exposes `CallsPersistence.tbd`
 - `PhoneAppIntents.framework` exposes `PhoneAppIntents.tbd`
 
-Boundary: the current repository has exported symbols, `.tbd` metadata, and Objective-C runtime metadata, but not full generated headers/interfaces for these private frameworks. The next interface-generation lane needs a dyld shared cache extractor or equivalent metadata tool before the remaining checklist item can be closed.
+No `.swiftinterface`, `.private.swiftinterface`, or `.swiftmodule` files were found for the selected Phone private frameworks in the checked macOS 27.0 SDK private framework directories or the active `/System/Library/PrivateFrameworks` directories.
+
+Boundary: the current repository has live dyld-cache residency evidence, exported symbols, `.tbd` metadata, and Objective-C runtime metadata, but not full generated headers/interfaces for these private frameworks. The next interface-generation lane needs a dyld shared cache extractor, class-dump-capable Objective-C metadata path, or another equivalent metadata tool before the remaining checklist item can be closed.
 
 ## Objective-C Runtime Capture
 

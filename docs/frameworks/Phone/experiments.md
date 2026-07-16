@@ -9,6 +9,7 @@
 - [x] Capture app binary linked libraries.
 - [x] Skim SDK `.tbd` metadata for `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`.
 - [x] Run a filtered dyld shared cache export probe.
+- [x] Capture live dyld cache residency and interface-tooling boundary evidence.
 - [x] Inventory launchd jobs and XPC service plists.
 - [x] Locate and inventory call-history storage schema without row data.
 - [x] Capture call-history schema and indexes without row data.

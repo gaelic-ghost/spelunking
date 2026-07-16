@@ -31,6 +31,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] App binary linked-library inventory
 - [x] SDK `.tbd` symbol skim for `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`
 - [x] Filtered dyld shared cache export probe
+- [x] Live dyld cache residency and interface-tooling boundary capture
 - [x] LaunchAgent and XPC service inventory
 - [x] Call-history storage schema inventory without row data
 - [x] Call-history schema/index capture without row data

@@ -37,6 +37,10 @@ Use these sources together:
 
 No generated private framework interfaces have been produced yet.
 
+Raw capture:
+
+- `research/Messages/runtime/dyld-cache-interface-boundary-macos-26.5.2.txt`
+
 Local tool availability checked on 2026-07-16:
 
 - `dyld_shared_cache_util`: not found on PATH or through `xcrun --find`
@@ -44,7 +48,16 @@ Local tool availability checked on 2026-07-16:
 - `class-dump-swift`: not found
 - `swift-reflection-dump`: not found
 - `jtool2`: not found
-- available: `dyld_info`, `nm`, and `otool`
+- available: `dyld_info`, `nm`, `otool`, `swift-api-digester`, and `swift-symbolgraph-extract`
+
+Live dyld shared cache map entries confirmed these target images in the active arm64e shared cache:
+
+- `/System/Library/PrivateFrameworks/IMDPersistence.framework/Versions/A/IMDPersistence`
+- `/System/Library/PrivateFrameworks/IMCore.framework/Versions/A/IMCore`
+- `/System/Library/PrivateFrameworks/IMDaemonCore.framework/Versions/A/IMDaemonCore`
+- `/System/Library/PrivateFrameworks/MessagesKit.framework/Versions/A/MessagesKit`
+- `/System/iOSSupport/System/Library/PrivateFrameworks/IMCore.framework/Versions/A/IMCore`
+- `/System/iOSSupport/System/Library/PrivateFrameworks/IMDPersistence.framework/Versions/A/IMDPersistence`
 
 SDK representation checked in the macOS 27.0 SDK:
 
@@ -52,7 +65,9 @@ SDK representation checked in the macOS 27.0 SDK:
 - `IMDaemonCore.framework` exposes `IMDaemonCore.tbd`
 - `MessagesKit.framework` exposes `MessagesKit.tbd`
 
-Boundary: the current repository has exported symbols, `.tbd` metadata, and Objective-C runtime metadata, but not full generated headers/interfaces for these private frameworks. The next interface-generation lane needs a dyld shared cache extractor or equivalent metadata tool before the remaining checklist item can be closed.
+No `.swiftinterface`, `.private.swiftinterface`, or `.swiftmodule` files were found for the selected Messages private frameworks in the checked macOS 27.0 SDK private framework directories or the active `/System/Library/PrivateFrameworks` directories.
+
+Boundary: the current repository has live dyld-cache residency evidence, exported symbols, `.tbd` metadata, and Objective-C runtime metadata, but not full generated headers/interfaces for these private frameworks. The next interface-generation lane needs a dyld shared cache extractor, class-dump-capable Objective-C metadata path, or another equivalent metadata tool before the remaining checklist item can be closed.
 
 ## Objective-C Runtime Capture
 

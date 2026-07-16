@@ -111,13 +111,17 @@ mkdir -p research/Messages/surfaces
 swift run spelunk string-constants --image /System/Library/PrivateFrameworks/IMCore.framework/IMCore --symbol '<notification symbol>' --json
 swift run spelunk string-constants --image /System/Library/PrivateFrameworks/IMDPersistence.framework/IMDPersistence --symbol '<notification symbol>' --json
 (sleep 1; /usr/bin/open -g -a Messages) & swift run spelunk notification-observe --seconds 6 --darwin com.apple.idstransfers.idslaunchnotification --darwin com.apple.imautomatichistorydeletionagent.prefchange --distributed IMMessageSentDistributedNotification --json > research/Messages/notifications/observer-app-open-macos-26.5.2.json
+file /System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e /System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e.map
+rg -n '(/System/Library/PrivateFrameworks/(IMCore|IMDPersistence|IMDaemonCore|MessagesKit)\.framework|/System/iOSSupport/System/Library/PrivateFrameworks/IM(Core|DPersistence)\.framework)' /System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e.map
+find /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks -maxdepth 4 \( -name '*.swiftinterface' -o -name '*.private.swiftinterface' -o -name '*.swiftmodule' \) | rg '/(IMCore|IMDPersistence|IMDaemonCore|MessagesKit)\.framework/' | sort
+find /System/Library/PrivateFrameworks -maxdepth 3 \( -name '*.swiftinterface' -o -name '*.private.swiftinterface' -o -name '*.swiftmodule' \) 2>/dev/null | rg '/(IMCore|IMDPersistence|IMDaemonCore|MessagesKit)\.framework/' | sort
 ```
 
 Privacy note: the SQLite commands captured table and column names only. The app-open and URL-scheme log streams were bounded to root URLs and activation behavior. No row data, message text, handles, recipients, attachment names, or counts were intentionally captured.
 
 ## Next Raw Captures
 
-- dyld shared cache extraction command and output paths
-- generated interfaces for IM private frameworks
-- notification observer/logging proof
+- dyld shared cache extraction with a capable external/local extractor
+- generated interfaces for IM private frameworks after an extractor or equivalent metadata path is available
+- controlled notification observer/logging proof for send/receive/test-thread flows
 - logging baseline

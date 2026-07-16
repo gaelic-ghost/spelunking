@@ -34,6 +34,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] App binary linked-library inventory
 - [x] SDK `.tbd` symbol skim for `IMCore`
 - [x] Filtered dyld shared cache export probe
+- [x] Live dyld cache residency and interface-tooling boundary capture
 - [x] LaunchAgent and XPC service inventory
 - [x] Public iPhoneOS 27.0 SDK header inventory for Messages, MessageUI, and Shared With You
 - [x] Private `.tbd` notification and type-family inventory
