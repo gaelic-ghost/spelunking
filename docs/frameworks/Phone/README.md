@@ -341,9 +341,12 @@ Inference: Phone’s user-facing app sits above a broad `callservicesd` broker p
 
 - `research/Phone/README.md`
 - `docs/frameworks/Phone/surfaces.md`
+- `docs/frameworks/Phone/agents.md`
 - `docs/frameworks/Phone/storage.md`
 - `docs/frameworks/Phone/symbols.md`
 - `docs/frameworks/Phone/notifications.md`
+- `docs/frameworks/Phone/types.md`
+- `docs/frameworks/Phone/runtime.md`
 - `docs/frameworks/Phone/experiments.md`
 - Apple Developer Documentation: [CallKit framework](https://developer.apple.com/documentation/callkit)
 - Apple Developer Documentation: [CoreTelephony framework](https://developer.apple.com/documentation/coretelephony)

@@ -353,9 +353,12 @@ Inference: database access is brokered through a privileged XPC service with a t
 
 - `research/Messages/README.md`
 - `docs/frameworks/Messages/surfaces.md`
+- `docs/frameworks/Messages/agents.md`
 - `docs/frameworks/Messages/storage.md`
 - `docs/frameworks/Messages/symbols.md`
 - `docs/frameworks/Messages/notifications.md`
+- `docs/frameworks/Messages/types.md`
+- `docs/frameworks/Messages/runtime.md`
 - `docs/frameworks/Messages/experiments.md`
 - Apple Developer Documentation: [Messages framework](https://developer.apple.com/documentation/messages)
 - Apple Developer Documentation: [Shared with You framework](https://developer.apple.com/documentation/sharedwithyou)
