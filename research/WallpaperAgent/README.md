@@ -210,9 +210,15 @@ Observed static facts:
   `CustomStringConvertible`, `description`, `init(from:)`, and `encode(to:)`.
 - `Wallpaper.AssertionPresentationMode` exports `RawRepresentable`,
   `Codable`, `init(rawValue:)`, and `rawValue` with raw type `String`.
-- No `Wallpaper.ContentType` cases, `AssertionValue` cases, or
-  `AssertionPresentationMode` raw strings were recovered from the current SDK
-  stubs, agent import symbols, or dyld-cache string windows.
+- A later Swift metadata pass recovered `Wallpaper.ContentType` cases as
+  `desktop` and `screenSaver`.
+- `WallpaperDisplayAttributes.desktop` stores zero and
+  `WallpaperDisplayAttributes.screenSaver` stores one, so model
+  `Wallpaper.ContentType.desktop` as byte value `0` and `.screenSaver` as byte
+  value `1`.
+- `AssertionValue` cases and `AssertionPresentationMode` raw strings were not
+  recovered from the current SDK stubs, agent import symbols, dyld-cache string
+  windows, or this metadata slice.
 - `WallpaperTypes.WallpaperSettingsViewModel.ContentType` is a separate
   `Int` raw-value enum with `init(rawValue:)` and `rawValue`; its cases were
   not recovered.
@@ -228,6 +234,25 @@ Observed static facts:
 - Dyld-cache strings name `AllowAllXPCSecurityPolicy`,
   `EntitlementXPCSecurityPolicy`, `AgentXPCSecurityPolicy`, and
   `WallpaperXPCConnectionSecurityPolicy`.
+
+Repeatable Swift metadata recovery command:
+
+```zsh
+tools/inspect-wallpaper-swift-metadata.sh
+```
+
+Observed metadata facts:
+
+- `Wallpaper.ContentType` exports `allCases`, `description`, `init(from:)`,
+  `encode(to:)`, and conformances for `Codable`, `CaseIterable`,
+  `CustomStringConvertible`, `Hashable`, and `Equatable`.
+- Parsed Swift field descriptors include two-case records named `desktop,
+  screenSaver`.
+- `Wallpaper.ContentType.description` compares the stored byte against `1`
+  and returns `desktop` or `screenSaver`.
+- `WallpaperDisplayAttributes.desktop` stores zero; `screenSaver` stores one.
+- `ViewModelRefreshReason` field descriptors include `launch`, `navigation`,
+  and `wallpaperInstallation`.
 - `Wallpaper.AgentXPCSecurityPolicy` exports `allow(process:)` and
   `checkAccess(message:for:)`, confirming that normal-agent messages need both
   valid Swift/XPC encoding and per-message access evaluation.

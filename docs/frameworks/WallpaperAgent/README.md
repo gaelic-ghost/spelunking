@@ -133,6 +133,8 @@ Observed non-mutating results from this branch:
 - [x] Static supporting-type and security-policy evidence for
       `ContentType`, `AssertionValue`, `AssertionPresentationMode`,
       `WallpaperStoreContentType`, and `AgentXPCSecurityPolicy`
+- [x] Swift metadata recovery of `Wallpaper.ContentType` cases and byte values
+      for the private redraw candidate
 - [ ] SIP-enabled proof that an ordinary client can successfully call the
       private Swift/XPC envelope
 - [ ] SIP-enabled proof for a non-mutating redraw request
@@ -535,16 +537,17 @@ Recovered supporting enum detail:
 | Type | Recovered cases or values | Evidence |
 | --- | --- | --- |
 | `ViewModelRefreshReason` | `launch`, `navigation`, `wallpaperInstallation` | Exported case constructor symbols in `Wallpaper.tbd`. |
-| `ContentType` | cases not recovered | Exported as `Codable`, `CaseIterable`, `CustomStringConvertible`, with `allCases`, `description`, `init(from:)`, and `encode(to:)`. No case constructors or raw values were recovered from the SDK stub, agent imports, or dyld-cache string windows. |
+| `ContentType` | `desktop`, `screenSaver`; byte values `desktop = 0`, `screenSaver = 1` | Exported as `Codable`, `CaseIterable`, `CustomStringConvertible`, with `allCases`, `description`, `init(from:)`, and `encode(to:)`. Swift field metadata descriptors contain the two case names. `WallpaperDisplayAttributes.desktop` stores zero; `WallpaperDisplayAttributes.screenSaver` stores one. `ContentType.description` compares against `1` and returns `desktop` or `screenSaver`. |
 | `AssertionValue` | cases not recovered | Exported as `Codable`, `Hashable`, `Equatable`, and `CustomStringConvertible`, with `description`, `init(from:)`, and `encode(to:)`. No case constructors or raw values were recovered from the SDK stub, agent imports, or dyld-cache string windows. |
 | `AssertionPresentationMode` | raw type `String`; concrete raw values not recovered | `init(rawValue:)`, `rawValue`, `RawRepresentable`, and `Codable` are exported, but no raw string constants were recovered from the current static evidence. |
 | `WallpaperTypes.WallpaperSettingsViewModel.ContentType` | raw type `Int`; cases not recovered | Exported as a separate settings-view-model enum with `init(rawValue:)` and `rawValue`; this is not enough to map it to `Wallpaper.ContentType`. |
 | `WallpaperStoreContentType` | likely store/runtime categories: `running-assertions`, `extension`, `screenSaver`, `inProcess` | Recovered from `WallpaperAgent` string windows near `ContentDescriptor type=inprocess`, `ContentDescriptor type=screensaver`, and `ContentDescriptor type=extension`. This appears to be agent/store vocabulary, not the exported `Wallpaper.ContentType` enum. |
 
 The private `Wallpaper` and `WallpaperTypes` Swift modules are not importable
-from this SDK, even though their `.tbd` exports exist. That blocks runtime
-queries such as `ContentType.allCases` from a normal Swift client until a
-separate private-module or metadata extraction path is available.
+from this SDK, even though their `.tbd` exports exist. Runtime queries such as
+`ContentType.allCases` are therefore unavailable from a normal Swift client,
+but `tools/inspect-wallpaper-swift-metadata.sh` recovers the case names and
+byte values from dyld metadata and disassembly.
 
 Keep these similarly named surfaces distinct:
 
@@ -554,9 +557,10 @@ Keep these similarly named surfaces distinct:
   settings-model enum with `Int` raw values.
 - `WallpaperStoreContentType` and `ContentDescriptor type=...` strings are
   agent/store/provider vocabulary observed in `WallpaperAgent`.
-- Strings such as `desktop`, `idle`, `linked`, `DesktopCodingKeys`, and
+- Strings such as `idle`, `linked`, `DesktopCodingKeys`, and
   `ScreenSaverCodingKeys` are useful context for settings models and coding
-  keys, but are not current proof of `Wallpaper.ContentType` cases.
+  keys, but are separate from the now-recovered `Wallpaper.ContentType`
+  `desktop` and `screenSaver` cases.
 
 ### Choice and Settings Payloads
 
@@ -1085,12 +1089,15 @@ The most plausible redraw probes are:
 
 - all content types with `.launch`
 - all content types with `.wallpaperInstallation`
-- desktop content type only, if the `ContentType` cases can be recovered
+- `.desktop` content type only
+- `.screenSaver` content type only
 
 The current blocker is not service visibility. It is exact private
 Swift/XPC encoding plus `AgentXPCSecurityPolicy`. A local SwiftPM module named
-`Wallpaper` with mirrored no-payload `AgentXPCMessage` cases is not sufficient:
-the agent logs `Failed to Decode XPC Message: NSCocoaErrorDomain (4865)`.
+`Wallpaper` with mirrored `AgentXPCMessage`, `ContentType`, and
+`ViewModelRefreshReason` cases is not sufficient by itself: the agent logs
+`Failed to Decode XPC Message: NSCocoaErrorDomain (4865)` for the current
+normal-probe envelope.
 
 ## Accessibility From Userland With SIP Enabled
 
@@ -1141,7 +1148,8 @@ Not accessible or not assumed accessible:
    - identify any listener/session-level audit-token or code-signing checks
    - decompile the exact string composition for `No valid extension` and
      `Unable to handle request:`
-5. Recover `Wallpaper.ContentType` cases and any raw values.
+5. Deepen normal-agent Swift/XPC envelope reconstruction now that
+   `Wallpaper.ContentType` cases are recovered.
 6. Recover `AssertionValue` cases and presentation-mode raw strings.
 7. Extend the Swift helper to encode private Swift/XPC messages only after the
    exact metadata identity is solved.

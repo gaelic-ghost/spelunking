@@ -49,4 +49,22 @@ struct SPKResearchTargetTests {
         #expect(decoded == message)
         #expect(String(decoding: data, as: UTF8.self).contains("diagnosticState"))
     }
+
+    @Test("Wallpaper normal mirror includes recovered redraw support enums")
+    func wallpaperNormalRedrawMirrorRoundTrips() throws {
+        let message = AgentXPCMessage.ensureViewModelIsUpToDate([.desktop, .screenSaver], .wallpaperInstallation)
+
+        let data = try JSONEncoder().encode(message)
+        let json = String(decoding: data, as: UTF8.self)
+        let decoded = try JSONDecoder().decode(AgentXPCMessage.self, from: data)
+
+        #expect(ContentType.allCases == [.desktop, .screenSaver])
+        #expect(ContentType.desktop.description == "desktop")
+        #expect(ContentType.screenSaver.description == "screenSaver")
+        #expect(decoded == message)
+        #expect(json.contains("ensureViewModelIsUpToDate"))
+        #expect(json.contains("desktop"))
+        #expect(json.contains("screenSaver"))
+        #expect(json.contains("wallpaperInstallation"))
+    }
 }
