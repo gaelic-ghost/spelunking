@@ -180,6 +180,8 @@ Runtime route-probe correlation:
 
 Endpoint getter isolation showed no extra message IDs beyond the class-only `MRAVEndpointGetLocalEndpoint(NULL)` baseline when separately enabling localized-name, UID, endpoint output-device copy, or shared output-context reads on this macOS 26.5.2 run.
 
+Routing-context isolation also showed no extra message IDs beyond the class-only baseline when calling `MRAVEndpointGetLocalEndpoint` with explicit `LOCAL` or synthetic routing-context UIDs. Static disassembly shows `_MRAVEndpointGetLocalEndpoint` forwarding to `+[MRAVLocalEndpoint sharedLocalEndpointForRoutingContextWithUID:]`; the cache-miss path creates an `MRAVConcreteOutputContext`, initializes `MRAVLocalEndpoint`, and attaches output-context controller state for shared contexts. Inference: the observed `0x0200000000000018` route-probe side path is coupled to local-endpoint/output-context hydration rather than the endpoint localized-name, UID, or output-device getters.
+
 Mutating route/session examples:
 
 | Ordinal | Message Type | Observed API |
