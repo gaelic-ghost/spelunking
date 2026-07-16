@@ -41,6 +41,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Read-only Objective-C runtime metadata capture for CallsXPC, CallsPersistence, and PhoneAppIntents surfaces
 - [x] Bounded app-open log observation
 - [x] First-pass notification delivery classification from launchd and SDK symbol evidence
+- [x] Bounded app-open notification observer baseline without payload values
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
 - [ ] OS comparison against another macOS build
 

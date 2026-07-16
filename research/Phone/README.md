@@ -107,6 +107,7 @@ mkdir -p research/Phone/surfaces
 swift run spelunk string-constants --image /System/Library/PrivateFrameworks/TelephonyUtilities.framework/TelephonyUtilities --symbol '<notification symbol>' --json
 swift run spelunk string-constants --image /System/Library/PrivateFrameworks/CallHistory.framework/CallHistory --kind nsstring --symbol '<notification symbol>' --json
 swift run spelunk string-constants --image /System/Library/PrivateFrameworks/CallHistory.framework/CallHistory --kind c-string-pointer --symbol CHCallInteractionsDidChangeDarwinNotification --json
+(sleep 1; /usr/bin/open -g -a Phone) & swift run spelunk notification-observe --seconds 6 --darwin com.apple.CallHistoryPluginHelper.launchnotification --darwin com.apple.callhistorysync.idslaunchnotification --darwin com.apple.callhistory.notification.call-interactions-changed --darwin com.apple.telephonyutilities.callservicesd.fakeincomingmessage --darwin com.apple.telephonyutilities.callservicesd.fakeoutgoingmessage --distributed com.apple.callhistory.save.distributed.notification --distributed kCallHistoryDatabaseChangedNotification --json > research/Phone/notifications/observer-app-open-macos-26.5.2.json
 ```
 
 Observed `sdef` result:

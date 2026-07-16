@@ -1,0 +1,25 @@
+{
+  "durationSeconds" : 6,
+  "endedAt" : "2026-07-16T09:01:32Z",
+  "events" : [
+
+  ],
+  "startedAt" : "2026-07-16T09:01:26Z",
+  "watches" : [
+    {
+      "mechanism" : "darwinNotify",
+      "name" : "com.apple.idstransfers.idslaunchnotification",
+      "registered" : true
+    },
+    {
+      "mechanism" : "darwinNotify",
+      "name" : "com.apple.imautomatichistorydeletionagent.prefchange",
+      "registered" : true
+    },
+    {
+      "mechanism" : "distributedNotificationCenter",
+      "name" : "IMMessageSentDistributedNotification",
+      "registered" : true
+    }
+  ]
+}

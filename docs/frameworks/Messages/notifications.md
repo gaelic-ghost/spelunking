@@ -19,6 +19,7 @@ Raw captures:
 - `research/Messages/notifications/notifyutil-probes-macos-26.5.2.txt`
 - `research/Messages/notifications/runtime-string-constants-imcore-macos-26.5.2.json`
 - `research/Messages/notifications/runtime-string-constants-imdpersistence-macos-26.5.2.json`
+- `research/Messages/notifications/observer-app-open-macos-26.5.2.json`
 
 Environment:
 
@@ -26,6 +27,18 @@ Environment:
 - SDK comparison: macOS 27.0 SDK from `/Applications/Xcode-beta.app`
 
 Important limitation: this macOS `notifyutil` does not support a list-all operation. Targeted `notifyutil -g` probes returned `0` for real-looking keys and for a random control key, so those probes are not proof that a notification exists or has an active publisher.
+
+## Observer Baseline
+
+Verified with the local `spelunk notification-observe` helper, which registers selected Darwin notify and distributed-notification names for a bounded duration and records notification names/timestamps only, not payload values.
+
+During a six-second observation window while opening Messages in the background, these watches registered successfully and observed zero events:
+
+- Darwin notify: `com.apple.idstransfers.idslaunchnotification`
+- Darwin notify: `com.apple.imautomatichistorydeletionagent.prefchange`
+- distributed notification center: `IMMessageSentDistributedNotification`
+
+Interpretation: app activation alone did not post the watched names during this capture. This is narrow negative evidence only; it does not rule out posts during send, receive, transfer, account login, history deletion preference changes, or notification response flows.
 
 ## Runtime String Values
 
@@ -154,4 +167,4 @@ Inference: the `IMDNotifications*` names likely relate to notification posting o
 - Which plain `IM*Notification` constants are posted through `NotificationCenter`, `DistributedNotificationCenter`, Darwin notify, XPC callbacks, or private observer abstractions?
 - Which notification names are visible outside Apple-signed clients, if any?
 - Which names are posted by `imagent` versus `IMDPersistenceAgent` versus Messages.app?
-- What payload keys are present when chat, message, and file-transfer notifications fire?
+- What payload keys are present when chat, message, and file-transfer notifications fire in a controlled test-thread flow?

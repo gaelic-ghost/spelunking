@@ -18,6 +18,8 @@ struct SPKMain {
             try printObjCRuntimeInventory(arguments: arguments)
         case "string-constants":
             try printStringConstants(arguments: arguments)
+        case "notification-observe":
+            try printNotificationObservation(arguments: arguments)
         case "help", "--help", "-h":
             printHelp()
         default:
@@ -172,6 +174,82 @@ struct SPKMain {
         }
     }
 
+    private static func printNotificationObservation(arguments: [String]) throws {
+        var darwinNames: [String] = []
+        var distributedNames: [String] = []
+        var durationSeconds = 10.0
+        var format = OutputFormat.text
+
+        var iterator = arguments.makeIterator()
+        while let argument = iterator.next() {
+            switch argument {
+            case "--darwin":
+                guard let value = iterator.next() else {
+                    throw SPKCLIError.invalidArguments("--darwin requires a notification name")
+                }
+                darwinNames.append(value)
+            case "--distributed":
+                guard let value = iterator.next() else {
+                    throw SPKCLIError.invalidArguments("--distributed requires a notification name")
+                }
+                distributedNames.append(value)
+            case "--seconds":
+                guard let value = iterator.next(), let parsed = Double(value), parsed > 0 else {
+                    throw SPKCLIError.invalidArguments("--seconds requires a positive number")
+                }
+                durationSeconds = parsed
+            case "--json":
+                format = .json
+            default:
+                throw SPKCLIError.invalidArguments("unknown notification-observe option '\(argument)'")
+            }
+        }
+
+        guard !darwinNames.isEmpty || !distributedNames.isEmpty else {
+            throw SPKCLIError.invalidArguments("notification-observe requires at least one --darwin or --distributed name")
+        }
+
+        let result = SPKNotificationObserver.observe(
+            darwinNames: darwinNames,
+            distributedNames: distributedNames,
+            durationSeconds: durationSeconds
+        )
+
+        switch format {
+        case .text:
+            printNotificationObservationResult(result)
+        case .json:
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+            let data = try encoder.encode(result)
+            print(String(decoding: data, as: UTF8.self))
+        }
+    }
+
+    private static func printNotificationObservationResult(_ result: SPKNotificationObservationResult) {
+        print("Started: \(result.startedAt)")
+        print("Ended: \(result.endedAt)")
+        print("Duration: \(result.durationSeconds)s")
+        print("")
+        print("Watches:")
+        for watch in result.watches {
+            if watch.registered {
+                print("- \(watch.mechanism.rawValue): \(watch.name) registered")
+            } else {
+                print("- \(watch.mechanism.rawValue): \(watch.name) failed (\(watch.error ?? "no diagnostic"))")
+            }
+        }
+        print("")
+        print("Events (\(result.events.count)):")
+        for event in result.events {
+            if let payloadKeyCount = event.payloadKeyCount {
+                print("- \(event.observedAt) \(event.mechanism.rawValue) \(event.name) payloadKeys=\(payloadKeyCount)")
+            } else {
+                print("- \(event.observedAt) \(event.mechanism.rawValue) \(event.name)")
+            }
+        }
+    }
+
     private static func printTextInventory(_ inventory: SPKObjCRuntimeInventory) {
         print("Loaded images:")
         for image in inventory.loadedImages {
@@ -225,12 +303,15 @@ struct SPKMain {
               spelunk targets
               spelunk objc-runtime [--image PATH] [--prefix PREFIX] [--methods] [--properties] [--protocols] [--json]
               spelunk string-constants --image PATH --symbol SYMBOL [--symbol SYMBOL ...] [--kind nsstring|c-string|c-string-pointer] [--json]
+              spelunk notification-observe [--darwin NAME] [--distributed NAME] [--seconds N] [--json]
 
             Commands:
               targets       List seeded research targets.
               objc-runtime  Load framework images read-only and print matching Objective-C runtime metadata.
               string-constants
                             Load a framework image read-only and print exported NSString constant values.
+              notification-observe
+                            Observe selected Darwin notify and distributed notification names for a bounded duration.
             """
         )
     }

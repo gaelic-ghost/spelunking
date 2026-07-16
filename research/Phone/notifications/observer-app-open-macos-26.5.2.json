@@ -1,0 +1,45 @@
+{
+  "durationSeconds" : 6,
+  "endedAt" : "2026-07-16T09:01:44Z",
+  "events" : [
+
+  ],
+  "startedAt" : "2026-07-16T09:01:38Z",
+  "watches" : [
+    {
+      "mechanism" : "darwinNotify",
+      "name" : "com.apple.CallHistoryPluginHelper.launchnotification",
+      "registered" : true
+    },
+    {
+      "mechanism" : "darwinNotify",
+      "name" : "com.apple.callhistorysync.idslaunchnotification",
+      "registered" : true
+    },
+    {
+      "mechanism" : "darwinNotify",
+      "name" : "com.apple.callhistory.notification.call-interactions-changed",
+      "registered" : true
+    },
+    {
+      "mechanism" : "darwinNotify",
+      "name" : "com.apple.telephonyutilities.callservicesd.fakeincomingmessage",
+      "registered" : true
+    },
+    {
+      "mechanism" : "darwinNotify",
+      "name" : "com.apple.telephonyutilities.callservicesd.fakeoutgoingmessage",
+      "registered" : true
+    },
+    {
+      "mechanism" : "distributedNotificationCenter",
+      "name" : "com.apple.callhistory.save.distributed.notification",
+      "registered" : true
+    },
+    {
+      "mechanism" : "distributedNotificationCenter",
+      "name" : "kCallHistoryDatabaseChangedNotification",
+      "registered" : true
+    }
+  ]
+}

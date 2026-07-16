@@ -20,6 +20,7 @@ Raw captures:
 - `research/Phone/notifications/runtime-string-constants-telephonyutilities-macos-26.5.2.json`
 - `research/Phone/notifications/runtime-string-constants-callhistory-darwin-macos-26.5.2.json`
 - `research/Phone/notifications/runtime-string-constants-callhistory-nsstring-macos-26.5.2.json`
+- `research/Phone/notifications/observer-app-open-macos-26.5.2.json`
 
 Environment:
 
@@ -27,6 +28,22 @@ Environment:
 - SDK comparison: macOS 27.0 SDK from `/Applications/Xcode-beta.app`
 
 Important limitation: this macOS `notifyutil` does not support a list-all operation. Targeted `notifyutil -g` probes returned `0` for real-looking keys and for a random control key, so those probes are not proof that a notification exists or has an active publisher.
+
+## Observer Baseline
+
+Verified with the local `spelunk notification-observe` helper, which registers selected Darwin notify and distributed-notification names for a bounded duration and records notification names/timestamps only, not payload values.
+
+During a six-second observation window while opening Phone in the background, these watches registered successfully and observed zero events:
+
+- Darwin notify: `com.apple.CallHistoryPluginHelper.launchnotification`
+- Darwin notify: `com.apple.callhistorysync.idslaunchnotification`
+- Darwin notify: `com.apple.callhistory.notification.call-interactions-changed`
+- Darwin notify: `com.apple.telephonyutilities.callservicesd.fakeincomingmessage`
+- Darwin notify: `com.apple.telephonyutilities.callservicesd.fakeoutgoingmessage`
+- distributed notification center: `com.apple.callhistory.save.distributed.notification`
+- distributed notification center: `kCallHistoryDatabaseChangedNotification`
+
+Interpretation: app activation alone did not post the watched names during this capture. This is narrow negative evidence only; it does not rule out posts during call-service state changes, call-history writes, FaceTime activity, fake-message test triggers, IDS sync activity, or controlled call/voicemail flows.
 
 ## Runtime String Values
 
@@ -132,11 +149,11 @@ Inference: these are not ordinary app-level NotificationCenter constants. They a
 
 ### Darwin Notification Naming
 
-Verified by exported symbol naming, not by observed post:
+Verified by exported symbol naming and runtime string resolution, not by observed post:
 
 - `CHCallInteractionsDidChangeDarwinNotification`
 
-Inference: the symbol name explicitly indicates a Darwin notification constant, but this pass did not recover the constant's string value or observe a post.
+Inference: the symbol name explicitly indicates a Darwin notification constant, and the live string value is `com.apple.callhistory.notification.call-interactions-changed`. The app-open observer baseline did not observe a post, so delivery timing and publisher remain open.
 
 ### Local / In-Process Notification Constants
 
@@ -170,4 +187,4 @@ Unclassified or naming-classified exported constants:
 - Which plain `TU*Notification` constants are posted through `NotificationCenter`, `DistributedNotificationCenter`, Darwin notify, XPC callbacks, or private observer abstractions?
 - Which names are posted by `callservicesd` versus `callhistoryd` versus Phone.app or FaceTime components?
 - Which call-history constants correspond to database changes versus UI-facing recents updates?
-- What payload keys are present for call status, call history, voicemail, and conversation notifications?
+- What payload keys are present for call status, call history, voicemail, and conversation notifications in controlled call or database-change flows?

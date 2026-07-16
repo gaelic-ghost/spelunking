@@ -110,6 +110,7 @@ mkdir -p research/Messages/surfaces
 /usr/bin/open -g -u '<root Messages URL scheme>'
 swift run spelunk string-constants --image /System/Library/PrivateFrameworks/IMCore.framework/IMCore --symbol '<notification symbol>' --json
 swift run spelunk string-constants --image /System/Library/PrivateFrameworks/IMDPersistence.framework/IMDPersistence --symbol '<notification symbol>' --json
+(sleep 1; /usr/bin/open -g -a Messages) & swift run spelunk notification-observe --seconds 6 --darwin com.apple.idstransfers.idslaunchnotification --darwin com.apple.imautomatichistorydeletionagent.prefchange --distributed IMMessageSentDistributedNotification --json > research/Messages/notifications/observer-app-open-macos-26.5.2.json
 ```
 
 Privacy note: the SQLite commands captured table and column names only. The app-open and URL-scheme log streams were bounded to root URLs and activation behavior. No row data, message text, handles, recipients, attachment names, or counts were intentionally captured.
