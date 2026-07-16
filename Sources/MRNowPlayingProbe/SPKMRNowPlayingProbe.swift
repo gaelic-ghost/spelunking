@@ -591,6 +591,7 @@ struct SPKMRNowPlayingProbe {
         _ = playerPath
         print("\(label) internal wrappers: disabled; constructing MRNowPlayingPlayerClient or MRNowPlayingPlayerClientRequests from MRPlayerPath crashed in Swift runtime bridging")
         print("\(label) internal wrappers: crash reports mr-now-playing-probe-2026-07-16-041234.ips and mr-now-playing-probe-2026-07-16-041335.ips")
+        print("\(label) internal wrappers: use mr-internal-probe for the Objective-C bridge path")
     }
 
     private static func objectFromPlayerPath(

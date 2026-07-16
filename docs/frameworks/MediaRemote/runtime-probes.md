@@ -142,17 +142,38 @@ Rejected queue follow-up: calling `MRMediaRemoteRequestNowPlayingPlaybackQueueFo
 
 Function-start evidence around the player path shows internal framework methods such as `MRNowPlayingOriginClient nowPlayingClientForPlayerPath:`, `MRNowPlayingClient initWithPlayerPath:`, and `MRNowPlayingPlayerClient initWithPlayerPath:`. That suggests a wrapper object may be constructed from the full path before metadata/queue APIs are safe.
 
-Rejected internal-wrapper follow-up: constructing `MRNowPlayingPlayerClient` or `MRNowPlayingPlayerClientRequests` from the active `MRPlayerPath` through Swift-side Objective-C runtime bridging crashed before a usable object could be printed. Crash reports:
+Swift bridge rejection: constructing `MRNowPlayingPlayerClient` or `MRNowPlayingPlayerClientRequests` from the active `MRPlayerPath` through Swift-side Objective-C runtime bridging crashed before a usable object could be printed. Crash reports:
 
 - `~/Library/Logs/DiagnosticReports/mr-now-playing-probe-2026-07-16-041234.ips`
 - `~/Library/Logs/DiagnosticReports/mr-now-playing-probe-2026-07-16-041335.ips`
 
-The faulting frame landed in `swift_getObjectType` while handling the constructed wrapper. `mr-now-playing-probe --origins --internal-requests` now reports this boundary instead of attempting construction. The next implementation should use a small Objective-C/C helper or decompiler-backed initializer signature recovery before trying this path again.
+The faulting frame landed in `swift_getObjectType` while handling the constructed wrapper. `mr-now-playing-probe --origins --internal-requests` now reports this boundary instead of attempting construction.
+
+Objective-C helper follow-up: `mr-internal-probe` successfully constructs both internal wrappers from the active Spotify player path:
+
+```text
+MRNowPlayingPlayerClient.debugDescription:
+    playerPath = LOCL (Mac) -> com.spotify.client (Spotify) -> default
+    supportedCommands = (null)
+    nowPlayingInfo = (null)
+    playbackState = Unknown
+    playbackQueue = (null)
+    capabilities = 0
+    canBeNowPlaying = NO
+
+MRNowPlayingPlayerClientRequests.debugDescription:
+    playerProperties = (null)
+    playbackState = Unknown
+    playbackQueue = (null)
+    supportedCommands = (null)
+```
+
+Interpretation: the internal wrappers are constructible when bridged through Objective-C, but creating them locally from the active `MRPlayerPath` does not by itself hydrate metadata, supported commands, or queue state for Spotify's default player. The next path is to inspect the request enqueue/hydration methods or daemon messages that populate these fields.
 
 ## Next Runtime Steps
 
 - Resolve metadata from the active `MRPlayerPath` without passing `MRClient` to `MRMediaRemoteGetNowPlayingInfoForClient`.
-- Recover or bridge the `MRNowPlayingPlayerClientRequests initWithPlayerPath:` object shape from Objective-C/C rather than Swift runtime guessing.
+- Inspect how `MRNowPlayingPlayerClientRequests` hydrates `playbackQueue`, `supportedCommands`, and `playerProperties` after construction.
 - Investigate playback queue request APIs using an API that accepts `MRPlayerPath`, or build a real `MRPlaybackQueueRequest`, rather than passing path-derived `MRPlayer` into `MRMediaRemoteRequestNowPlayingPlaybackQueueForPlayerSync`.
 - Inspect daemon-facing XPC traffic/service surfaces before any mutating command path.
 - Build an app-bundle fixture if CLI `MPNowPlayingInfoCenter` remains invisible.

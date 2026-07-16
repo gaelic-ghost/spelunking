@@ -102,6 +102,17 @@ The request-side class also names the likely state buckets:
 
 Inference: a stable metadata/queue probe should either ask the public C layer for an API that accepts a full player path, or dynamically construct the internal request/client wrapper from the active `MRPlayerPath` and call accessors on that wrapper. Passing the raw path-derived client or player into higher-level C APIs is confirmed unsafe.
 
+Runtime update: `mr-internal-probe` constructs `MRNowPlayingPlayerClient` and `MRNowPlayingPlayerClientRequests` from the active Spotify `MRPlayerPath` when the bridge is written in Objective-C. The resulting wrappers preserve the path and expose callbacks, but their hydrated state is empty for the current Spotify default player:
+
+- `supportedCommands = (null)`
+- `nowPlayingInfo = (null)`
+- `playbackState = Unknown`
+- `playbackQueue = (null)`
+- `playerProperties = (null)`
+- `capabilities = 0`
+
+Inference: `initWithPlayerPath:` is only object identity setup. A separate request, callback registration, or daemon response path populates the interesting fields.
+
 ## Controller Generations
 
 OS log strings identify several now-playing controller implementations:
