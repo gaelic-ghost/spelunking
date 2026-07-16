@@ -73,6 +73,7 @@ See `runtime-probes.md` for the Spotify and fixture-backed runtime results.
 - `daemon-observation.md`: repeatable unified-log captures around probe runs and daemon-side client evidence.
 - `entitlement-model.md`: entitlement helper symbols, daemon bitfield evidence, named entitlement status, and mapping gaps.
 - `xpc-and-messages.md`: XPC service names, message keys, command paths, endpoint routing, and serialization hints.
+- `message-id-map.md`: immediate call-site mapping for `MRXPC_MESSAGE_ID_KEY` domains, ordinals, and high-value now-playing IDs.
 - `permissions-policy.md`: runtime Code 3 denials, entitlement names, audit-token policy, and signed-helper experiment boundaries.
 - `routes-output-devices.md`: endpoint, route, output context, output device, and discovery surfaces.
 - `experiments.md`: experiment log and next steps.

@@ -164,6 +164,30 @@ Follow-up:
 
 Map `MRXPC_MESSAGE_ID_KEY` integer values and correlate `MRNowPlayingPlayerClientRequests` calls to specific message types or daemon handler names.
 
+### Message ID Call-Site Extraction
+
+Status: baseline run complete
+
+Command:
+
+```sh
+tools/mediaremote-message-id-callsites.zsh --disassembly research/MediaRemote/experiments/disassembly/20260716T085816Z/mediaremote-disassemble.txt
+```
+
+Observed behavior:
+
+Capture `research/MediaRemote/experiments/message-ids/20260716T090007Z` extracted 192 immediate call sites that pass message type values to `MRCreateXPCMessage`, `sendMessageWithType:queue:reply:`, or `sendSyncMessageWithType:error:`.
+
+The IDs use a `domain << 48 | ordinal` shape. High-signal now-playing examples include `0x0200000000000007` for `RequestNowPlayingPlaybackQueue`, `0x020000000000000F` for `GetPlayerProperties`, `0x0200000000000012` for `GetPlaybackState`, and `0x0200000000000031` for `GetSupportedCommands`.
+
+Permissions, entitlements, or SIP notes:
+
+This is a static disassembly extraction. It does not open an XPC connection, query `mediaremoted`, request now-playing state, send commands, or mutate routes.
+
+Follow-up:
+
+Correlate the Code 3 runtime failures with these known message IDs using daemon log predicates or client-side interposition, then compare the same map against macOS 27 beta evidence.
+
 ## Mutating Experiments
 
 Run only after the read-only baseline is documented.

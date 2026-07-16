@@ -72,7 +72,24 @@ Live symbols, runtime interface capture, and imports identify the core client-si
 
 Inference: most client-visible C calls likely reduce to dictionary/protobuf payloads sent through this wrapper, with `MRXPC_MESSAGE_ID_KEY` selecting the daemon-side operation and callback blocks bridged back through the default reply queue.
 
-Current gap: numeric message IDs are not mapped yet. The string evidence proves ID-key routing exists; it does not prove which integer maps to which request.
+The immediate client-side message IDs are now partially mapped in `message-id-map.md`. That map proves the framework-side message-construction values for many wrapper APIs; it does not yet prove every dynamic ID or every daemon-side handler table entry.
+
+## Message ID Map
+
+Static disassembly shows message types using a high-domain plus low-ordinal shape:
+
+```text
+message_type = domain << 48 | ordinal
+```
+
+High-value now-playing examples:
+
+- `0x0200000000000007`: `RequestNowPlayingPlaybackQueue`
+- `0x020000000000000F`: `GetPlayerProperties`
+- `0x0200000000000012`: `GetPlaybackState`
+- `0x0200000000000031`: `GetSupportedCommands`
+
+See `message-id-map.md` for the full immediate call-site map, route and command domains, safety notes, and current extraction limits.
 
 ## Command XPC Paths
 
