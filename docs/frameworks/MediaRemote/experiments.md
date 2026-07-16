@@ -225,6 +225,40 @@ Follow-up:
 
 Use the same interposed runner for narrower probes that isolate playback state, supported commands, and available-origin request paths one at a time.
 
+### Route and Output-Device Probe
+
+Status: baseline run complete
+
+Commands:
+
+```sh
+swift run mr-route-probe
+tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe
+```
+
+Observed behavior:
+
+Capture `research/MediaRemote/experiments/daemon-observation/20260716T092126Z` ran the default route probe with `MRXPCTraceInterpose` injected. The probe resolved the local endpoint as `MRAVLocalEndpoint` with UID `LOCAL`, skipped output-device copying, and skipped shared output-context queries.
+
+Observed XPC trace:
+
+- `0x0200000000000018`: resolve player path
+- `0x0100000000000004`: media playback volume
+- `0x0300000000000004`: picked route volume control capabilities
+- `0x0100000000000008`: system mute state by unified-log context, not yet mapped by static call-site extraction
+
+Daemon/log evidence:
+
+`mediaremoted` added the probe as a client with `entitlements=0`, then invalidated and removed it after the process exited. The probe emitted route/volume read log entries but no Code 3 and no route-selection or output-device mutation.
+
+Permissions, entitlements, or SIP notes:
+
+This proves the default endpoint identity route probe is read-only in intent but daemon-visible in behavior. Keep output-device copying, output-context lookup, descriptions, route mutation, and volume mutation behind explicit flags.
+
+Follow-up:
+
+Isolate which local endpoint getter triggers each volume/system-state request, then test `--output-devices` and `--contexts` separately when route/device state is needed.
+
 ## Mutating Experiments
 
 Run only after the read-only baseline is documented.

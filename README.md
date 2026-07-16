@@ -21,6 +21,7 @@ The first research target is `MediaRemote.framework` on macOS 26.5 and the insta
 - `mr-now-playing-probe`: read-only dynamic `MediaRemote.framework` probe for global now-playing info, app PID/is-playing/client state, client/player lists, and short notification observation windows.
 - `mr-internal-probe`: Objective-C helper for internal `MediaRemote.framework` wrapper experiments that need direct Objective-C runtime calls.
 - `mr-interface-probe`: Objective-C runtime interface describer for targeted `MediaRemote.framework` classes, methods, properties, ivars, and protocols.
+- `mr-route-probe`: read-oriented endpoint and output-device probe for route boundary experiments.
 - `MRXPCTraceInterpose`: private dynamic interposer for tracing MediaRemote XPC dictionary sends from local probe processes.
 - `now-playing-fixture`: metadata-only fixture for testing whether `MPNowPlayingInfoCenter` publication appears through MediaRemote.
 - `tools/mediaremote-inventory.zsh`: repeatable local capture script for dyld-cache exports, imports, strings, ObjC names, SDK diffs, support binaries, resources, and entitlements.
@@ -62,6 +63,7 @@ swift run mr-now-playing-probe --all
 swift run mr-now-playing-probe --origins
 swift run mr-internal-probe
 swift run mr-interface-probe
+swift run mr-route-probe
 swift run mr-now-playing-probe --observe 10 --application
 tools/mediaremote-inventory.zsh
 tools/mediaremote-entitlement-experiment.zsh

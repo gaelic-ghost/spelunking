@@ -24,6 +24,10 @@ let package = Package(
             name: "mr-interface-probe",
             targets: ["MRInterfaceProbe"]
         ),
+        .executable(
+            name: "mr-route-probe",
+            targets: ["MRRouteProbe"]
+        ),
         .library(
             name: "MRXPCTraceInterpose",
             type: .dynamic,
@@ -50,6 +54,9 @@ let package = Package(
         ),
         .executableTarget(
             name: "MRInterfaceProbe"
+        ),
+        .executableTarget(
+            name: "MRRouteProbe"
         ),
         .target(
             name: "MRXPCTraceInterpose"

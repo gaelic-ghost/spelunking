@@ -67,6 +67,17 @@ Meaning: these IDs are real XPC message IDs at the framework boundary, not only 
 
 The domain labels are inferred from nearby symbol/function names. They are not Apple-provided enum names.
 
+## General Service Domain `0x100`
+
+High-signal IDs observed during route/output-device probing:
+
+| Ordinal | Message Type | Observed API or Context |
+| --- | --- | --- |
+| `0x4` | `0x0100000000000004` | `_MRMediaRemoteServiceGetMediaPlaybackVolume`, runtime `mediaPlaybackVolume` request |
+| `0x8` | `0x0100000000000008` | runtime `getSystemIsMuted` request; no immediate call-site mapping recovered yet |
+
+Boundary: the `0x100` domain mixes read-style volume/system state with notifications, pairing, bless/wake, and critical-section surfaces. Keep volume or mute reads documented separately from route mutation.
+
 ## Now-Playing Domain `0x200`
 
 High-value IDs for read-oriented now-playing research:
@@ -138,6 +149,7 @@ Runtime correlation from `tools/mediaremote-xpc-trace-observe.zsh`:
 | `0x0200000000000031` | `handleSupportedCommandsRequestWithCompletion:` | completion result `nil` |
 | `0x020000000000000F` | `handlePlayerPropertiesRequestWithCompletion:` | local Code 3 |
 | `0x0200000000000007` | `enqueuePlaybackQueueRequest:completion:` | local Code 3; daemon `handlePlaybackQueueRequest` Code 3 with `entitlements=0` |
+| `0x0200000000000018` | `mr-route-probe` default endpoint setup | route probe side path before local endpoint identity prints |
 
 ## Routes and Endpoints Domain `0x300`
 
@@ -159,6 +171,12 @@ High-signal read or inspection-looking route IDs:
 | `0x33` | `0x0300000000000033` | `searchEndpointsForRoutingContextUID:timeout:details:queue:completion:` |
 | `0x37` | `0x0300000000000037` | `+[MRAVEndpoint(Intent_Volume) volumeForOutputDeviceUID:timeout:details:completion:]` |
 | `0x39` | `0x0300000000000039` | `+[MRAVEndpoint(Intent_Volume) volumeCapabilitiesForOutputDeviceUID:timeout:details:completion:]` |
+
+Runtime route-probe correlation:
+
+| Message Type | Observed Runtime Context | Runtime Result |
+| --- | --- | --- |
+| `0x0300000000000004` | `mr-route-probe` default endpoint setup; unified log `volumeControlCapabilities` | request sent; no Code 3 observed |
 
 Mutating route/session examples:
 

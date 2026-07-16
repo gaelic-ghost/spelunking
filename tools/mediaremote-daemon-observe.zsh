@@ -107,10 +107,10 @@ sleep 2
 end_time="$(date '+%Y-%m-%d %H:%M:%S')"
 end_epoch="$(date +%s)"
 
-predicate='process == "mediaremoted" OR process == "mediaremoteagent" OR process == "amfid" OR process == "taskgated-helper" OR eventMessage CONTAINS[c] "mr-internal-probe" OR eventMessage CONTAINS[c] "mr-now-playing-probe" OR eventMessage CONTAINS[c] "MRDMediaRemoteClient" OR eventMessage CONTAINS[c] "Operation not permitted" OR eventMessage CONTAINS[c] "playbackQueue" OR eventMessage CONTAINS[c] "playerProperties" OR subsystem CONTAINS[c] "mediaremote"'
+predicate='process == "mediaremoted" OR process == "mediaremoteagent" OR process == "amfid" OR process == "taskgated-helper" OR eventMessage CONTAINS[c] "mr-internal-probe" OR eventMessage CONTAINS[c] "mr-now-playing-probe" OR eventMessage CONTAINS[c] "mr-route-probe" OR eventMessage CONTAINS[c] "MRDMediaRemoteClient" OR eventMessage CONTAINS[c] "Operation not permitted" OR eventMessage CONTAINS[c] "playbackQueue" OR eventMessage CONTAINS[c] "playerProperties" OR eventMessage CONTAINS[c] "mediaPlaybackVolume" OR eventMessage CONTAINS[c] "volumeControlCapabilities" OR eventMessage CONTAINS[c] "getSystemIsMuted" OR eventMessage CONTAINS[c] "ConcreteOutputContext" OR subsystem CONTAINS[c] "mediaremote"'
 
 run_capture_allow_failure "unified-log.txt" /usr/bin/log show --style compact --start "${start_time}" --end "${end_time}" --predicate "${predicate}" || true
-run_capture_allow_failure "daemon-highlights.txt" zsh -c "rg -n 'Adding client|Removing client|invalidated|entitlements=|NowPlaying|not entitled|Operation not permitted|playbackQueue|playerProperties|request|load code signature|Unsatisfied entitlements|AMFI|taskgated' ${(q)capture_root}/unified-log.txt || true"
+run_capture_allow_failure "daemon-highlights.txt" zsh -c "rg -n 'Adding client|Removing client|invalidated|entitlements=|NowPlaying|not entitled|Operation not permitted|playbackQueue|playerProperties|mediaPlaybackVolume|volumeControlCapabilities|getSystemIsMuted|ConcreteOutputContext|request|load code signature|Unsatisfied entitlements|AMFI|taskgated' ${(q)capture_root}/unified-log.txt || true"
 
 {
   log "# MediaRemote Daemon Observation"

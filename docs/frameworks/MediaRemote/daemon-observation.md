@@ -102,3 +102,31 @@ Observed daemon/log result:
 Interpretation: the playback queue denial is now correlated across three evidence layers in one capture: local request wrapper, outbound XPC message ID `0x0200000000000007`, and daemon-side `handlePlaybackQueueRequest` Code 3 for an `entitlements=0` client. The player-properties denial is correlated across the local request wrapper and outbound XPC message ID `0x020000000000000F`; daemon logs did not expose a named player-properties handler in this focused window.
 
 Boundary: `MRXPCTraceInterpose` only observes local probe sends. It does not trace daemon internals, change policy decisions, or prove that every request with the same ID will receive the same result for other clients.
+
+### Route Probe
+
+Capture `research/MediaRemote/experiments/daemon-observation/20260716T092126Z` ran the default `mr-route-probe` with `MRXPCTraceInterpose` injected.
+
+Observed probe result:
+
+- Local endpoint resolved as `MRAVLocalEndpoint`.
+- Local endpoint UID was `LOCAL`.
+- Output-device copying was skipped.
+- Shared output-context queries were skipped.
+
+Observed XPC trace:
+
+| Message Type | Observed Context |
+| --- | --- |
+| `0x0200000000000018` | route probe setup side path, same ID as player-path resolution |
+| `0x0100000000000004` | unified log reports `mediaPlaybackVolume` |
+| `0x0300000000000004` | unified log reports `volumeControlCapabilities` |
+| `0x0100000000000008` | unified log reports `getSystemIsMuted` |
+
+Observed daemon result:
+
+- `mediaremoted` added `mr-route-probe` as a client with `entitlements=0`.
+- No Code 3 denial was observed.
+- No route-selection, output-device mutation, or volume mutation was requested by the helper.
+
+Interpretation: local endpoint identity is a safe read-oriented probe, but not a zero-daemon-contact probe. MediaRemote lazily initializes route/volume state around this surface.
