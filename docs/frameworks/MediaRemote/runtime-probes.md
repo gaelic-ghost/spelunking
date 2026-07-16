@@ -138,10 +138,12 @@ Interpretation: Spotify is visible through MediaRemote's origin/player-path laye
 
 Rejected follow-up: calling `MRMediaRemoteGetNowPlayingInfoForClient` with the path-derived `MRClient` object crashed in `MRMediaRemoteGetNowPlayingInfoForClient`. That object is not necessarily the same type expected by the proven Canopy `MRNowPlayingClient` info path.
 
+Rejected queue follow-up: calling `MRMediaRemoteRequestNowPlayingPlaybackQueueForPlayerSync` with the path-derived `MRPlayer` object crashed in the non-sync queue request path. `mr-now-playing-probe --origins --queue` now reports this boundary instead of calling the unsafe function.
+
 ## Next Runtime Steps
 
 - Resolve metadata from the active `MRPlayerPath` without passing `MRClient` to `MRMediaRemoteGetNowPlayingInfoForClient`.
-- Investigate playback queue request APIs using active player path as the route into richer metadata.
+- Investigate playback queue request APIs using an API that accepts `MRPlayerPath`, or build a real `MRPlaybackQueueRequest`, rather than passing path-derived `MRPlayer` into `MRMediaRemoteRequestNowPlayingPlaybackQueueForPlayerSync`.
 - Inspect daemon-facing XPC traffic/service surfaces before any mutating command path.
 - Build an app-bundle fixture if CLI `MPNowPlayingInfoCenter` remains invisible.
 - Keep command dispatch and route mutation out of runtime probes until read-only state and identity surfaces are understood.

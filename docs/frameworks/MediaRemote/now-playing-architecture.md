@@ -25,6 +25,7 @@ Rejected until proven:
 - `MRMediaRemoteGetNowPlayingApplicationDisplayID`
 - `MRMediaRemoteGetNowPlayingApplicationDisplayName`
 - path-derived `MRClient` passed to `MRMediaRemoteGetNowPlayingInfoForClient`
+- path-derived `MRPlayer` passed to `MRMediaRemoteRequestNowPlayingPlaybackQueueForPlayerSync`
 
 Those display-name/display-ID callbacks crashed when guessed as string callbacks.
 
@@ -49,6 +50,8 @@ LOCL (Mac) -> com.spotify.client (Spotify, PID 37433) -> default player
 ```
 
 The path-derived client exposes bundle identifier, display name, and process identifier through `MRNowPlayingClientGet*` helpers. The path-derived player exposes identifier `MediaRemote-DefaultPlayer`, display name `Default Player`, and audio session type `0`.
+
+The path-derived objects are useful for identity, but they are not interchangeable with every higher-level MediaRemote API. Two crashes confirmed that `MRMediaRemoteGetNowPlayingInfoForClient` and `MRMediaRemoteRequestNowPlayingPlaybackQueueForPlayerSync` expect a narrower object shape than the `MRClient`/`MRPlayer` extracted from `MRPlayerPath`.
 
 ## Controller Generations
 

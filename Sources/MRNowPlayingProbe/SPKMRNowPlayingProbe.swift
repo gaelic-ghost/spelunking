@@ -112,6 +112,7 @@ struct SPKMRNowPlayingProbe {
         let shouldReadClients = arguments.contains("--clients") || arguments.contains("--all")
         let shouldReadPlayer = arguments.contains("--player") || arguments.contains("--all")
         let shouldReadOrigins = arguments.contains("--origins") || arguments.contains("--all")
+        let shouldRequestQueues = arguments.contains("--queue")
         let observeSeconds = parseObserveSeconds(arguments: Array(CommandLine.arguments.dropFirst()))
 
         if shouldPrime {
@@ -135,7 +136,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         if shouldReadOrigins {
-            try readOrigins(handle: handle)
+            try readOrigins(handle: handle, shouldRequestQueues: shouldRequestQueues)
         }
 
         try readNowPlayingInfo(handle: handle)
@@ -328,29 +329,51 @@ struct SPKMRNowPlayingProbe {
         return result
     }
 
-    private static func readOrigins(handle: UnsafeMutableRawPointer) throws {
+    private static func readOrigins(
+        handle: UnsafeMutableRawPointer,
+        shouldRequestQueues: Bool
+    ) throws {
         print("MediaRemote read-only origin probe")
 
-        readOriginIfAvailable(handle: handle, symbolName: "MRMediaRemoteGetLocalOrigin", label: "Local origin")
-        readOriginIfAvailable(handle: handle, symbolName: "MRMediaRemoteGetActiveOrigin", label: "Active origin")
-        readAvailableOriginsIfAvailable(handle: handle)
+        readOriginIfAvailable(
+            handle: handle,
+            symbolName: "MRMediaRemoteGetLocalOrigin",
+            label: "Local origin",
+            shouldRequestQueues: shouldRequestQueues
+        )
+        readOriginIfAvailable(
+            handle: handle,
+            symbolName: "MRMediaRemoteGetActiveOrigin",
+            label: "Active origin",
+            shouldRequestQueues: shouldRequestQueues
+        )
+        readAvailableOriginsIfAvailable(handle: handle, shouldRequestQueues: shouldRequestQueues)
     }
 
     private static func readOriginIfAvailable(
         handle: UnsafeMutableRawPointer,
         symbolName: String,
-        label: String
+        label: String,
+        shouldRequestQueues: Bool
     ) {
         do {
-            try readOrigin(handle: handle, symbolName: symbolName, label: label)
+            try readOrigin(
+                handle: handle,
+                symbolName: symbolName,
+                label: label,
+                shouldRequestQueues: shouldRequestQueues
+            )
         } catch {
             print("\(label): \(error)")
         }
     }
 
-    private static func readAvailableOriginsIfAvailable(handle: UnsafeMutableRawPointer) {
+    private static func readAvailableOriginsIfAvailable(
+        handle: UnsafeMutableRawPointer,
+        shouldRequestQueues: Bool
+    ) {
         do {
-            try readAvailableOrigins(handle: handle)
+            try readAvailableOrigins(handle: handle, shouldRequestQueues: shouldRequestQueues)
         } catch {
             print("Available origins: \(error)")
         }
@@ -359,7 +382,8 @@ struct SPKMRNowPlayingProbe {
     private static func readOrigin(
         handle: UnsafeMutableRawPointer,
         symbolName: String,
-        label: String
+        label: String,
+        shouldRequestQueues: Bool
     ) throws {
         guard let symbol = dlsym(handle, symbolName) else {
             throw SPKProbeError.missingSymbol(symbolName)
@@ -378,7 +402,12 @@ struct SPKMRNowPlayingProbe {
             }
 
             print("\(label): success=\(success) \(summarizeOrigin(origin, handle: handle))")
-            readOriginDetails(handle: handle, origin: origin, label: label)
+            readOriginDetails(
+                handle: handle,
+                origin: origin,
+                label: label,
+                shouldRequestQueues: shouldRequestQueues
+            )
         }
 
         guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
@@ -386,7 +415,10 @@ struct SPKMRNowPlayingProbe {
         }
     }
 
-    private static func readAvailableOrigins(handle: UnsafeMutableRawPointer) throws {
+    private static func readAvailableOrigins(
+        handle: UnsafeMutableRawPointer,
+        shouldRequestQueues: Bool
+    ) throws {
         let symbolName = "MRMediaRemoteGetAvailableOrigins"
 
         guard let symbol = dlsym(handle, symbolName) else {
@@ -415,7 +447,12 @@ struct SPKMRNowPlayingProbe {
 
                 let label = "Origin[\(index)]"
                 print("\(label): \(summarizeOrigin(origin, handle: handle))")
-                readOriginDetails(handle: handle, origin: origin, label: label)
+                readOriginDetails(
+                    handle: handle,
+                    origin: origin,
+                    label: label,
+                    shouldRequestQueues: shouldRequestQueues
+                )
             }
         }
 
@@ -427,7 +464,8 @@ struct SPKMRNowPlayingProbe {
     private static func readOriginDetails(
         handle: UnsafeMutableRawPointer,
         origin: AnyObject,
-        label: String
+        label: String,
+        shouldRequestQueues: Bool
     ) {
         if let info = try? readInfoForObject(
             handle: handle,
@@ -484,7 +522,12 @@ struct SPKMRNowPlayingProbe {
 
                 let playerPathLabel = "\(label) playerPath[\(index)]"
                 print("\(playerPathLabel): \(summarizePlayerPath(playerPath, handle: handle))")
-                readPlayerPathDetails(handle: handle, playerPath: playerPath, label: playerPathLabel)
+                readPlayerPathDetails(
+                    handle: handle,
+                    playerPath: playerPath,
+                    label: playerPathLabel,
+                    shouldRequestQueues: shouldRequestQueues
+                )
             }
         } catch {
             print("\(label) active player paths: \(error)")
@@ -494,7 +537,8 @@ struct SPKMRNowPlayingProbe {
     private static func readPlayerPathDetails(
         handle: UnsafeMutableRawPointer,
         playerPath: AnyObject,
-        label: String
+        label: String,
+        shouldRequestQueues: Bool
     ) {
         if let client = objectFromPlayerPath(handle: handle, playerPath: playerPath, symbolName: "MRNowPlayingPlayerPathGetClient") {
             print("\(label) client: \(summarizeClient(client, handle: handle))")
@@ -502,6 +546,10 @@ struct SPKMRNowPlayingProbe {
 
         if let player = objectFromPlayerPath(handle: handle, playerPath: playerPath, symbolName: "MRNowPlayingPlayerPathGetPlayer") {
             print("\(label) player: \(summarizePlayer(player, handle: handle))")
+
+            if shouldRequestQueues {
+                print("\(label) playback queue: disabled; MRMediaRemoteRequestNowPlayingPlaybackQueueForPlayerSync crashed with path-derived MRPlayer")
+            }
         }
 
         if let origin = objectFromPlayerPath(handle: handle, playerPath: playerPath, symbolName: "MRNowPlayingPlayerPathGetOrigin") {
