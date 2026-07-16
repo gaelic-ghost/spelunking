@@ -106,7 +106,15 @@ Inference: the current Code 3 denials for `playerProperties` and `playbackQueue`
 
 ## Signed-Helper Experiment Path
 
-The next permission experiment should be a tiny signed macOS command-line helper that repeats the current Objective-C request calls with one entitlement change per run.
+A tiny signed macOS command-line helper flow repeats the current Objective-C request calls with one entitlement change per run.
+
+Command:
+
+```sh
+tools/mediaremote-entitlement-experiment.zsh
+```
+
+The runner builds `mr-internal-probe`, copies the product into an ignored capture directory, signs copied variants with ad-hoc signatures plus candidate entitlements, records the embedded entitlements, and captures each run.
 
 Candidate entitlement families to test first:
 
@@ -123,7 +131,20 @@ Only after read access is understood should command or route entitlements be tes
 - `com.apple.mediaremote.remote-control-discovery`
 - `com.apple.avfoundation.allows-set-output-device`
 
-Risk: private entitlements may be rejected, ignored, or treated differently for non-Apple-signed binaries even on a SIP-disabled local system. The experiment needs to record the resulting code signature, embedded entitlements, runtime error, and whether the daemon logs a specific entitlement failure.
+Current result from capture `20260716T083329Z`:
+
+- Baseline copied helper ran with active Spotify playback, resolved one active player path, and still returned Code 3 for `playerProperties` and `playbackQueue`.
+- `codesign` embedded each candidate entitlement successfully into copied helper variants.
+- Every ad-hoc signed private-entitlement variant exited with status 137 before running probe code.
+- Unified log evidence from AMFI/amfid reports `AppleMobileFileIntegrityError Code=-424 "The file is adhoc signed but contains restricted entitlements"` and kernel `load code signature error 4`.
+
+Interpretation: on this system, the first four candidate entitlement keys are restricted at code-signature validation time for an ad-hoc signed helper. They cannot currently be used as a simple SIP-disabled/ad-hoc-signing bypass for the Code 3 MediaRemote policy boundary.
+
+Risk: private entitlements may be rejected, ignored, or treated differently for non-Apple-signed binaries even on a SIP-disabled local system. The experiment records the resulting code signature, embedded entitlements, runtime error, and system log evidence so each future signing lane can be compared against the baseline.
+
+Current capture location pattern:
+
+- `research/MediaRemote/experiments/entitlements/<timestamp>/`
 
 ## Repeatable Evidence
 
