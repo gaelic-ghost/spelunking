@@ -24,6 +24,14 @@ The same helper can call request methods without crashing, but richer data hydra
 
 This makes the active origin/player-path route real, but not sufficient for full now-playing metadata, player properties, or queue access from the current helper.
 
+Message-ID correlation from capture `research/MediaRemote/experiments/daemon-observation/20260716T090922Z`:
+
+| Operation | Outbound Message ID | Daemon Evidence |
+| --- | --- | --- |
+| `handleSupportedCommandsRequestWithCompletion:` | `0x0200000000000031` | No daemon denial observed; local completion returned `nil`. |
+| `handlePlayerPropertiesRequestWithCompletion:` | `0x020000000000000F` | Local completion returned Code 3. |
+| `enqueuePlaybackQueueRequest:completion:` | `0x0200000000000007` | Daemon logged `handlePlaybackQueueRequest` Code 3 for the same probe client with `entitlements=0`. |
+
 ## Static Framework Evidence
 
 The live framework string sections include explicit policy and error strings:

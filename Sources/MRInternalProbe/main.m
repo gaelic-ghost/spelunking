@@ -3,6 +3,7 @@
 #import <dlfcn.h>
 #import <objc/message.h>
 #import <objc/runtime.h>
+#import <xpc/xpc.h>
 
 typedef void (*MRMediaRemoteGetOriginFunc)(dispatch_queue_t, void (^)(BOOL, id));
 typedef void (*MRMediaRemoteGetObjectsForOriginFunc)(id, dispatch_queue_t, void (^)(NSArray *));
@@ -13,6 +14,136 @@ typedef void (*MRPlaybackQueueRequestSetStringFunc)(id, CFStringRef);
 typedef CFStringRef (*MRPlaybackQueueRequestCopyDescriptionFunc)(id);
 typedef CFStringRef (*MRPlaybackQueueCopyReadableDescriptionFunc)(id);
 typedef NSArray *(*MRPlaybackQueueCopyContentItemsFunc)(id);
+
+typedef void (*MRXPCSendMessageWithTypeIMP)(id, SEL, uint64_t, dispatch_queue_t, id);
+typedef id (*MRXPCSendSyncMessageWithTypeIMP)(id, SEL, uint64_t, id *);
+typedef void (*MRXPCSendMessageIMP)(id, SEL, id, dispatch_queue_t, id);
+typedef id (*MRXPCSendSyncMessageIMP)(id, SEL, id, id *);
+
+static MRXPCSendMessageWithTypeIMP originalSendMessageWithType = NULL;
+static MRXPCSendSyncMessageWithTypeIMP originalSendSyncMessageWithType = NULL;
+static MRXPCSendMessageIMP originalSendMessage = NULL;
+static MRXPCSendSyncMessageIMP originalSendSyncMessage = NULL;
+static SEL sendMessageWithTypeSelector = NULL;
+static SEL sendSyncMessageWithTypeSelector = NULL;
+static SEL sendMessageSelector = NULL;
+static SEL sendSyncMessageSelector = NULL;
+
+static const char *messageDomainName(uint64_t messageType) {
+    switch ((messageType >> 48) & 0xffff) {
+    case 0x100:
+        return "general";
+    case 0x200:
+        return "now-playing";
+    case 0x300:
+        return "routes";
+    case 0x400:
+        return "commands";
+    case 0x500:
+        return "browsable-content";
+    case 0x600:
+        return "television";
+    case 0x900:
+        return "voice-recording";
+    case 0xA00:
+        return "agent";
+    case 0xB00:
+        return "ui-service";
+    case 0xC00:
+        return "group-session";
+    default:
+        return "unknown";
+    }
+}
+
+static void printMessageType(NSString *surface, uint64_t messageType) {
+    uint64_t domain = (messageType >> 48) & 0xffff;
+    uint64_t ordinal = messageType & 0xffffffffffff;
+
+    printf(
+        "MRXPC trace: %s messageType=0x%016llX domain=0x%llX(%s) ordinal=0x%llX\n",
+        surface.UTF8String,
+        (unsigned long long)messageType,
+        (unsigned long long)domain,
+        messageDomainName(messageType),
+        (unsigned long long)ordinal
+    );
+    fflush(stdout);
+}
+
+static uint64_t messageTypeFromXPCMessage(id message) {
+    if (message == nil) {
+        return 0;
+    }
+
+    xpc_object_t xpcMessage = (xpc_object_t)message;
+    if (xpc_get_type(xpcMessage) != XPC_TYPE_DICTIONARY) {
+        return 0;
+    }
+
+    return xpc_dictionary_get_uint64(xpcMessage, "MRXPC_MESSAGE_ID_KEY");
+}
+
+static void installMRXPCConnectionTraceHooks(void) {
+    Class connectionClass = NSClassFromString(@"MRXPCConnection");
+    if (connectionClass == Nil) {
+        printf("MRXPC trace: MRXPCConnection class unavailable\n");
+        return;
+    }
+
+    sendMessageWithTypeSelector = NSSelectorFromString(@"sendMessageWithType:queue:reply:");
+    sendSyncMessageWithTypeSelector = NSSelectorFromString(@"sendSyncMessageWithType:error:");
+    sendMessageSelector = NSSelectorFromString(@"sendMessage:queue:reply:");
+    sendSyncMessageSelector = NSSelectorFromString(@"sendSyncMessage:error:");
+
+    Method sendMessageWithTypeMethod = class_getInstanceMethod(connectionClass, sendMessageWithTypeSelector);
+    if (sendMessageWithTypeMethod != NULL) {
+        originalSendMessageWithType = (MRXPCSendMessageWithTypeIMP)method_getImplementation(sendMessageWithTypeMethod);
+        IMP replacement = imp_implementationWithBlock(^(id receiver, uint64_t messageType, dispatch_queue_t queue, id reply) {
+            printMessageType(@"sendMessageWithType", messageType);
+            originalSendMessageWithType(receiver, sendMessageWithTypeSelector, messageType, queue, reply);
+        });
+        method_setImplementation(sendMessageWithTypeMethod, replacement);
+    }
+
+    Method sendSyncMessageWithTypeMethod = class_getInstanceMethod(connectionClass, sendSyncMessageWithTypeSelector);
+    if (sendSyncMessageWithTypeMethod != NULL) {
+        originalSendSyncMessageWithType = (MRXPCSendSyncMessageWithTypeIMP)method_getImplementation(sendSyncMessageWithTypeMethod);
+        IMP replacement = imp_implementationWithBlock(^(id receiver, uint64_t messageType, id *error) {
+            printMessageType(@"sendSyncMessageWithType", messageType);
+            return originalSendSyncMessageWithType(receiver, sendSyncMessageWithTypeSelector, messageType, error);
+        });
+        method_setImplementation(sendSyncMessageWithTypeMethod, replacement);
+    }
+
+    Method sendMessageMethod = class_getInstanceMethod(connectionClass, sendMessageSelector);
+    if (sendMessageMethod != NULL) {
+        originalSendMessage = (MRXPCSendMessageIMP)method_getImplementation(sendMessageMethod);
+        IMP replacement = imp_implementationWithBlock(^(id receiver, id message, dispatch_queue_t queue, id reply) {
+            uint64_t messageType = messageTypeFromXPCMessage(message);
+            if (messageType != 0) {
+                printMessageType(@"sendMessage", messageType);
+            }
+            originalSendMessage(receiver, sendMessageSelector, message, queue, reply);
+        });
+        method_setImplementation(sendMessageMethod, replacement);
+    }
+
+    Method sendSyncMessageMethod = class_getInstanceMethod(connectionClass, sendSyncMessageSelector);
+    if (sendSyncMessageMethod != NULL) {
+        originalSendSyncMessage = (MRXPCSendSyncMessageIMP)method_getImplementation(sendSyncMessageMethod);
+        IMP replacement = imp_implementationWithBlock(^(id receiver, id message, id *error) {
+            uint64_t messageType = messageTypeFromXPCMessage(message);
+            if (messageType != 0) {
+                printMessageType(@"sendSyncMessage", messageType);
+            }
+            return originalSendSyncMessage(receiver, sendSyncMessageSelector, message, error);
+        });
+        method_setImplementation(sendSyncMessageMethod, replacement);
+    }
+
+    printf("MRXPC trace: installed MRXPCConnection send hooks\n");
+}
 
 static id sendObject(id receiver, SEL selector) {
     id (*send)(id, SEL) = (id (*)(id, SEL))objc_msgSend;
@@ -274,11 +405,16 @@ static void inspectWrapper(NSString *className, id playerPath, void *handle) {
 
 int main(void) {
     @autoreleasepool {
+        setvbuf(stdout, NULL, _IOLBF, 0);
+        setvbuf(stderr, NULL, _IOLBF, 0);
+
         void *handle = dlopen("/System/Library/PrivateFrameworks/MediaRemote.framework/Versions/A/MediaRemote", RTLD_NOW);
         if (handle == NULL) {
             fprintf(stderr, "mr-internal-probe: could not load MediaRemote.framework: %s\n", dlerror());
             return 1;
         }
+
+        installMRXPCConnectionTraceHooks();
 
         MRMediaRemoteGetOriginFunc getActiveOrigin = (MRMediaRemoteGetOriginFunc)dlsym(handle, "MRMediaRemoteGetActiveOrigin");
         MRMediaRemoteGetObjectsForOriginFunc getActivePlayerPaths = (MRMediaRemoteGetObjectsForOriginFunc)dlsym(handle, "MRMediaRemoteGetActivePlayerPathsForOrigin");

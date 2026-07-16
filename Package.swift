@@ -24,6 +24,11 @@ let package = Package(
             name: "mr-interface-probe",
             targets: ["MRInterfaceProbe"]
         ),
+        .library(
+            name: "MRXPCTraceInterpose",
+            type: .dynamic,
+            targets: ["MRXPCTraceInterpose"]
+        ),
         .executable(
             name: "now-playing-fixture",
             targets: ["NowPlayingFixture"]
@@ -45,6 +50,9 @@ let package = Package(
         ),
         .executableTarget(
             name: "MRInterfaceProbe"
+        ),
+        .target(
+            name: "MRXPCTraceInterpose"
         ),
         .executableTarget(
             name: "NowPlayingFixture"

@@ -21,6 +21,7 @@ The first research target is `MediaRemote.framework` on macOS 26.5 and the insta
 - `mr-now-playing-probe`: read-only dynamic `MediaRemote.framework` probe for global now-playing info, app PID/is-playing/client state, client/player lists, and short notification observation windows.
 - `mr-internal-probe`: Objective-C helper for internal `MediaRemote.framework` wrapper experiments that need direct Objective-C runtime calls.
 - `mr-interface-probe`: Objective-C runtime interface describer for targeted `MediaRemote.framework` classes, methods, properties, ivars, and protocols.
+- `MRXPCTraceInterpose`: private dynamic interposer for tracing MediaRemote XPC dictionary sends from local probe processes.
 - `now-playing-fixture`: metadata-only fixture for testing whether `MPNowPlayingInfoCenter` publication appears through MediaRemote.
 - `tools/mediaremote-inventory.zsh`: repeatable local capture script for dyld-cache exports, imports, strings, ObjC names, SDK diffs, support binaries, resources, and entitlements.
 - `tools/mediaremote-entitlement-experiment.zsh`: repeatable local runner that builds `mr-internal-probe`, signs copied variants with candidate private entitlements, and captures runtime differences.
@@ -28,6 +29,7 @@ The first research target is `MediaRemote.framework` on macOS 26.5 and the insta
 - `tools/mediaremote-interface-capture.zsh`: repeatable local runner that captures selected Objective-C runtime interfaces from the loaded framework into ignored research output.
 - `tools/mediaremote-message-surfaces.zsh`: repeatable extractor for XPC keys, message logs, request handlers, protobuf/message symbols, and transport helpers from an inventory capture.
 - `tools/mediaremote-message-id-callsites.zsh`: repeatable disassembly parser for immediate MediaRemote XPC message type call sites.
+- `tools/mediaremote-xpc-trace-observe.zsh`: repeatable DYLD interposer runner that pairs XPC message-ID traces with focused daemon logs.
 
 ## Research Shape
 
@@ -67,4 +69,5 @@ tools/mediaremote-daemon-observe.zsh
 tools/mediaremote-interface-capture.zsh
 tools/mediaremote-message-surfaces.zsh
 tools/mediaremote-message-id-callsites.zsh
+tools/mediaremote-xpc-trace-observe.zsh
 ```

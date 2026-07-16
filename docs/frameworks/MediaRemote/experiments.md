@@ -188,6 +188,43 @@ Follow-up:
 
 Correlate the Code 3 runtime failures with these known message IDs using daemon log predicates or client-side interposition, then compare the same map against macOS 27 beta evidence.
 
+### XPC Message Trace Observation
+
+Status: baseline run complete
+
+Command:
+
+```sh
+tools/mediaremote-xpc-trace-observe.zsh
+```
+
+Observed behavior:
+
+Capture `research/MediaRemote/experiments/daemon-observation/20260716T090922Z` ran `mr-internal-probe` with `MRXPCTraceInterpose` injected while Spotify was playing.
+
+Client-side message trace:
+
+- `0x0200000000000018`: player path resolution
+- `0x020000000000001B`: active origin
+- `0x0200000000000027`: active player paths for local origin
+- `0x0200000000000031`: supported commands
+- `0x020000000000000F`: player properties
+- `0x0200000000000007`: playback queue
+
+The same probe run returned Code 3 for `handlePlayerPropertiesRequestWithCompletion:` after sending `0x020000000000000F`, and Code 3 for `enqueuePlaybackQueueRequest:completion:` after sending `0x0200000000000007`.
+
+Daemon-side evidence:
+
+`mediaremoted` added the probe as a client with `entitlements=0` and logged `handlePlaybackQueueRequest` returning `kMRMediaRemoteFrameworkErrorDomain Code=3 "Operation not permitted"` for the active Spotify player path in the same capture window.
+
+Permissions, entitlements, or SIP notes:
+
+The interposer is local-only instrumentation for SIP-disabled/private research. It observes outgoing XPC dictionary message IDs in the probe process; it does not grant entitlement bits, bypass daemon policy, or mutate media state.
+
+Follow-up:
+
+Use the same interposed runner for narrower probes that isolate playback state, supported commands, and available-origin request paths one at a time.
+
 ## Mutating Experiments
 
 Run only after the read-only baseline is documented.

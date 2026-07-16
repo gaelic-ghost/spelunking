@@ -77,3 +77,28 @@ Noise note: the same log window also captured an unrelated `com.apple.perl` clie
 These observations do not prove which exact daemon-side branch rejects `playerProperties`. They prove the daemon sees the probes as clients with `entitlements=0` during the same run windows where richer request APIs return Code 3, and they directly log playback queue requests returning Code 3.
 
 Next daemon-side work should target more specific log predicates, private log categories, or safe interposition around entitlement-copy helpers before attempting any mutating command or route path.
+
+### XPC Message Trace Probe
+
+Capture `research/MediaRemote/experiments/daemon-observation/20260716T090922Z` ran `tools/mediaremote-xpc-trace-observe.zsh`, which injected `libMRXPCTraceInterpose.dylib` into the built `mr-internal-probe` command while Spotify was playing `Bring Me The Horizon - Doomed`.
+
+Observed probe-side message IDs:
+
+| Message Type | Known Meaning | Probe Context | Result |
+| --- | --- | --- | --- |
+| `0x0200000000000018` | resolve player path | initial active-origin/player-path setup | success |
+| `0x020000000000001B` | get active origin | initial active-origin/player-path setup | success |
+| `0x0200000000000027` | get active player paths for local origin | initial active-origin/player-path setup | success |
+| `0x0200000000000031` | get supported commands | `handleSupportedCommandsRequestWithCompletion:` | completion result `nil` |
+| `0x020000000000000F` | get player properties | `handlePlayerPropertiesRequestWithCompletion:` | Code 3 |
+| `0x0200000000000007` | request now-playing playback queue | `enqueuePlaybackQueueRequest:completion:` | Code 3 |
+
+Observed daemon/log result:
+
+- `mediaremoted` added the probe client with `entitlements=0`.
+- The daemon logged `Request: handlePlaybackQueueRequest<spelunking.internal-probe.default ...>`.
+- The daemon logged the matching response returning `kMRMediaRemoteFrameworkErrorDomain Code=3 "Operation not permitted"` for the active Spotify player path.
+
+Interpretation: the playback queue denial is now correlated across three evidence layers in one capture: local request wrapper, outbound XPC message ID `0x0200000000000007`, and daemon-side `handlePlaybackQueueRequest` Code 3 for an `entitlements=0` client. The player-properties denial is correlated across the local request wrapper and outbound XPC message ID `0x020000000000000F`; daemon logs did not expose a named player-properties handler in this focused window.
+
+Boundary: `MRXPCTraceInterpose` only observes local probe sends. It does not trace daemon internals, change policy decisions, or prove that every request with the same ID will receive the same result for other clients.

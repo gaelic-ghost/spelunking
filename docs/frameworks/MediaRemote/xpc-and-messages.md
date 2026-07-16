@@ -91,6 +91,15 @@ High-value now-playing examples:
 
 See `message-id-map.md` for the full immediate call-site map, route and command domains, safety notes, and current extraction limits.
 
+Runtime tracing with `tools/mediaremote-xpc-trace-observe.zsh` has confirmed several now-playing IDs in a live probe process:
+
+- `0x0200000000000018`: player path resolution during origin setup.
+- `0x020000000000001B`: active origin.
+- `0x0200000000000027`: active player paths for local origin.
+- `0x0200000000000031`: supported commands request.
+- `0x020000000000000F`: player properties request, followed by local Code 3.
+- `0x0200000000000007`: playback queue request, followed by local and daemon-side Code 3.
+
 ## Command XPC Paths
 
 Command logs identify daemon and app directions:

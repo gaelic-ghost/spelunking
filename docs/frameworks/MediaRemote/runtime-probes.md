@@ -208,6 +208,17 @@ The request was built with `MRPlaybackQueueRequestCreateDefault`, had the active
 
 See `permissions-policy.md` for the current entitlement and audit-token evidence behind the Code 3 boundary.
 
+XPC trace follow-up with `tools/mediaremote-xpc-trace-observe.zsh`:
+
+```text
+MRXPC interpose: xpc_connection_send_message_with_reply messageType=0x0200000000000031 domain=0x200 ordinal=0x31
+MRXPC trace: sendMessage messageType=0x020000000000000F domain=0x200(now-playing) ordinal=0xF
+MRXPC interpose: xpc_connection_send_message_with_reply messageType=0x020000000000000F domain=0x200 ordinal=0xF
+MRXPC interpose: xpc_connection_send_message_with_reply messageType=0x0200000000000007 domain=0x200 ordinal=0x7
+```
+
+Interpretation: the internal wrapper requests now correlate to concrete now-playing message IDs. Supported commands sends `0x0200000000000031`, player properties sends `0x020000000000000F`, and playback queue sends `0x0200000000000007`. The playback queue Code 3 also lines up with daemon-side `handlePlaybackQueueRequest` denial for the same probe client with `entitlements=0`.
+
 ## Next Runtime Steps
 
 - Resolve metadata from the active `MRPlayerPath` without passing `MRClient` to `MRMediaRemoteGetNowPlayingInfoForClient`.

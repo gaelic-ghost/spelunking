@@ -128,6 +128,17 @@ Mutating or state-publishing IDs in the same domain:
 
 Boundary: `0x200` is not inherently read-only. It mixes useful read requests with identity, queue, playback-state, and content-item mutation/publishing paths.
 
+Runtime correlation from `tools/mediaremote-xpc-trace-observe.zsh`:
+
+| Message Type | Observed Runtime Context | Runtime Result |
+| --- | --- | --- |
+| `0x0200000000000018` | initial active-origin/player-path setup | success |
+| `0x020000000000001B` | initial active-origin/player-path setup | success |
+| `0x0200000000000027` | initial active-origin/player-path setup | success |
+| `0x0200000000000031` | `handleSupportedCommandsRequestWithCompletion:` | completion result `nil` |
+| `0x020000000000000F` | `handlePlayerPropertiesRequestWithCompletion:` | local Code 3 |
+| `0x0200000000000007` | `enqueuePlaybackQueueRequest:completion:` | local Code 3; daemon `handlePlaybackQueueRequest` Code 3 with `entitlements=0` |
+
 ## Routes and Endpoints Domain `0x300`
 
 High-signal read or inspection-looking route IDs:
