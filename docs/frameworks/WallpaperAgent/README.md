@@ -88,7 +88,8 @@ Observed non-mutating results from this branch:
       extensions, feature flags, logging preferences, and filtered
       string/symbol evidence
 - [x] Static receiver-side implementation trace of `WallpaperDebugServer`
-      decode, async handoff, extension dispatch inputs, and response reply
+      decode, async handoff, extension lookup, `handleDebugRequest` dispatch,
+      error-response construction, and response reply
 - [ ] SIP-enabled proof that an ordinary client can successfully call the
       private Swift/XPC envelope
 - [ ] SIP-enabled proof for a non-mutating redraw request
@@ -670,12 +671,26 @@ The key x86_64 receiver window starts at `0x10009b455`:
 8. The continuation calls `WallpaperDebugRequestMessage.request` and
    `WallpaperDebugRequestMessage.extensionIdentifier`.
 9. The continuation dispatches with the recovered `(request,
-   extensionIdentifier)` pair. The exact callee name is still not recovered
-   from the stripped Swift function pointer, but the imported
-   `WallpaperExtensionProxy.handleDebugRequest` symbol is the matching
-   extension-side request primitive.
+   extensionIdentifier)` pair.
 10. The response continuation loads `WallpaperDebugResponse` metadata plus its
     `Encodable` conformance and calls `XPCReceivedMessage.reply(_:)`.
+
+The extension-dispatch path is now traced further in the x86_64 slice:
+
+| Address | Evidence |
+| --- | --- |
+| `0x1001444d9` | Helper path loads `WallpaperTypes.WallpaperChoiceProviderID` metadata and iterates a dictionary-like collection at object offset `0x78`. This appears to resolve a requested extension/provider entry from `extensionIdentifier`. |
+| `0x10014406e` | Reads a candidate extension/proxy object from the resolved entry. |
+| `0x100144071` | Loads the imported async function pointer for `WallpaperExtensionProxy.handleDebugRequest`. |
+| `0x1001440bc` | Tail-calls `WallpaperExtensionProxy.handleDebugRequest(WallpaperDebugRequest) async throws -> WallpaperDebugResponse`. |
+| `0x100144151` | Loads `WallpaperDebugResponse.error(String)` for a failure branch using the literal `com.apple.wallpaper.extension`. |
+| `0x1001442b3` | Builds an error string beginning with `No valid extension`. |
+| `0x100144340` | Loads `WallpaperDebugResponse.error(String)` for the `No valid extension` path. |
+
+The agent string table also contains the prefix `Unable to handle request:`.
+It sits next to the extension-error literals and likely belongs to the
+thrown-error/logging path around failed debug request handling, but the exact
+string composition was not fully decompiled in this slice.
 
 This proves the receiver is not expecting a bare dictionary or a method-name
 selector. It expects a Swift/XPC message whose body decodes exactly as
@@ -705,6 +720,12 @@ Built-in wallpaper extensions observed in `/System/Library/ExtensionKit/Extensio
 | `com.apple.wallpaper.extension.sonoma` | `WallpaperSonomaExtension.appex` |
 | `com.apple.wallpaper.extension.ventura` | `WallpaperVenturaExtension.appex` |
 | `com.apple.NeptuneOneExtension` | `NeptuneOneWallpaper.appex` |
+
+The agent binary also contains the provider string
+`com.apple.wallpaper.extension.photos`, but this filesystem inventory did not
+find a matching ExtensionKit bundle on the current OS image. Treat it as an
+agent-known provider identifier until a concrete bundle or runtime registration
+is found.
 
 These are plausible `extensionIdentifier` values for
 `WallpaperDebugRequestMessage`. They are not all proven to implement every
@@ -848,10 +869,9 @@ Not accessible or not assumed accessible:
 2. Run a controlled same-user `SIGTERM` respawn probe outside active desktop
    work, with pid before/after, launchd state, and log evidence.
 3. Deepen the remaining `WallpaperDebugServer` implementation trace:
-   - identify the stripped extension-dispatch callee after
-     `extensionIdentifier` and `request` extraction
-   - trace `WallpaperDebugResponse.error(String)` construction paths
    - identify any listener/session-level audit-token or code-signing checks
+   - decompile the exact string composition for `No valid extension` and
+     `Unable to handle request:`
 4. Recover `Wallpaper.ContentType` cases and any raw values.
 5. Recover `AssertionValue` cases and presentation-mode raw strings.
 6. Extend the Swift helper to encode private Swift/XPC messages only after the
@@ -862,6 +882,8 @@ Not accessible or not assumed accessible:
 - Raw command inventory: `../../../research/WallpaperAgent/README.md`
 - SDK and receiver-import symbol helper:
   `../../../tools/extract-wallpaper-symbols.sh`
+- Receiver disassembly-window helper:
+  `../../../tools/inspect-wallpaper-debug-receiver.sh`
 - Ghidra string and symbol xref helper:
   `../../../tools/ghidra/DumpWallpaperDebugReferences.java`
 - LaunchAgent: `/System/Library/LaunchAgents/com.apple.wallpaper.plist`

@@ -189,6 +189,12 @@ debug imports from the live `WallpaperAgent` binary. Important imports:
 - `XPC.XPCReceivedMessage.handoffReply(to:_:)`
 - `XPC.XPCReceivedMessage.reply(_:)`
 
+For focused receiver disassembly windows, use:
+
+```zsh
+tools/inspect-wallpaper-debug-receiver.sh
+```
+
 ## Shared-Cache String Windows
 
 ```zsh
@@ -428,6 +434,20 @@ Key addresses from the x86_64 slice:
   `WallpaperDebugRequestMessage.extensionIdentifier`.
 - `0x10009ba4f`: loads `WallpaperDebugResponse : Encodable`.
 - `0x10009ba64`: calls `XPCReceivedMessage.reply(_:)`.
+- `0x1001444d9`: extension/provider lookup helper; loads
+  `WallpaperChoiceProviderID` metadata and iterates a dictionary-like
+  collection.
+- `0x10014406e`: reads a candidate extension/proxy object from the resolved
+  entry.
+- `0x100144071`: loads the imported async function pointer for
+  `WallpaperExtensionProxy.handleDebugRequest`.
+- `0x1001440bc`: tail-calls
+  `WallpaperExtensionProxy.handleDebugRequest(WallpaperDebugRequest)`.
+- `0x100144151`: loads `WallpaperDebugResponse.error(String)` for a branch
+  using the literal `com.apple.wallpaper.extension`.
+- `0x1001442b3`: builds an error string beginning with `No valid extension`.
+- `0x100144340`: loads `WallpaperDebugResponse.error(String)` for the
+  `No valid extension` path.
 
 Ghidra symbol cross-reference notes:
 
@@ -438,12 +458,16 @@ Ghidra symbol cross-reference notes:
 - `WallpaperDebugResponse.error(String)` has read references around
   `0x100144158` and `0x100144347`, which look like error-response construction
   paths but were not traced in this slice.
+- The agent string table also contains `Unable to handle request:`, adjacent
+  to the extension-error literals. Treat it as a likely failed-request logging
+  or error-composition prefix until decompiled.
 
 Interpretation: the debug listener receives a Swift/XPC request, decodes the
 body as `WallpaperDebugRequestMessage`, extracts `request` and
-`extensionIdentifier`, dispatches asynchronously, then replies by encoding
-`WallpaperDebugResponse`. This rules out a plain XPC dictionary protocol for
-successful calls.
+`extensionIdentifier`, resolves the matching extension/provider entry,
+dispatches asynchronously to `WallpaperExtensionProxy.handleDebugRequest`, then
+replies by encoding `WallpaperDebugResponse`. This rules out a plain XPC
+dictionary protocol for successful calls.
 
 ## Controlled Experiments To Capture
 

@@ -26,6 +26,9 @@ public class DumpWallpaperDebugReferences extends GhidraScript {
         "snapshotAllSpaces",
         "diagnosticState",
         "ensureViewModelIsUpToDate",
+        "No valid extension",
+        "Unable to handle request",
+        "com.apple.wallpaper.extension",
     };
 
     private static final String[] SYMBOL_TERMS = {
