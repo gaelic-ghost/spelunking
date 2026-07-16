@@ -12,6 +12,7 @@
 - [x] Inventory launchd jobs and XPC service plists.
 - [x] Locate and inventory call-history storage schema without row data.
 - [x] Capture call-history schema and indexes without row data.
+- [x] Capture call-history relationship/index/trigger boundary metadata without row data.
 - [x] Read public SDK headers/interfaces for CallKit and LiveCommunicationKit.
 - [x] Demangle private SDK `.tbd` Swift symbols for PhoneAppIntents, CallsXPC, CallsPersistence, and TelephonyUtilities.
 - [x] Capture private SDK notification constant families.

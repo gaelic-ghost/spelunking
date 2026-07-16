@@ -34,6 +34,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] LaunchAgent and XPC service inventory
 - [x] Call-history storage schema inventory without row data
 - [x] Call-history schema/index capture without row data
+- [x] Call-history relationship/index/trigger boundary capture without row data
 - [x] Public iPhoneOS 27.0 SDK header/interface inventory for CallKit and LiveCommunicationKit
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for call-history, TelephonyUtilities, and CallKit surfaces
@@ -151,6 +152,7 @@ High-signal schema notes:
 - `ZCALLRECORD` is the main call record table. It includes answered/originated/read state, call type/category, disconnect cause, FaceTime data flag, message flag, junk/confidence fields, communication trust score, emergency/video flags, verification status, timestamps, duration, service provider, country code, location/name/address fields, unique identifiers, conversation ID, participant group identifiers, local participant UUIDs, originating device name, and originating UI type.
 - `ZHANDLE` stores normalized and raw handle values plus type.
 - `Z_2REMOTEPARTICIPANTHANDLES` joins remote participant calls to handles.
+- `pragma_foreign_key_list` returned no SQLite-enforced foreign keys, and `sqlite_schema` returned no trigger definitions. Relationship meaning is therefore Core Data model convention plus table/index naming, not SQLite trigger/foreign-key lifecycle enforcement.
 - `ZCALLDBPROPERTIES`, `Z_METADATA`, `Z_MODELCACHE`, and `Z_PRIMARYKEY` are Core Data or store bookkeeping tables.
 - `ZEMERGENCYMEDIAITEM` tracks emergency media assets and upload state.
 

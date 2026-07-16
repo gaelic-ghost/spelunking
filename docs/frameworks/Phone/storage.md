@@ -9,6 +9,7 @@ This page documents the local Phone/CallHistory Core Data SQLite schema observed
 Raw capture:
 
 - `research/Phone/storage/callhistory-schema-macos-26.5.2.txt`
+- `research/Phone/storage/callhistory-relationships-macos-26.5.2.txt`
 
 Capture method:
 
@@ -16,6 +17,7 @@ Capture method:
 - `sqlite3 "$HOME/Library/Application Support/CallHistoryDB/CallHistory.storedata" ".tables"`
 - `pragma_table_info` for every table
 - `sqlite_schema` entries for table, index, trigger, and view definitions
+- `pragma_foreign_key_list` plus focused `sqlite_schema` extraction for relationship, index, and trigger metadata
 
 `com.apple.callhistory.databaseInfo.plist` reports `DatabaseVersionPerm` as `43`.
 
@@ -63,6 +65,20 @@ No handle values were captured.
 
 Inference: Phone normalizes remote participants into handle rows and links them through a Core Data join table, rather than embedding all participant identity directly in each call record.
 
+## Relationship And Lifecycle Notes
+
+Verified from `callhistory-relationships-macos-26.5.2.txt`:
+
+| Area | Observation |
+| --- | --- |
+| `Z_2REMOTEPARTICIPANTHANDLES` | The join table has two integer columns, `Z_2REMOTEPARTICIPANTCALLS` and `Z_4REMOTEPARTICIPANTHANDLES`, with a composite primary key across both columns. |
+| Reverse handle lookup | `Z_2REMOTEPARTICIPANTHANDLES_Z_4REMOTEPARTICIPANTHANDLES_INDEX` indexes `(Z_4REMOTEPARTICIPANTHANDLES, Z_2REMOTEPARTICIPANTCALLS)`. |
+| Emergency media lookup | `ZEMERGENCYMEDIAITEM_ZUPLOADEDFORCALL_INDEX` indexes `ZEMERGENCYMEDIAITEM.ZUPLOADEDFORCALL`. |
+| SQLite foreign keys | `pragma_foreign_key_list` returned no foreign-key rows for the observed tables. |
+| SQLite triggers | `sqlite_schema` returned no trigger definitions. |
+
+Inference: relationship meaning is primarily Core Data model convention plus table/index naming in this store, not SQLite-level foreign-key enforcement. The join table names strongly indicate a call-record-to-handle many-to-many edge, and `ZUPLOADEDFORCALL` strongly indicates an emergency-media-to-call edge, but the live SQLite schema does not enforce those edges with foreign-key constraints or cleanup triggers.
+
 ## Emergency Media And Properties
 
 `ZEMERGENCYMEDIAITEM` includes:
@@ -102,7 +118,7 @@ Observed join/media indexes:
 - `Z_2REMOTEPARTICIPANTHANDLES_Z_4REMOTEPARTICIPANTHANDLES_INDEX`
 - `ZEMERGENCYMEDIAITEM_ZUPLOADEDFORCALL_INDEX`
 
-Inference: the recents store is optimized for date-ordered call lookup, stable unique IDs, participant-local UUID queries, initiator filtering, and handle lookup by raw or normalized value.
+Inference: the recents store is optimized for date-ordered call lookup, stable unique IDs, participant-local UUID queries, initiator filtering, handle lookup by raw or normalized value, reverse lookup from handles to calls, and emergency-media lookup by uploaded-for-call reference.
 
 ## Open Questions
 
