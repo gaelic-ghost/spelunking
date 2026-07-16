@@ -7,9 +7,9 @@ print_header() {
     printf '\n## %s\n\n' "$1"
 }
 
-print_header 'Wallpaper ContentType and redraw-related exports'
+print_header 'Wallpaper normal-agent redraw and assertion-related exports'
 xcrun dyld_info -exports "$wallpaper" |
-    rg 'ContentType|ViewModelRefreshReason|ensureViewModelIsUpToDate|WallpaperDisplayAttributes' |
+    rg 'ContentType|ViewModelRefreshReason|ensureViewModelIsUpToDate|WallpaperDisplayAttributes|Assertion(Value|PresentationMode|ID|Reply)|Wallpaper(Display|PresentationMode)Assertion' |
     swift demangle
 
 print_header 'Wallpaper Swift field metadata case names'
@@ -25,6 +25,14 @@ INTERESTING_NAMES = {
     "launch",
     "navigation",
     "wallpaperInstallation",
+    "default",
+    "locked",
+    "idle",
+    "display",
+    "displayAssertionID",
+    "contextID",
+    "allDisplays",
+    "perDisplaySpace",
     "ensureViewModelIsUpToDate",
     "diagnosticState",
     "snapshotAllSpaces",
@@ -116,6 +124,6 @@ while offset + 16 <= len(field_metadata):
 print(f"parsedDescriptors={descriptor_index}")
 PY
 
-print_header 'Wallpaper ContentType disassembly anchors'
+print_header 'Wallpaper ContentType and assertion disassembly anchors'
 xcrun dyld_info -all_sections "$wallpaper" |
-    rg '\$s9Wallpaper11ContentTypeO8allCases|\$s9Wallpaper11ContentTypeO11description|\$s9Wallpaper0A17DisplayAttributesV7desktop|\$s9Wallpaper0A17DisplayAttributesV11screenSaver' -C 8
+    rg '\$s9Wallpaper11ContentTypeO8allCases|\$s9Wallpaper11ContentTypeO11description|\$s9Wallpaper0A17DisplayAttributesV7desktop|\$s9Wallpaper0A17DisplayAttributesV11screenSaver|\$s9Wallpaper14AssertionValueO(11description|6encode|2eeoiy)|\$s9Wallpaper25AssertionPresentationModeV8rawValue|\$s9Wallpaper0A25PresentationModeAssertionC(14takeLocked|12takeIdle)' -C 8

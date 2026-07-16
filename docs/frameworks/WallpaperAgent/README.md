@@ -540,8 +540,10 @@ Recovered supporting enum detail:
 | --- | --- | --- |
 | `ViewModelRefreshReason` | `launch`, `navigation`, `wallpaperInstallation` | Exported case constructor symbols in `Wallpaper.tbd`. |
 | `ContentType` | `desktop`, `screenSaver`; byte values `desktop = 0`, `screenSaver = 1` | Exported as `Codable`, `CaseIterable`, `CustomStringConvertible`, with `allCases`, `description`, `init(from:)`, and `encode(to:)`. Swift field metadata descriptors contain the two case names. `WallpaperDisplayAttributes.desktop` stores zero; `WallpaperDisplayAttributes.screenSaver` stores one. `ContentType.description` compares against `1` and returns `desktop` or `screenSaver`. |
-| `AssertionValue` | cases not recovered | Exported as `Codable`, `Hashable`, `Equatable`, and `CustomStringConvertible`, with `description`, `init(from:)`, and `encode(to:)`. No case constructors or raw values were recovered from the SDK stub, agent imports, or dyld-cache string windows. |
-| `AssertionPresentationMode` | raw type `String`; concrete raw values not recovered | `init(rawValue:)`, `rawValue`, `RawRepresentable`, and `Codable` are exported, but no raw string constants were recovered from the current static evidence. |
+| `AssertionValue` | field metadata names `display`, `idle`, `locked`; exact payload layout still inferred | Exported as `Codable`, `Hashable`, `Equatable`, and `CustomStringConvertible`, with `description`, `init(from:)`, and `encode(to:)`. Swift field metadata descriptors include `display, idle, locked`. `WallpaperPresentationModeAssertion` also exports `takeLockedAssertion` and `takeIdleAssertion`, which supports the presentation-mode assertion interpretation. No public case constructors were exported. |
+| `AssertionPresentationMode` | field metadata names `default`, `locked`, `idle`; raw type `String` | `init(rawValue:)`, `rawValue`, `RawRepresentable`, and `Codable` are exported. Swift field metadata descriptor `[67]` contains `default, locked, idle`, making these the best current raw-value/case names. |
+| `AssertionID` | raw type `UInt64`; `description`, `Codable`, `Hashable`, `Equatable`, `RawRepresentable` | Exported `init(rawValue:)`, `rawValue`, `description`, `init(from:)`, and `encode(to:)`. |
+| `AssertionReply` | fields `id: AssertionID`, `contextID: UInt32?` | Exported `init(id:contextID:)`, `id`, `contextID`, `description`, `init(from:)`, and `encode(to:)`; Swift field metadata descriptors contain `id, contextID`. |
 | `WallpaperTypes.WallpaperSettingsViewModel.ContentType` | raw type `Int`; cases not recovered | Exported as a separate settings-view-model enum with `init(rawValue:)` and `rawValue`; this is not enough to map it to `Wallpaper.ContentType`. |
 | `WallpaperStoreContentType` | likely store/runtime categories: `running-assertions`, `extension`, `screenSaver`, `inProcess` | Recovered from `WallpaperAgent` string windows near `ContentDescriptor type=inprocess`, `ContentDescriptor type=screensaver`, and `ContentDescriptor type=extension`. This appears to be agent/store vocabulary, not the exported `Wallpaper.ContentType` enum. |
 
@@ -549,7 +551,8 @@ The private `Wallpaper` and `WallpaperTypes` Swift modules are not importable
 from this SDK, even though their `.tbd` exports exist. Runtime queries such as
 `ContentType.allCases` are therefore unavailable from a normal Swift client,
 but `tools/inspect-wallpaper-swift-metadata.sh` recovers the case names and
-byte values from dyld metadata and disassembly.
+byte values from dyld metadata and disassembly. The same helper now also
+recovers assertion-related field descriptors and disassembly anchors.
 
 Keep these similarly named surfaces distinct:
 
@@ -1200,7 +1203,8 @@ Not accessible or not assumed accessible:
      `Unable to handle request:`
 5. Deepen normal-agent Swift/XPC envelope reconstruction now that
    `Wallpaper.ContentType` cases are recovered.
-6. Recover `AssertionValue` cases and presentation-mode raw strings.
+6. Deepen `AssertionValue` payload-layout reconstruction and assertion
+   access-policy behavior now that the field names are recovered.
 7. Extend the Swift helper to encode private Swift/XPC messages only after the
    exact metadata identity is solved.
 

@@ -239,9 +239,22 @@ Observed static facts:
   `WallpaperDisplayAttributes.screenSaver` stores one, so model
   `Wallpaper.ContentType.desktop` as byte value `0` and `.screenSaver` as byte
   value `1`.
-- `AssertionValue` cases and `AssertionPresentationMode` raw strings were not
-  recovered from the current SDK stubs, agent import symbols, dyld-cache string
-  windows, or this metadata slice.
+- Swift field metadata recovered assertion-related descriptor names:
+  - descriptor `[67]`: `default`, `locked`, `idle`
+  - descriptor `[68]`: `display`, `idle`, `locked`
+  - descriptor `[69]`: `id`, `contextID`
+  - descriptor `[70]` and `[71]`: `displayAssertionID`
+  - descriptor `[73]`: `display`, `idle`, `locked`
+  - descriptor `[74]`: `id`, `contextID`
+- Treat `AssertionPresentationMode` as raw-string-like with recovered names
+  `default`, `locked`, and `idle`.
+- Treat `AssertionValue` as likely using `display`, `idle`, and `locked`
+  cases/fields, but keep its exact payload layout unresolved until the encode
+  and decode paths are traced more deeply.
+- `AssertionID` exports `init(rawValue:)` and `rawValue` with raw type
+  `UInt64`.
+- `AssertionReply` exports `init(id:contextID:)`, `id`, and `contextID`; field
+  metadata also contains `id, contextID`.
 - `WallpaperTypes.WallpaperSettingsViewModel.ContentType` is a separate
   `Int` raw-value enum with `init(rawValue:)` and `rawValue`; its cases were
   not recovered.
