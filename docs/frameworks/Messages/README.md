@@ -29,6 +29,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] AppleScript scripting dictionary
 - [x] `chat.db` table and column inventory without row data
 - [x] `chat.db` schema/index/trigger capture without row data
+- [x] `chat.db` relationship, foreign-key, and trigger-lifecycle capture without row data
 - [x] Active and SDK framework constellation inventory
 - [x] App binary linked-library inventory
 - [x] SDK `.tbd` symbol skim for `IMCore`
@@ -193,7 +194,9 @@ High-signal schema notes:
 - `chat` is the conversation table. It includes GUIDs, style/state, account and service names, display and group identifiers, archive/filter/recovery/deletion state, CloudKit sync fields, and pending review/blackhole flags.
 - `handle` stores address/person identifiers and service/country fields.
 - Join tables map chats to handles, chats to messages, messages to attachments, and chats to recoverable message parts.
+- Foreign keys confirm cascade relationships for `chat_handle_join`, `chat_message_join`, `message_attachment_join`, `chat_lookup`, `chat_service`, `sync_chat_slice`, and recoverable-message joins.
 - Sync and deleted-item tables indicate CloudKit-backed lifecycle bookkeeping.
+- SQLite triggers enforce attachment-path cleanup, deleted GUID tracking, `sync_deleted_*` bookkeeping, orphan cleanup, plugin cleanup, cached room names, chat-service projection, failed-message metadata, and index-state metrics.
 - `persistent_tasks` and `message_processing_task` indicate queued local work, but the first pass did not decode task flags or payload blobs.
 
 No message text, addresses, attachment names, or row counts were captured in this documentation pass.

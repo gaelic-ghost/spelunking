@@ -29,6 +29,19 @@ mkdir -p research/Messages/storage
 sqlite3 "$HOME/Library/Messages/chat.db" "SELECT m.name || '|' || p.cid || '|' || p.name || '|' || p.type || '|' || p.\"notnull\" || '|' || COALESCE(p.dflt_value, '') || '|' || p.pk FROM sqlite_schema AS m JOIN pragma_table_info(m.name) AS p WHERE m.type='table' ORDER BY m.name, p.cid;"
 sqlite3 "$HOME/Library/Messages/chat.db" "SELECT type || '|' || name || '|' || tbl_name || '|' || COALESCE(sql, '') FROM sqlite_schema WHERE type IN ('index','trigger','view') ORDER BY type, tbl_name, name;"
 sqlite3 "$HOME/Library/Messages/chat.db" "SELECT type || '|' || name || '|' || tbl_name || '|' || COALESCE(sql, '') FROM sqlite_schema WHERE type='table' ORDER BY name;"
+sqlite3 "$HOME/Library/Messages/chat.db" \
+  ".output research/Messages/storage/chatdb-relationships-macos-26.5.2.txt" \
+  ".print # Messages chat.db relationship and lifecycle schema capture" \
+  ".print # Captured on macOS 26.5.2 (25F84). Metadata only: no row data, no counts." \
+  ".print ## relationship_tables" \
+  "SELECT name || '|' || COALESCE(sql, '') FROM sqlite_schema WHERE type='table' AND name IN ('chat_handle_join','chat_message_join','message_attachment_join','chat_recoverable_message_join','chat_service','chat_lookup','deleted_messages','sync_deleted_messages','sync_deleted_attachments','sync_deleted_chats','scheduled_messages_pending_cloudkit_delete','unsynced_removed_recoverable_messages') ORDER BY name;" \
+  ".print ## foreign_keys" \
+  "SELECT m.name || '|' || COALESCE(f.id, '') || '|' || COALESCE(f.seq, '') || '|' || COALESCE(f.\"table\", '') || '|' || COALESCE(f.\"from\", '') || '|' || COALESCE(f.\"to\", '') || '|' || COALESCE(f.on_update, '') || '|' || COALESCE(f.on_delete, '') || '|' || COALESCE(f.match, '') FROM sqlite_schema AS m LEFT JOIN pragma_foreign_key_list(m.name) AS f WHERE m.type='table' ORDER BY m.name, f.id, f.seq;" \
+  ".print ## indexes" \
+  "SELECT m.tbl_name || '|' || m.name || '|' || COALESCE(m.sql, '') FROM sqlite_schema AS m WHERE m.type='index' ORDER BY m.tbl_name, m.name;" \
+  ".print ## triggers" \
+  "SELECT tbl_name || '|' || name || '|' || COALESCE(sql, '') FROM sqlite_schema WHERE type='trigger' ORDER BY tbl_name, name;" \
+  ".output stdout"
 sdef /System/Applications/Messages.app
 mkdir -p research/Messages/surfaces
 plutil -p /System/Applications/Messages.app/Contents/Info.plist
