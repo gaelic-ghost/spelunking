@@ -125,7 +125,21 @@ Runtime method encodings show the request wrapper has a clear cache-and-request 
 
 Calling `handleSupportedCommandsRequestWithCompletion:` on the Spotify path completed with nil supported commands. Calling `handlePlayerPropertiesRequestWithCompletion:` completed with `kMRMediaRemoteFrameworkErrorDomain Code=3`, `Operation not permitted`.
 
-Inference: supported commands may genuinely be absent for the locally constructed request object, while player properties is a policy-gated or entitlement-gated request.
+`MRPlaybackQueueRequest` construction also works from userland:
+
+- `MRPlaybackQueueRequestCreateDefault`
+- `MRPlaybackQueueRequestSetRequestID`
+- `MRPlaybackQueueRequestSetLabel`
+- `MRPlaybackQueueRequestSetIncludeMetadata`
+- `MRPlaybackQueueRequestSetIncludeInfo`
+- `MRPlaybackQueueRequestSetIncludeLyrics`
+- `MRPlaybackQueueRequestSetIncludeSections`
+- `-[MRPlaybackQueueRequest setPlayerPath:]`
+- `-[MRNowPlayingPlayerClientRequests enqueuePlaybackQueueRequest:completion:]`
+
+The constructed request described itself as `/M/I/L/AF/R[0:1]`, but enqueueing it against the Spotify player path returned `kMRMediaRemoteFrameworkErrorDomain Code=3`, `Operation not permitted`, and no queue.
+
+Inference: supported commands may genuinely be absent for the locally constructed request object, while player properties and playback queue hydration are policy-gated or entitlement-gated for this helper.
 
 ## Controller Generations
 

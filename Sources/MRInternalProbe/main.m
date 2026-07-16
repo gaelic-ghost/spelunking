@@ -7,6 +7,12 @@
 typedef void (*MRMediaRemoteGetOriginFunc)(dispatch_queue_t, void (^)(BOOL, id));
 typedef void (*MRMediaRemoteGetObjectsForOriginFunc)(id, dispatch_queue_t, void (^)(NSArray *));
 typedef CFStringRef (*MRNowPlayingPlayerPathCopyStringRepresentationFunc)(id);
+typedef id (*MRPlaybackQueueRequestCreateFunc)(void);
+typedef void (*MRPlaybackQueueRequestSetBoolFunc)(id, bool);
+typedef void (*MRPlaybackQueueRequestSetStringFunc)(id, CFStringRef);
+typedef CFStringRef (*MRPlaybackQueueRequestCopyDescriptionFunc)(id);
+typedef CFStringRef (*MRPlaybackQueueCopyReadableDescriptionFunc)(id);
+typedef NSArray *(*MRPlaybackQueueCopyContentItemsFunc)(id);
 
 static id sendObject(id receiver, SEL selector) {
     id (*send)(id, SEL) = (id (*)(id, SEL))objc_msgSend;
@@ -21,6 +27,11 @@ static id sendObjectWithObject(id receiver, SEL selector, id argument) {
 static void sendVoidWithObject(id receiver, SEL selector, id argument) {
     void (*send)(id, SEL, id) = (void (*)(id, SEL, id))objc_msgSend;
     send(receiver, selector, argument);
+}
+
+static void sendVoidWithTwoObjects(id receiver, SEL selector, id firstArgument, id secondArgument) {
+    void (*send)(id, SEL, id, id) = (void (*)(id, SEL, id, id))objc_msgSend;
+    send(receiver, selector, firstArgument, secondArgument);
 }
 
 static void printSelector(id object, NSString *selectorName, NSString *label) {
@@ -117,7 +128,116 @@ static void requestObjectWithCompletion(id object, NSString *selectorName, NSStr
     }
 }
 
-static void inspectWrapper(NSString *className, id playerPath) {
+static void enqueuePlaybackQueueRequest(
+    id requestWrapper,
+    id playerPath,
+    void *handle,
+    NSString *label
+) {
+    MRPlaybackQueueRequestCreateFunc createDefault = (MRPlaybackQueueRequestCreateFunc)dlsym(handle, "MRPlaybackQueueRequestCreateDefault");
+    MRPlaybackQueueRequestSetBoolFunc setIncludeMetadata = (MRPlaybackQueueRequestSetBoolFunc)dlsym(handle, "MRPlaybackQueueRequestSetIncludeMetadata");
+    MRPlaybackQueueRequestSetBoolFunc setIncludeInfo = (MRPlaybackQueueRequestSetBoolFunc)dlsym(handle, "MRPlaybackQueueRequestSetIncludeInfo");
+    MRPlaybackQueueRequestSetBoolFunc setIncludeLyrics = (MRPlaybackQueueRequestSetBoolFunc)dlsym(handle, "MRPlaybackQueueRequestSetIncludeLyrics");
+    MRPlaybackQueueRequestSetBoolFunc setIncludeSections = (MRPlaybackQueueRequestSetBoolFunc)dlsym(handle, "MRPlaybackQueueRequestSetIncludeSections");
+    MRPlaybackQueueRequestSetStringFunc setRequestID = (MRPlaybackQueueRequestSetStringFunc)dlsym(handle, "MRPlaybackQueueRequestSetRequestID");
+    MRPlaybackQueueRequestSetStringFunc setLabel = (MRPlaybackQueueRequestSetStringFunc)dlsym(handle, "MRPlaybackQueueRequestSetLabel");
+    MRPlaybackQueueRequestCopyDescriptionFunc copyRequestDescription = (MRPlaybackQueueRequestCopyDescriptionFunc)dlsym(handle, "MRPlaybackQueueRequestCopyDescription");
+    MRPlaybackQueueCopyReadableDescriptionFunc copyQueueDescription = (MRPlaybackQueueCopyReadableDescriptionFunc)dlsym(handle, "MRPlaybackQueueCopyReadableDescription");
+    MRPlaybackQueueCopyContentItemsFunc copyContentItems = (MRPlaybackQueueCopyContentItemsFunc)dlsym(handle, "MRPlaybackQueueCopyContentItems");
+
+    if (createDefault == NULL) {
+        printf("%s.enqueuePlaybackQueueRequest: missing MRPlaybackQueueRequestCreateDefault\n", label.UTF8String);
+        return;
+    }
+
+    SEL enqueueSelector = NSSelectorFromString(@"enqueuePlaybackQueueRequest:completion:");
+    if (![requestWrapper respondsToSelector:enqueueSelector]) {
+        printf("%s.enqueuePlaybackQueueRequest: selector unavailable\n", label.UTF8String);
+        return;
+    }
+
+    id request = createDefault();
+    if (request == nil) {
+        printf("%s.enqueuePlaybackQueueRequest: MRPlaybackQueueRequestCreateDefault returned nil\n", label.UTF8String);
+        return;
+    }
+
+    if ([request respondsToSelector:NSSelectorFromString(@"setPlayerPath:")]) {
+        sendVoidWithObject(request, NSSelectorFromString(@"setPlayerPath:"), playerPath);
+    }
+
+    if (setRequestID != NULL) {
+        setRequestID(request, CFSTR("spelunking.internal-probe.default"));
+    }
+    if (setLabel != NULL) {
+        setLabel(request, CFSTR("Spelunking internal probe"));
+    }
+    if (setIncludeMetadata != NULL) {
+        setIncludeMetadata(request, true);
+    }
+    if (setIncludeInfo != NULL) {
+        setIncludeInfo(request, true);
+    }
+    if (setIncludeLyrics != NULL) {
+        setIncludeLyrics(request, false);
+    }
+    if (setIncludeSections != NULL) {
+        setIncludeSections(request, false);
+    }
+
+    if (copyRequestDescription != NULL) {
+        CFStringRef requestDescription = copyRequestDescription(request);
+        printf("%s.enqueuePlaybackQueueRequest request: %s\n", label.UTF8String, requestDescription != NULL ? [(__bridge NSString *)requestDescription UTF8String] : [[request description] UTF8String]);
+        if (requestDescription != NULL) {
+            CFRelease(requestDescription);
+        }
+    } else {
+        printf("%s.enqueuePlaybackQueueRequest request: %s\n", label.UTF8String, [[request description] UTF8String]);
+    }
+
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block BOOL called = NO;
+
+    id completion = ^(id queue, id error) {
+        called = YES;
+
+        if (error != nil) {
+            printf("%s.enqueuePlaybackQueueRequest completion error: %s\n", label.UTF8String, [[error description] UTF8String]);
+        }
+
+        if (queue == nil) {
+            printf("%s.enqueuePlaybackQueueRequest completion queue: <nil>\n", label.UTF8String);
+        } else {
+            printf("%s.enqueuePlaybackQueueRequest completion queue: <%s> %s\n", label.UTF8String, object_getClassName(queue), [[queue description] UTF8String]);
+
+            if (copyQueueDescription != NULL) {
+                CFStringRef queueDescription = copyQueueDescription(queue);
+                printf("%s.enqueuePlaybackQueueRequest readable queue: %s\n", label.UTF8String, queueDescription != NULL ? [(__bridge NSString *)queueDescription UTF8String] : "<nil>");
+                if (queueDescription != NULL) {
+                    CFRelease(queueDescription);
+                }
+            }
+
+            if (copyContentItems != NULL) {
+                NSArray *items = copyContentItems(queue);
+                printf("%s.enqueuePlaybackQueueRequest content items: %lu item(s)\n", label.UTF8String, (unsigned long)items.count);
+            }
+        }
+
+        dispatch_semaphore_signal(semaphore);
+    };
+
+    printf("%s.enqueuePlaybackQueueRequest: invoking\n", label.UTF8String);
+    sendVoidWithTwoObjects(requestWrapper, enqueueSelector, request, completion);
+
+    if (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC)) != 0) {
+        printf("%s.enqueuePlaybackQueueRequest: timed out waiting for completion (called=%s)\n", label.UTF8String, called ? "true" : "false");
+    }
+
+    printSelector(requestWrapper, @"playbackQueue", label);
+}
+
+static void inspectWrapper(NSString *className, id playerPath, void *handle) {
     Class wrapperClass = NSClassFromString(className);
     if (wrapperClass == Nil) {
         printf("%s: class unavailable\n", className.UTF8String);
@@ -148,6 +268,7 @@ static void inspectWrapper(NSString *className, id playerPath) {
         printSelector(wrapper, @"supportedCommands", className);
         requestObjectWithCompletion(wrapper, @"handlePlayerPropertiesRequestWithCompletion:", className);
         printSelector(wrapper, @"playerProperties", className);
+        enqueuePlaybackQueueRequest(wrapper, playerPath, handle, className);
     }
 }
 
@@ -205,8 +326,8 @@ int main(void) {
                 CFRelease(pathString);
             }
 
-            inspectWrapper(@"MRNowPlayingPlayerClient", playerPath);
-            inspectWrapper(@"MRNowPlayingPlayerClientRequests", playerPath);
+            inspectWrapper(@"MRNowPlayingPlayerClient", playerPath, handle);
+            inspectWrapper(@"MRNowPlayingPlayerClientRequests", playerPath, handle);
         }
 
         return 0;

@@ -194,12 +194,24 @@ MRNowPlayingPlayerClientRequests.playerProperties: <nil>
 
 Interpretation: the request object path is callable from userland, but Spotify's supported commands still return nil and player properties are blocked by MediaRemote policy with `kMRMediaRemoteFrameworkErrorDomain Code=3`. Treat player properties as a permission/entitlement-gated surface until a signed entitlement experiment or daemon-side evidence proves otherwise.
 
+Playback queue request attempt:
+
+```text
+MRNowPlayingPlayerClientRequests.enqueuePlaybackQueueRequest request: spelunking.internal-probe.default Spelunking internal probe /M/I/L/AF/R[0:1]
+MRNowPlayingPlayerClientRequests.enqueuePlaybackQueueRequest: invoking
+MRNowPlayingPlayerClientRequests.enqueuePlaybackQueueRequest completion error: Error Domain=kMRMediaRemoteFrameworkErrorDomain Code=3 "Operation not permitted"
+MRNowPlayingPlayerClientRequests.enqueuePlaybackQueueRequest completion queue: <nil>
+MRNowPlayingPlayerClientRequests.playbackQueue: <nil>
+```
+
+The request was built with `MRPlaybackQueueRequestCreateDefault`, had the active Spotify `MRPlayerPath` set via `-[MRPlaybackQueueRequest setPlayerPath:]`, and requested metadata plus info while leaving lyrics and sections off. This confirms the richer request route is reachable but still blocked by daemon/framework policy for the unsigned userland helper.
+
 ## Next Runtime Steps
 
 - Resolve metadata from the active `MRPlayerPath` without passing `MRClient` to `MRMediaRemoteGetNowPlayingInfoForClient`.
-- Inspect how `MRNowPlayingPlayerClientRequests` hydrates `playbackQueue` and content items after construction.
+- Inspect the entitlement or XPC daemon policy behind `kMRMediaRemoteFrameworkErrorDomain Code=3` for playback queue and player properties.
 - Treat `handlePlayerPropertiesRequestWithCompletion:` as permission-gated for the current unsigned userland helper.
-- Investigate playback queue request APIs using an API that accepts `MRPlayerPath`, or build a real `MRPlaybackQueueRequest`, rather than passing path-derived `MRPlayer` into `MRMediaRemoteRequestNowPlayingPlaybackQueueForPlayerSync`.
+- Preserve `MRPlaybackQueueRequest` construction in the helper, but keep it read-only and guarded until an entitlement/signed-helper experiment is explicit.
 - Inspect daemon-facing XPC traffic/service surfaces before any mutating command path.
 - Build an app-bundle fixture if CLI `MPNowPlayingInfoCenter` remains invisible.
 - Keep command dispatch and route mutation out of runtime probes until read-only state and identity surfaces are understood.
