@@ -81,6 +81,21 @@ struct SPKMain {
             #else
             throw CLIError.unsupportedPlatform("Static desktop redraw requires AppKit.")
             #endif
+        case "redraw-probe-plan":
+            #if canImport(AppKit)
+            printRedrawProbeResult(try SPKWallpaperStaticRedraw().redrawProbe(execute: false))
+            #else
+            throw CLIError.unsupportedPlatform("Static desktop redraw probe requires AppKit.")
+            #endif
+        case "redraw-probe":
+            guard arguments.contains("--execute") else {
+                throw CLIError.missingExecuteFlag("Refusing to redraw-probe desktop images without --execute. Use redraw-probe-plan for a dry run.")
+            }
+            #if canImport(AppKit)
+            printRedrawProbeResult(try SPKWallpaperStaticRedraw().redrawProbe(execute: true))
+            #else
+            throw CLIError.unsupportedPlatform("Static desktop redraw probe requires AppKit.")
+            #endif
         default:
             printWallpaperUsage()
             Foundation.exit(64)
@@ -111,6 +126,8 @@ struct SPKMain {
               spelunk wallpaper-agent restart-probe --execute [--signal TERM]
               spelunk wallpaper-agent redraw-static-plan
               spelunk wallpaper-agent redraw-static --execute
+              spelunk wallpaper-agent redraw-probe-plan
+              spelunk wallpaper-agent redraw-probe --execute
             """
         )
     }
@@ -129,6 +146,8 @@ struct SPKMain {
               restart-probe --execute [--signal TERM]
               redraw-static-plan
               redraw-static --execute
+              redraw-probe-plan
+              redraw-probe --execute
             """
         )
     }
@@ -195,6 +214,23 @@ struct SPKMain {
         }
     }
 
+    private static func printRedrawProbeResult(_ result: SPKDesktopImageRedrawProbeResult) {
+        print("execute: \(result.execute)")
+        for entry in result.entries {
+            print("screen: \(entry.screenName)")
+            print("  beforeImageURL: \(entry.beforeImageURL ?? "<none>")")
+            print("  afterImageURL: \(entry.afterImageURL ?? "<not collected>")")
+            print("  beforeOptionKeys: \(entry.beforeOptionKeys.joined(separator: ", "))")
+            print("  afterOptionKeys: \(entry.afterOptionKeys?.joined(separator: ", ") ?? "<not collected>")")
+            print("  reapplied: \(entry.reapplied)")
+            if let preservedImageURL = entry.preservedImageURL {
+                print("  preservedImageURL: \(preservedImageURL)")
+            } else {
+                print("  preservedImageURL: <not executed>")
+            }
+        }
+    }
+
     @MainActor
     private static func printSIPValidationReport(inspector: SPKWallpaperAgentInspector) throws {
         let sipStatus = try inspector.sipStatus()
@@ -223,6 +259,14 @@ struct SPKMain {
         printRedrawResult(try SPKWallpaperStaticRedraw().reapplyCurrentDesktopImages(execute: false))
         #else
         print("error: Static desktop redraw planning requires AppKit.")
+        #endif
+
+        print("")
+        print("redrawProbePlan:")
+        #if canImport(AppKit)
+        printRedrawProbeResult(try SPKWallpaperStaticRedraw().redrawProbe(execute: false))
+        #else
+        print("error: Static desktop redraw probe planning requires AppKit.")
         #endif
 
         print("")

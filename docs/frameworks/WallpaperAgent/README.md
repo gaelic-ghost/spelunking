@@ -46,6 +46,7 @@ swift run spelunk wallpaper-agent debug-xpc-probe --request download-state --ass
 swift run spelunk wallpaper-agent sip-validation-report
 swift run spelunk wallpaper-agent restart-probe-plan
 swift run spelunk wallpaper-agent redraw-static-plan
+swift run spelunk wallpaper-agent redraw-probe-plan
 swift run spelunk wallpaper-agent signal-plan --signal TERM
 ```
 
@@ -55,6 +56,7 @@ Those commands are non-mutating. The mutating commands require `--execute`:
 swift run spelunk wallpaper-agent redraw-static --execute
 swift run spelunk wallpaper-agent signal --execute --signal TERM
 swift run spelunk wallpaper-agent restart-probe --execute --signal TERM
+swift run spelunk wallpaper-agent redraw-probe --execute
 ```
 
 The helper deliberately does not offer a `kickstart` path.
@@ -69,8 +71,9 @@ Observed non-mutating results from this branch:
 | `debug-xpc-probe` with `accessAllAssets(downloaded)` | Succeeded on the current boot and decoded two downloaded Aerial assets. Current boot has SIP disabled, so this is not SIP-enabled proof yet. |
 | `debug-xpc-probe --extension com.apple.wallpaper.extension.not-real` | Succeeded on the current boot and decoded `WallpaperDebugResponse.error("No valid extension")`, confirming the receiver dispatch/error path. Current boot has SIP disabled. |
 | `debug-xpc-probe --request download-state` | Succeeded on the current boot and decoded `WallpaperAssetDownloadState` for a known asset id. Current boot has SIP disabled. |
-| `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, signal plan, and restart probe plan; refused the SIP proof claim because SIP is disabled on this boot. |
+| `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, redraw probe plan, signal plan, and restart probe plan; refused the SIP proof claim because SIP is disabled on this boot. |
 | `restart-probe-plan` | Captured current target pid, planned `SIGTERM`, and left after/respawn evidence uncollected because it did not execute. |
+| `redraw-probe-plan` | Captured current desktop image URL and options, and left after/preserved-image evidence uncollected because it did not execute. |
 | `redraw-static-plan` | Found the current static desktop image URL without reapplying it. |
 | `signal-plan --signal TERM` | Found the current `WallpaperAgent` pid and planned `SIGTERM` without executing it. |
 
@@ -98,6 +101,8 @@ Observed non-mutating results from this branch:
       `csrutil status`
 - [x] SwiftPM restart probe plan/execute command that captures before and
       after pids without using `launchctl kickstart`
+- [x] SwiftPM redraw probe plan/execute command that captures before and
+      after `NSWorkspace` desktop image state
 - [x] Headless Ghidra string/data-reference pass for debug and redraw anchors
 - [x] Adjacent userland surface inventory for export daemon, Settings helper,
       diagnostic extension, WallpaperAgent plug-ins, ExtensionKit wallpaper
@@ -911,6 +916,20 @@ This is the most SIP-compatible redraw candidate because it uses public
 userland APIs instead of private XPC. It may not cover live, dynamic, aerial,
 or extension-backed wallpapers, and it is still settings mutation rather than
 a pure compositor redraw.
+
+The repository helper now has a proof-oriented version of this experiment:
+
+```zsh
+swift run spelunk wallpaper-agent redraw-probe-plan
+swift run spelunk wallpaper-agent redraw-probe --execute
+```
+
+The plan form is non-mutating and records each screen's current desktop image
+URL plus option keys. The execute form reapplies the same image URL and options,
+then reads `NSWorkspace` state again and reports whether the image URL was
+preserved. It still needs a SIP-enabled boot and a moment where visible desktop
+mutation is acceptable before this can be promoted from candidate to proven
+redraw path.
 
 ### Private Redraw Candidate Details
 
