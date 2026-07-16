@@ -80,6 +80,16 @@ Observed exported Swift families:
 
 Inference: `CallsXPC` provides a typed Swift message layer for call-service communication.
 
+Demangled highlights:
+
+- `XPCMessage`: associated `Reply` and `Failure`, encodable/decodable, static `messageIdentifier`.
+- `XPCInterface`: associated host messages, client messages, interface kind, and identity.
+- `XPCIdentity.machService(String)`.
+- `XPCHostConnection`: has bundle identifier, UUID id, async send, and one-way send overloads.
+- `XPCHost`: request handler, message handlers, cancellation handler, start, one-to-one current connection, and one-to-many connection iteration.
+- `XPCHost.ConnectionRequest`: exposes bundle identifier and entitlement value lookup.
+- `XPCClient`: async send, sync send, message handlers, cancellation handler, and destroy connection.
+
 ### CallsPersistence
 
 Verified from `MacOSX27.0.sdk/System/Library/PrivateFrameworks/CallsPersistence.framework/CallsPersistence.tbd`.
@@ -94,6 +104,13 @@ Observed exported Swift families:
 - fetch/save/update/delete and persistent-history error cases
 
 Inference: `CallsPersistence` wraps a Core Data or Core Data-like persistence layer for call records/messages and syncable call entities.
+
+Demangled highlights:
+
+- `SyncableEntity`: entity name, id, insert/update/equality, and unique key requirements.
+- `DataStoreWrapper`: async fetch, fetch count, fetch object IDs, insert, update, delete, delegate.
+- `DataStoreWrapperDelegate`: added/updated/deleted syncables, reconnect, and refetch callbacks.
+- `DataStoreWrapperError`: batch delete, synchronization, persistent history change, update, deletion, save, fetch, invalid state, store load, and invalid entity name.
 
 ### PhoneAppIntents
 
@@ -130,16 +147,43 @@ High-signal model fields visible in symbol names:
 - `CallAVMode.audio`
 - `CallAVMode.video`
 
+Additional demangled Phone App Intents surface:
+
+- `PhonePerson`: wraps `IntentPerson` and conforms to App Entity/App Value/display/transfer protocols.
+- `CallRecord.CallRecordQuery`: async query by string identifiers.
+- `CallMessage`: voicemail/call-message entity with message file, optional transcript, read state, duration, date, sender, and linked call record.
+- `CallMessage.CallMessageQuery`: async query by UUIDs.
+- `CallStatus.from(TUCallStatus)`: maps private TelephonyUtilities call status into the App Intents enum.
+
 ## Constants And Notifications
 
-Not yet captured from live runtime.
+Captured from SDK `.tbd` exports. These names prove exported constants/symbols exist; they do not yet prove delivery mechanism or posting behavior.
 
-Planned sources:
+High-signal `TelephonyUtilities` notification families:
 
-- strings and Objective-C metadata from dyld-cache extracted private frameworks
-- `notifyutil -l` filtered for Phone, Calls, TelephonyUtilities, and FaceTime identifiers
+- call center: `TUCallCenterCallConnectedNotification`, `TUCallCenterCallStatusChangedNotification`, `TUCallCenterCallStartedConnectingNotification`, `TUCallCenterCallerIDChangedNotification`, `TUCallCenterConferenceParticipantsChangedNotification`
+- call state: `TUCallIsOnHoldChangedNotification`, `TUCallIsSendingAudioChangedNotification`, `TUCallIsSendingVideoChangedNotification`, `TUCallIsUplinkMutedChangedNotification`, `TUCallRecordingStateChangedNotification`, `TUCallTranslationStateChangedNotification`
+- call history: `TUCallHistoryControllerRecentCallsDidChangeNotification`, `TUCallHistoryControllerUnreadCallCountDidChangeNotification`
+- capabilities: `TUCallCapabilitiesFaceTimeAvailabilityChangedNotification`, `TUCallCapabilitiesSupportsTelephonyCallsChangedNotification`, `TUCallCapabilitiesWiFiCallingChangedNotification`, `TUCallCapabilitiesRelayCallingChangedNotification`
+- conversation/provider: `TUConversationManagerDidBecomeAvailableNotification`, `TUCallProviderManagerProvidersChangedNotification`, `TUCallConversationChangedNotification`
+- audio/video devices: `TUAudioSystemUplinkMuteStatusChangedNotification`, `TUVideoDeviceControllerDeviceBecameAvailableNotification`, `TUVideoDeviceControllerDidStartPreviewNotification`, `TUVideoDeviceControllerUserPreferredCameraChangedNotification`
+- privacy/safety: `TUPrivacyRulesChangedNotification`, `TUCallScreeningDidFinishAnnouncementNotification`
+
+High-signal `CallHistory` constants:
+
+- `CHCallInteractionsDidChangeDarwinNotification`
+- `kCallHistoryCallRecordInsertedNotification`
+- `kCallHistoryDatabaseChangedNotification`
+- `kCallHistoryDatabasePluginUpdateNotification`
+- `kCallHistoryDatabaseRemoteUpdateReadNotification`
+- `kCallHistorySyncHelperReadyNotification`
+- `kCallHistoryTimersChangedNotification`
+
+Next sources:
+
+- `notifyutil -l` filtered for live Darwin notification names
 - log stream predicates for call-service subsystem names
-- generated headers or Swift interfaces
+- controlled runtime observer helper to classify notification center vs Darwin notify behavior
 
 ## Version Differences
 

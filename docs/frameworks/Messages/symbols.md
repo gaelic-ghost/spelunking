@@ -84,6 +84,14 @@ Observed exported Swift families:
 - `ConversationRecordIterator`
 - batch/progress/export statistics types
 
+Demangled type families:
+
+- `ImportExportRecordExportIterating`: protocol with `recordType`, `exportOptions`, `exportStatistics`, `fetchStartingCountsForExport`, `hasCompletedCloudSync`, and `progress`.
+- `AttachmentExportIterator`, `ParticipantExportIterator`, and `ConversationExportIterator`: async sequences with nested iterators and batches.
+- iterator batches: include count, empty-state, progress, description, and record arrays.
+- `ArchiveImportIterator`: async iterator over archive import batches, encodable/decodable.
+- `MessageExportExclusionFilter`: filters for promotional, transactional, balloon plugin, junk, system, chat bot, default, deleted, expired, all cases, and business messages.
+
 ## Scripting Bridge Classes
 
 Verified from `sdef /System/Applications/Messages.app`.
@@ -99,14 +107,51 @@ These names are scripting dictionary class bindings. They identify the Cocoa bri
 
 ## Constants And Notifications
 
-Not yet captured from live runtime.
+Captured from SDK `.tbd` exports. These names prove exported constants/symbols exist; they do not yet prove delivery mechanism or posting behavior.
 
-Planned sources:
+High-signal `IMCore` notification families:
 
-- strings and Objective-C metadata from dyld-cache extracted private frameworks
-- `notifyutil -l` filtered for Messages/IM identifiers
+- account lifecycle: `IMAccountActivatedNotification`, `IMAccountLoggedInNotification`, `IMAccountLoggedOutNotification`, `IMAccountLoginStatusChangedNotification`, `IMAccountRegistrationStatusChangedNotification`
+- chat lifecycle: `IMChatMessageReceivedNotification`, `IMChatMessageSendFailedNotification`, `IMChatRegistryMessageSendingNotification`, `IMChatRegistryMessageSentNotification`, `IMChatRegistryDidRegisterChatNotification`, `IMChatRegistryDidUnregisterChatNotification`
+- chat state: `IMChatUnreadCountChangedNotification`, `IMChatParticipantsDidChangeNotification`, `IMChatPropertiesChangedNotification`, `IMChatKeyTransparencyStatusChangedNotification`, `IMChatAutomaticTranslationChangedNotification`
+- file transfer: `IMFileTransferCreatedNotification`, `IMFileTransferUpdatedNotification`, `IMFileTransferFinishedNotification`, `IMFileTransferRejectedNotification`, `IMFileTransferRemovedNotification`
+- daemon/service: `IMDaemonWillConnectNotification`, `IMDaemonDidConnectNotification`, `IMDaemonDidDisconnectNotification`, `IMDaemonConnectionLostNotification`, `IMServiceDidConnectNotification`, `IMServiceDidDisconnectNotification`
+- CloudKit/sync: `IMCloudKitFetchedSyncStatsNotification`, `IMCloudKitFetchedSyncDebuggingInfoNotification`, `IMRunAllCloudKitEventNotification`
+- collaboration/nicknames/pinning: `IMCollaborationNoticesDidChangeNotification`, `IMNicknameDidChangeNotification`, `IMPinnedConversationsDidChangeNotification`
+
+High-signal `IMDPersistence` and `IMDaemonCore` symbols:
+
+- `IMDMessageRecordRetractNotification`
+- `IMDNotificationsPostNotification`
+- `IMDNotificationsPostUrgentNotification`
+- `IMDNotificationsRetractNotification`
+- `IMDNotificationsUpdatePostedNotification`
+- `IMDPersistenceServiceResettingNotification`
+- `IMDSMSFailedToSendNotification`
+- `IMDSMSMarkAsReadCompletedNotification`
+- `IMDChatRegistryAddedChatNotification`
+- `IMDFileTransferCreatedNotification`
+- `IMDFileTransferUpdatedNotification`
+- `IMDSMSMessageSentNotification`
+
+High-signal `IMSharedUtilities` symbols:
+
+- `IMMessageSentDistributedNotification`
+- `IMSharedMessageSendingTextMessageAvailabilityDidChangeNotification`
+- `IMOneTimeCodesUpdatedNotification`
+- `IMIncomingMessageAlertFiltrationChangedNotification`
+- `IMUnreadCountControllerDidUpdateNotification`
+- `IMSettingsKeepMessagesChangedNotification`
+- `IMSettingsFilterUnknownSendersChangedNotification`
+- `IMTranslationLanguageStatusChangedNotification`
+- `IMStewieConversationContextChangedNotification`
+- `SatelliteStatusActiveNotification`
+
+Next sources:
+
+- `notifyutil -l` filtered for live Darwin notification names
 - log stream predicates for Messages subsystem names
-- generated headers or Swift interfaces
+- controlled runtime observer helper to classify notification center vs Darwin notify behavior
 
 ## Version Differences
 

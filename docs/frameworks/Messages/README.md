@@ -32,6 +32,8 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] SDK `.tbd` symbol skim for `IMCore`
 - [x] Filtered dyld shared cache export probe
 - [x] LaunchAgent and XPC service inventory
+- [x] Public iPhoneOS 27.0 SDK header inventory for Messages, MessageUI, and Shared With You
+- [x] Private `.tbd` notification and type-family inventory
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
 - [ ] Read-only runtime experiments against app/framework state
 - [ ] OS comparison against another macOS build
@@ -47,6 +49,68 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - macOS Apple Events through `Messages.app` for limited local, user-controlled automation.
 
 These are not equivalent surfaces. A Messages extension lives inside visible user interaction. Shared with You carries app-owned collaboration metadata. App Intents expose app actions. Message UI presents a composer. Apple Events automate a local Mac app with permission and a small scripting dictionary.
+
+## Supported API Notes
+
+Verified from the iPhoneOS 27.0 SDK local headers.
+
+### Messages Framework
+
+`MSConversation` exposes:
+
+- participant identifiers scoped to this device: `localParticipantIdentifier` and `remoteParticipantIdentifiers`
+- `selectedMessage` when the extension is invoked from a message in the transcript
+- staging APIs: `insertMessage`, `insertSticker`, `insertText`, and `insertAttachment`
+- send APIs: `sendMessage`, `sendSticker`, `sendText`, and `sendAttachment`
+
+Important boundary: the send APIs require the extension app to be visible and to have had a recent touch interaction since launch or the last send. This makes them user-present extension operations, not background send primitives.
+
+`MSMessagesAppViewController` exposes:
+
+- `activeConversation`
+- presentation style and context
+- lifecycle callbacks for becoming active and resigning active
+- compact/expanded callbacks for message selection, message receipt, send start, send cancellation, and presentation transitions
+- transcript presentation hooks such as `contentSizeThatFits`, message tint color, and message corner radius
+
+`MSMessage` exposes:
+
+- `session` for grouping message updates
+- `isPending`
+- sender participant identifier
+- layout, URL payload, expiration, accessibility label, summary text, and send error
+
+Inference: Apple’s supported iMessage extension surface is a constrained UI-extension model for app-specific payloads and transcript UI, with app-owned state encoded through message URLs/layouts and updated through visible user interaction.
+
+### MessageUI
+
+`MFMessageComposeViewController` exposes:
+
+- capability checks: `canSendText`, `canSendSubject`, `canSendAttachments`, and `isSupportedAttachmentUTI`
+- initial `recipients`, `body`, `subject`, attachments, and optional interactive `MSMessage`
+- attachment APIs for file URLs and data
+- `insertCollaborationItemProvider` for collaboration item providers
+- delegate completion with `MessageComposeResultCancelled`, `MessageComposeResultSent`, or `MessageComposeResultFailed`
+
+Important boundary: `MessageComposeResultSent` means the user sent or queued the message; the actual delivery can still occur later when the device is able to send.
+
+The UPI category adds `setUPIVerificationCodeSendCompletion` behind the managed `com.apple.developer.upi-device-validation` entitlement. That completion reports actual SMS transmission only for that narrow managed-entitlement validation flow.
+
+### Shared With You Core
+
+`SWCollaborationMetadata` exposes:
+
+- globally unique `collaborationIdentifier`
+- local `localIdentifier`
+- app-owned `title`
+- default and user-selected share options
+- initiator handle/name fields used for local confirmation, not transmitted to recipients
+
+`SWStartCollaborationAction` carries collaboration metadata and can be fulfilled with a URL plus collaboration identifier.
+
+`SWUpdateCollaborationParticipantsAction` carries collaboration metadata plus added and removed `SWPersonIdentity` arrays.
+
+Inference: Shared With You collaboration APIs model app-owned shared objects and participant changes. They do not expose personal Messages history.
 
 ### Private Local Surfaces
 
@@ -168,6 +232,23 @@ Verified from the macOS 27.0 SDK `IMCore.tbd`:
 
 Inference: the SDK-visible `IMCore` export surface includes modern Swift import/export plumbing for records, attachments, participants, and conversations, not only legacy Objective-C IM types.
 
+Demangled `IMCore` families from the macOS 27.0 SDK include:
+
+- `ImportExportRecordExportIterating`
+- `ImportExportProgressReporting`
+- `ImportExport.AttachmentExportIterator`
+- `ImportExport.ParticipantExportIterator`
+- `ImportExport.ConversationExportIterator`
+- `ImportExport.ArchiveImportIterator`
+- `ImportExport.Attachment`, `Participant`, and `Conversation` batch types
+- `ImportExport.ExportOptions`
+- `ImportExport.ExportStatistics`
+- `ImportExport.RecordCounts`
+- `ImportExport.AttachmentDownloader`
+- `ImportExport.MessageExportExclusionFilter`
+
+Observed `MessageExportExclusionFilter` cases include promotional, transactional, balloon plugins, junk, system, chat bot, default, deleted, expired, all cases, and business.
+
 ## Dyld Shared Cache Notes
 
 Verified with:
@@ -226,7 +307,7 @@ Inference: database access is brokered through a privileged XPC service with a t
 - Which XPC messages are exchanged between `Messages.app`, `imagent`, `IMDPersistenceAgent`, `MessagesBlastDoorService`, and transfer/transcoding agents?
 - Which `chat.db` task flags and message state integer values map to named IMCore constants?
 - Which fields are stable across macOS 26.5.2 and macOS 27.0 SDK assumptions?
-- Which notifications fire for incoming messages, outgoing sends, read state, reactions, edits, scheduled messages, and sync events?
+- Which observed notification constants are posted in-process, through distributed notification center, through Darwin notify, or only used as local symbols?
 - Which Apple Events operations require app launch, explicit Automation consent, or foreground user context?
 
 ## References

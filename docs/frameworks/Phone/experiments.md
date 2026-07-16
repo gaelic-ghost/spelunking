@@ -10,9 +10,12 @@
 - [x] Run a filtered dyld shared cache export probe.
 - [x] Inventory launchd jobs and XPC service plists.
 - [x] Locate and inventory call-history storage schema without row data.
+- [x] Read public SDK headers/interfaces for CallKit and LiveCommunicationKit.
+- [x] Demangle private SDK `.tbd` Swift symbols for PhoneAppIntents, CallsXPC, CallsPersistence, and TelephonyUtilities.
+- [x] Capture private SDK notification constant families.
 - [ ] Extract live dyld shared cache images for full call private framework metadata.
 - [ ] Generate class/protocol/selector inventory.
-- [ ] Observe notification names without placing calls.
+- [ ] Classify notification constants by delivery mechanism without placing calls.
 - [ ] Attach read-only logging predicates while manually opening Phone.
 
 ## Mutating Experiments

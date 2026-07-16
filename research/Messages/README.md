@@ -36,6 +36,19 @@ plutil -p /System/Library/LaunchAgents/com.apple.imautomatichistorydeletionagent
 plutil -p /System/Library/LaunchAgents/com.apple.imtransferagent.plist
 plutil -p /System/Library/PrivateFrameworks/IMDPersistence.framework/XPCServices/IMDPersistenceAgent.xpc/Contents/Info.plist
 dyld_info -exports -objc -all_dyld_cache
+xcrun --show-sdk-path --sdk iphoneos
+xcrun --sdk iphoneos --show-sdk-version
+find /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/Messages.framework -maxdepth 5 -type f
+sed -n '1,240p' /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/Messages.framework/Headers/MSConversation.h
+sed -n '1,260p' /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/Messages.framework/Headers/MSMessagesAppViewController.h
+sed -n '1,220p' /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/Messages.framework/Headers/MSMessage.h
+sed -n '1,260p' /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/MessageUI.framework/Headers/MFMessageComposeViewController.h
+sed -n '1,180p' /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/MessageUI.framework/Headers/MFMessageComposeViewController+UPI.h
+sed -n '1,260p' /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/SharedWithYouCore.framework/Headers/SWCollaborationMetadata.h
+sed -n '1,220p' /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/SharedWithYouCore.framework/Headers/SWStartCollaborationAction.h
+sed -n '1,220p' /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/SharedWithYouCore.framework/Headers/SWUpdateCollaborationParticipantsAction.h
+rg -o '_\$s[^,[:space:]]+' /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMCore.framework/Versions/A/IMCore.tbd | tr -d "'" | swift-demangle
+rg -o "_[A-Za-z0-9_]*(Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMCore.framework/Versions/A/IMCore.tbd
 ```
 
 Privacy note: the SQLite commands captured table and column names only. No row data, message text, handles, attachment names, or counts were captured.
@@ -43,5 +56,5 @@ Privacy note: the SQLite commands captured table and column names only. No row d
 ## Next Raw Captures
 
 - dyld shared cache extraction command and output paths
-- filtered Swift demangle output for `IMCore`
-- notification/logging baseline
+- notification delivery classification
+- logging baseline

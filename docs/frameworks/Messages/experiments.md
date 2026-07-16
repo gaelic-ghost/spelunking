@@ -10,9 +10,12 @@
 - [x] Skim SDK `.tbd` metadata for `IMCore`.
 - [x] Run a filtered dyld shared cache export probe.
 - [x] Inventory launchd jobs and XPC service plists.
+- [x] Read public iPhoneOS SDK headers for Messages, MessageUI, and Shared With You.
+- [x] Demangle private SDK `.tbd` Swift symbols for IMCore import/export families.
+- [x] Capture private SDK notification constant families.
 - [ ] Extract live dyld shared cache images for full IM private framework metadata.
 - [ ] Generate class/protocol/selector inventory.
-- [ ] Observe notification names without sending messages.
+- [ ] Classify notification constants by delivery mechanism without sending messages.
 - [ ] Attach read-only logging predicates while manually using Messages.
 
 ## Mutating Experiments

@@ -32,6 +32,8 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Filtered dyld shared cache export probe
 - [x] LaunchAgent and XPC service inventory
 - [x] Call-history storage schema inventory without row data
+- [x] Public iPhoneOS 27.0 SDK header/interface inventory for CallKit and LiveCommunicationKit
+- [x] Private `.tbd` notification and type-family inventory
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
 - [ ] Read-only runtime experiments against app/framework state
 - [ ] OS comparison against another macOS build
@@ -44,6 +46,34 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - CallKit for public call directory, VoIP call UI, and call-related extension surfaces.
 - LiveCommunicationKit for public communication experiences where applicable.
 - App Intents for app-owned actions, not general private call control.
+
+## Supported API Notes
+
+Verified from iPhoneOS and macOS 27.0 SDK headers/interfaces.
+
+### CallKit
+
+Local SDK headers expose the public call integration model through:
+
+- actions: `CXStartCallAction`, `CXAnswerCallAction`, `CXEndCallAction`, `CXSetHeldCallAction`, `CXSetMutedCallAction`, `CXSetGroupCallAction`, `CXPlayDTMFCallAction`, and `CXSetTranslatingCallAction`
+- state/model objects: `CXCall`, `CXCallUpdate`, `CXHandle`, and `CXTransaction`
+- orchestration: `CXProvider`, `CXProviderConfiguration`, `CXCallController`, and `CXCallObserver`
+- call-directory extension support: `CXCallDirectoryProvider`, `CXCallDirectoryExtensionContext`, and `CXCallDirectoryManager`
+
+Inference: public CallKit supports app-owned calling services and call-directory behavior, but it is not a general interface to Phone’s private call history, voicemail store, or `callservicesd` control surface.
+
+### LiveCommunicationKit
+
+The Swift interface exposes:
+
+- `ConversationManager.Configuration` with ringtone, icon, conversation-group limits, recents inclusion, video support, supported handle types, and audio translation support
+- `Conversation` with observable state and local member
+- `ConversationAction` plus concrete `StartConversationAction`, `PauseConversationAction`, and `MergeConversationAction`
+- `TelephonyConversationManager.sharedInstance`, `cellularServices`, and `startCellularConversation`
+- `ConversationHistoryManager.sharedInstance` with recent-conversation queries and mark-read operations
+- `ConversationHistoryDidUpdate` as a notification-center async message
+
+Inference: LiveCommunicationKit is the public route for modern conversation experiences and, where supported, default-dialer/cellular conversation integration. It does not expose the private Phone App Intents or TelephonyUtilities storage/control surfaces directly.
 
 ### Private Local Surfaces
 
@@ -173,6 +203,41 @@ Verified from macOS 27.0 SDK `.tbd` files.
 
 Inference: the beta SDK exposes a structured App Intents layer for Phone call records/messages and a Swift XPC/persistence stack for private call-service internals.
 
+Demangled `PhoneAppIntents` families from the macOS 27.0 SDK include:
+
+- `PhonePerson`: transient App Entity/App Value wrapper around `IntentPerson`
+- `CallAVMode`: AppEnum with `audio` and `video`
+- `CallStatus`: AppEnum with `active`, `ringing`, `sending`, `onHold`, `disconnecting`, `disconnected`, and `unknown`; includes a conversion from `TUCallStatus`
+- `CallRecord`: App Entity, Indexed Entity, Syncable Entity, and Assistant Entity with `id`, `date`, `type`, `duration`, `provider`, `audioVisualMode`, and `remoteParticipants`
+- `CallRecordQuery`: async entity query by string identifiers
+- `CallMessage`: App Entity, Indexed Entity, Syncable Entity, Assistant Entity, model-representable, displayable, transferable entity with `id`, `date`, `from`, `duration`, `isRead`, `messageFile`, `voicemailTranscript`, and optional `callRecord`
+- `CallMessageQuery`: async entity query by UUIDs
+- `CallProvider`, `CallDestination`, and `CallRecordType` supporting call-record representation
+
+Demangled `CallsXPC` families include:
+
+- `XPCMessage`, with associated reply/failure types and static message identifiers
+- `XPCInterface`, with host messages, client messages, interface kind, and identity
+- `XPCIdentity.machService`
+- `XPCMessages` with typed payload decoder maps
+- `XPCHostConnection`, `XPCHost`, and `XPCClient`, with async send, sync send, message handlers, cancellation handlers, and entitlement lookup on connection requests
+- one-to-one and one-to-many interface kinds
+
+Demangled `CallsPersistence` families include:
+
+- `SyncableEntity` and `Syncable`
+- `DataStoreWrapper` with async fetch/count/object-id operations plus insert, update, and delete
+- `DataStoreWrapperDelegate` callbacks for added, updated, deleted syncables, reconnect, and refetch requirements
+- `DataStoreWrapperError` cases for batch delete, synchronization, persistent history, update, deletion, save, fetch, invalid state, store load, and invalid entity name
+
+Demangled `TelephonyUtilities` families include:
+
+- `VoiceSpamReportTelephonyManagerProtocol` and `VoiceSpamReportTelephonyManager`
+- `BadgeCounts` and `BadgeCountCategory`
+- `MessageStoreBadgeCounts`
+- `RecordingMetadata` and `RecordingMediaComposer`
+- `CallContextCardsHolder`
+
 ## Dyld Shared Cache Notes
 
 Verified with:
@@ -230,6 +295,7 @@ Inference: Phone’s user-facing app sits above a broad `callservicesd` broker p
 - Which Phone App Intents are user-invocable, Siri-only, or private/system-only?
 - Which URL schemes open visible UI only versus initiating privileged background actions for Apple-signed callers?
 - How does `Phone.app` divide responsibilities with `FaceTime.app` on macOS?
+- Which observed TelephonyUtilities and CallHistory notification constants are distributed, Darwin, notification-center, or internal-only?
 
 ## References
 
