@@ -118,6 +118,30 @@ Follow-up:
 
 Add narrower daemon predicates or safe helper interposition around entitlement-copy functions before exploring mutating commands.
 
+### Runtime Interface Capture
+
+Status: baseline run complete
+
+Command:
+
+```sh
+tools/mediaremote-interface-capture.zsh
+```
+
+Observed behavior:
+
+Capture `research/MediaRemote/experiments/interfaces/20260716T085016Z` built `mr-interface-probe` and produced grouped Objective-C runtime metadata for now-playing request wrappers, origin/client identity classes, controller classes, and `MRXPCConnection`.
+
+The recovered interface evidence confirms `MRNowPlayingPlayerClientRequests` owns cached playback queue, playback state, supported commands, and player properties state; exposes `initWithPlayerPath:`; and provides the request handlers already exercised by `mr-internal-probe`.
+
+Permissions, entitlements, or SIP notes:
+
+This capture is read-only runtime metadata. It does not instantiate classes, send XPC messages, query `mediaremoted`, or mutate playback/routes.
+
+Follow-up:
+
+Use the recovered selectors to map `MRXPCConnection` message lifetimes and `MRNowPlayingClientRequests` hydration paths before attempting any new mutating command surface.
+
 ## Mutating Experiments
 
 Run only after the read-only baseline is documented.

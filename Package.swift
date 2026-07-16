@@ -21,6 +21,10 @@ let package = Package(
             targets: ["MRInternalProbe"]
         ),
         .executable(
+            name: "mr-interface-probe",
+            targets: ["MRInterfaceProbe"]
+        ),
+        .executable(
             name: "now-playing-fixture",
             targets: ["NowPlayingFixture"]
         ),
@@ -38,6 +42,9 @@ let package = Package(
         ),
         .executableTarget(
             name: "MRInternalProbe"
+        ),
+        .executableTarget(
+            name: "MRInterfaceProbe"
         ),
         .executableTarget(
             name: "NowPlayingFixture"

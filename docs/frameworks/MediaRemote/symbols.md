@@ -36,7 +36,7 @@ Notable Xcode 27 beta additions include:
 
 ## Objective-C Runtime Surface
 
-`dyld_info -objc` cannot print live Objective-C metadata from dyld shared-cache dylibs, but exported symbols expose representative class names. See `live-dyld-cache.md`.
+`dyld_info -objc` cannot print live Objective-C metadata from dyld shared-cache dylibs, but exported symbols expose representative class names. `mr-interface-probe` now supplements that with selected loaded-runtime class metadata. See `live-dyld-cache.md` and `runtime-interfaces.md`.
 
 ## Constants and Notifications
 

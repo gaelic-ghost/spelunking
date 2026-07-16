@@ -27,14 +27,14 @@ The first evidence capture is recorded in `../../../research/MediaRemote/baselin
 - [x] `otool` metadata for support binaries
 - [x] exported symbols from live dyld cache
 - [x] Objective-C class names from exported symbols
-- [ ] protocols
+- [x] protocols from selected runtime classes
 - [x] selectors and method strings from dyld capture
 - [x] strings
 - [x] notifications
 - [x] entitlements for support binaries
 - [x] related daemons and agents
 - [x] related services and XPC endpoints
-- [ ] generated headers or interfaces
+- [x] runtime interface descriptions for selected classes
 - [x] read-only runtime experiments
 
 ## Interesting Areas
@@ -68,6 +68,7 @@ See `runtime-probes.md` for the Spotify and fixture-backed runtime results.
 - `symbols.md`: exported symbol families and SDK differences.
 - `now-playing-architecture.md`: now-playing identity, notifications, metadata keys, playback queues, and controller generations.
 - `runtime-probes.md`: local Swift probes and observed runtime behavior.
+- `runtime-interfaces.md`: recovered Objective-C runtime class interfaces and high-value request wrappers.
 - `agents-daemons.md`: `mediaremoted`, `mediaremoteagent`, entitlements, mach services, and daemon authority boundaries.
 - `daemon-observation.md`: repeatable unified-log captures around probe runs and daemon-side client evidence.
 - `entitlement-model.md`: entitlement helper symbols, daemon bitfield evidence, named entitlement status, and mapping gaps.

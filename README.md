@@ -20,10 +20,12 @@ The first research target is `MediaRemote.framework` on macOS 26.5 and the insta
 - `spelunk`: prints the current seeded research target paths.
 - `mr-now-playing-probe`: read-only dynamic `MediaRemote.framework` probe for global now-playing info, app PID/is-playing/client state, client/player lists, and short notification observation windows.
 - `mr-internal-probe`: Objective-C helper for internal `MediaRemote.framework` wrapper experiments that need direct Objective-C runtime calls.
+- `mr-interface-probe`: Objective-C runtime interface describer for targeted `MediaRemote.framework` classes, methods, properties, ivars, and protocols.
 - `now-playing-fixture`: metadata-only fixture for testing whether `MPNowPlayingInfoCenter` publication appears through MediaRemote.
 - `tools/mediaremote-inventory.zsh`: repeatable local capture script for dyld-cache exports, imports, strings, ObjC names, SDK diffs, support binaries, resources, and entitlements.
 - `tools/mediaremote-entitlement-experiment.zsh`: repeatable local runner that builds `mr-internal-probe`, signs copied variants with candidate private entitlements, and captures runtime differences.
 - `tools/mediaremote-daemon-observe.zsh`: repeatable local runner that executes a probe and captures focused `mediaremoted`/unified-log evidence for the same time window.
+- `tools/mediaremote-interface-capture.zsh`: repeatable local runner that captures selected Objective-C runtime interfaces from the loaded framework into ignored research output.
 
 ## Research Shape
 
@@ -55,8 +57,10 @@ Useful current commands:
 swift run mr-now-playing-probe --all
 swift run mr-now-playing-probe --origins
 swift run mr-internal-probe
+swift run mr-interface-probe
 swift run mr-now-playing-probe --observe 10 --application
 tools/mediaremote-inventory.zsh
 tools/mediaremote-entitlement-experiment.zsh
 tools/mediaremote-daemon-observe.zsh
+tools/mediaremote-interface-capture.zsh
 ```
