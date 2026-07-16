@@ -382,6 +382,34 @@ prints `sipEnabled: true` and the debug XPC read probe succeeds, it proves
 ordinary-user debug XPC reachability under SIP for the read/query surface. It
 still does not prove restart or redraw mutation.
 
+Recent log snapshot:
+
+```zsh
+.build/debug/spelunk wallpaper-agent log-snapshot --last 10m --limit 12
+```
+
+Observed result:
+
+```text
+lastInterval: 10m
+limit: 12
+truncated: true
+predicate: process == "WallpaperAgent" AND (...)
+lines:
+  2026-07-16 04:48:29.571 Df WallpaperAgent[...] activating connection: ... name=com.apple.wallpaper.debug.service.peer[...]
+  2026-07-16 04:48:29.571 Df WallpaperAgent[...] BEGIN - [com.apple.wallpaper.extension.aerials] handleDebugRequest
+  2026-07-16 04:48:29.586 Df WallpaperAgent[...] END - [com.apple.wallpaper.extension.aerials] handleDebugRequest
+  2026-07-16 04:48:29.586 Df WallpaperAgent[...] invalidated because the client process ... cancelled the connection or exited
+  2026-07-16 04:52:36.312 Df WallpaperAgent[...] activating connection: ... name=com.apple.wallpaper.debug.service.peer[...]
+  2026-07-16 04:52:36.312 Df WallpaperAgent[...] BEGIN - [com.apple.wallpaper.extension.aerials] handleDebugRequest
+  2026-07-16 04:52:36.327 Df WallpaperAgent[...] END - [com.apple.wallpaper.extension.aerials] handleDebugRequest
+  2026-07-16 04:52:36.327 Df WallpaperAgent[...] invalidated because the client process ... cancelled the connection or exited
+```
+
+The log snapshot corroborates the runtime debug XPC result: the request reaches
+`WallpaperAgent`, crosses into the extension proxy, and returns from
+`handleDebugRequest`.
+
 For focused receiver disassembly windows, use:
 
 ```zsh
@@ -538,6 +566,7 @@ swift run spelunk wallpaper-agent inventory
 swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper
 swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper.debug.service
 swift run spelunk wallpaper-agent debug-xpc-probe
+swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80
 swift run spelunk wallpaper-agent sip-validation-report
 swift run spelunk wallpaper-agent restart-probe-plan
 swift run spelunk wallpaper-agent redraw-static-plan
@@ -563,10 +592,12 @@ Observed in this branch:
   `Underlying connection interrupted`.
 - `debug-xpc-probe`: decoded downloaded Aerial assets through
   `WallpaperDebugRequestMessage` on this SIP-disabled boot.
+- `log-snapshot --last 10m --limit 12`: captured recent debug XPC peer
+  connection activation and `handleDebugRequest` begin/end lines.
 - `sip-validation-report`: collected SIP status, inventory, debug-XPC read
-  probe, static redraw plan, redraw probe plan, signal plan, and restart probe
-  plan; reported `sipProofClaim: not eligible because SIP is not enabled for
-  this boot.`
+  probe, static redraw plan, redraw probe plan, signal plan, restart probe
+  plan, and bounded log snapshot; reported `sipProofClaim: not eligible
+  because SIP is not enabled for this boot.`
 - `restart-probe-plan`: reported the current target pid and did not collect
   after/respawn evidence because it did not execute.
 - `redraw-probe-plan`: reported the current desktop image URL and did not
@@ -684,14 +715,18 @@ Do these only when visible desktop interruption is acceptable:
 
 1. Same-user `SIGTERM` restart probe:
    - record pid and `launchctl print` before
+   - run `swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80`
    - run `swift run spelunk wallpaper-agent restart-probe --execute --signal TERM`
    - record pid and `launchctl print` after, using the command's
      `respawnObserved` result as the first pass
-   - capture logs around relaunch and redraw
+   - rerun `swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80`
+     to capture relaunch, reload, generation, runtime, or snapshot evidence
 2. Public AppKit same-image reapply:
    - record current image URL and options for every `NSScreen`
+   - run `swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80`
    - run `swift run spelunk wallpaper-agent redraw-probe --execute`
-   - capture logs and visual result
+   - rerun `swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80`
+   - capture visual result
 3. Private `ensureViewModelIsUpToDate` probe:
    - only after the private Swift/XPC envelope is solved
    - test safe refresh reasons before any mutating messages

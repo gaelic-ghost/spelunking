@@ -43,6 +43,7 @@ swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper
 swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper.debug.service
 swift run spelunk wallpaper-agent debug-xpc-probe
 swift run spelunk wallpaper-agent debug-xpc-probe --request download-state --asset-id <asset-id>
+swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80
 swift run spelunk wallpaper-agent sip-validation-report
 swift run spelunk wallpaper-agent restart-probe-plan
 swift run spelunk wallpaper-agent redraw-static-plan
@@ -71,7 +72,8 @@ Observed non-mutating results from this branch:
 | `debug-xpc-probe` with `accessAllAssets(downloaded)` | Succeeded on the current boot and decoded two downloaded Aerial assets. Current boot has SIP disabled, so this is not SIP-enabled proof yet. |
 | `debug-xpc-probe --extension com.apple.wallpaper.extension.not-real` | Succeeded on the current boot and decoded `WallpaperDebugResponse.error("No valid extension")`, confirming the receiver dispatch/error path. Current boot has SIP disabled. |
 | `debug-xpc-probe --request download-state` | Succeeded on the current boot and decoded `WallpaperAssetDownloadState` for a known asset id. Current boot has SIP disabled. |
-| `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, redraw probe plan, signal plan, and restart probe plan; refused the SIP proof claim because SIP is disabled on this boot. |
+| `log-snapshot --last 10m --limit 12` | Captured recent `WallpaperAgent` unified log lines showing debug XPC peer connection activation and `handleDebugRequest` begin/end events. |
+| `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, redraw probe plan, signal plan, restart probe plan, and a bounded log snapshot; refused the SIP proof claim because SIP is disabled on this boot. |
 | `restart-probe-plan` | Captured current target pid, planned `SIGTERM`, and left after/respawn evidence uncollected because it did not execute. |
 | `redraw-probe-plan` | Captured current desktop image URL and options, and left after/preserved-image evidence uncollected because it did not execute. |
 | `redraw-static-plan` | Found the current static desktop image URL without reapplying it. |
@@ -103,6 +105,8 @@ Observed non-mutating results from this branch:
       after pids without using `launchctl kickstart`
 - [x] SwiftPM redraw probe plan/execute command that captures before and
       after `NSWorkspace` desktop image state
+- [x] SwiftPM unified-log snapshot command for bounded `WallpaperAgent`
+      debug/reload/generation evidence
 - [x] Headless Ghidra string/data-reference pass for debug and redraw anchors
 - [x] Adjacent userland surface inventory for export daemon, Settings helper,
       diagnostic extension, WallpaperAgent plug-ins, ExtensionKit wallpaper
@@ -794,6 +798,16 @@ Current observed results on macOS 26.5.2 build 25F84:
 | `accessAllAssets(downloaded)` against `com.apple.wallpaper.extension.not-real` | `error(No valid extension)` |
 | `downloadAssetState(4C108785-A7BA-422E-9C79-B0129F1D5550)` against Aerials | `downloadState(... progress: 1.0, isDownloaded: true)` |
 
+Recent unified-log evidence from the same boot shows `WallpaperAgent` accepting
+debug-service peer connections and dispatching to the extension bridge:
+
+```text
+activating connection: ... name=com.apple.wallpaper.debug.service.peer[...]
+BEGIN - [com.apple.wallpaper.extension.aerials] handleDebugRequest
+END - [com.apple.wallpaper.extension.aerials] handleDebugRequest
+invalidated because the client process ... cancelled the connection or exited
+```
+
 These calls prove the ordinary-user wire shape and debug receiver dispatch on
 this boot. They do not prove SIP-enabled access because `csrutil status`
 reported `System Integrity Protection status: disabled.` during the probe.
@@ -902,6 +916,13 @@ form sends the selected same-user POSIX signal, polls for a replacement
 observed. It still needs to be run on a SIP-enabled boot before it can be
 promoted from candidate to proven restart path.
 
+Use the log snapshot immediately before and after the execute form to capture
+relaunch, reload, generation, runtime, or snapshot evidence:
+
+```zsh
+swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80
+```
+
 `launchctl kickstart -k` is deliberately not part of this path.
 
 ### Public Redraw Candidate Details
@@ -930,6 +951,10 @@ then reads `NSWorkspace` state again and reports whether the image URL was
 preserved. It still needs a SIP-enabled boot and a moment where visible desktop
 mutation is acceptable before this can be promoted from candidate to proven
 redraw path.
+
+Use the same log snapshot command around the execute form to capture any
+`WallpaperAgent` reload, generation, runtime rebuild, or snapshot invalidation
+messages.
 
 ### Private Redraw Candidate Details
 

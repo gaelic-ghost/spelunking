@@ -40,6 +40,10 @@ struct SPKMain {
         switch subcommand {
         case "inventory":
             printSnapshot(try inspector.snapshot())
+        case "log-snapshot":
+            let lastInterval = optionValue("--last", in: arguments) ?? "10m"
+            let limit = optionValue("--limit", in: arguments).flatMap(Int.init) ?? 80
+            printLogSnapshot(try inspector.logSnapshot(lastInterval: lastInterval, limit: limit))
         case "xpc-ping-empty":
             let service = arguments.dropFirst().first ?? SPKWallpaperAgentInspector.normalMachService
             printXPCProbe(inspector.probeEmptyXPCMessage(machService: service))
@@ -117,6 +121,7 @@ struct SPKMain {
             Usage:
               spelunk targets
               spelunk wallpaper-agent inventory
+              spelunk wallpaper-agent log-snapshot [--last 10m] [--limit 80]
               spelunk wallpaper-agent xpc-ping-empty [mach-service]
               spelunk wallpaper-agent debug-xpc-probe [--extension identifier] [--request access-downloaded|access-all|download-state] [--asset-id id]
               spelunk wallpaper-agent sip-validation-report
@@ -137,6 +142,7 @@ struct SPKMain {
             """
             WallpaperAgent commands:
               inventory
+              log-snapshot [--last 10m] [--limit 80]
               xpc-ping-empty [mach-service]
               debug-xpc-probe [--extension identifier] [--request access-downloaded|access-all|download-state] [--asset-id id]
               sip-validation-report
@@ -165,6 +171,21 @@ struct SPKMain {
             print("  \(service.visibleInUserBootstrap ? "visible" : "missing") \(service.name)")
             if let line = service.launchctlLine {
                 print("    \(line)")
+            }
+        }
+    }
+
+    private static func printLogSnapshot(_ snapshot: SPKWallpaperLogSnapshot) {
+        print("lastInterval: \(snapshot.lastInterval)")
+        print("limit: \(snapshot.limit)")
+        print("truncated: \(snapshot.truncated)")
+        print("predicate: \(snapshot.predicate)")
+        print("lines:")
+        if snapshot.lines.isEmpty {
+            print("  <none>")
+        } else {
+            for line in snapshot.lines {
+                print("  \(line)")
             }
         }
     }
@@ -276,6 +297,10 @@ struct SPKMain {
         print("")
         print("restartProbePlan:")
         printRestartProbeResult(try inspector.restartProbe(signalName: "TERM", execute: false))
+
+        print("")
+        print("logSnapshot:")
+        printLogSnapshot(try inspector.logSnapshot(lastInterval: "10m", limit: 40))
 
         print("")
         if sipStatus.isEnabled {

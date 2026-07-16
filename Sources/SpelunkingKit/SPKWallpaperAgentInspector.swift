@@ -30,6 +30,14 @@ public struct SPKWallpaperXPCProbeResult: Equatable, Sendable {
     public var errorDescription: String?
 }
 
+public struct SPKWallpaperLogSnapshot: Equatable, Sendable {
+    public var lastInterval: String
+    public var predicate: String
+    public var limit: Int
+    public var lines: [String]
+    public var truncated: Bool
+}
+
 public struct SPKWallpaperSignalResult: Equatable, Sendable {
     public var signal: Int32
     public var execute: Bool
@@ -140,6 +148,39 @@ public struct SPKWallpaperAgentInspector: Sendable {
                 errorDescription: String(describing: error)
             )
         }
+    }
+
+    public func logSnapshot(lastInterval: String = "10m", limit: Int = 80) throws -> SPKWallpaperLogSnapshot {
+        let predicate = """
+        process == "WallpaperAgent" AND (eventMessage CONTAINS[c] "debug" OR eventMessage CONTAINS[c] "Failed to Decode" OR eventMessage CONTAINS[c] "Accepted XPC" OR eventMessage CONTAINS[c] "reload" OR eventMessage CONTAINS[c] "generation" OR eventMessage CONTAINS[c] "Runtime" OR eventMessage CONTAINS[c] "REBUILD" OR eventMessage CONTAINS[c] "snapshot" OR eventMessage CONTAINS[c] "invalidate")
+        """
+        let result = try runner.run(
+            "/usr/bin/log",
+            arguments: [
+                "show",
+                "--last", lastInterval,
+                "--style", "compact",
+                "--predicate", predicate,
+            ]
+        )
+
+        guard result.succeeded else {
+            throw SPKWallpaperAgentError.commandFailed("log show for WallpaperAgent returned \(result.exitCode): \(result.standardError)")
+        }
+
+        let allLines = result.standardOutput
+            .split(separator: "\n", omittingEmptySubsequences: true)
+            .map(String.init)
+        let boundedLimit = max(1, limit)
+        let lines = Array(allLines.suffix(boundedLimit))
+
+        return SPKWallpaperLogSnapshot(
+            lastInterval: lastInterval,
+            predicate: predicate,
+            limit: boundedLimit,
+            lines: lines,
+            truncated: allLines.count > boundedLimit
+        )
     }
 
     public func signalAgent(signalName: String, execute: Bool) throws -> SPKWallpaperSignalResult {
