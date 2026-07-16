@@ -358,6 +358,7 @@ Inference: Phone’s user-facing app sits above a broad `callservicesd` broker p
 
 ## References
 
+- `docs/frameworks/messages-phone-status.md`
 - `research/Phone/README.md`
 - `docs/frameworks/Phone/surfaces.md`
 - `docs/frameworks/Phone/agents.md`

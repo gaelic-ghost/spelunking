@@ -371,6 +371,7 @@ Inference: database access is brokered through a privileged XPC service with a t
 
 ## References
 
+- `docs/frameworks/messages-phone-status.md`
 - `research/Messages/README.md`
 - `docs/frameworks/Messages/surfaces.md`
 - `docs/frameworks/Messages/agents.md`
