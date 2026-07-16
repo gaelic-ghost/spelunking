@@ -17,7 +17,7 @@ public API, a distribution recommendation, or an App Store path.
 | Process | `/System/Library/CoreServices/WallpaperAgent.app/Contents/MacOS/WallpaperAgent` |
 | Job | `gui/<uid>/com.apple.wallpaper.agent` |
 | Shared-cache source | `dyld_shared_cache_arm64e.05` |
-| SIP at runtime verification | disabled |
+| SIP at runtime verification | enabled (retested 2026-07-16) |
 
 ## Evidence Inventory
 
@@ -30,8 +30,8 @@ public API, a distribution recommendation, or an App Store path.
 - [x] Debug request/response vocabulary and adjacent XPC protocol metadata
 - [x] Typed Swift-XPC envelope for the debug request
 - [x] Ordinary current-user access to the debug listener with SIP disabled
-- [x] Current-user restart operation with SIP disabled
-- [ ] Repeat the read-only probe and restart with SIP enabled
+- [x] Current-user `SIGTERM` restart operation with SIP enabled
+- [x] SIP-enabled `launchctl kickstart -k` denial captured
 - [ ] A non-disruptive redraw request proven from an ordinary SIP-enabled client
 
 ## Service Ownership and Lifecycle
@@ -48,16 +48,18 @@ four managed Mach endpoints:
 `launchctl print` confirms that the current user's job owns the first and
 second endpoints. This proves the bootstrap namespace and label only.
 
-The fully-qualified service target is essential. This succeeds on the current
-SIP-disabled environment and records a clean `SIGTERM` restart in launchd:
+The fully-qualified service target is essential:
 
 ```zsh
 launchctl kickstart -kp "gui/$(id -u)/com.apple.wallpaper.agent"
 ```
 
 Using only `com.apple.wallpaper.agent` fails with launchctl usage error 64;
-that is target parsing, not a demonstrated permission denial. Whether the
-same command succeeds with SIP enabled remains unverified.
+that is target parsing, not a permission denial. With SIP enabled, the
+fully-qualified `kickstart -kp` command fails with exit code 150 and
+`Operation not permitted while System Integrity Protection is engaged`.
+With SIP disabled, the same fully-qualified command cleanly restarted the
+agent and launchd recorded a `SIGTERM` termination.
 
 The verified restart primitive is:
 
@@ -69,10 +71,11 @@ It obtains the current session's agent PID, sends `SIGTERM`, and waits for
 launchd to publish a replacement PID. In the live verification, PID `87092`
 became `90265`, the job run count increased from `2` to `3`, and launchd
 recorded `last terminating signal = Terminated: 15` with no crash count added.
-This is an observation made while SIP was disabled. It uses ordinary
-same-user POSIX signalling and the agent's existing LaunchAgent keep-alive
-policy; it does not require private entitlements or injection in this runtime
-configuration. A SIP-enabled retest is required before claiming that boundary.
+This was retested with SIP enabled: PID `632` became `9524`, launchd's run
+count increased from `1` to `2`, and it recorded `last terminating signal =
+Terminated: 15`. It uses ordinary same-user POSIX signalling and the agent's
+existing LaunchAgent keep-alive policy; it does not require private
+entitlements or injection.
 
 The launchd policy includes `KeepAlive.SuccessfulExit = false`. The restart
 does visibly interrupt and rebuild the desktop wallpaper path, so do not run
@@ -233,9 +236,8 @@ Controls widget uses it only to advance a shuffled collection.
 SIP does not grant an arbitrary client the agent's private entitlements, nor
 does it supply private Swift type metadata. The earlier ordinary-client decode
 error and an interrupted debug-service connection are consistent with that
-boundary. This repository has not yet established whether SIP must be disabled
-for any restart or redraw experiment; all successful runtime experiments to
-date occurred with SIP disabled.
+boundary. SIP does block launchctl's managed `kickstart -k` operation for this
+system-owned LaunchAgent, but it does not block a same-user `SIGTERM` restart.
 
 ## Experiments
 
@@ -248,9 +250,9 @@ date occurred with SIP disabled.
 3. Capture a receiver-side trace while Apple wallpaper settings performs a
    debug-asset action. This requires an explicit decision about introspection
    permissions; do not weaken SIP just to retry guessed payloads.
-4. Separately test a controlled same-user agent termination outside active
-   desktop use, then check whether launchd respawns the job and whether the
-   wallpaper is redrawn. Record the exact exit status and launchd result.
+4. Determine whether a SIP-enabled redraw can be initiated without process
+   termination. The restart boundary is now verified: `launchctl kickstart
+   -k` is denied, whereas same-user `SIGTERM` is accepted and respawned.
 
 ## Open Questions
 

@@ -5,7 +5,7 @@ Matching stable documentation: [`docs/frameworks/launchd/README.md`](../../docs/
 ## Current Runtime State
 
 ```text
-System Integrity Protection status: disabled.
+System Integrity Protection status: enabled.
 ```
 
 The service examined in this pass is the current user's Aqua LaunchAgent:
@@ -15,9 +15,15 @@ job="gui/$(id -u)/com.apple.wallpaper.agent"
 launchctl print "$job"
 ```
 
-At capture time, launchd reported a running instance, `runs = 4`, and
-`last terminating signal = Terminated: 15` after a fully-qualified
-`kickstart -k` operation.
+With SIP enabled, fully-qualified `kickstart -kp` failed with exit code 150:
+
+```text
+Could not kickstart service "com.apple.wallpaper.agent": 150: Operation not permitted while System Integrity Protection is engaged
+```
+
+Direct same-user `kill -TERM` succeeded: PID `632` became `9524`, `runs`
+increased from `1` to `2`, and launchd reported `last terminating signal =
+Terminated: 15`.
 
 ## Target Parsing Reproduction
 

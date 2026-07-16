@@ -11,7 +11,7 @@ does not claim a public API or SIP-enabled result.
 | Field | Value |
 | --- | --- |
 | Active OS | macOS 26.5.2 (25F84) |
-| SIP during observations | disabled |
+| SIP during observations | disabled and enabled (retested 2026-07-16) |
 | Client | `/bin/launchctl` (`com.apple.xpc.launchctl`) |
 | Target | `gui/<uid>/com.apple.wallpaper.agent` |
 
@@ -38,7 +38,9 @@ launchctl kickstart -kp "gui/$(id -u)/com.apple.wallpaper.agent"
 `-k` terminates an existing service instance and `-p` prints the resulting PID.
 The live launchd record showed `last terminating signal = Terminated: 15` and
 an increased run count. The non-killing form, `launchctl kickstart -p`,
-returned the existing PID unchanged.
+returned the existing PID unchanged. With SIP enabled, the same fully-qualified
+command fails with exit code 150: `Operation not permitted while System
+Integrity Protection is engaged`.
 
 The manual also exposes a signal-specific service command:
 
@@ -79,9 +81,11 @@ This makes two boundaries distinct:
    be permitted.
 
 Consequently, a bare-label failure does not demonstrate a SIP boundary. The
-correct next proof is to enable SIP, then repeat the exact fully-qualified
-restart and read-only XPC commands while recording exit status and launchd
-state.
+SIP-enabled retest resolves the managed-restart question: launchd denies
+`kickstart -k` for this system-owned LaunchAgent. In contrast, direct
+same-user `SIGTERM` is accepted by the kernel and launchd respawns the job;
+PID `632` became `9524`, run count increased from `1` to `2`, and launchd
+recorded `Terminated: 15`.
 
 ## Evidence Commands
 
@@ -99,7 +103,5 @@ launchctl print "gui/$(id -u)/com.apple.wallpaper.agent"
 
 - Which `launchctl` subcommands directly use `__launch_msg2` versus a
   different XPC helper, and what exact request dictionaries do they send?
-- Does SIP-enabled `kickstart -k` accept a current-user Apple LaunchAgent
-  after the target is fully qualified?
 - Does `launchctl kill SIGTERM` follow precisely the same launchd bookkeeping
   path as `kickstart -k` for this job?
