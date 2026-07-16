@@ -16,6 +16,8 @@ struct SPKMain {
             printTargets()
         case "objc-runtime":
             try printObjCRuntimeInventory(arguments: arguments)
+        case "string-constants":
+            try printStringConstants(arguments: arguments)
         case "help", "--help", "-h":
             printHelp()
         default:
@@ -90,6 +92,86 @@ struct SPKMain {
         }
     }
 
+    private static func printStringConstants(arguments: [String]) throws {
+        var imagePath: String?
+        var symbols: [String] = []
+        var kind = SPKStringConstantKind.nsStringGlobal
+        var format = OutputFormat.text
+
+        var iterator = arguments.makeIterator()
+        while let argument = iterator.next() {
+            switch argument {
+            case "--image":
+                guard let value = iterator.next() else {
+                    throw SPKCLIError.invalidArguments("--image requires a framework binary path")
+                }
+                imagePath = value
+            case "--symbol":
+                guard let value = iterator.next() else {
+                    throw SPKCLIError.invalidArguments("--symbol requires an exported NSString constant name")
+                }
+                symbols.append(value)
+            case "--kind":
+                guard let value = iterator.next() else {
+                    throw SPKCLIError.invalidArguments("--kind requires nsstring, c-string, or c-string-pointer")
+                }
+                switch value {
+                case "nsstring":
+                    kind = .nsStringGlobal
+                case "c-string":
+                    kind = .cStringInline
+                case "c-string-pointer":
+                    kind = .cStringPointer
+                default:
+                    throw SPKCLIError.invalidArguments("--kind requires nsstring, c-string, or c-string-pointer")
+                }
+            case "--json":
+                format = .json
+            default:
+                throw SPKCLIError.invalidArguments("unknown string-constants option '\(argument)'")
+            }
+        }
+
+        guard let imagePath else {
+            throw SPKCLIError.invalidArguments("string-constants requires --image")
+        }
+        guard !symbols.isEmpty else {
+            throw SPKCLIError.invalidArguments("string-constants requires at least one --symbol")
+        }
+
+        let result = SPKStringConstantResolver.resolveStringConstants(
+            imagePath: imagePath,
+            symbols: symbols,
+            kind: kind
+        )
+
+        switch format {
+        case .text:
+            printStringConstantResult(result)
+        case .json:
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+            let data = try encoder.encode(result)
+            print(String(decoding: data, as: UTF8.self))
+        }
+    }
+
+    private static func printStringConstantResult(_ result: SPKStringConstantImageResult) {
+        if result.image.loaded {
+            print("Image: \(result.image.path) loaded")
+        } else {
+            print("Image: \(result.image.path) not loaded (\(result.image.error ?? "no diagnostic"))")
+        }
+
+        for constant in result.constants {
+            if let value = constant.value {
+                print("\(constant.symbol) = \(value)")
+            } else {
+                print("\(constant.symbol) unresolved (\(constant.error ?? "no diagnostic"))")
+            }
+        }
+    }
+
     private static func printTextInventory(_ inventory: SPKObjCRuntimeInventory) {
         print("Loaded images:")
         for image in inventory.loadedImages {
@@ -142,10 +224,13 @@ struct SPKMain {
             Usage:
               spelunk targets
               spelunk objc-runtime [--image PATH] [--prefix PREFIX] [--methods] [--properties] [--protocols] [--json]
+              spelunk string-constants --image PATH --symbol SYMBOL [--symbol SYMBOL ...] [--kind nsstring|c-string|c-string-pointer] [--json]
 
             Commands:
               targets       List seeded research targets.
               objc-runtime  Load framework images read-only and print matching Objective-C runtime metadata.
+              string-constants
+                            Load a framework image read-only and print exported NSString constant values.
             """
         )
     }

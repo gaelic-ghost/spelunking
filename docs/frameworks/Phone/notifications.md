@@ -17,6 +17,9 @@ Raw captures:
 - `research/Phone/notifications/sdk-notification-symbols-macos-27.0.txt`
 - `research/Phone/notifications/launchd-notification-triggers-macos-26.5.2.txt`
 - `research/Phone/notifications/notifyutil-probes-macos-26.5.2.txt`
+- `research/Phone/notifications/runtime-string-constants-telephonyutilities-macos-26.5.2.json`
+- `research/Phone/notifications/runtime-string-constants-callhistory-darwin-macos-26.5.2.json`
+- `research/Phone/notifications/runtime-string-constants-callhistory-nsstring-macos-26.5.2.json`
 
 Environment:
 
@@ -24,6 +27,50 @@ Environment:
 - SDK comparison: macOS 27.0 SDK from `/Applications/Xcode-beta.app`
 
 Important limitation: this macOS `notifyutil` does not support a list-all operation. Targeted `notifyutil -g` probes returned `0` for real-looking keys and for a random control key, so those probes are not proof that a notification exists or has an active publisher.
+
+## Runtime String Values
+
+Verified with the local `spelunk string-constants` helper, which loads a framework image read-only and resolves selected exported string constants with `dlsym`.
+
+### TelephonyUtilities
+
+| Symbol | Runtime value |
+| --- | --- |
+| `TUCallCenterCallConnectedNotification` | `TUCallCenterCallConnectedNotification` |
+| `TUCallCenterCallStatusChangedNotification` | `TUCallCenterCallStatusChangedNotification` |
+| `TUCallCenterCallStartedConnectingNotification` | `TUCallCenterCallStartedConnectingNotification` |
+| `TUCallCenterCallerIDChangedNotification` | `TUCallCenterCallerIDChangedNotification` |
+| `TUCallCenterConferenceParticipantsChangedNotification` | `TUCallCenterConferenceParticipantsChangedNotification` |
+| `TUCallIsOnHoldChangedNotification` | `TUCallIsOnHoldChangedNotification` |
+| `TUCallIsSendingAudioChangedNotification` | `TUCallIsSendingAudioChangedNotification` |
+| `TUCallIsSendingVideoChangedNotification` | `TUCallIsSendingVideoChangedNotification` |
+| `TUCallIsUplinkMutedChangedNotification` | `TUCallIsUplinkMutedChangedNotification` |
+| `TUCallRecordingStateChangedNotification` | `TUCallRecordingStateChangedNotification` |
+| `TUCallTranslationStateChangedNotification` | `TUCallTranslationStateChangedNotification` |
+| `TUCallHistoryControllerRecentCallsDidChangeNotification` | `TUCallHistoryControllerRecentCallsDidChangeNotification` |
+| `TUCallHistoryControllerUnreadCallCountDidChangeNotification` | `TUCallHistoryControllerUnreadCallCountDidChangeNotification` |
+| `TUCallCapabilitiesFaceTimeAvailabilityChangedNotification` | `TUCallCapabilitiesFaceTimeAvailabilityChangedNotification` |
+| `TUCallCapabilitiesSupportsTelephonyCallsChangedNotification` | `TUCallCapabilitiesSupportsTelephonyCallsChangedNotification` |
+| `TUCallCapabilitiesWiFiCallingChangedNotification` | `TUCallCapabilitiesWiFiCallingChangedNotification` |
+| `TUCallCapabilitiesRelayCallingChangedNotification` | `TUCallCapabilitiesRelayCallingChangedNotification` |
+| `TUConversationManagerDidBecomeAvailableNotification` | `TUConversationManagerDidBecomeAvailableNotification` |
+| `TUCallProviderManagerProvidersChangedNotification` | `TUCallProviderManagerProvidersChangedNotification` |
+| `TUCallConversationChangedNotification` | `TUCallConversationChangedNotification` |
+| `TUPrivacyRulesChangedNotification` | `com.apple.TelephonyUtilities.TUPrivacyManager.RulesChanged` |
+
+### CallHistory
+
+| Symbol | Runtime value | Representation |
+| --- | --- | --- |
+| `CHCallInteractionsDidChangeDarwinNotification` | `com.apple.callhistory.notification.call-interactions-changed` | C string pointer |
+| `kCallHistoryCallRecordInsertedNotification` | `kCallHistoryCallRecordInsertedNotification` | NSString global |
+| `kCallHistoryDatabaseChangedNotification` | `kCallHistoryDatabaseChangedNotification` | NSString global |
+| `kCallHistoryDatabasePluginUpdateNotification` | `kCallHistoryDatabasePluginUpdateNotification` | NSString global |
+| `kCallHistoryDatabaseRemoteUpdateReadNotification` | `kCallHistoryDatabaseRemoteUpdateReadNotification` | NSString global |
+| `kCallHistorySyncHelperReadyNotification` | `kCallHistorySyncHelperReadyNotification` | NSString global |
+| `kCallHistoryTimersChangedNotification` | `kCallHistoryTimersChangedNotification` | NSString global |
+
+Inference: `CHCallInteractionsDidChangeDarwinNotification` is stronger Darwin-notify evidence than naming alone because its live string value is a reverse-DNS Darwin-style key. The `kCallHistory*` names resolve as NSString globals whose runtime values match their exported symbol names; delivery still requires observer evidence.
 
 ## Verified Launch Triggers
 
@@ -119,7 +166,7 @@ Unclassified or naming-classified exported constants:
 
 ## Open Questions
 
-- What exact string value does each exported constant hold?
+- What exact string values do lower-level `callservicesd` and PhoneAppIntents private notification or XPC constants hold beyond this first focused pass?
 - Which plain `TU*Notification` constants are posted through `NotificationCenter`, `DistributedNotificationCenter`, Darwin notify, XPC callbacks, or private observer abstractions?
 - Which names are posted by `callservicesd` versus `callhistoryd` versus Phone.app or FaceTime components?
 - Which call-history constants correspond to database changes versus UI-facing recents updates?

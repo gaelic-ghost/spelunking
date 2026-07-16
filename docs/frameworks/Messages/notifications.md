@@ -17,6 +17,8 @@ Raw captures:
 - `research/Messages/notifications/sdk-notification-symbols-macos-27.0.txt`
 - `research/Messages/notifications/launchd-notification-triggers-macos-26.5.2.txt`
 - `research/Messages/notifications/notifyutil-probes-macos-26.5.2.txt`
+- `research/Messages/notifications/runtime-string-constants-imcore-macos-26.5.2.json`
+- `research/Messages/notifications/runtime-string-constants-imdpersistence-macos-26.5.2.json`
 
 Environment:
 
@@ -24,6 +26,53 @@ Environment:
 - SDK comparison: macOS 27.0 SDK from `/Applications/Xcode-beta.app`
 
 Important limitation: this macOS `notifyutil` does not support a list-all operation. Targeted `notifyutil -g` probes returned `0` for real-looking keys and for a random control key, so those probes are not proof that a notification exists or has an active publisher.
+
+## Runtime String Values
+
+Verified with the local `spelunk string-constants` helper, which loads a framework image read-only and resolves selected exported `NSString` constant globals with `dlsym`.
+
+### IMCore
+
+| Symbol | Runtime value |
+| --- | --- |
+| `IMMessageSentDistributedNotification` | `IMMessageSentDistributedNotification` |
+| `IMAccountActivatedNotification` | `__kIMAccountActivatedNotification` |
+| `IMAccountLoggedInNotification` | `__kIMAccountLoggedInNotification` |
+| `IMAccountLoggedOutNotification` | `__kIMAccountLoggedOutNotification` |
+| `IMAccountLoginStatusChangedNotification` | `__kIMAccountLoginStatusChangedNotification` |
+| `IMAccountRegistrationStatusChangedNotification` | `__kIMAccountRegistrationStatusChangedNotification` |
+| `IMChatMessageReceivedNotification` | `__kIMChatMessageReceivedNotification` |
+| `IMChatMessageSendFailedNotification` | `__kIMChatMessageSendFailedNotification` |
+| `IMChatRegistryMessageSendingNotification` | `__kIMChatRegistryMessageSendingNotification` |
+| `IMChatRegistryMessageSentNotification` | `__kIMChatRegistryMessageSentNotification` |
+| `IMChatUnreadCountChangedNotification` | `__kIMChatUnreadCountChangedNotification` |
+| `IMFileTransferCreatedNotification` | `__kIMFileTransferCreatedNotification` |
+| `IMFileTransferUpdatedNotification` | `__kIMFileTransferUpdatedNotification` |
+| `IMFileTransferFinishedNotification` | `__kIMFileTransferFinishedNotification` |
+| `IMDaemonWillConnectNotification` | `__kIMDaemonWillConnectNotification` |
+| `IMDaemonDidConnectNotification` | `__kIMDaemonDidConnectNotification` |
+| `IMDaemonDidDisconnectNotification` | `__kIMDaemonDidDisconnectNotification` |
+| `IMDaemonConnectionLostNotification` | `__kIMDaemonConnectionLostNotification` |
+| `IMServiceDidConnectNotification` | `ServiceDidConnect` |
+| `IMServiceDidDisconnectNotification` | `ServiceDidDisconnect` |
+| `IMCloudKitFetchedSyncStatsNotification` | `IMCloudKitFetchedSyncStatsNotification` |
+| `IMCollaborationNoticesDidChangeNotification` | `__kIMCollaborationNoticesDidChangeNotification` |
+| `IMNicknameDidChangeNotification` | `__kIMNicknameDidChangeNotification` |
+| `IMPinnedConversationsDidChangeNotification` | `__kIMPinnedConversationsDidChangeNotification` |
+
+### IMDPersistence
+
+Resolved from `/System/Library/PrivateFrameworks/IMDPersistence.framework/IMDPersistence`:
+
+| Symbol | Runtime value |
+| --- | --- |
+| `IMDPersistenceServiceResettingNotification` | `IMDPersistenceServiceResettingNotification` |
+| `IMDSMSFailedToSendNotification` | `__kIMDSMSFailedToSendNotification` |
+| `IMDSMSMarkAsReadCompletedNotification` | `__kIMDSMSMarkAsReadCompletedNotification` |
+
+The same runtime pass did not resolve these SDK-observed names as exported `NSString` globals from the loaded IMDPersistence image: `IMDMessageRecordRetractNotification`, `IMDNotificationsPostNotification`, `IMDNotificationsPostUrgentNotification`, `IMDNotificationsRetractNotification`, `IMDNotificationsUpdatePostedNotification`, `IMDChatRegistryAddedChatNotification`, `IMDFileTransferCreatedNotification`, `IMDFileTransferUpdatedNotification`, and `IMDSMSMessageSentNotification`.
+
+Inference: SDK symbol scanning can surface names that are not directly resolvable as live exported NSString globals by `dlsym` on this OS image. Treat those unresolved names as weaker evidence until a dyld-cache metadata pass or runtime caller evidence explains their representation.
 
 ## Verified Launch Triggers
 
@@ -101,7 +150,7 @@ Inference: the `IMDNotifications*` names likely relate to notification posting o
 
 ## Open Questions
 
-- What exact string value does each exported constant hold?
+- What exact string value do the remaining unresolved IMD exported names hold, if they exist as constants rather than selectors, Swift metadata, or non-exported data?
 - Which plain `IM*Notification` constants are posted through `NotificationCenter`, `DistributedNotificationCenter`, Darwin notify, XPC callbacks, or private observer abstractions?
 - Which notification names are visible outside Apple-signed clients, if any?
 - Which names are posted by `imagent` versus `IMDPersistenceAgent` versus Messages.app?

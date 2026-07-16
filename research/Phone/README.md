@@ -91,6 +91,9 @@ open -a Phone
 mkdir -p research/Phone/surfaces
 /usr/bin/log stream --style compact --level default --timeout 4 --predicate '(process == "Phone") OR (subsystem CONTAINS[c] "Phone") OR (subsystem CONTAINS[c] "mobilephone") OR (subsystem CONTAINS[c] "CallHistory") OR (subsystem CONTAINS[c] "TelephonyUtilities") OR (eventMessage CONTAINS[c] "Phone") OR (eventMessage CONTAINS[c] "CallHistory") OR (eventMessage CONTAINS[c] "TelephonyUtilities") OR (eventMessage CONTAINS[c] "LaunchServices")'
 /usr/bin/open -g -u '<root Phone URL scheme>'
+swift run spelunk string-constants --image /System/Library/PrivateFrameworks/TelephonyUtilities.framework/TelephonyUtilities --symbol '<notification symbol>' --json
+swift run spelunk string-constants --image /System/Library/PrivateFrameworks/CallHistory.framework/CallHistory --kind nsstring --symbol '<notification symbol>' --json
+swift run spelunk string-constants --image /System/Library/PrivateFrameworks/CallHistory.framework/CallHistory --kind c-string-pointer --symbol CHCallInteractionsDidChangeDarwinNotification --json
 ```
 
 Observed `sdef` result:

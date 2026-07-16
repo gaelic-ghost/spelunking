@@ -20,6 +20,7 @@
 - [x] Generate first-pass class/protocol/selector inventory for `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`.
 - [x] Capture bounded default-level log stream while opening Phone.
 - [x] Probe root URL schemes without phone numbers, voicemail IDs, or call targets.
+- [x] Resolve first-pass runtime string values for selected TelephonyUtilities and CallHistory notification constants.
 - [ ] Extract live dyld shared cache images for full call private framework metadata.
 - [ ] Observe notification delivery with controlled read-only observers or log predicates.
 - [ ] Attach read-only logging predicates while manually opening Phone.

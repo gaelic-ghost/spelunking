@@ -1,0 +1,44 @@
+{
+  "constants" : [
+    {
+      "kind" : "nsStringGlobal",
+      "lookupSymbol" : "kCallHistoryCallRecordInsertedNotification",
+      "symbol" : "kCallHistoryCallRecordInsertedNotification",
+      "value" : "kCallHistoryCallRecordInsertedNotification"
+    },
+    {
+      "kind" : "nsStringGlobal",
+      "lookupSymbol" : "kCallHistoryDatabaseChangedNotification",
+      "symbol" : "kCallHistoryDatabaseChangedNotification",
+      "value" : "kCallHistoryDatabaseChangedNotification"
+    },
+    {
+      "kind" : "nsStringGlobal",
+      "lookupSymbol" : "kCallHistoryDatabasePluginUpdateNotification",
+      "symbol" : "kCallHistoryDatabasePluginUpdateNotification",
+      "value" : "kCallHistoryDatabasePluginUpdateNotification"
+    },
+    {
+      "kind" : "nsStringGlobal",
+      "lookupSymbol" : "kCallHistoryDatabaseRemoteUpdateReadNotification",
+      "symbol" : "kCallHistoryDatabaseRemoteUpdateReadNotification",
+      "value" : "kCallHistoryDatabaseRemoteUpdateReadNotification"
+    },
+    {
+      "kind" : "nsStringGlobal",
+      "lookupSymbol" : "kCallHistorySyncHelperReadyNotification",
+      "symbol" : "kCallHistorySyncHelperReadyNotification",
+      "value" : "kCallHistorySyncHelperReadyNotification"
+    },
+    {
+      "kind" : "nsStringGlobal",
+      "lookupSymbol" : "kCallHistoryTimersChangedNotification",
+      "symbol" : "kCallHistoryTimersChangedNotification",
+      "value" : "kCallHistoryTimersChangedNotification"
+    }
+  ],
+  "image" : {
+    "loaded" : true,
+    "path" : "\/System\/Library\/PrivateFrameworks\/CallHistory.framework\/CallHistory"
+  }
+}

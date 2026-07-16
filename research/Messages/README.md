@@ -95,6 +95,8 @@ open -a Messages
 mkdir -p research/Messages/surfaces
 /usr/bin/log stream --style compact --level default --timeout 4 --predicate '(process == "Messages") OR (subsystem CONTAINS[c] "Messages") OR (subsystem CONTAINS[c] "MobileSMS") OR (eventMessage CONTAINS[c] "MobileSMS") OR (eventMessage CONTAINS[c] "Messages") OR (eventMessage CONTAINS[c] "LaunchServices")'
 /usr/bin/open -g -u '<root Messages URL scheme>'
+swift run spelunk string-constants --image /System/Library/PrivateFrameworks/IMCore.framework/IMCore --symbol '<notification symbol>' --json
+swift run spelunk string-constants --image /System/Library/PrivateFrameworks/IMDPersistence.framework/IMDPersistence --symbol '<notification symbol>' --json
 ```
 
 Privacy note: the SQLite commands captured table and column names only. The app-open and URL-scheme log streams were bounded to root URLs and activation behavior. No row data, message text, handles, recipients, attachment names, or counts were intentionally captured.

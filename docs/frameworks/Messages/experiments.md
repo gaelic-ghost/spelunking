@@ -20,6 +20,7 @@
 - [x] Generate first-pass class/protocol/selector inventory for `IMDPersistence`, `IMDaemonCore`, and `MessagesKit`.
 - [x] Capture bounded default-level log stream while opening Messages.
 - [x] Probe root URL schemes without recipients or message payloads.
+- [x] Resolve first-pass runtime string values for selected IMCore and IMDPersistence notification constants.
 - [ ] Extract live dyld shared cache images for full IM private framework metadata.
 - [ ] Observe notification delivery with controlled read-only observers or log predicates.
 - [ ] Attach read-only logging predicates while manually using Messages.
