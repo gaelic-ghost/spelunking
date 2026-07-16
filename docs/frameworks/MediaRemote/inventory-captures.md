@@ -10,8 +10,8 @@ Raw captures are intentionally ignored by Git under `research/**/captures/`. Pro
 
 | Field | Value |
 | --- | --- |
-| Timestamp | `20260716T080910Z` |
-| Capture root | `research/MediaRemote/captures/20260716T080910Z` |
+| Timestamp | `20260716T082750Z` |
+| Capture root | `research/MediaRemote/captures/20260716T082750Z` |
 | Active framework image | `/System/Library/PrivateFrameworks/MediaRemote.framework/Versions/A/MediaRemote` |
 | Active OS | macOS 26.5.2, build 25F84 |
 | Selected developer directory | `/Applications/Xcode-beta.app/Contents/Developer` |
@@ -24,12 +24,14 @@ Raw captures are intentionally ignored by Git under `research/**/captures/`. Pro
 - `dyld-exports.txt`, `dyld-imports.txt`, `dyld-linked-dylibs.txt`, `dyld-load-commands.txt`: `dyld_info` views over the live framework image.
 - `dyld-function-starts.txt`: function-start names and addresses, useful for recovering internal method/function neighborhoods when header dumping is unavailable.
 - `dyld-cstrings.txt`, `dyld-oslogstrings.txt`: string and os-log evidence from the live framework image.
+- `dyld-policy-strings.txt`: focused entitlement, permission, audit-token, now-playing, playback-queue, and player-property evidence from the live framework image.
 - `dyld-objc-classnames.txt`, `dyld-objc-method-names.txt`, `dyld-objc-method-types.txt`: best-effort Objective-C sections from dyld tooling.
 - `symbols-nowplaying-targets.txt`: Xcode `symbols` lookup output for now-playing, playback-queue, player-client, client-request, and `MRXPC` method neighborhoods.
 - `sdk-current-symbols.txt`, `sdk-beta-symbols.txt`: symbols named by the installed Xcode 26 and Xcode 27 beta `.tbd` stubs.
 - `live-only-vs-current-sdk.txt`, `live-only-vs-beta-sdk.txt`, `current-sdk-only-vs-live.txt`, `beta-sdk-only-vs-live.txt`: local symbol-set diffs.
 - `mediaremoted-*`: support daemon linkage, entitlements, and filtered strings.
 - `mediaremoteagent-*`: launch agent linkage, entitlements, and filtered strings.
+- `mediaremoted-policy-strings.txt`, `mediaremoteagent-policy-strings.txt`: focused policy-string captures for entitlement and permission research.
 - `framework-info-plist.txt`, `remote-control-blacklist.txt`: framework resources.
 
 ## Capture Summary

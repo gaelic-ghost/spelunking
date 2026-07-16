@@ -70,6 +70,7 @@ See `runtime-probes.md` for the Spotify and fixture-backed runtime results.
 - `runtime-probes.md`: local Swift probes and observed runtime behavior.
 - `agents-daemons.md`: `mediaremoted`, `mediaremoteagent`, entitlements, mach services, and daemon authority boundaries.
 - `xpc-and-messages.md`: XPC service names, message keys, command paths, endpoint routing, and serialization hints.
+- `permissions-policy.md`: runtime Code 3 denials, entitlement names, audit-token policy, and signed-helper experiment boundaries.
 - `routes-output-devices.md`: endpoint, route, output context, output device, and discovery surfaces.
 - `experiments.md`: experiment log and next steps.
 - `references.md`: links within this research package.

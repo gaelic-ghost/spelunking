@@ -140,3 +140,13 @@ Static evidence points to protobuf and XPC serialization helpers:
 - `Encountered unknown protobuf key (%@) while converting to a dictionary; skipping.`
 
 Inference: many higher-level C APIs marshal Objective-C model objects or protobuf-backed payloads into XPC messages rather than exposing simple property dictionaries end to end.
+
+## Policy and Audit Boundaries
+
+Daemon strings show that XPC request handling includes audit-token, PID, and entitlement checks:
+
+- `_validateAuditTokens:pids:auditTokens:`
+- `PID Mismatch: Client %{public}@ is trying to make a nowPlayingClient with a different pid %d`
+- `Client is not entitled for NowPlaying Acesss: %@`
+
+See `permissions-policy.md` for the current runtime Code 3 denials and entitlement inventory.

@@ -47,6 +47,7 @@ run_capture "dyld-oslogstrings.txt" dyld_info -section __TEXT __oslogstring "${f
 run_capture "dyld-objc-classnames.txt" dyld_info -section __TEXT __objc_classname "${framework}"
 run_capture "dyld-objc-method-names.txt" dyld_info -section __TEXT __objc_methname "${framework}"
 run_capture "dyld-objc-method-types.txt" dyld_info -section __TEXT __objc_methtype "${framework}"
+run_capture "dyld-policy-strings.txt" zsh -c "cat ${(q)capture_root}/dyld-cstrings.txt ${(q)capture_root}/dyld-oslogstrings.txt ${(q)capture_root}/dyld-function-starts.txt | rg -i 'entitlement|operation not permitted|frameworkerror|audit|pid mismatch|validateaudittokens|nowplaying|now-playing|playbackqueue|playerproperties|device-info|waking now playing|required entitlements|not permitted|permission|sandbox' || true"
 
 if [[ -n "${symbols_tool}" ]]; then
   run_capture "symbols-nowplaying-targets.txt" "${symbols_tool}" -arch arm64e -noHeaders -noRegions -noSources \
@@ -76,6 +77,7 @@ if [[ "${target}" == "MediaRemote" ]]; then
       run_capture "${binary}-otool-linked-dylibs.txt" otool -L "${binary_path}"
       run_capture "${binary}-entitlements.xml" codesign -d --entitlements - "${binary_path}"
       run_capture "${binary}-strings-filtered.txt" zsh -c "strings -a ${(q)binary_path} | rg -i 'com\\.apple|mediaremote|xpc|notification|nowplaying|route|command|playback|endpoint|output|origin|player|spotify|music|airplay|rapport|ids|session' || true"
+      run_capture "${binary}-policy-strings.txt" zsh -c "strings -a ${(q)binary_path} | rg -i 'entitlement|operation not permitted|frameworkerror|audit|pid mismatch|validateaudittokens|nowplaying|now-playing|playbackqueue|playerproperties|device-info|waking now playing|required entitlements|not permitted|permission|sandbox|output context|send command|restrict command|read-access' || true"
     fi
   done
 

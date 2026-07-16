@@ -206,6 +206,8 @@ MRNowPlayingPlayerClientRequests.playbackQueue: <nil>
 
 The request was built with `MRPlaybackQueueRequestCreateDefault`, had the active Spotify `MRPlayerPath` set via `-[MRPlaybackQueueRequest setPlayerPath:]`, and requested metadata plus info while leaving lyrics and sections off. This confirms the richer request route is reachable but still blocked by daemon/framework policy for the unsigned userland helper.
 
+See `permissions-policy.md` for the current entitlement and audit-token evidence behind the Code 3 boundary.
+
 ## Next Runtime Steps
 
 - Resolve metadata from the active `MRPlayerPath` without passing `MRClient` to `MRMediaRemoteGetNowPlayingInfoForClient`.
