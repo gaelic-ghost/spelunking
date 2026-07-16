@@ -17,6 +17,7 @@ public API, a distribution recommendation, or an App Store path.
 | Process | `/System/Library/CoreServices/WallpaperAgent.app/Contents/MacOS/WallpaperAgent` |
 | Job | `gui/<uid>/com.apple.wallpaper.agent` |
 | Shared-cache source | `dyld_shared_cache_arm64e.05` |
+| SIP at runtime verification | disabled |
 
 ## Evidence Inventory
 
@@ -28,8 +29,9 @@ public API, a distribution recommendation, or an App Store path.
 - [x] Wallpaper, WallpaperTypes, and WallpaperExtensionKit shared-cache strings
 - [x] Debug request/response vocabulary and adjacent XPC protocol metadata
 - [x] Typed Swift-XPC envelope for the debug request
-- [x] Ordinary SIP-enabled userland access to the debug listener
-- [x] SIP-enabled current-user restart operation
+- [x] Ordinary current-user access to the debug listener with SIP disabled
+- [x] Current-user restart operation with SIP disabled
+- [ ] Repeat the read-only probe and restart with SIP enabled
 - [ ] A non-disruptive redraw request proven from an ordinary SIP-enabled client
 
 ## Service Ownership and Lifecycle
@@ -45,8 +47,17 @@ four managed Mach endpoints:
 
 `launchctl print` confirms that the current user's job owns the first and
 second endpoints. This proves the bootstrap namespace and label only.
-`launchctl kickstart -k` does not restart this agent under SIP on this machine
-and must not be treated as a restart solution.
+
+The fully-qualified service target is essential. This succeeds on the current
+SIP-disabled environment and records a clean `SIGTERM` restart in launchd:
+
+```zsh
+launchctl kickstart -kp "gui/$(id -u)/com.apple.wallpaper.agent"
+```
+
+Using only `com.apple.wallpaper.agent` fails with launchctl usage error 64;
+that is target parsing, not a demonstrated permission denial. Whether the
+same command succeeds with SIP enabled remains unverified.
 
 The verified restart primitive is:
 
@@ -58,9 +69,10 @@ It obtains the current session's agent PID, sends `SIGTERM`, and waits for
 launchd to publish a replacement PID. In the live verification, PID `87092`
 became `90265`, the job run count increased from `2` to `3`, and launchd
 recorded `last terminating signal = Terminated: 15` with no crash count added.
-This works with SIP enabled because it uses ordinary same-user POSIX signalling
-and the agent's existing LaunchAgent keep-alive policy; it does not require
-private entitlements or injection.
+This is an observation made while SIP was disabled. It uses ordinary
+same-user POSIX signalling and the agent's existing LaunchAgent keep-alive
+policy; it does not require private entitlements or injection in this runtime
+configuration. A SIP-enabled retest is required before claiming that boundary.
 
 The launchd policy includes `KeepAlive.SuccessfulExit = false`. The restart
 does visibly interrupt and rebuild the desktop wallpaper path, so do not run
@@ -85,6 +97,7 @@ The normal service accepts a connection, but prior typed request probes logged
 was the message shape, not basic Mach-service reachability. The debug request
 now decodes successfully from a reconstructed `Codable` mirror; the top-level
 private Swift type identity is not encoded as an access-control requirement.
+This observation was made with SIP disabled.
 
 ## Normal Agent Protocol
 
@@ -175,8 +188,9 @@ Swift XPC wraps a typed `Codable` request in an XPC dictionary containing:
 machine, the ordinary current user successfully sent
 `accessAllAssets(.all)` for `com.apple.wallpaper.extension.aerials` to
 `com.apple.wallpaper.debug.service`; the listener decoded the request and
-returned a message. This proves that neither SIP nor a client entitlement
-blocks the listener's read-only decode path.
+returned a message. This proves that the SIP-disabled environment does not
+require a client entitlement for the listener's read-only decode path. It does
+not establish the same result under SIP.
 
 The built-in Aerials provider did not call `reply(_)` for that request. This
 is consistent with the static finding that the service delegates to the
@@ -216,12 +230,12 @@ Controls widget uses it only to advance a shuffled collection.
 
 ## Permissions and Entitlements
 
-SIP alone does not grant an arbitrary client the agent's private entitlements,
-nor does it supply private Swift type metadata. The earlier ordinary-client
-decode error and an interrupted debug-service connection are consistent with
-that boundary. There is no evidence yet that disabling SIP is necessary for a
-restart or redraw experiment; it is relevant only if deeper process inspection
-or private-code injection is required.
+SIP does not grant an arbitrary client the agent's private entitlements, nor
+does it supply private Swift type metadata. The earlier ordinary-client decode
+error and an interrupted debug-service connection are consistent with that
+boundary. This repository has not yet established whether SIP must be disabled
+for any restart or redraw experiment; all successful runtime experiments to
+date occurred with SIP disabled.
 
 ## Experiments
 
