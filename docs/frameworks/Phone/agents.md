@@ -6,10 +6,13 @@ This page maps the local agents, XPC services, app extensions, and brokered serv
 
 Raw evidence:
 
+- `research/Phone/runtime/xpc-ownership-macos-26.5.2.txt`
 - `research/Phone/notifications/launchd-notification-triggers-macos-26.5.2.txt`
 - `research/Phone/surfaces/bundle-surfaces-macos-26.5.2.txt`
 - `research/Phone/surfaces/entitlements-macos-26.5.2.plist.txt`
 - `research/Phone/runtime/open-logstream-macos-26.5.2.txt`
+
+See [Phone XPC Ownership](xpc-ownership.md) for the mach-service, entitlement, extension, and private-protocol correlation map.
 
 ## LaunchAgents
 
@@ -64,4 +67,3 @@ Inference: default activation is a FaceTime/Calls recents surface. The short app
 - Which `callservicesd` XPC interfaces correspond to each broad TelephonyUtilities entitlement value?
 - Which services wake for default activation versus Recents selection, dialing, voicemail, call receiving, or call-history mutation?
 - Which Phone App Intents are user-invocable versus private/system-only?
-

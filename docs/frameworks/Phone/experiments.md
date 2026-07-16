@@ -11,6 +11,7 @@
 - [x] Run a filtered dyld shared cache export probe.
 - [x] Capture live dyld cache residency and interface-tooling boundary evidence.
 - [x] Inventory launchd jobs and XPC service plists.
+- [x] Correlate mach services, XPC/intent services, entitlements, and private protocol families.
 - [x] Locate and inventory call-history storage schema without row data.
 - [x] Capture call-history schema and indexes without row data.
 - [x] Capture call-history relationship/index/trigger boundary metadata without row data.

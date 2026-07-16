@@ -33,6 +33,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Filtered dyld shared cache export probe
 - [x] Live dyld cache residency and interface-tooling boundary capture
 - [x] LaunchAgent and XPC service inventory
+- [x] XPC ownership and entitlement correlation capture
 - [x] Call-history storage schema inventory without row data
 - [x] Call-history schema/index capture without row data
 - [x] Call-history relationship/index/trigger boundary capture without row data
@@ -362,6 +363,7 @@ Inference: Phone’s user-facing app sits above a broad `callservicesd` broker p
 - `research/Phone/README.md`
 - `docs/frameworks/Phone/surfaces.md`
 - `docs/frameworks/Phone/agents.md`
+- `docs/frameworks/Phone/xpc-ownership.md`
 - `docs/frameworks/Phone/storage.md`
 - `docs/frameworks/Phone/symbols.md`
 - `docs/frameworks/Phone/notifications.md`

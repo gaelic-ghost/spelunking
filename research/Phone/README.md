@@ -124,6 +124,8 @@ Privacy note: no call-history rows, phone numbers, contacts, voicemail metadata,
 
 Generated artifact note: `research/Phone/runtime/hook-surface-inventory-macos-26.5.2.json` is a focused class/protocol subset generated from the Objective-C runtime captures above. The source capture list and filter description are stored inside the JSON artifact.
 
+Generated artifact note: `research/Phone/runtime/xpc-ownership-macos-26.5.2.txt` is a compact correlation capture generated from launchd plists, XPC/intent service plists, selected `Phone.app` entitlements, and selected `PhoneIntentHandler` entitlements. It contains service names, supported intents, and private entitlement values only.
+
 ## Next Raw Captures
 
 - dyld shared cache extraction with a capable external/local extractor

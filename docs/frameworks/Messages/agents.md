@@ -6,10 +6,13 @@ This page maps the local agents, XPC services, app extensions, and brokered serv
 
 Raw evidence:
 
+- `research/Messages/runtime/xpc-ownership-macos-26.5.2.txt`
 - `research/Messages/notifications/launchd-notification-triggers-macos-26.5.2.txt`
 - `research/Messages/surfaces/bundle-surfaces-macos-26.5.2.txt`
 - `research/Messages/surfaces/entitlements-macos-26.5.2.plist.txt`
 - `research/Messages/runtime/open-logstream-macos-26.5.2.txt`
+
+See [Messages XPC Ownership](xpc-ownership.md) for the mach-service, entitlement, allowlist, and private-protocol correlation map.
 
 ## LaunchAgents
 
@@ -62,4 +65,3 @@ Inference: visible activation alone is enough to involve the app process, `image
 - Which XPC messages are exchanged between `Messages.app`, `imagent`, `IMDPersistenceAgent`, `IMDMessageServicesAgent`, BlastDoor support, and transfer/transcoding agents?
 - Which agent calls are triggered only by app activation versus message selection, send, receive, notification response, attachment download, or AppleScript?
 - Which allowed clients exercise read-only database access versus mutation?
-

@@ -36,6 +36,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Filtered dyld shared cache export probe
 - [x] Live dyld cache residency and interface-tooling boundary capture
 - [x] LaunchAgent and XPC service inventory
+- [x] XPC ownership and entitlement correlation capture
 - [x] Public iPhoneOS 27.0 SDK header inventory for Messages, MessageUI, and Shared With You
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for IM private frameworks
@@ -375,6 +376,7 @@ Inference: database access is brokered through a privileged XPC service with a t
 - `research/Messages/README.md`
 - `docs/frameworks/Messages/surfaces.md`
 - `docs/frameworks/Messages/agents.md`
+- `docs/frameworks/Messages/xpc-ownership.md`
 - `docs/frameworks/Messages/storage.md`
 - `docs/frameworks/Messages/symbols.md`
 - `docs/frameworks/Messages/notifications.md`

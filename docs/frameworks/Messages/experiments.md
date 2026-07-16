@@ -14,6 +14,7 @@
 - [x] Run a filtered dyld shared cache export probe.
 - [x] Capture live dyld cache residency and interface-tooling boundary evidence.
 - [x] Inventory launchd jobs and XPC service plists.
+- [x] Correlate mach services, XPC allowlists, entitlements, and private protocol families.
 - [x] Read public iPhoneOS SDK headers for Messages, MessageUI, and Shared With You.
 - [x] Demangle private SDK `.tbd` Swift symbols for IMCore import/export families.
 - [x] Capture private SDK notification constant families.
