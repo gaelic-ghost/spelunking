@@ -6,7 +6,9 @@ public struct SPKWallpaperDebugXPCProbeRequest: Equatable, Sendable {
     public enum DebugRequest: Equatable, Sendable {
         case accessDownloadedAssets
         case accessAllAssets
+        case downloadAsset(String)
         case downloadAssetState(String)
+        case removeAsset(String)
     }
 
     public var extensionIdentifier: String
@@ -89,8 +91,21 @@ extension SPKWallpaperDebugXPCProbeRequest.DebugRequest: CustomStringConvertible
             "accessAllAssets(downloaded)"
         case .accessAllAssets:
             "accessAllAssets(all)"
+        case .downloadAsset(let assetID):
+            "downloadAsset(\(assetID))"
         case .downloadAssetState(let assetID):
             "downloadAssetState(\(assetID))"
+        case .removeAsset(let assetID):
+            "removeAsset(\(assetID))"
+        }
+    }
+
+    public var isMutating: Bool {
+        switch self {
+        case .accessDownloadedAssets, .accessAllAssets, .downloadAssetState:
+            false
+        case .downloadAsset, .removeAsset:
+            true
         }
     }
 
@@ -100,8 +115,12 @@ extension SPKWallpaperDebugXPCProbeRequest.DebugRequest: CustomStringConvertible
             .accessAllAssets(.downloaded)
         case .accessAllAssets:
             .accessAllAssets(.all)
+        case .downloadAsset(let assetID):
+            .downloadAsset(assetID)
         case .downloadAssetState(let assetID):
             .downloadAssetState(assetID)
+        case .removeAsset(let assetID):
+            .removeAsset(assetID)
         }
     }
 }

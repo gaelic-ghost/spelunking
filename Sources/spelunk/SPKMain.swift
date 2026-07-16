@@ -137,6 +137,7 @@ struct SPKMain {
               spelunk wallpaper-agent xpc-ping-empty [mach-service]
               spelunk wallpaper-agent normal-xpc-probe [--request diagnostic-state|snapshot-all-spaces|get-caches]
               spelunk wallpaper-agent debug-xpc-probe [--extension identifier] [--request access-downloaded|access-all|download-state] [--asset-id id]
+              spelunk wallpaper-agent debug-xpc-probe --request download-asset|remove-asset --asset-id id --execute
               spelunk wallpaper-agent sip-validation-report
               spelunk wallpaper-agent signal-plan [--signal TERM]
               spelunk wallpaper-agent signal --execute [--signal TERM]
@@ -161,6 +162,7 @@ struct SPKMain {
               xpc-ping-empty [mach-service]
               normal-xpc-probe [--request diagnostic-state|snapshot-all-spaces|get-caches]
               debug-xpc-probe [--extension identifier] [--request access-downloaded|access-all|download-state] [--asset-id id]
+              debug-xpc-probe --request download-asset|remove-asset --asset-id id --execute
               sip-validation-report
               signal-plan [--signal TERM]
               signal --execute [--signal TERM]
@@ -410,13 +412,27 @@ struct SPKMain {
             request = .accessDownloadedAssets
         case "access-all":
             request = .accessAllAssets
+        case "download-asset":
+            guard let assetID = optionValue("--asset-id", in: arguments), !assetID.isEmpty else {
+                throw CLIError.invalidArgument("debug-xpc-probe --request download-asset requires --asset-id.")
+            }
+            request = .downloadAsset(assetID)
         case "download-state":
             guard let assetID = optionValue("--asset-id", in: arguments), !assetID.isEmpty else {
                 throw CLIError.invalidArgument("debug-xpc-probe --request download-state requires --asset-id.")
             }
             request = .downloadAssetState(assetID)
+        case "remove-asset":
+            guard let assetID = optionValue("--asset-id", in: arguments), !assetID.isEmpty else {
+                throw CLIError.invalidArgument("debug-xpc-probe --request remove-asset requires --asset-id.")
+            }
+            request = .removeAsset(assetID)
         default:
-            throw CLIError.invalidArgument("Unsupported debug-xpc-probe request '\(requestName)'. Use access-downloaded, access-all, or download-state.")
+            throw CLIError.invalidArgument("Unsupported debug-xpc-probe request '\(requestName)'. Use access-downloaded, access-all, download-state, download-asset, or remove-asset.")
+        }
+
+        if request.isMutating && !arguments.contains("--execute") {
+            throw CLIError.missingExecuteFlag("Refusing to send mutating Wallpaper Debug XPC request \(request) without --execute.")
         }
 
         return SPKWallpaperDebugXPCProbeRequest(extensionIdentifier: extensionIdentifier, request: request)

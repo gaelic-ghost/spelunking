@@ -642,6 +642,8 @@ Mutating commands require an explicit execute flag:
 
 ```zsh
 swift run spelunk wallpaper-agent redraw-static --execute
+swift run spelunk wallpaper-agent debug-xpc-probe --request download-asset --asset-id <asset-id> --execute
+swift run spelunk wallpaper-agent debug-xpc-probe --request remove-asset --asset-id <asset-id> --execute
 swift run spelunk wallpaper-agent signal --execute --signal TERM
 swift run spelunk wallpaper-agent restart-probe --execute --signal TERM
 swift run spelunk wallpaper-agent launchctl-kill --execute --signal TERM
@@ -657,6 +659,10 @@ Observed in this branch:
   `Underlying connection interrupted`.
 - `debug-xpc-probe`: decoded downloaded Aerial assets through
   `WallpaperDebugRequestMessage` on this SIP-disabled boot.
+- `debug-xpc-probe --request download-asset` without `--execute`: refused
+  before sending `downloadAsset`.
+- `debug-xpc-probe --request remove-asset` without `--execute`: refused before
+  sending `removeAsset`.
 - `log-snapshot --last 10m --limit 12`: captured recent debug XPC peer
   connection activation and `handleDebugRequest` begin/end lines.
 - `normal-xpc-probe --request diagnostic-state`: reached

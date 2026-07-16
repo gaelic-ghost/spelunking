@@ -57,6 +57,8 @@ Those commands are non-mutating. The mutating commands require `--execute`:
 
 ```zsh
 swift run spelunk wallpaper-agent redraw-static --execute
+swift run spelunk wallpaper-agent debug-xpc-probe --request download-asset --asset-id <asset-id> --execute
+swift run spelunk wallpaper-agent debug-xpc-probe --request remove-asset --asset-id <asset-id> --execute
 swift run spelunk wallpaper-agent signal --execute --signal TERM
 swift run spelunk wallpaper-agent restart-probe --execute --signal TERM
 swift run spelunk wallpaper-agent launchctl-kill --execute --signal TERM
@@ -75,6 +77,8 @@ Observed non-mutating results from this branch:
 | `debug-xpc-probe` with `accessAllAssets(downloaded)` | Succeeded on the current boot and decoded two downloaded Aerial assets. Current boot has SIP disabled, so this is not SIP-enabled proof yet. |
 | `debug-xpc-probe --extension com.apple.wallpaper.extension.not-real` | Succeeded on the current boot and decoded `WallpaperDebugResponse.error("No valid extension")`, confirming the receiver dispatch/error path. Current boot has SIP disabled. |
 | `debug-xpc-probe --request download-state` | Succeeded on the current boot and decoded `WallpaperAssetDownloadState` for a known asset id. Current boot has SIP disabled. |
+| `debug-xpc-probe --request download-asset` without `--execute` | Refused before sending the mutating debug request. |
+| `debug-xpc-probe --request remove-asset` without `--execute` | Refused before sending the mutating debug request. |
 | `log-snapshot --last 10m --limit 12` | Captured recent `WallpaperAgent` unified log lines showing debug XPC peer connection activation and `handleDebugRequest` begin/end events. |
 | `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, redraw probe plan, signal plan, restart probe plan, launchctl-kill plan, and a bounded log snapshot; refused the SIP proof claim because SIP is disabled on this boot. |
 | `normal-xpc-probe --request diagnostic-state` | Reached `com.apple.wallpaper` but received an empty old-coder reply; logs showed `Accepted XPC Connection` followed by `Failed to Decode XPC Message: NSCocoaErrorDomain (4865)`. |
@@ -102,8 +106,9 @@ Observed non-mutating results from this branch:
       `WallpaperDebugResponse`, and related payloads
 - [x] SwiftPM helper for safe inventory, empty XPC ping, static-redraw dry run,
       and same-user signal dry run
-- [x] SwiftPM local `WallpaperTypes` mirror and read-only debug XPC probe for
-      `accessAllAssets` and `downloadAssetState`
+- [x] SwiftPM local `WallpaperTypes` mirror and debug XPC probe coverage for
+      all recovered `WallpaperDebugRequest` cases, with `downloadAsset` and
+      `removeAsset` guarded behind `--execute`
 - [x] SwiftPM SIP validation report that gates proof claims on
       `csrutil status`
 - [x] SwiftPM restart probe plan/execute command that captures before and
@@ -677,6 +682,25 @@ Recovered `WallpaperDebugRequest` cases:
 | `removeAsset` | `String` | Remove a local asset by id. |
 
 The enum is `Codable`.
+
+The repository helper exposes all four cases. The read/query cases can be sent
+directly:
+
+```zsh
+swift run spelunk wallpaper-agent debug-xpc-probe --request access-downloaded
+swift run spelunk wallpaper-agent debug-xpc-probe --request access-all
+swift run spelunk wallpaper-agent debug-xpc-probe --request download-state --asset-id <asset-id>
+```
+
+The asset mutation cases require explicit execution:
+
+```zsh
+swift run spelunk wallpaper-agent debug-xpc-probe --request download-asset --asset-id <asset-id> --execute
+swift run spelunk wallpaper-agent debug-xpc-probe --request remove-asset --asset-id <asset-id> --execute
+```
+
+Without `--execute`, the CLI refuses before opening the XPC session or sending
+the mutating `WallpaperDebugRequest`.
 
 ### Asset Type Enum
 
