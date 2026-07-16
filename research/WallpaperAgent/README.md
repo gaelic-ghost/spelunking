@@ -208,6 +208,100 @@ Observed wallpaper extension identifiers:
 - `com.apple.wallpaper.extension.ventura`
 - `com.apple.NeptuneOneExtension`
 
+## Adjacent Userland Surface Inventory
+
+Use the repository helper for a bounded repeatable inventory:
+
+```zsh
+tools/inspect-wallpaper-surfaces.sh
+```
+
+Manual commands used for the current pass:
+
+```zsh
+plutil -p /System/Library/LaunchDaemons/com.apple.wallpaper.export.plist
+plutil -p /System/Library/PrivateFrameworks/PreferencePanesSupport.framework/Versions/A/XPCServices/WallpaperHelper.xpc/Contents/Info.plist
+plutil -p /System/Library/PrivateFrameworks/DiagnosticExtensions.framework/PlugIns/WallpaperDiagnosticExtension.appex/Contents/Info.plist
+```
+
+```zsh
+for plist in /System/Library/CoreServices/WallpaperAgent.app/Contents/PlugIns/*.appex/Contents/Info.plist; do
+  /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$plist"
+  /usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$plist"
+  /usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "$plist" 2>/dev/null || true
+  /usr/libexec/PlistBuddy -c 'Print :EXAppExtensionAttributes:EXExtensionPointIdentifier' "$plist" 2>/dev/null || true
+done
+```
+
+```zsh
+find /System/Library/ExtensionKit/Extensions \
+  -maxdepth 3 \
+  -path '*Wallpaper*.appex/Contents/Info.plist' \
+  -print |
+  sort |
+  while IFS= read -r plist; do
+  /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$plist"
+  /usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$plist" 2>/dev/null || true
+  /usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "$plist" 2>/dev/null || true
+  /usr/libexec/PlistBuddy -c 'Print :EXAppExtensionAttributes:EXExtensionPointIdentifier' "$plist" 2>/dev/null || true
+done
+```
+
+```zsh
+plutil -p /System/Library/FeatureFlags/Domain/Wallpaper.plist
+plutil -p /System/Library/FeatureFlags/Domain/NeptuneWallpaper.plist
+plutil -p /System/Library/Preferences/Logging/Subsystems/com.apple.wallpaper.plist
+```
+
+```zsh
+LC_ALL=C strings -a /System/Library/CoreServices/WallpaperAgent.app/Contents/PlugIns/WallpaperControlsExtension.appex/Contents/MacOS/WallpaperControlsExtension |
+  rg -i 'wallpaper|skip|reload|refresh|redraw|xpc|intent|control|widget|notification|distributed|darwin|defaults|UserDefaults|desktop|screen'
+```
+
+```zsh
+LC_ALL=C strings -a /System/Library/CoreServices/WallpaperAgent.app/Contents/PlugIns/WallpaperIntents.appex/Contents/MacOS/WallpaperIntents |
+  rg -i 'wallpaper|skip|reload|refresh|redraw|xpc|intent|appintent|shortcut|notification|distributed|darwin|defaults|UserDefaults|desktop|screen|set|get'
+```
+
+```zsh
+LC_ALL=C strings -a /System/Library/PrivateFrameworks/PreferencePanesSupport.framework/Versions/A/XPCServices/WallpaperHelper.xpc/Contents/MacOS/WallpaperHelper |
+  rg -i 'wallpaper|reload|refresh|redraw|xpc|helper|notification|distributed|darwin|defaults|UserDefaults|desktop|screen|set|get|url|extension'
+```
+
+```zsh
+LC_ALL=C strings -a /usr/libexec/wallpaperexportd |
+  rg -i 'wallpaper|export|reload|refresh|redraw|xpc|mach|notification|distributed|darwin|defaults|UserDefaults|desktop|screen|set|get|url|service'
+```
+
+Key observations:
+
+- `com.apple.wallpaper.export` is a LaunchDaemon Mach service backed by
+  `/usr/libexec/wallpaperexportd`.
+- `wallpaperexportd` exports `Wallpaper.ExportXPCProtocol` methods:
+  `write`, `clear`, `readMetadata`, and `markIdleAssetsAsPurgeable`.
+- `wallpaperexportd` uses `EntitlementXPCSecurityPolicy` with
+  `com.apple.private.wallpaper.export`.
+- `wallpaperexportd` strings reference `/var/db/Wallpapers`,
+  `/Library/Application Support/com.apple.idleassetsd`,
+  `com.apple.wallpaper.idleassets.delete`, and export/clear/read-metadata
+  log messages.
+- `WallpaperHelper.xpc` declares
+  `com.apple.preferencepanessupport.WallpaperHelper` and strings expose
+  `WallpaperHelperProtocol` plus `removeWallpaperFiles:`.
+- `WallpaperDiagnosticExtension.appex` declares extension point
+  `com.apple.diagnosticextensions-service` with attachment name `Wallpaper`.
+- `WallpaperControlsExtension.appex` is a WidgetKit extension with
+  `SkipShuffledContentAction`, `SkipShuffledContentButton`, and
+  `com.apple.wallpaper.skip`.
+- `WallpaperIntents.appex` is an App Intents extension with
+  `SetWallpaperIntent`, `SetWallpaperPhotoIntent`, `WallpaperEntityQuery`,
+  `_wallpaper`, and `_showAsScreenSaver`.
+- `Wallpaper.plist` feature flags expose `Gradients` and `LivePreviews` as
+  `FeatureComplete`.
+- `NeptuneWallpaper.plist` exposes `one` as `FeatureComplete`.
+- `com.apple.wallpaper` logging preferences enable persisted performance
+  signposts and configure default log TTL.
+
 ## Logs
 
 ```zsh

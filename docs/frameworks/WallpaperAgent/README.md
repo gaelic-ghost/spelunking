@@ -83,6 +83,10 @@ Observed non-mutating results from this branch:
 - [x] SwiftPM helper for safe inventory, empty XPC ping, static-redraw dry run,
       and same-user signal dry run
 - [x] Headless Ghidra string/data-reference pass for debug and redraw anchors
+- [x] Adjacent userland surface inventory for export daemon, Settings helper,
+      diagnostic extension, WallpaperAgent plug-ins, ExtensionKit wallpaper
+      extensions, feature flags, logging preferences, and filtered
+      string/symbol evidence
 - [ ] Receiver-side implementation trace of `WallpaperDebugServer`
 - [ ] SIP-enabled proof that an ordinary client can successfully call the
       private Swift/XPC envelope
@@ -118,6 +122,22 @@ The LaunchAgent declares four Mach services:
 entries for `com.apple.wallpaper`, `com.apple.wallpaper.debug.service`, and
 `com.apple.wallpaper.CacheDelete`. This proves namespace ownership and lookup
 visibility. It does not prove client authorization for every message.
+
+The broader system also includes a LaunchDaemon for wallpaper export:
+
+| Key | Observed value |
+| --- | --- |
+| `Label` | `com.apple.wallpaper.export` |
+| `Program` | `/usr/libexec/wallpaperexportd` |
+| `MachServices` | `com.apple.wallpaper.export` |
+| `EnablePressuredExit` | `true` |
+| `EnableTransactions` | `true` |
+| `POSIXSpawnType` | `Adaptive` |
+| `ThrottleInterval` | `1` |
+
+This daemon is root-launched and separate from the Aqua-session
+`WallpaperAgent`. Its recovered protocol is an export/preboot/idle-assets
+surface, not a redraw or restart surface.
 
 ## Agent Boundary
 
@@ -165,6 +185,135 @@ policy.
 
 The sealed system volume exposes private framework stubs and SDK `.tbd` files,
 but the implementation lives in the dyld shared cache on this system.
+
+## Adjacent Userland Surfaces
+
+This inventory covers surfaces that are discoverable from ordinary userland on
+this system. Discoverable means the plist, bundle, service name, or public
+metadata is readable. It does not mean an unsigned ordinary client can perform
+the privileged operation behind that surface.
+
+### Export Daemon
+
+`/usr/libexec/wallpaperexportd` owns the Mach service
+`com.apple.wallpaper.export`. Demangled symbols recover the private protocol
+`Wallpaper.ExportXPCProtocol`:
+
+| Method | Return |
+| --- | --- |
+| `write(_:sender:) async throws` | `Void` |
+| `clear(sender:) async throws` | `Void` |
+| `readMetadata(sender:) async throws` | `EncodedExportedWallpaperMetadata?` |
+| `markIdleAssetsAsPurgeable(sender:) async throws` | `Void` |
+
+The daemon constructs an `EntitlementXPCSecurityPolicy` for the entitlement
+`com.apple.private.wallpaper.export`. Strings reference
+`/var/db/Wallpapers`, `/Library/Application Support/com.apple.idleassetsd`,
+`com.apple.wallpaper.idleassets.delete`, and export/clear/read-metadata log
+messages.
+
+Conclusion: this is a real Wallpaper XPC service, but the recovered API is
+for exported wallpaper state and idle-assets cleanup. It is entitlement-gated
+and not currently a SIP-enabled redraw or restart candidate.
+
+### Settings Helper XPC
+
+`WallpaperHelper.xpc` lives under
+`PreferencePanesSupport.framework` and declares:
+
+| Field | Value |
+| --- | --- |
+| Bundle identifier | `com.apple.preferencepanessupport.WallpaperHelper` |
+| Executable | `WallpaperHelper` |
+| Package type | `XPC!` |
+| XPC service type | `Application` |
+
+Filtered strings expose `WallpaperHelperProtocol` and
+`removeWallpaperFiles:`. The helper is therefore a Settings-support cleanup
+surface, not a redraw primitive. It may be relevant when tracing wallpaper
+file removal from Settings, but it does not expose any recovered refresh,
+reload, or restart vocabulary.
+
+### Diagnostic Extension
+
+`WallpaperDiagnosticExtension.appex` declares:
+
+| Field | Value |
+| --- | --- |
+| Bundle identifier | `com.apple.DiagnosticExtensions.WallpaperMac` |
+| Executable | `WallpaperDiagnosticExtension` |
+| Extension point | `com.apple.diagnosticextensions-service` |
+| Principal class | `WallpaperDiagnosticExtension.WallpaperDiagnosticExtension` |
+| Attachment name | `Wallpaper` |
+
+This is a diagnostics collection surface. It should be treated as useful for
+sysdiagnose-style evidence, not as a redraw/reset hook.
+
+### WallpaperAgent Plug-ins
+
+`WallpaperAgent.app` embeds two plug-ins:
+
+| Bundle identifier | Executable | Extension point | Relevant evidence |
+| --- | --- | --- | --- |
+| `com.apple.wallpaper.agent.controls` | `WallpaperControlsExtension` | `com.apple.widgetkit-extension` | `SkipShuffledContentAction`, `SkipShuffledContentButton`, `com.apple.wallpaper.skip`, and the description "Skips to the next wallpaper when using a shuffled collection." |
+| `com.apple.wallpaper.agent.WallpaperIntents` | `WallpaperIntents` | `com.apple.appintents-extension` | `SetWallpaperIntent`, `SetWallpaperPhotoIntent`, `WallpaperEntityQuery`, `_wallpaper`, `_showAsScreenSaver`, "Set Wallpaper Photo", and "Show As Screen Saver". |
+
+The controls extension lines up with the normal-agent
+`skipShuffledContent`/`canSkipShuffledContent` methods. It is a narrow
+shuffle-advance control and not a generic redraw hook.
+
+The App Intents extension appears to expose wallpaper selection actions for
+Shortcuts/Siri-style callers. It is a userland-accessible automation surface
+for changing wallpaper choices, but the observed vocabulary is setting a
+wallpaper or wallpaper photo, not refreshing the current runtime in place.
+
+### ExtensionKit Wallpaper Providers
+
+Built-in `com.apple.wallpaper` ExtensionKit providers are the likely targets
+for `WallpaperDebugRequestMessage.extensionIdentifier`:
+
+| Identifier | Bundle |
+| --- | --- |
+| `com.apple.wallpaper.extension.aerials` | `WallpaperAerialsExtension.appex` |
+| `com.apple.wallpaper.extension.dynamic` | `WallpaperDynamicExtension.appex` |
+| `com.apple.wallpaper.extension.gradient` | `WallpaperGradientExtension.appex` |
+| `com.apple.wallpaper.extension.image` | `WallpaperImageExtension.appex` |
+| `com.apple.wallpaper.extension.legacy` | `WallpaperLegacyExtension.appex` |
+| `com.apple.wallpaper.extension.macintosh` | `WallpaperMacintoshExtension.appex` |
+| `com.apple.wallpaper.extension.monterey` | `WallpaperMontereyExtension.appex` |
+| `com.apple.wallpaper.extension.sequoia` | `WallpaperSequoiaExtension.appex` |
+| `com.apple.wallpaper.extension.sonoma` | `WallpaperSonomaExtension.appex` |
+| `com.apple.wallpaper.extension.ventura` | `WallpaperVenturaExtension.appex` |
+| `com.apple.NeptuneOneExtension` | `NeptuneOneWallpaper.appex` |
+
+The separate `Wallpaper.appex` has bundle identifier
+`com.apple.Wallpaper-Settings.extension` and extension point
+`com.apple.Settings.extension.ui`; it is the Settings UI extension, not a
+wallpaper provider.
+
+`WallpaperSettingsIntents.appex` has bundle identifier
+`com.apple.settings-intents.WallpaperIntents` and declares the WidgetKit
+extension point `com.apple.widgetkit-extension`; it is not a wallpaper provider
+extension.
+
+### Feature Flags and Logging
+
+Wallpaper feature flags are present in
+`/System/Library/FeatureFlags/Domain/Wallpaper.plist`:
+
+| Flag | Development phase |
+| --- | --- |
+| `Gradients` | `FeatureComplete` |
+| `LivePreviews` | `FeatureComplete` |
+
+`/System/Library/FeatureFlags/Domain/NeptuneWallpaper.plist` declares `one`
+as `FeatureComplete`.
+
+The logging preferences at
+`/System/Library/Preferences/Logging/Subsystems/com.apple.wallpaper.plist`
+configure default log level TTL and enable persisted performance signposts.
+These plists are useful for understanding behavior and log capture, but they
+are not runtime redraw hooks.
 
 ## Normal Agent XPC API
 
@@ -541,6 +690,11 @@ invalidation path. It does not prove any external trigger.
 | Private `ensureViewModelIsUpToDate` | Send normal `AgentXPCMessage.ensureViewModelIsUpToDate([ContentType], ViewModelRefreshReason)` to `com.apple.wallpaper`. | Mach lookup is visible, but message envelope and authorization are not solved. | Private protocol, may be entitlement-gated. | Best private redraw candidate |
 | Private `snapshotAllSpaces` | Send normal diagnostic request to `com.apple.wallpaper`. | Same as above. | Could be diagnostic-only. | Useful probe, not a redraw primitive |
 | Private debug asset service | Send `WallpaperDebugRequestMessage` to `com.apple.wallpaper.debug.service`. | Mach lookup is visible, but envelope and handler access are unproven. | Asset mutations possible. No generic redraw vocabulary. | Not currently a redraw candidate |
+| Wallpaper controls widget | Use `com.apple.wallpaper.agent.controls` / `com.apple.wallpaper.skip`. | WidgetKit/App Intents surface is discoverable. | Only advances shuffled content. | Narrow shuffle hook only |
+| Wallpaper App Intents | Use `SetWallpaperIntent` or `SetWallpaperPhotoIntent`. | App Intents extension is discoverable. Invocation path still needs a controlled Shortcuts/App Intents proof. | Changes wallpaper choices rather than refreshing the current runtime in place. | Automation surface, not reset |
+| Export daemon | Call `com.apple.wallpaper.export`. | Service is discoverable, but protocol uses `com.apple.private.wallpaper.export`. | Entitlement-gated and state-mutating export/preboot path. | Not a redraw candidate |
+| Settings helper XPC | Call `WallpaperHelper.xpc` / `removeWallpaperFiles:`. | XPC bundle is discoverable. Authorization and callers are not mapped. | Wallpaper file removal, not redraw. | Cleanup surface only |
+| Diagnostic extension | Invoke `WallpaperDiagnosticExtension.appex`. | Diagnostic extension metadata is discoverable. | Evidence collection only. | Not a redraw candidate |
 | Filesystem preference touch | Touch wallpaper preferences or support files. | May be user-writable, but indirect and state-mutating. | Fragile, can corrupt or desync state. | Avoid until a watched key/file is proven |
 | Darwin or distributed notification | Post a guessed notification. | No confirmed notification name yet. | Low effect, noisy. | Not proven |
 
@@ -607,7 +761,12 @@ Accessible or likely accessible:
 - Same-user process signaling, pending SIP-enabled proof
 - Mach lookup attempts for `com.apple.wallpaper`
 - Mach lookup attempts for `com.apple.wallpaper.debug.service`
+- Read-only discovery of `com.apple.wallpaper.export`,
+  `WallpaperHelper.xpc`, `WallpaperDiagnosticExtension.appex`, bundled
+  WallpaperAgent plug-ins, and ExtensionKit wallpaper providers
 - Public `NSWorkspace` desktop picture APIs
+- App Intents / WidgetKit surfaces declared by WallpaperAgent plug-ins,
+  pending controlled invocation proof
 - Read-only inspection of launchd job state with `launchctl print`
 - Unified log reads permitted to the current user
 
@@ -616,6 +775,8 @@ Not accessible or not assumed accessible:
 - Task attachment to `WallpaperAgent`
 - Code injection into `WallpaperAgent`
 - Unsigned or non-Apple private entitlement acquisition
+- Calling `com.apple.wallpaper.export` successfully without
+  `com.apple.private.wallpaper.export`
 - Receiver-side tracing that requires task port access
 - `launchctl kickstart -k` as a reset mechanism
 - Calling private messages without solving the Swift/XPC envelope and security
