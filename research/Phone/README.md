@@ -26,6 +26,16 @@ sdef /System/Applications/Phone.app
 plutil -p /System/Applications/Phone.app/Contents/Info.plist
 codesign -d --entitlements :- /System/Applications/Phone.app
 otool -L /System/Applications/Phone.app/Contents/MacOS/Phone
+find /System/Library/PrivateFrameworks /System/iOSSupport/System/Library/PrivateFrameworks -maxdepth 3 \( -name '*.xpc' -o -name '*.appex' -o -name '*.app' -o -name 'LaunchServices' \) 2>/dev/null | rg 'IM|Message|MobileSMS|Phone|Call|Telephony|FaceTime' | sort
+find /System/Library/LaunchAgents /System/Library/LaunchDaemons /Library/LaunchAgents /Library/LaunchDaemons -maxdepth 1 -type f \( -iname '*im*' -o -iname '*message*' -o -iname '*call*' -o -iname '*phone*' -o -iname '*telephony*' -o -iname '*facetime*' \) -print 2>/dev/null | sort
+plutil -p /System/Library/LaunchAgents/com.apple.callhistoryd.plist
+plutil -p /System/Library/LaunchAgents/com.apple.CallHistoryPluginHelper.plist
+plutil -p /System/Library/LaunchAgents/com.apple.CallHistorySyncHelper.plist
+plutil -p /System/Library/LaunchAgents/com.apple.callintelligenced.plist
+plutil -p /System/Library/LaunchAgents/com.apple.facetimemessagestored.plist
+plutil -p /System/Library/LaunchAgents/com.apple.telephonyutilities.callservicesd.plist
+plutil -p /System/Library/PrivateFrameworks/TelephonyUtilities.framework/PlugIns/PhoneIntentHandler.appex/Contents/Info.plist
+dyld_info -exports -objc -all_dyld_cache
 ```
 
 Observed `sdef` result:
@@ -41,6 +51,4 @@ Privacy note: no call-history rows, phone numbers, contacts, voicemail metadata,
 - call-history storage location and schema-only inventory
 - dyld shared cache extraction command and output paths
 - filtered Swift demangle output for call frameworks
-- launchd/XPC service inventory
 - notification/logging baseline
-

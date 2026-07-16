@@ -33,10 +33,34 @@ Framework directories exist for `CallsXPC`, `CallsPersistence`, and `TelephonyUt
 
 Use one of these next:
 
-- dyld shared cache extraction for live macOS symbols
+- dyld shared cache extraction for full live macOS symbols and Objective-C metadata
 - SDK `.tbd` files for exported symbol names
 - generated Swift interfaces when available
 - runtime class listing from a small read-only helper
+
+## Dyld Shared Cache Export Probe
+
+Verified with:
+
+```sh
+dyld_info -exports -objc -all_dyld_cache
+```
+
+`dyld_info` can print exports from cache images, but not live Objective-C class/category metadata from cache dylibs on this machine.
+
+Observed high-signal exports and classes:
+
+- `TelephonyUtilities.VoiceSpamReportManagerProtocol`
+- `TelephonyUtilities.VoiceSpamReportManager`
+- `TelephonyUtilities.BadgeCounts`
+- `TelephonyUtilities.AnalyticsLogger`
+- `OBJC_CLASS_$_INSearchCallHistoryIntent`
+- `OBJC_CLASS_$_INSearchCallHistoryIntentResponse`
+- `OBJC_CLASS_$_SAPhoneCallHistory`
+- `OBJC_CLASS_$_SAPhoneCallSearchResult`
+- `CKSQLiteContainerAttribution_PhoneFaceTimeCallHistory`
+- `CKSQLiteContainerAttribution_PhoneFaceTimeMessageStore`
+- `kGEOCallHistoryRecentsClearedNotification`
 
 ## SDK `.tbd` Highlights
 
@@ -125,4 +149,3 @@ Known first-pass difference:
 - The macOS 27.0 SDK exposes `.tbd` symbol metadata for private frameworks including `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`.
 
 No semantic symbol diff has been performed yet.
-

@@ -8,11 +8,12 @@
 - [x] Capture app entitlements.
 - [x] Capture app binary linked libraries.
 - [x] Skim SDK `.tbd` metadata for `IMCore`.
-- [ ] Extract live dyld shared cache symbols for IM private frameworks.
+- [x] Run a filtered dyld shared cache export probe.
+- [x] Inventory launchd jobs and XPC service plists.
+- [ ] Extract live dyld shared cache images for full IM private framework metadata.
 - [ ] Generate class/protocol/selector inventory.
 - [ ] Observe notification names without sending messages.
 - [ ] Attach read-only logging predicates while manually using Messages.
-- [ ] Inspect launchd jobs and XPC service plists.
 
 ## Mutating Experiments
 
@@ -48,4 +49,3 @@ Follow-up:
 - Do not capture message text, addresses, participant names, attachment file names, or row-level data unless Gale explicitly asks for that controlled evidence.
 - Prefer schema, symbol, entitlement, command, and interface evidence.
 - If a runtime experiment needs a real message, use an intentionally created test thread and label that fact in the evidence.
-

@@ -30,9 +30,9 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Active and SDK framework constellation inventory
 - [x] App binary linked-library inventory
 - [x] SDK `.tbd` symbol skim for `IMCore`
-- [ ] Dyld shared cache symbol extraction for live private frameworks
+- [x] Filtered dyld shared cache export probe
+- [x] LaunchAgent and XPC service inventory
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
-- [ ] Notification, XPC, and launchd job inventory
 - [ ] Read-only runtime experiments against app/framework state
 - [ ] OS comparison against another macOS build
 
@@ -167,6 +167,58 @@ Verified from the macOS 27.0 SDK `IMCore.tbd`:
 - High-signal demangled symbol families include attachment, participant, and conversation import/export iterators, async batches, export statistics, progress reporting, and CloudKit sync completion state.
 
 Inference: the SDK-visible `IMCore` export surface includes modern Swift import/export plumbing for records, attachments, participants, and conversations, not only legacy Objective-C IM types.
+
+## Dyld Shared Cache Notes
+
+Verified with:
+
+```sh
+dyld_info -exports -objc -all_dyld_cache
+```
+
+The active arm64e shared cache is split under `/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/`.
+
+Observed export/symbol hints:
+
+- `IMCoreAttachmentBlastdoorErrorDomain`
+- `IMCoreDuetLogHandle`
+- `IMCoreSpotlightIndexReasonIsCritical`
+- `IMCoreSpotlightIndexReasonIsIncomingMessage`
+- `IMCouldBeChatBotKey`
+- `IMIsRunningInIMDPersistenceAgent`
+- `IMIsRunningInImagent`
+- `IMiMessagePrivacyPolicyNotification`
+- `MessageServiceLogHandle`
+- `NSStringFromIMCoreSpotlightIndexReason`
+- `NSStringFromIMPersistentTaskExecutorStatus`
+- `NSStringFromIMPersistentTaskLane`
+- `IMCoreAutomationNotifications`
+- `IMCoreRecentsMetadataBuilder`
+- `IMCoreSpotlightUtilities`
+
+Boundary: `dyld_info` reported that it cannot print live Objective-C metadata from dylibs in the dyld shared cache. A later class/protocol/selector pass needs a different extraction path or a controlled runtime helper.
+
+## Launchd And XPC
+
+Verified LaunchAgents:
+
+| Label | Program | High-signal services or triggers |
+| --- | --- | --- |
+| `com.apple.imagent` | `IMCore.framework/imagent.app` | Mach services for APS/imagent, Messages notifications delegates, Spotlight messages, incoming-call-filter, Madrid IDS wake; launch events for AuthKit user info and `com.apple.private.IMCore.LoggedIntoHSA2` |
+| `com.apple.imautomatichistorydeletionagent` | `IMDPersistence.framework/IMAutomaticHistoryDeletionAgent.app` | daily xpc activity plus `com.apple.imautomatichistorydeletionagent.prefchange` |
+| `com.apple.imcore.imtransferagent` | `IMTransferServices.framework/IMTransferAgent.app` | Mach service `com.apple.imtransferservices.IMTransferAgent`; IDS transfer launch notification |
+
+Verified XPC services:
+
+| Bundle identifier | Visible name | Notes |
+| --- | --- | --- |
+| `com.apple.imdmessageservices.IMDMessageServicesAgent` | Message Services Agent | application XPC service |
+| `com.apple.imdpersistence.IMDPersistenceAgent` | Messages Database Agent | user XPC service with explicit Apple-signed allowed-client list |
+| `com.apple.imtranscoding.IMTranscoderAgent` | Messages Transcoding Agent | application XPC service with GPU access |
+
+`IMDPersistenceAgent.xpc` allowed clients include Apple-signed `MobileSMS.spotlight`, `imagent`, `IMDMessageServicesAgent`, Safari variants, `iChat`, `AddressBook.FaceTimeService`, `imtool`, `assistantd`, `ContactsAgent`, `messages.AssistantExtension`, `IMAutomaticHistoryDeletionAgent`, `messages.StorageManagementExtension`, Control Center, Photos, Game Center, FaceTime, Finder, SocialLayer, CoreDuet, People, Ask To, Suggestd, OmniSearch, diagnostics, and internal incubation tools.
+
+Inference: database access is brokered through a privileged XPC service with a tight Apple-signed client allowlist, not a generic local IPC endpoint for third-party callers.
 
 ## Open Questions
 

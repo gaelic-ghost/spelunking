@@ -29,10 +29,10 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Active and SDK framework constellation inventory
 - [x] App binary linked-library inventory
 - [x] SDK `.tbd` symbol skim for `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`
+- [x] Filtered dyld shared cache export probe
+- [x] LaunchAgent and XPC service inventory
 - [ ] Call-history storage schema inventory without row data
-- [ ] Dyld shared cache symbol extraction for live private frameworks
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
-- [ ] Notification, XPC, and launchd job inventory
 - [ ] Read-only runtime experiments against app/framework state
 - [ ] OS comparison against another macOS build
 
@@ -139,6 +139,56 @@ Verified from macOS 27.0 SDK `.tbd` files.
 - `CallStatus` includes cases such as active, ringing, sending, on hold, disconnecting, disconnected, and unknown
 
 Inference: the beta SDK exposes a structured App Intents layer for Phone call records/messages and a Swift XPC/persistence stack for private call-service internals.
+
+## Dyld Shared Cache Notes
+
+Verified with:
+
+```sh
+dyld_info -exports -objc -all_dyld_cache
+```
+
+The active arm64e shared cache is split under `/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/`.
+
+Observed export/symbol hints:
+
+- `TelephonyUtilities.VoiceSpamReportManagerProtocol`
+- `TelephonyUtilities.VoiceSpamReportManager`
+- `TelephonyUtilities.BadgeCounts`
+- `TelephonyUtilities.AnalyticsLogger`
+- `INSearchCallHistoryIntent`
+- `INSearchCallHistoryIntentResponse`
+- `SAPhoneCallHistory`
+- `SAPhoneCallSearchResult`
+- `CKSQLiteContainerAttribution_PhoneFaceTimeCallHistory`
+- `CKSQLiteContainerAttribution_PhoneFaceTimeMessageStore`
+- `kGEOCallHistoryRecentsClearedNotification`
+
+Boundary: `dyld_info` reported that it cannot print live Objective-C metadata from dylibs in the dyld shared cache. A later class/protocol/selector pass needs a different extraction path or a controlled runtime helper.
+
+## Launchd And XPC
+
+Verified LaunchAgents:
+
+| Label | Program | High-signal services or triggers |
+| --- | --- | --- |
+| `com.apple.callhistoryd` | `CallHistory.framework/Support/callhistoryd` | Mach services `com.apple.callhistoryd.service` and `com.apple.conversation.history` |
+| `com.apple.CallHistoryPluginHelper` | `CallHistory.framework/Support/CallHistoryPluginHelper` | Mach service `com.apple.CallHistoryPluginHelper`; notify trigger `com.apple.CallHistoryPluginHelper.launchnotification` |
+| `com.apple.CallHistorySyncHelper` | `CallHistory.framework/Support/CallHistorySyncHelper` | Mach services `com.apple.CallHistorySyncHelper` and `.aps`; IDS launch notification |
+| `com.apple.callintelligenced` | `CallIntelligence.framework/callintelligenced` | Mach service `com.apple.callintelligenced.service`; first-unlock trigger |
+| `com.apple.facetimemessagestored` | `FaceTimeMessageStore.framework/facetimemessagestored` | APS and FaceTime message-store mach services |
+| `com.apple.telephonyutilities.callservicesd` | `TelephonyUtilities.framework/callservicesd` | CallKit, FaceTime alloy, call history, call state, conversation, provider, notification, VoIP, and simulated-conversation mach services |
+
+Verified XPC and extension bundles:
+
+| Bundle identifier | Bundle type | Notes |
+| --- | --- | --- |
+| `com.apple.TelephonyUtilities.PhoneIntentHandler` | intents extension | supports `INAddCallParticipantIntent`, `INJoinCallIntent`, `INStartCallIntent`, `INSearchCallHistoryIntent`, and `INPlayVoicemailIntent` |
+| `com.apple.TelephonyBlastDoorService` | XPC service | application service with ProbGuard and shared-cache reslide |
+| `com.apple.FaceTime.FTConversationService` | XPC service | FaceTime conversation service |
+| `com.apple.FTLivePhotoService` | XPC service | FaceTime live photo service |
+
+Inference: Phone’s user-facing app sits above a broad `callservicesd` broker plus CallHistory, FaceTime, IDS, voicemail, and intent-handler surfaces. The exposed Siri/Intent verbs are narrower than the app’s private TelephonyUtilities entitlement set.
 
 ## Open Questions
 

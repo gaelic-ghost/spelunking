@@ -7,12 +7,13 @@
 - [x] Capture app entitlements.
 - [x] Capture app binary linked libraries.
 - [x] Skim SDK `.tbd` metadata for `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`.
+- [x] Run a filtered dyld shared cache export probe.
+- [x] Inventory launchd jobs and XPC service plists.
 - [ ] Locate and inventory call-history storage schema without row data.
-- [ ] Extract live dyld shared cache symbols for call private frameworks.
+- [ ] Extract live dyld shared cache images for full call private framework metadata.
 - [ ] Generate class/protocol/selector inventory.
 - [ ] Observe notification names without placing calls.
 - [ ] Attach read-only logging predicates while manually opening Phone.
-- [ ] Inspect launchd jobs and XPC service plists.
 
 ## Mutating Experiments
 
@@ -48,4 +49,3 @@ Follow-up:
 - Do not capture call records, phone numbers, voicemail metadata, contacts, participant names, or row-level data unless Gale explicitly asks for that controlled evidence.
 - Prefer schema, symbol, entitlement, command, and interface evidence.
 - If a runtime experiment needs a real call, use an intentionally controlled test call and label that fact in the evidence.
-

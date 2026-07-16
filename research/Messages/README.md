@@ -29,6 +29,13 @@ sdef /System/Applications/Messages.app
 plutil -p /System/Applications/Messages.app/Contents/Info.plist
 codesign -d --entitlements :- /System/Applications/Messages.app
 otool -L /System/Applications/Messages.app/Contents/MacOS/Messages
+find /System/Library/PrivateFrameworks /System/iOSSupport/System/Library/PrivateFrameworks -maxdepth 3 \( -name '*.xpc' -o -name '*.appex' -o -name '*.app' -o -name 'LaunchServices' \) 2>/dev/null | rg 'IM|Message|MobileSMS|Phone|Call|Telephony|FaceTime' | sort
+find /System/Library/LaunchAgents /System/Library/LaunchDaemons /Library/LaunchAgents /Library/LaunchDaemons -maxdepth 1 -type f \( -iname '*im*' -o -iname '*message*' -o -iname '*call*' -o -iname '*phone*' -o -iname '*telephony*' -o -iname '*facetime*' \) -print 2>/dev/null | sort
+plutil -p /System/Library/LaunchAgents/com.apple.imagent.plist
+plutil -p /System/Library/LaunchAgents/com.apple.imautomatichistorydeletionagent.plist
+plutil -p /System/Library/LaunchAgents/com.apple.imtransferagent.plist
+plutil -p /System/Library/PrivateFrameworks/IMDPersistence.framework/XPCServices/IMDPersistenceAgent.xpc/Contents/Info.plist
+dyld_info -exports -objc -all_dyld_cache
 ```
 
 Privacy note: the SQLite commands captured table and column names only. No row data, message text, handles, attachment names, or counts were captured.
@@ -37,6 +44,4 @@ Privacy note: the SQLite commands captured table and column names only. No row d
 
 - dyld shared cache extraction command and output paths
 - filtered Swift demangle output for `IMCore`
-- launchd/XPC service inventory
 - notification/logging baseline
-

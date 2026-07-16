@@ -28,10 +28,38 @@ Framework directories exist for `IMCore`, `IMDPersistence`, `IMDaemonCore`, `Cal
 
 Use one of these next:
 
-- dyld shared cache extraction for live macOS symbols
+- dyld shared cache extraction for full live macOS symbols and Objective-C metadata
 - SDK `.tbd` files for exported symbol names
 - generated Swift interfaces when available
 - runtime class listing from a small read-only helper
+
+## Dyld Shared Cache Export Probe
+
+Verified with:
+
+```sh
+dyld_info -exports -objc -all_dyld_cache
+```
+
+`dyld_info` can print exports from cache images, but not live Objective-C class/category metadata from cache dylibs on this machine.
+
+Observed high-signal exports and classes:
+
+- `IMCoreAttachmentBlastdoorErrorDomain`
+- `IMCoreDuetLogHandle`
+- `IMCoreSpotlightIndexReasonIsCritical`
+- `IMCoreSpotlightIndexReasonIsIncomingMessage`
+- `IMCouldBeChatBotKey`
+- `IMIsRunningInIMDPersistenceAgent`
+- `IMIsRunningInImagent`
+- `IMiMessagePrivacyPolicyNotification`
+- `MessageServiceLogHandle`
+- `NSStringFromIMCoreSpotlightIndexReason`
+- `NSStringFromIMPersistentTaskExecutorStatus`
+- `NSStringFromIMPersistentTaskLane`
+- `OBJC_CLASS_$_IMCoreAutomationNotifications`
+- `OBJC_CLASS_$_IMCoreRecentsMetadataBuilder`
+- `OBJC_CLASS_$_IMCoreSpotlightUtilities`
 
 ## SDK `.tbd` Highlights
 
@@ -88,4 +116,3 @@ Known first-pass difference:
 - The macOS 27.0 SDK exposes `.tbd` symbol metadata for private frameworks including `IMCore`.
 
 No semantic symbol diff has been performed yet.
-
