@@ -113,6 +113,20 @@ Runtime update: `mr-internal-probe` constructs `MRNowPlayingPlayerClient` and `M
 
 Inference: `initWithPlayerPath:` is only object identity setup. A separate request, callback registration, or daemon response path populates the interesting fields.
 
+Runtime method encodings show the request wrapper has a clear cache-and-request shape:
+
+- `updatePlaybackQueueIfUninitialized:` takes one object.
+- `updatePlaybackStateIfUninitialized:` takes one unsigned scalar.
+- `updateSupportedCommandsIfUninitialized:` takes one object.
+- `enqueuePlaybackQueueRequest:completion:` takes an object and a block.
+- `handleSupportedCommandsRequestWithCompletion:` takes a block.
+- `handlePlaybackStateRequestWithCompletion:` takes a block.
+- `handlePlayerPropertiesRequestWithCompletion:` takes a block.
+
+Calling `handleSupportedCommandsRequestWithCompletion:` on the Spotify path completed with nil supported commands. Calling `handlePlayerPropertiesRequestWithCompletion:` completed with `kMRMediaRemoteFrameworkErrorDomain Code=3`, `Operation not permitted`.
+
+Inference: supported commands may genuinely be absent for the locally constructed request object, while player properties is a policy-gated or entitlement-gated request.
+
 ## Controller Generations
 
 OS log strings identify several now-playing controller implementations:

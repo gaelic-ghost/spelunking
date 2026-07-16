@@ -2,6 +2,7 @@
 #import <dispatch/dispatch.h>
 #import <dlfcn.h>
 #import <objc/message.h>
+#import <objc/runtime.h>
 
 typedef void (*MRMediaRemoteGetOriginFunc)(dispatch_queue_t, void (^)(BOOL, id));
 typedef void (*MRMediaRemoteGetObjectsForOriginFunc)(id, dispatch_queue_t, void (^)(NSArray *));
@@ -15,6 +16,11 @@ static id sendObject(id receiver, SEL selector) {
 static id sendObjectWithObject(id receiver, SEL selector, id argument) {
     id (*send)(id, SEL, id) = (id (*)(id, SEL, id))objc_msgSend;
     return send(receiver, selector, argument);
+}
+
+static void sendVoidWithObject(id receiver, SEL selector, id argument) {
+    void (*send)(id, SEL, id) = (void (*)(id, SEL, id))objc_msgSend;
+    send(receiver, selector, argument);
 }
 
 static void printSelector(id object, NSString *selectorName, NSString *label) {
@@ -32,6 +38,83 @@ static void printSelector(id object, NSString *selectorName, NSString *label) {
     }
 
     printf("%s.%s: %s\n", label.UTF8String, selectorName.UTF8String, [[result description] UTF8String]);
+}
+
+static void printMethodEncoding(id object, NSString *selectorName, NSString *label) {
+    SEL selector = NSSelectorFromString(selectorName);
+    Method method = class_getInstanceMethod([object class], selector);
+
+    if (method == NULL) {
+        printf("%s.%s encoding: unavailable\n", label.UTF8String, selectorName.UTF8String);
+        return;
+    }
+
+    const char *encoding = method_getTypeEncoding(method);
+    printf("%s.%s encoding: %s\n", label.UTF8String, selectorName.UTF8String, encoding != NULL ? encoding : "<null>");
+}
+
+static void printRequestMethodEncodings(id object, NSString *label) {
+    NSArray<NSString *> *selectors = @[
+        @"debugDescription",
+        @"playerPath",
+        @"supportedCommands",
+        @"playbackQueue",
+        @"playerProperties",
+        @"updatePlaybackQueueIfUninitialized:",
+        @"updatePlaybackStateIfUninitialized:",
+        @"updateSupportedCommandsIfUninitialized:",
+        @"enqueuePlaybackQueueRequest:completion:",
+        @"handleSupportedCommandsRequestWithCompletion:",
+        @"handlePlaybackStateRequestWithCompletion:",
+        @"handlePlayerPropertiesRequestWithCompletion:",
+        @"restoreNowPlayingClientState",
+        @"subscriptionController"
+    ];
+
+    for (NSString *selectorName in selectors) {
+        printMethodEncoding(object, selectorName, label);
+    }
+}
+
+static void requestObjectWithCompletion(id object, NSString *selectorName, NSString *label) {
+    SEL selector = NSSelectorFromString(selectorName);
+
+    if (![object respondsToSelector:selector]) {
+        printf("%s.%s request: selector unavailable\n", label.UTF8String, selectorName.UTF8String);
+        return;
+    }
+
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block BOOL called = NO;
+
+    id completion = ^(id result, id error) {
+        called = YES;
+
+        if (error != nil) {
+            printf("%s.%s completion error: %s\n", label.UTF8String, selectorName.UTF8String, [[error description] UTF8String]);
+        }
+
+        if (result == nil) {
+            printf("%s.%s completion result: <nil>\n", label.UTF8String, selectorName.UTF8String);
+        } else {
+            printf(
+                "%s.%s completion result: <%s> %s\n",
+                label.UTF8String,
+                selectorName.UTF8String,
+                object_getClassName(result),
+                [[result description] UTF8String]
+            );
+        }
+
+        dispatch_semaphore_signal(semaphore);
+    };
+
+    printf("%s.%s request: invoking\n", label.UTF8String, selectorName.UTF8String);
+    sendVoidWithObject(object, selector, completion);
+
+    if (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC)) != 0) {
+        printf("%s.%s request: timed out waiting for completion (called=%s)\n", label.UTF8String, selectorName.UTF8String, called ? "true" : "false");
+    }
 }
 
 static void inspectWrapper(NSString *className, id playerPath) {
@@ -58,6 +141,14 @@ static void inspectWrapper(NSString *className, id playerPath) {
     printSelector(wrapper, @"supportedCommands", className);
     printSelector(wrapper, @"playbackQueue", className);
     printSelector(wrapper, @"playerProperties", className);
+    printRequestMethodEncodings(wrapper, className);
+
+    if ([className isEqualToString:@"MRNowPlayingPlayerClientRequests"]) {
+        requestObjectWithCompletion(wrapper, @"handleSupportedCommandsRequestWithCompletion:", className);
+        printSelector(wrapper, @"supportedCommands", className);
+        requestObjectWithCompletion(wrapper, @"handlePlayerPropertiesRequestWithCompletion:", className);
+        printSelector(wrapper, @"playerProperties", className);
+    }
 }
 
 int main(void) {

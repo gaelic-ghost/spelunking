@@ -170,10 +170,35 @@ MRNowPlayingPlayerClientRequests.debugDescription:
 
 Interpretation: the internal wrappers are constructible when bridged through Objective-C, but creating them locally from the active `MRPlayerPath` does not by itself hydrate metadata, supported commands, or queue state for Spotify's default player. The next path is to inspect the request enqueue/hydration methods or daemon messages that populate these fields.
 
+Expanded Objective-C helper follow-up: runtime method encodings confirm the request wrapper methods:
+
+```text
+MRNowPlayingPlayerClientRequests.updatePlaybackQueueIfUninitialized: encoding: v24@0:8@16
+MRNowPlayingPlayerClientRequests.updatePlaybackStateIfUninitialized: encoding: v20@0:8I16
+MRNowPlayingPlayerClientRequests.updateSupportedCommandsIfUninitialized: encoding: v24@0:8@16
+MRNowPlayingPlayerClientRequests.enqueuePlaybackQueueRequest:completion: encoding: v32@0:8@16@?24
+MRNowPlayingPlayerClientRequests.handleSupportedCommandsRequestWithCompletion: encoding: v24@0:8@?16
+MRNowPlayingPlayerClientRequests.handlePlaybackStateRequestWithCompletion: encoding: v24@0:8@?16
+MRNowPlayingPlayerClientRequests.handlePlayerPropertiesRequestWithCompletion: encoding: v24@0:8@?16
+```
+
+Read-style hydration attempts:
+
+```text
+MRNowPlayingPlayerClientRequests.handleSupportedCommandsRequestWithCompletion: completion result: <nil>
+MRNowPlayingPlayerClientRequests.supportedCommands: <nil>
+MRNowPlayingPlayerClientRequests.handlePlayerPropertiesRequestWithCompletion: completion error: Error Domain=kMRMediaRemoteFrameworkErrorDomain Code=3 "Operation not permitted"
+MRNowPlayingPlayerClientRequests.handlePlayerPropertiesRequestWithCompletion: completion result: <nil>
+MRNowPlayingPlayerClientRequests.playerProperties: <nil>
+```
+
+Interpretation: the request object path is callable from userland, but Spotify's supported commands still return nil and player properties are blocked by MediaRemote policy with `kMRMediaRemoteFrameworkErrorDomain Code=3`. Treat player properties as a permission/entitlement-gated surface until a signed entitlement experiment or daemon-side evidence proves otherwise.
+
 ## Next Runtime Steps
 
 - Resolve metadata from the active `MRPlayerPath` without passing `MRClient` to `MRMediaRemoteGetNowPlayingInfoForClient`.
-- Inspect how `MRNowPlayingPlayerClientRequests` hydrates `playbackQueue`, `supportedCommands`, and `playerProperties` after construction.
+- Inspect how `MRNowPlayingPlayerClientRequests` hydrates `playbackQueue` and content items after construction.
+- Treat `handlePlayerPropertiesRequestWithCompletion:` as permission-gated for the current unsigned userland helper.
 - Investigate playback queue request APIs using an API that accepts `MRPlayerPath`, or build a real `MRPlaybackQueueRequest`, rather than passing path-derived `MRPlayer` into `MRMediaRemoteRequestNowPlayingPlaybackQueueForPlayerSync`.
 - Inspect daemon-facing XPC traffic/service surfaces before any mutating command path.
 - Build an app-bundle fixture if CLI `MPNowPlayingInfoCenter` remains invisible.
