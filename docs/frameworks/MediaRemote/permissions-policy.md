@@ -169,7 +169,10 @@ Current capture location pattern:
 `tools/mediaremote-inventory.zsh` now captures focused policy files in addition to the broader string inventories:
 
 - `dyld-policy-strings.txt`
+- `symbols-policy-targets.txt`
 - `mediaremoted-policy-strings.txt`
 - `mediaremoteagent-policy-strings.txt`
 
 Use those files when updating this note so entitlement and policy evidence remains easy to diff across OS and SDK captures.
+
+See `entitlement-model.md` for the current mapping between named entitlement strings, daemon bitfield evidence, and unresolved bit-position questions.

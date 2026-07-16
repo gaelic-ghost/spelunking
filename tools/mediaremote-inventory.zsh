@@ -58,6 +58,14 @@ if [[ -n "${symbols_tool}" ]]; then
     -lookup '*MRNowPlayingClientRequests*' \
     -lookup '*MRXPC*' \
     "${framework}"
+
+  run_capture "symbols-policy-targets.txt" "${symbols_tool}" -arch arm64e -noHeaders -noRegions -noSources \
+    -lookup '*MRMediaRemoteCopy*Entitlement*' \
+    -lookup '*Entitlement*' \
+    -lookup '*entitlement*' \
+    -lookup '*hasBoolEntitlement*' \
+    -lookup '*MRDMediaRemoteClient*' \
+    "${framework}"
 fi
 
 if [[ -f "${sdk_current}" ]]; then

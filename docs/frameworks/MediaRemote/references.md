@@ -15,6 +15,7 @@ Add references only after they have been read or locally verified.
 - `docs/frameworks/MediaRemote/now-playing-architecture.md`
 - `docs/frameworks/MediaRemote/agents-daemons.md`
 - `docs/frameworks/MediaRemote/daemon-observation.md`
+- `docs/frameworks/MediaRemote/entitlement-model.md`
 - `docs/frameworks/MediaRemote/xpc-and-messages.md`
 - `docs/frameworks/MediaRemote/permissions-policy.md`
 - `docs/frameworks/MediaRemote/routes-output-devices.md`
