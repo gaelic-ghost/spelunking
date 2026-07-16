@@ -140,6 +140,8 @@ Rejected follow-up: calling `MRMediaRemoteGetNowPlayingInfoForClient` with the p
 
 Rejected queue follow-up: calling `MRMediaRemoteRequestNowPlayingPlaybackQueueForPlayerSync` with the path-derived `MRPlayer` object crashed in the non-sync queue request path. `mr-now-playing-probe --origins --queue` now reports this boundary instead of calling the unsafe function.
 
+Function-start evidence around the player path shows internal framework methods such as `MRNowPlayingOriginClient nowPlayingClientForPlayerPath:`, `MRNowPlayingClient initWithPlayerPath:`, and `MRNowPlayingPlayerClient initWithPlayerPath:`. That suggests a wrapper object may be constructed from the full path before metadata/queue APIs are safe.
+
 ## Next Runtime Steps
 
 - Resolve metadata from the active `MRPlayerPath` without passing `MRClient` to `MRMediaRemoteGetNowPlayingInfoForClient`.

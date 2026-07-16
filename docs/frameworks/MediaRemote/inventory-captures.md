@@ -10,8 +10,8 @@ Raw captures are intentionally ignored by Git under `research/**/captures/`. Pro
 
 | Field | Value |
 | --- | --- |
-| Timestamp | `20260716T073933Z` |
-| Capture root | `research/MediaRemote/captures/20260716T073933Z` |
+| Timestamp | `20260716T080533Z` |
+| Capture root | `research/MediaRemote/captures/20260716T080533Z` |
 | Active framework image | `/System/Library/PrivateFrameworks/MediaRemote.framework/Versions/A/MediaRemote` |
 | Active OS | macOS 26.5.2, build 25F84 |
 | Selected Xcode SDK | Xcode 26.6, MacOSX26.5 SDK |
@@ -21,6 +21,7 @@ Raw captures are intentionally ignored by Git under `research/**/captures/`. Pro
 
 - `live-symbols.txt`: exported symbols from the live dyld shared-cache image.
 - `dyld-exports.txt`, `dyld-imports.txt`, `dyld-linked-dylibs.txt`, `dyld-load-commands.txt`: `dyld_info` views over the live framework image.
+- `dyld-function-starts.txt`: function-start names and addresses, useful for recovering internal method/function neighborhoods when header dumping is unavailable.
 - `dyld-cstrings.txt`, `dyld-oslogstrings.txt`: string and os-log evidence from the live framework image.
 - `dyld-objc-classnames.txt`, `dyld-objc-method-names.txt`, `dyld-objc-method-types.txt`: best-effort Objective-C sections from dyld tooling.
 - `sdk-current-symbols.txt`, `sdk-beta-symbols.txt`: symbols named by the installed Xcode 26 and Xcode 27 beta `.tbd` stubs.

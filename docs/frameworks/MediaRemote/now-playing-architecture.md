@@ -53,6 +53,26 @@ The path-derived client exposes bundle identifier, display name, and process ide
 
 The path-derived objects are useful for identity, but they are not interchangeable with every higher-level MediaRemote API. Two crashes confirmed that `MRMediaRemoteGetNowPlayingInfoForClient` and `MRMediaRemoteRequestNowPlayingPlaybackQueueForPlayerSync` expect a narrower object shape than the `MRClient`/`MRPlayer` extracted from `MRPlayerPath`.
 
+`dyld_info -function_starts` adds useful implementation context around this path:
+
+- `MRMediaRemoteGetLocalNowPlayingClient`
+- `MRNowPlayingPlayerPathCreate`
+- `MRNowPlayingPlayerPathSetOrigin`
+- `MRNowPlayingPlayerPathSetClient`
+- `MRNowPlayingPlayerPathSetPlayer`
+- `MRMediaRemoteGetLocalOrigin`
+- `MRNowPlayingPlayerPathGetClient`
+- `MRNowPlayingClientGetProcessIdentifier`
+- `MRNowPlayingClientGetBundleIdentifier`
+- `MRNowPlayingPlayerPathGetPlayer`
+- `MRMediaRemoteGetDefaultNowPlayingPlayer`
+- `MRNowPlayingOriginClientManager playerClientForPlayerPath:`
+- `MRNowPlayingOriginClient nowPlayingClientForPlayerPath:`
+- `MRNowPlayingClient initWithPlayerPath:`
+- `MRNowPlayingPlayerClient initWithPlayerPath:`
+
+Inference: for richer metadata, the next cleaner path is likely through `MRNowPlayingOriginClientManager`/`MRNowPlayingPlayerClient` behavior or a request API that accepts the full player path, not through the raw path-derived client/player object alone.
+
 ## Controller Generations
 
 OS log strings identify several now-playing controller implementations:
