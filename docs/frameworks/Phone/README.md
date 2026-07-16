@@ -37,6 +37,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Public iPhoneOS 27.0 SDK header/interface inventory for CallKit and LiveCommunicationKit
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for call-history, TelephonyUtilities, and CallKit surfaces
+- [x] Read-only Objective-C runtime metadata capture for CallsXPC, CallsPersistence, and PhoneAppIntents surfaces
 - [x] First-pass notification delivery classification from launchd and SDK symbol evidence
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
 - [ ] OS comparison against another macOS build
@@ -192,10 +193,15 @@ Verified by the local `spelunk objc-runtime` helper loading:
 - `/System/Library/PrivateFrameworks/TelephonyUtilities.framework/TelephonyUtilities`
 - `/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory`
 - `/System/Library/Frameworks/CallKit.framework/CallKit`
+- `/System/Library/PrivateFrameworks/CallsXPC.framework/CallsXPC`
+- `/System/Library/PrivateFrameworks/CallsPersistence.framework/CallsPersistence`
+- `/System/Library/PrivateFrameworks/PhoneAppIntents.framework/PhoneAppIntents`
 
 The capture also attempted `/System/Library/PrivateFrameworks/CallHistoryDB.framework/CallHistoryDB`; dyld reported no active file or dyld-cache image for that install name on this machine.
 
 The `TU*`, `CH*`, `Call*`, `CX*`, and `Phone*` capture produced 439 Objective-C classes and 181 Objective-C protocols on macOS 26.5.2. This is runtime metadata, not a generated public/private interface; method and property names are observed selectors/properties and still need behavior confirmation.
+
+The `Calls*`, `CX*`, `CH*`, `Phone*`, and selected `TU*` capture produced 225 Objective-C classes and 97 Objective-C protocols. See `types.md` for the stable type-family inventory.
 
 High-signal observed class families:
 

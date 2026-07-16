@@ -17,8 +17,8 @@
 - [x] Capture private SDK notification constant families.
 - [x] Capture read-only Objective-C runtime metadata for IM private frameworks with `spelunk objc-runtime`.
 - [x] First-pass classify notification delivery mechanisms from launchd and SDK symbol evidence.
+- [x] Generate first-pass class/protocol/selector inventory for `IMDPersistence`, `IMDaemonCore`, and `MessagesKit`.
 - [ ] Extract live dyld shared cache images for full IM private framework metadata.
-- [ ] Generate full class/protocol/selector inventory for `IMDPersistence`, `IMDaemonCore`, and `MessagesKit`.
 - [ ] Observe notification delivery with controlled read-only observers or log predicates.
 - [ ] Attach read-only logging predicates while manually using Messages.
 

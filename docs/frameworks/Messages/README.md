@@ -37,6 +37,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Public iPhoneOS 27.0 SDK header inventory for Messages, MessageUI, and Shared With You
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for IM private frameworks
+- [x] Read-only Objective-C runtime metadata capture for IMD persistence, daemon, and MessagesKit surfaces
 - [x] First-pass notification delivery classification from launchd and SDK symbol evidence
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
 - [ ] OS comparison against another macOS build
@@ -232,8 +233,13 @@ Verified by the local `spelunk objc-runtime` helper loading:
 - `/System/Library/PrivateFrameworks/IMCore.framework/IMCore`
 - `/System/Library/PrivateFrameworks/IMSharedUtilities.framework/IMSharedUtilities`
 - `/System/Library/PrivateFrameworks/IMFoundation.framework/IMFoundation`
+- `/System/Library/PrivateFrameworks/IMDPersistence.framework/IMDPersistence`
+- `/System/Library/PrivateFrameworks/IMDaemonCore.framework/IMDaemonCore`
+- `/System/Library/PrivateFrameworks/MessagesKit.framework/MessagesKit`
 
 The narrow `IM*` capture produced 888 Objective-C classes and 150 Objective-C protocols on macOS 26.5.2. This is runtime metadata, not a generated public interface; method and property names are observed selectors/properties and still need behavior confirmation before being treated as stable contracts.
+
+The `IMD*`, `IMDaemon*`, and selected `CK*` MessagesKit capture produced 456 Objective-C classes and 105 Objective-C protocols. See `types.md` for the stable type-family inventory.
 
 High-signal observed class families:
 
