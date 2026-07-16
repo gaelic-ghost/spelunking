@@ -189,6 +189,53 @@ debug imports from the live `WallpaperAgent` binary. Important imports:
 - `XPC.XPCReceivedMessage.handoffReply(to:_:)`
 - `XPC.XPCReceivedMessage.reply(_:)`
 
+## Supporting Type and Security Evidence
+
+Use the repository helper for a repeatable static inventory:
+
+```zsh
+tools/inspect-wallpaper-supporting-types.sh
+```
+
+The helper combines SDK stub symbols, `WallpaperAgent` strings, and dyld-cache
+string windows for the supporting types that are currently blocking a real
+normal-agent redraw message.
+
+Observed static facts:
+
+- `Wallpaper.ContentType` exports `Codable`, `CaseIterable`,
+  `CustomStringConvertible`, `allCases`, `description`, `init(from:)`, and
+  `encode(to:)`.
+- `Wallpaper.AssertionValue` exports `Codable`, `Hashable`, `Equatable`,
+  `CustomStringConvertible`, `description`, `init(from:)`, and `encode(to:)`.
+- `Wallpaper.AssertionPresentationMode` exports `RawRepresentable`,
+  `Codable`, `init(rawValue:)`, and `rawValue` with raw type `String`.
+- No `Wallpaper.ContentType` cases, `AssertionValue` cases, or
+  `AssertionPresentationMode` raw strings were recovered from the current SDK
+  stubs, agent import symbols, or dyld-cache string windows.
+- `WallpaperTypes.WallpaperSettingsViewModel.ContentType` is a separate
+  `Int` raw-value enum with `init(rawValue:)` and `rawValue`; its cases were
+  not recovered.
+- `WallpaperAgent` strings include `WallpaperStoreContentType`,
+  `running-assertions`, `extension`, `screenSaver`, `inProcess`,
+  `ContentDescriptor type=inprocess`, `ContentDescriptor type=screensaver`,
+  and `ContentDescriptor type=extension`. Treat these as agent/store/provider
+  vocabulary unless a later runtime or metadata pass ties them to
+  `Wallpaper.ContentType`.
+- Agent strings also include `Unknown XPC Sender`, `Remote process %{public}s
+  attempting to connect`, `Added Client Assertion: %{public}s`, and
+  `Removed Client Assertion: %{public}s`.
+- Dyld-cache strings name `AllowAllXPCSecurityPolicy`,
+  `EntitlementXPCSecurityPolicy`, `AgentXPCSecurityPolicy`, and
+  `WallpaperXPCConnectionSecurityPolicy`.
+- `Wallpaper.AgentXPCSecurityPolicy` exports `allow(process:)` and
+  `checkAccess(message:for:)`, confirming that normal-agent messages need both
+  valid Swift/XPC encoding and per-message access evaluation.
+
+`swift-inspect --help` was checked as a possible metadata route. It is a live
+runtime process-inspection tool, not a static extractor, so it was not used
+against `WallpaperAgent` in this pass.
+
 For focused receiver disassembly windows, use:
 
 ```zsh

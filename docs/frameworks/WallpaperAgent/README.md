@@ -90,6 +90,9 @@ Observed non-mutating results from this branch:
 - [x] Static receiver-side implementation trace of `WallpaperDebugServer`
       decode, async handoff, extension lookup, `handleDebugRequest` dispatch,
       error-response construction, and response reply
+- [x] Static supporting-type and security-policy evidence for
+      `ContentType`, `AssertionValue`, `AssertionPresentationMode`,
+      `WallpaperStoreContentType`, and `AgentXPCSecurityPolicy`
 - [ ] SIP-enabled proof that an ordinary client can successfully call the
       private Swift/XPC envelope
 - [ ] SIP-enabled proof for a non-mutating redraw request
@@ -340,6 +343,12 @@ The security policy exports:
 This means every normal-agent message must be evaluated as both a Codable
 message-shape problem and an authorization problem.
 
+The agent also contains receiver-side strings for `Unknown XPC Sender` and
+`Remote process %{public}s attempting to connect`. These strings confirm that
+the agent records remote-process identity during normal-service connection
+handling. They do not prove which caller identities are accepted for each
+message.
+
 ### Request Enum
 
 Recovered `AgentXPCMessage` cases:
@@ -427,14 +436,28 @@ Recovered supporting enum detail:
 | Type | Recovered cases or values | Evidence |
 | --- | --- | --- |
 | `ViewModelRefreshReason` | `launch`, `navigation`, `wallpaperInstallation` | Exported case constructor symbols in `Wallpaper.tbd`. |
-| `ContentType` | cases not recovered yet | `ContentType` is exported as `Codable`, `CaseIterable`, and `CustomStringConvertible`, but no case constructor symbols are present in the SDK stub. |
-| `AssertionValue` | cases not recovered yet | `AssertionValue` is exported as `Codable`, `Hashable`, and `CustomStringConvertible`, but no case constructor symbols are present in the SDK stub. |
-| `AssertionPresentationMode` | raw type `String`; concrete raw values not recovered yet | `init(rawValue:)` and `rawValue` are exported. |
+| `ContentType` | cases not recovered | Exported as `Codable`, `CaseIterable`, `CustomStringConvertible`, with `allCases`, `description`, `init(from:)`, and `encode(to:)`. No case constructors or raw values were recovered from the SDK stub, agent imports, or dyld-cache string windows. |
+| `AssertionValue` | cases not recovered | Exported as `Codable`, `Hashable`, `Equatable`, and `CustomStringConvertible`, with `description`, `init(from:)`, and `encode(to:)`. No case constructors or raw values were recovered from the SDK stub, agent imports, or dyld-cache string windows. |
+| `AssertionPresentationMode` | raw type `String`; concrete raw values not recovered | `init(rawValue:)`, `rawValue`, `RawRepresentable`, and `Codable` are exported, but no raw string constants were recovered from the current static evidence. |
+| `WallpaperTypes.WallpaperSettingsViewModel.ContentType` | raw type `Int`; cases not recovered | Exported as a separate settings-view-model enum with `init(rawValue:)` and `rawValue`; this is not enough to map it to `Wallpaper.ContentType`. |
+| `WallpaperStoreContentType` | likely store/runtime categories: `running-assertions`, `extension`, `screenSaver`, `inProcess` | Recovered from `WallpaperAgent` string windows near `ContentDescriptor type=inprocess`, `ContentDescriptor type=screensaver`, and `ContentDescriptor type=extension`. This appears to be agent/store vocabulary, not the exported `Wallpaper.ContentType` enum. |
 
 The private `Wallpaper` and `WallpaperTypes` Swift modules are not importable
 from this SDK, even though their `.tbd` exports exist. That blocks runtime
 queries such as `ContentType.allCases` from a normal Swift client until a
 separate private-module or metadata extraction path is available.
+
+Keep these similarly named surfaces distinct:
+
+- `Wallpaper.ContentType` is the normal-agent parameter type used by
+  `ensureViewModelIsUpToDate(contentTypes:reason:sender:)`.
+- `WallpaperTypes.WallpaperSettingsViewModel.ContentType` is a separate
+  settings-model enum with `Int` raw values.
+- `WallpaperStoreContentType` and `ContentDescriptor type=...` strings are
+  agent/store/provider vocabulary observed in `WallpaperAgent`.
+- Strings such as `desktop`, `idle`, `linked`, `DesktopCodingKeys`, and
+  `ScreenSaverCodingKeys` are useful context for settings models and coding
+  keys, but are not current proof of `Wallpaper.ContentType` cases.
 
 ### Choice and Settings Payloads
 
@@ -493,6 +516,9 @@ Recovered `WallpaperSettingsViewModel.RefreshPolicy` cases:
 
 `WallpaperSettingsViewModel.ContentType` exists as an `Int` raw-value enum, but
 its concrete cases were not recovered from the SDK stub.
+
+Current static evidence does not prove that settings view-model content cases
+share names or values with `Wallpaper.ContentType`.
 
 ## WallpaperDebugServer API
 
@@ -703,6 +729,13 @@ host policy, sandbox policy, or framework-level checks may still reject an
 ordinary client before or during dispatch. Treat ordinary-client access as
 unproven until a SIP-enabled runtime probe succeeds.
 
+Shared-cache strings name `AllowAllXPCSecurityPolicy`,
+`EntitlementXPCSecurityPolicy`, `AgentXPCSecurityPolicy`, and
+`WallpaperXPCConnectionSecurityPolicy`, while the normal service explicitly
+exports `AgentXPCSecurityPolicy.checkAccess(message:for:)`. Current static
+evidence does not prove that any of those policies is attached to
+`WallpaperDebugServer`.
+
 ### Extension Identifiers
 
 Built-in wallpaper extensions observed in `/System/Library/ExtensionKit/Extensions`:
@@ -884,6 +917,8 @@ Not accessible or not assumed accessible:
   `../../../tools/extract-wallpaper-symbols.sh`
 - Receiver disassembly-window helper:
   `../../../tools/inspect-wallpaper-debug-receiver.sh`
+- Supporting enum/security helper:
+  `../../../tools/inspect-wallpaper-supporting-types.sh`
 - Ghidra string and symbol xref helper:
   `../../../tools/ghidra/DumpWallpaperDebugReferences.java`
 - LaunchAgent: `/System/Library/LaunchAgents/com.apple.wallpaper.plist`
