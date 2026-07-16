@@ -1,6 +1,6 @@
 # Spelunking
 
-Private Apple platform research for SIP-disabled, "peer behind the curtain" exploration.
+Private Apple platform research for local, user-consented accessibility and SIP-disabled "peer behind the curtain" exploration.
 
 This repository is for focused investigations into macOS, iOS, and Apple-platform frameworks, services, daemons, private APIs, headers, symbols, and runtime behavior. Each pass should study one framework, service, subsystem, or tightly related category at a time, then leave behind documentation that is useful for future tools and projects.
 
@@ -27,7 +27,7 @@ Every target should answer the same core questions:
 
 Keep raw captures in `research/<Name>/` and promote only cleaned, reusable knowledge into `docs/frameworks/<Name>/`.
 
-## Current Target
+## Current Targets
 
 `MediaRemote.framework` and related media-control surfaces:
 
@@ -38,3 +38,18 @@ Keep raw captures in `research/<Name>/` and promote only cleaned, reusable knowl
 - macOS 26.5 versus macOS 27 beta SDK differences
 
 See `docs/frameworks/MediaRemote/README.md` for the starting outline.
+
+`UserNotifications` and `NotificationCenter.app` accessibility research:
+
+- Notification Center's supported, app-scoped UserNotifications API boundary
+- read-only Accessibility inspection of the system Notification Center UI
+- observer capability evidence for the active macOS release
+- preview-privacy and TCC limitations
+
+Run the read-only probe with:
+
+```sh
+swift run spelunk notifications --max-depth 6
+```
+
+It requests no interaction with the notification UI and performs no accessibility actions. The host process must already have Accessibility permission. See `docs/frameworks/UserNotifications/README.md` for the research boundary and `research/UserNotifications/README.md` for the evidence plan.
