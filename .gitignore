@@ -7,6 +7,7 @@ xcuserdata/
 
 # Local-only research output that may be large, noisy, or machine-specific.
 research/**/captures/
+research/**/experiments/
 research/**/generated/
 research/**/*.log
 research/**/*.tmp

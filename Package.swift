@@ -13,6 +13,31 @@ let package = Package(
             targets: ["SpelunkingKit"]
         ),
         .executable(
+            name: "mr-now-playing-probe",
+            targets: ["MRNowPlayingProbe"]
+        ),
+        .executable(
+            name: "mr-internal-probe",
+            targets: ["MRInternalProbe"]
+        ),
+        .executable(
+            name: "mr-interface-probe",
+            targets: ["MRInterfaceProbe"]
+        ),
+        .executable(
+            name: "mr-route-probe",
+            targets: ["MRRouteProbe"]
+        ),
+        .library(
+            name: "MRXPCTraceInterpose",
+            type: .dynamic,
+            targets: ["MRXPCTraceInterpose"]
+        ),
+        .executable(
+            name: "now-playing-fixture",
+            targets: ["NowPlayingFixture"]
+        ),
+        .executable(
             name: "spelunk",
             targets: ["spelunk"]
         )
@@ -24,6 +49,24 @@ let package = Package(
         .target(
             name: "SpelunkingKit",
             dependencies: ["CSpelunkingNotify"]
+        ),
+        .executableTarget(
+            name: "MRNowPlayingProbe"
+        ),
+        .executableTarget(
+            name: "MRInternalProbe"
+        ),
+        .executableTarget(
+            name: "MRInterfaceProbe"
+        ),
+        .executableTarget(
+            name: "MRRouteProbe"
+        ),
+        .target(
+            name: "MRXPCTraceInterpose"
+        ),
+        .executableTarget(
+            name: "NowPlayingFixture"
         ),
         .executableTarget(
             name: "spelunk",
