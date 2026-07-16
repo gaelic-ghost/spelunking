@@ -209,9 +209,11 @@ High-signal `CallHistory` constants:
 
 Next sources:
 
-- `notifyutil -l` filtered for live Darwin notification names
+- launchd notify trigger snapshots and targeted `notifyutil -g` probes
 - log stream predicates for call-service subsystem names
 - controlled runtime observer helper to classify notification center vs Darwin notify behavior
+
+See `notifications.md` for the current delivery-mechanism classification.
 
 ## Version Differences
 

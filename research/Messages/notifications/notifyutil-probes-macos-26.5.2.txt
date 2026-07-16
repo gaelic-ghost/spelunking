@@ -1,0 +1,18 @@
+# Messages targeted notifyutil state probes
+# notifyutil on this macOS does not support listing all keys; these are targeted -g probes for names found in LaunchEvents or notification-like symbols.
+## com.apple.imautomatichistorydeletionagent.prefchange
+com.apple.imautomatichistorydeletionagent.prefchange 0
+## com.apple.idstransfers.idslaunchnotification
+com.apple.idstransfers.idslaunchnotification 0
+## com.apple.private.IMCore.LoggedIntoHSA2
+com.apple.private.IMCore.LoggedIntoHSA2 0
+## IMMessageSentDistributedNotification
+IMMessageSentDistributedNotification 0
+## IMDMessageRecordRetractNotification
+IMDMessageRecordRetractNotification 0
+## IMAccountLoggedInNotification
+IMAccountLoggedInNotification 0
+## IMChatMessageReceivedNotification
+IMChatMessageReceivedNotification 0
+## control.random.spelunking.nonexistent.26.5.2
+control.random.spelunking.nonexistent.26.5.2 0

@@ -51,6 +51,17 @@ rg -o '_\$s[^,[:space:]]+' /Applications/Xcode-beta.app/Contents/Developer/Platf
 rg -o "_[A-Za-z0-9_]*(Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMCore.framework/Versions/A/IMCore.tbd
 swift run spelunk objc-runtime --image /System/Library/PrivateFrameworks/IMCore.framework/IMCore --image /System/Library/PrivateFrameworks/IMSharedUtilities.framework/IMSharedUtilities --image /System/Library/PrivateFrameworks/IMFoundation.framework/IMFoundation --prefix IM --methods --properties --protocols --json > research/Messages/runtime/objc-runtime-im-macos-26.5.2.json
 swift run spelunk objc-runtime --image /System/Library/PrivateFrameworks/IMCore.framework/IMCore --image /System/Library/PrivateFrameworks/IMSharedUtilities.framework/IMSharedUtilities --image /System/Library/PrivateFrameworks/IMFoundation.framework/IMFoundation --prefix IM --prefix CK --methods --properties --protocols --json > research/Messages/runtime/objc-runtime-imcore-macos-26.5.2.json
+mkdir -p research/Messages/notifications
+rg -o "_[A-Za-z0-9_]*(Darwin|Distributed|Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMCore.framework/Versions/A/IMCore.tbd
+rg -o "_[A-Za-z0-9_]*(Darwin|Distributed|Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMDPersistence.framework/Versions/A/IMDPersistence.tbd
+rg -o "_[A-Za-z0-9_]*(Darwin|Distributed|Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMDaemonCore.framework/Versions/A/IMDaemonCore.tbd
+rg -o "_[A-Za-z0-9_]*(Darwin|Distributed|Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMSharedUtilities.framework/Versions/A/IMSharedUtilities.tbd
+plutil -p /System/Library/LaunchAgents/com.apple.imagent.plist
+plutil -p /System/Library/LaunchAgents/com.apple.imautomatichistorydeletionagent.plist
+plutil -p /System/Library/LaunchAgents/com.apple.imtransferagent.plist
+notifyutil -g com.apple.imautomatichistorydeletionagent.prefchange
+notifyutil -g com.apple.idstransfers.idslaunchnotification
+notifyutil -g control.random.spelunking.nonexistent.26.5.2
 ```
 
 Privacy note: the SQLite commands captured table and column names only. No row data, message text, handles, attachment names, or counts were captured.
@@ -59,5 +70,5 @@ Privacy note: the SQLite commands captured table and column names only. No row d
 
 - dyld shared cache extraction command and output paths
 - generated interfaces for IM private frameworks
-- notification delivery classification
+- notification observer/logging proof
 - logging baseline

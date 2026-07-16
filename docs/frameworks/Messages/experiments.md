@@ -14,9 +14,10 @@
 - [x] Demangle private SDK `.tbd` Swift symbols for IMCore import/export families.
 - [x] Capture private SDK notification constant families.
 - [x] Capture read-only Objective-C runtime metadata for IM private frameworks with `spelunk objc-runtime`.
+- [x] First-pass classify notification delivery mechanisms from launchd and SDK symbol evidence.
 - [ ] Extract live dyld shared cache images for full IM private framework metadata.
 - [ ] Generate full class/protocol/selector inventory for `IMDPersistence`, `IMDaemonCore`, and `MessagesKit`.
-- [ ] Classify notification constants by delivery mechanism without sending messages.
+- [ ] Observe notification delivery with controlled read-only observers or log predicates.
 - [ ] Attach read-only logging predicates while manually using Messages.
 
 ## Mutating Experiments

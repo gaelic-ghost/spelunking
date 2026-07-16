@@ -51,6 +51,17 @@ rg -o '_\$s[^,[:space:]]+' /Applications/Xcode-beta.app/Contents/Developer/Platf
 rg -o "_[A-Za-z0-9_]*(Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/TelephonyUtilities.framework/Versions/A/TelephonyUtilities.tbd
 rg -o "_[A-Za-z0-9_]*(Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/CallHistory.framework/Versions/A/CallHistory.tbd
 swift run spelunk objc-runtime --image /System/Library/PrivateFrameworks/TelephonyUtilities.framework/TelephonyUtilities --image /System/Library/PrivateFrameworks/CallHistory.framework/CallHistory --image /System/Library/PrivateFrameworks/CallHistoryDB.framework/CallHistoryDB --image /System/Library/Frameworks/CallKit.framework/CallKit --prefix TU --prefix CH --prefix Call --prefix CX --prefix Phone --methods --properties --protocols --json > research/Phone/runtime/objc-runtime-callservices-macos-26.5.2.json
+mkdir -p research/Phone/notifications
+rg -o "_[A-Za-z0-9_]*(Darwin|Distributed|Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/TelephonyUtilities.framework/Versions/A/TelephonyUtilities.tbd
+rg -o "_[A-Za-z0-9_]*(Darwin|Distributed|Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/CallHistory.framework/Versions/A/CallHistory.tbd
+rg -o "_[A-Za-z0-9_]*(Darwin|Distributed|Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/CallsXPC.framework/Versions/A/CallsXPC.tbd
+rg -o "_[A-Za-z0-9_]*(Darwin|Distributed|Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/CallsPersistence.framework/Versions/A/CallsPersistence.tbd
+plutil -p /System/Library/LaunchAgents/com.apple.CallHistoryPluginHelper.plist
+plutil -p /System/Library/LaunchAgents/com.apple.CallHistorySyncHelper.plist
+plutil -p /System/Library/LaunchAgents/com.apple.telephonyutilities.callservicesd.plist
+notifyutil -g com.apple.CallHistoryPluginHelper.launchnotification
+notifyutil -g com.apple.callhistorysync.idslaunchnotification
+notifyutil -g control.random.spelunking.nonexistent.26.5.2
 ```
 
 Observed `sdef` result:
@@ -65,5 +76,5 @@ Privacy note: no call-history rows, phone numbers, contacts, voicemail metadata,
 
 - dyld shared cache extraction command and output paths
 - generated interfaces for call private frameworks
-- notification delivery classification
+- notification observer/logging proof
 - logging baseline

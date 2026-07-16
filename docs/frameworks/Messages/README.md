@@ -35,6 +35,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Public iPhoneOS 27.0 SDK header inventory for Messages, MessageUI, and Shared With You
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for IM private frameworks
+- [x] First-pass notification delivery classification from launchd and SDK symbol evidence
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
 - [ ] OS comparison against another macOS build
 
@@ -334,13 +335,14 @@ Inference: database access is brokered through a privileged XPC service with a t
 - Which XPC messages are exchanged between `Messages.app`, `imagent`, `IMDPersistenceAgent`, `MessagesBlastDoorService`, and transfer/transcoding agents?
 - Which `chat.db` task flags and message state integer values map to named IMCore constants?
 - Which fields are stable across macOS 26.5.2 and macOS 27.0 SDK assumptions?
-- Which observed notification constants are posted in-process, through distributed notification center, through Darwin notify, or only used as local symbols?
+- Which remaining unclassified notification constants are posted in-process, through distributed notification center, through Darwin notify, or only used as local symbols?
 - Which Apple Events operations require app launch, explicit Automation consent, or foreground user context?
 
 ## References
 
 - `research/Messages/README.md`
 - `docs/frameworks/Messages/symbols.md`
+- `docs/frameworks/Messages/notifications.md`
 - `docs/frameworks/Messages/experiments.md`
 - Apple Developer Documentation: [Messages framework](https://developer.apple.com/documentation/messages)
 - Apple Developer Documentation: [Shared with You framework](https://developer.apple.com/documentation/sharedwithyou)

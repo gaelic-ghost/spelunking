@@ -35,6 +35,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Public iPhoneOS 27.0 SDK header/interface inventory for CallKit and LiveCommunicationKit
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for call-history, TelephonyUtilities, and CallKit surfaces
+- [x] First-pass notification delivery classification from launchd and SDK symbol evidence
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
 - [ ] OS comparison against another macOS build
 
@@ -323,12 +324,13 @@ Inference: Phone’s user-facing app sits above a broad `callservicesd` broker p
 - Which Phone App Intents are user-invocable, Siri-only, or private/system-only?
 - Which URL schemes open visible UI only versus initiating privileged background actions for Apple-signed callers?
 - How does `Phone.app` divide responsibilities with `FaceTime.app` on macOS?
-- Which observed TelephonyUtilities and CallHistory notification constants are distributed, Darwin, notification-center, or internal-only?
+- Which remaining unclassified TelephonyUtilities and CallHistory notification constants are distributed, Darwin, notification-center, or internal-only?
 
 ## References
 
 - `research/Phone/README.md`
 - `docs/frameworks/Phone/symbols.md`
+- `docs/frameworks/Phone/notifications.md`
 - `docs/frameworks/Phone/experiments.md`
 - Apple Developer Documentation: [CallKit framework](https://developer.apple.com/documentation/callkit)
 - Apple Developer Documentation: [CoreTelephony framework](https://developer.apple.com/documentation/coretelephony)
