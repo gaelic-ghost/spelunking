@@ -24,4 +24,11 @@ public extension SPKResearchTarget {
         documentationPath: "docs/frameworks/MediaRemote",
         researchPath: "research/MediaRemote"
     )
+
+    static let wallpaperAgent = SPKResearchTarget(
+        name: "WallpaperAgent",
+        summary: "WallpaperAgent, Wallpaper Debug XPC, and SIP-enabled userland restart or redraw research.",
+        documentationPath: "docs/frameworks/WallpaperAgent",
+        researchPath: "research/WallpaperAgent"
+    )
 }

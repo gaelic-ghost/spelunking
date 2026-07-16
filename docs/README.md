@@ -4,6 +4,11 @@ This directory holds durable writeups promoted from raw research.
 
 Use `docs/frameworks/<Name>/` for framework, daemon, service, and subsystem writeups. Keep raw dumps, generated headers, command transcripts, and scratch notes under `research/<Name>/` until they are cleaned up enough to be useful later.
 
+Current target writeups:
+
+- `frameworks/MediaRemote/`: MediaRemote and related media-control surfaces.
+- `frameworks/WallpaperAgent/`: WallpaperAgent, Wallpaper Debug XPC, and SIP-enabled userland redraw/restart candidates.
+
 Each target writeup should include:
 
 - scope

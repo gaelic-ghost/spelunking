@@ -27,7 +27,7 @@ Every target should answer the same core questions:
 
 Keep raw captures in `research/<Name>/` and promote only cleaned, reusable knowledge into `docs/frameworks/<Name>/`.
 
-## Current Target
+## Current Targets
 
 `MediaRemote.framework` and related media-control surfaces:
 
@@ -38,3 +38,12 @@ Keep raw captures in `research/<Name>/` and promote only cleaned, reusable knowl
 - macOS 26.5 versus macOS 27 beta SDK differences
 
 See `docs/frameworks/MediaRemote/README.md` for the starting outline.
+
+`WallpaperAgent` and related wallpaper-control surfaces:
+
+- `WallpaperAgent` process, launchd job, and Mach services
+- `com.apple.wallpaper` normal XPC protocol
+- `com.apple.wallpaper.debug.service` and `WallpaperDebugRequestMessage`
+- SIP-enabled userland restart and redraw candidates
+
+See `docs/frameworks/WallpaperAgent/README.md` for the current map.
