@@ -17,7 +17,9 @@
 - [ ] Document userland-callable APIs for now-playing metadata, playback commands, queue information, origin discovery, and route or destination behavior.
 - [ ] Mark calls that require entitlements, elevated privileges, SIP-disabled conditions, or private-framework linking.
 - [x] Build one small Swift helper that safely probes now-playing state without mutating playback.
-- [ ] Confirm non-empty now-playing dictionary shape while active media is playing.
+- [x] Test the read-only helper against active Spotify playback.
+- [x] Build a metadata-only now-playing fixture and test whether it appears through MediaRemote.
+- [ ] Confirm non-empty now-playing dictionary shape through notification registration, player/client-specific queries, or an app-bundle fixture.
 
 ## Phase 2: Media Control Experiments
 

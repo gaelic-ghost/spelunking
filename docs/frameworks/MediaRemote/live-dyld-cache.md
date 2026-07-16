@@ -98,7 +98,7 @@ Symbol: MRMediaRemoteGetNowPlayingInfo
 Result: callback returned nil dictionary
 ```
 
-Interpretation: the function can be loaded and invoked from an ordinary local helper, but the current minimal call returned no now-playing dictionary. The next refinement should test with active playback and then, if still nil, add read-only notification subscription before fetching.
+Interpretation: the function can be loaded and invoked from an ordinary local helper, but the minimal call returned no now-playing dictionary. Active Spotify playback and a metadata-only CLI fixture also returned nil, so the next refinement is notification registration plus player/client-specific queries.
 
 ## Command and Mutation Surface
 

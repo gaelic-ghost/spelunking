@@ -58,3 +58,5 @@ Start with read-only discovery before sending playback commands or mutating rout
 Initial local evidence shows the active framework directories are dyld-cache framework shells rather than ordinary binary-bearing framework directories. Live binary inspection should use dyld shared-cache tooling or extracted cache images.
 
 See `live-dyld-cache.md` for the first live export classification and read-only now-playing probe result.
+
+See `runtime-probes.md` for the Spotify and fixture-backed runtime results.

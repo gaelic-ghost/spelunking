@@ -27,7 +27,15 @@ Result: callback returned nil dictionary
 
 Meaning:
 
-The helper successfully loads `MediaRemote.framework`, resolves `MRMediaRemoteGetNowPlayingInfo`, and receives a callback. On the baseline run, no dictionary was returned. Follow up with active playback; if the result is still nil, add read-only notification subscription before fetching.
+The helper successfully loads `MediaRemote.framework`, resolves `MRMediaRemoteGetNowPlayingInfo`, and receives a callback. On the baseline run, no dictionary was returned.
+
+Follow-up results:
+
+- Active Spotify playback still returned nil MediaRemote now-playing state through the direct read path.
+- A metadata-only `MPNowPlayingInfoCenter` fixture still returned nil MediaRemote now-playing state through the direct read path.
+- App-level callbacks with locally evidenced signatures returned `isPlaying=false`, PID `0`, and nil client in both cases.
+
+Next: keep a run loop alive after registering for notifications, then query players/clients and player-specific info.
 
 ## Mutating Experiments
 

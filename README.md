@@ -19,6 +19,8 @@ The first research target is `MediaRemote.framework` on macOS 26.5 and the insta
 
 - `spelunk`: prints the current seeded research target paths.
 - `mr-now-playing-probe`: read-only dynamic `MediaRemote.framework` probe for `MRMediaRemoteGetNowPlayingInfo`.
+- `now-playing-fixture`: metadata-only fixture for testing whether `MPNowPlayingInfoCenter` publication appears through MediaRemote.
+- `tools/mediaremote-inventory.zsh`: repeatable local capture script for dyld-cache exports, imports, strings, ObjC names, SDK diffs, support binaries, resources, and entitlements.
 
 ## Research Shape
 

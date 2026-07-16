@@ -17,6 +17,10 @@ let package = Package(
             targets: ["MRNowPlayingProbe"]
         ),
         .executable(
+            name: "now-playing-fixture",
+            targets: ["NowPlayingFixture"]
+        ),
+        .executable(
             name: "spelunk",
             targets: ["spelunk"]
         )
@@ -27,6 +31,9 @@ let package = Package(
         ),
         .executableTarget(
             name: "MRNowPlayingProbe"
+        ),
+        .executableTarget(
+            name: "NowPlayingFixture"
         ),
         .executableTarget(
             name: "spelunk",

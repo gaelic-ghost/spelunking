@@ -10,6 +10,7 @@ Add references only after they have been read or locally verified.
 
 - `research/MediaRemote/baseline-2026-07-15.md`
 - `docs/frameworks/MediaRemote/live-dyld-cache.md`
+- `docs/frameworks/MediaRemote/runtime-probes.md`
 - Active system framework shell: `/System/Library/PrivateFrameworks/MediaRemote.framework`
 - Active system support binaries: `mediaremoted`, `mediaremoteagent`
 - Selected Xcode 26 SDK stub: `MediaRemote.tbd`
