@@ -112,9 +112,10 @@ Command:
 
 ```sh
 tools/mediaremote-entitlement-experiment.zsh
+tools/mediaremote-entitlement-experiment.zsh --identity auto
 ```
 
-The runner builds `mr-internal-probe`, copies the product into an ignored capture directory, signs copied variants with ad-hoc signatures plus candidate entitlements, records the embedded entitlements, and captures each run.
+The runner builds `mr-internal-probe`, copies the product into an ignored capture directory, signs copied variants with candidate entitlements, records signature details and embedded entitlements, captures each run, and records a short policy-focused system log.
 
 Candidate entitlement families to test first:
 
@@ -138,7 +139,24 @@ Current result from capture `20260716T083329Z`:
 - Every ad-hoc signed private-entitlement variant exited with status 137 before running probe code.
 - Unified log evidence from AMFI/amfid reports `AppleMobileFileIntegrityError Code=-424 "The file is adhoc signed but contains restricted entitlements"` and kernel `load code signature error 4`.
 
-Interpretation: on this system, the first four candidate entitlement keys are restricted at code-signature validation time for an ad-hoc signed helper. They cannot currently be used as a simple SIP-disabled/ad-hoc-signing bypass for the Code 3 MediaRemote policy boundary.
+Current Apple Development identity result from capture `20260716T083557Z`:
+
+- `--identity auto` resolved to a local Apple Development certificate hash.
+- `codesign` succeeded for all four private-entitlement variants.
+- Signature details show an Apple Development chain and team identifier `BC73766F69`.
+- Each requested private entitlement is embedded in the corresponding variant.
+- Every private-entitlement variant still exited with status 137 before running probe code.
+- Unified log evidence includes taskgated reporting `Unsatisfied entitlements: com.apple.mediaremote.now-playing-read-access`; AMFI still reports restricted-entitlement validation failure and kernel `load code signature error 4`.
+
+Current Developer ID identity result from capture `20260716T083725Z`:
+
+- Explicit Developer ID signing with certificate hash `7C250E5B3750CAC924FD0960D224A7BA5E3E4399` succeeded for all four private-entitlement variants.
+- Signature details show a Developer ID Application chain and team identifier `BC73766F69`.
+- Each requested private entitlement is embedded in the corresponding variant.
+- Every private-entitlement variant still exited with status 137 before running probe code.
+- Unified log evidence names all four unsatisfied entitlement keys: `com.apple.mediaremote.now-playing-read-access`, `com.apple.mediaremote.full-now-playing-read-access`, `com.apple.mediaremote.device-info`, and `com.apple.nowplaying.entitlement`.
+
+Interpretation: on this system, the first four candidate entitlement keys are restricted at code-signature validation time for ad-hoc, local Apple Development, and Developer ID signing. They cannot currently be used as a simple SIP-disabled signing bypass for the Code 3 MediaRemote policy boundary.
 
 Risk: private entitlements may be rejected, ignored, or treated differently for non-Apple-signed binaries even on a SIP-disabled local system. The experiment records the resulting code signature, embedded entitlements, runtime error, and system log evidence so each future signing lane can be compared against the baseline.
 

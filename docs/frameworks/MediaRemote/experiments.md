@@ -45,11 +45,12 @@ Command:
 
 ```sh
 tools/mediaremote-entitlement-experiment.zsh
+tools/mediaremote-entitlement-experiment.zsh --identity auto
 ```
 
 Expected behavior:
 
-The runner builds `mr-internal-probe`, copies the product into an ignored experiment capture directory, signs copied variants with one candidate entitlement each, records the embedded entitlements, and runs the same internal wrapper request path for every variant.
+The runner builds `mr-internal-probe`, copies the product into an ignored experiment capture directory, signs copied variants with one candidate entitlement each, records signature details and embedded entitlements, and runs the same internal wrapper request path for every successfully signed variant.
 
 Candidate entitlements:
 
@@ -68,13 +69,30 @@ Capture `research/MediaRemote/experiments/entitlements/20260716T083329Z`:
 - Each private-entitlement variant exited with status 137 before probe output.
 - Unified log evidence reports AMFI/amfid `AppleMobileFileIntegrityError Code=-424 "The file is adhoc signed but contains restricted entitlements"` for the private-entitled variants.
 
+Capture `research/MediaRemote/experiments/entitlements/20260716T083557Z`:
+
+- `--identity auto` resolved to a local Apple Development certificate hash.
+- `codesign` succeeded for the same four private-entitlement variants.
+- Signature details show `Authority=Apple Development: Gale Williams (AMRC3N39SQ)` and `TeamIdentifier=BC73766F69`.
+- Each candidate entitlement embedded successfully.
+- Each private-entitlement variant still exited with status 137 before probe output.
+- Unified log evidence reports taskgated `Unsatisfied entitlements: com.apple.mediaremote.now-playing-read-access`, restricted entitlement validation failure, and kernel `load code signature error 4`.
+
+Capture `research/MediaRemote/experiments/entitlements/20260716T083725Z`:
+
+- Explicit Developer ID signing with certificate hash `7C250E5B3750CAC924FD0960D224A7BA5E3E4399` succeeded for the same four private-entitlement variants.
+- Signature details show `Authority=Developer ID Application: Gale Williams (BC73766F69)` and `TeamIdentifier=BC73766F69`.
+- Each candidate entitlement embedded successfully.
+- Each private-entitlement variant still exited with status 137 before probe output.
+- Unified log evidence names all four unsatisfied entitlement keys and reports restricted entitlement validation failure plus kernel `load code signature error 4`.
+
 Permissions, entitlements, or SIP notes:
 
-Private entitlements can embed successfully in an ad-hoc signature but still fail code-signature validation at launch. On this macOS 26.5.2 system, these first four candidates do not reach `mediaremoted`; AMFI kills the helper before MediaRemote can evaluate the request.
+Private entitlements can embed successfully in ad-hoc, Apple Development, or Developer ID signatures but still fail code-signature validation at launch. On this macOS 26.5.2 system, these first four candidates do not reach `mediaremoted`; AMFI kills the helper before MediaRemote can evaluate the request.
 
 Follow-up:
 
-Next signing lane should test whether a Developer ID or local Apple Development identity changes the launch boundary. If that still fails, the next useful path is daemon-side observation, an Apple-signed host process, or a non-entitlement metadata route rather than more ad-hoc entitlement variants.
+Next useful path is daemon-side observation, an Apple-signed host process, or a non-entitlement metadata route. Normal local signing identities are not enough to satisfy these restricted entitlement checks.
 
 ## Mutating Experiments
 
