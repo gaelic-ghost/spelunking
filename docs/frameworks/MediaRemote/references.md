@@ -10,6 +10,7 @@ Add references only after they have been read or locally verified.
 
 - `research/MediaRemote/baseline-2026-07-15.md`
 - `docs/frameworks/MediaRemote/live-dyld-cache.md`
+- `docs/frameworks/MediaRemote/sdk-live-differences.md`
 - `docs/frameworks/MediaRemote/runtime-probes.md`
 - `docs/frameworks/MediaRemote/runtime-interfaces.md`
 - `docs/frameworks/MediaRemote/inventory-captures.md`

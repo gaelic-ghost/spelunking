@@ -69,11 +69,11 @@ if [[ -n "${symbols_tool}" ]]; then
 fi
 
 if [[ -f "${sdk_current}" ]]; then
-  run_capture "sdk-current-tbd.txt" sed -n '1,240p' "${sdk_current}"
+  run_capture "sdk-current-tbd.txt" cat "${sdk_current}"
 fi
 
 if [[ -f "${sdk_beta}" ]]; then
-  run_capture "sdk-beta-tbd.txt" sed -n '1,240p' "${sdk_beta}"
+  run_capture "sdk-beta-tbd.txt" cat "${sdk_beta}"
 fi
 
 if [[ "${target}" == "MediaRemote" ]]; then
@@ -112,6 +112,11 @@ if [[ -f "${sdk_beta}" ]]; then
   comm -13 "${capture_root}/live-symbols.txt" "${capture_root}/sdk-beta-symbols.txt" > "${capture_root}/beta-sdk-only-vs-live.txt"
 fi
 
+if [[ -f "${capture_root}/sdk-current-symbols.txt" && -f "${capture_root}/sdk-beta-symbols.txt" ]]; then
+  comm -23 "${capture_root}/sdk-current-symbols.txt" "${capture_root}/sdk-beta-symbols.txt" > "${capture_root}/current-sdk-only-vs-beta-sdk.txt"
+  comm -13 "${capture_root}/sdk-current-symbols.txt" "${capture_root}/sdk-beta-symbols.txt" > "${capture_root}/beta-sdk-only-vs-current-sdk.txt"
+fi
+
 {
   log "# ${target} Inventory Capture"
   log
@@ -131,6 +136,11 @@ fi
     log "- beta SDK symbols: $(wc -l < "${capture_root}/sdk-beta-symbols.txt" | tr -d ' ')"
     log "- live-only vs beta SDK: $(wc -l < "${capture_root}/live-only-vs-beta-sdk.txt" | tr -d ' ')"
     log "- beta SDK-only vs live: $(wc -l < "${capture_root}/beta-sdk-only-vs-live.txt" | tr -d ' ')"
+  fi
+
+  if [[ -f "${capture_root}/beta-sdk-only-vs-current-sdk.txt" ]]; then
+    log "- beta SDK-only vs current SDK: $(wc -l < "${capture_root}/beta-sdk-only-vs-current-sdk.txt" | tr -d ' ')"
+    log "- current SDK-only vs beta SDK: $(wc -l < "${capture_root}/current-sdk-only-vs-beta-sdk.txt" | tr -d ' ')"
   fi
 } > "${capture_root}/SUMMARY.md"
 

@@ -66,6 +66,7 @@ See `runtime-probes.md` for the Spotify and fixture-backed runtime results.
 - `inventory-captures.md`: repeatable capture workflow and latest capture inventory.
 - `live-dyld-cache.md`: dyld-cache inspection notes, live/SDK symbol counts, and export buckets.
 - `symbols.md`: exported symbol families and SDK differences.
+- `sdk-live-differences.md`: macOS 26.5 live exports versus Xcode 26 SDK and Xcode 27 beta SDK deltas.
 - `now-playing-architecture.md`: now-playing identity, notifications, metadata keys, playback queues, and controller generations.
 - `runtime-probes.md`: local Swift probes and observed runtime behavior.
 - `runtime-interfaces.md`: recovered Objective-C runtime class interfaces and high-value request wrappers.

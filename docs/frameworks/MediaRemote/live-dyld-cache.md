@@ -29,8 +29,12 @@ Comparison counts:
 | Live-only versus Xcode 27 beta SDK | 2,566 |
 | Xcode 26 SDK-only versus live | 1,340 |
 | Xcode 27 beta SDK-only versus live | 1,389 |
+| Xcode 27 beta SDK-only versus Xcode 26 SDK | 51 |
+| Xcode 26 SDK-only versus Xcode 27 beta SDK | 3 |
 
 The large live-only count is mostly Objective-C class, metaclass, ivar, and internal protobuf/message surface that is present in the dyld cache export table but not represented in the same way in the SDK stub.
+
+None of the 51 Xcode 27 beta-only SDK names are exported by the active macOS 26.5.2 live framework image. See `sdk-live-differences.md` for the complete list and compatibility notes.
 
 ## Export Buckets
 

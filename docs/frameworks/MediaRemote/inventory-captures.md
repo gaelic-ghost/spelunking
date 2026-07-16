@@ -10,8 +10,8 @@ Raw captures are intentionally ignored by Git under `research/**/captures/`. Pro
 
 | Field | Value |
 | --- | --- |
-| Timestamp | `20260716T084528Z` |
-| Capture root | `research/MediaRemote/captures/20260716T084528Z` |
+| Timestamp | `20260716T091344Z` |
+| Capture root | `research/MediaRemote/captures/20260716T091344Z` |
 | Active framework image | `/System/Library/PrivateFrameworks/MediaRemote.framework/Versions/A/MediaRemote` |
 | Active OS | macOS 26.5.2, build 25F84 |
 | Selected developer directory | `/Applications/Xcode-beta.app/Contents/Developer` |
@@ -28,8 +28,10 @@ Raw captures are intentionally ignored by Git under `research/**/captures/`. Pro
 - `dyld-objc-classnames.txt`, `dyld-objc-method-names.txt`, `dyld-objc-method-types.txt`: best-effort Objective-C sections from dyld tooling.
 - `symbols-nowplaying-targets.txt`: Xcode `symbols` lookup output for now-playing, playback-queue, player-client, client-request, and `MRXPC` method neighborhoods.
 - `symbols-policy-targets.txt`: Xcode `symbols` lookup output for entitlement helper functions, Security entitlement stubs, and policy-related Objective-C stubs.
+- `sdk-current-tbd.txt`, `sdk-beta-tbd.txt`: complete installed Xcode 26 and Xcode 27 beta `.tbd` stubs.
 - `sdk-current-symbols.txt`, `sdk-beta-symbols.txt`: symbols named by the installed Xcode 26 and Xcode 27 beta `.tbd` stubs.
-- `live-only-vs-current-sdk.txt`, `live-only-vs-beta-sdk.txt`, `current-sdk-only-vs-live.txt`, `beta-sdk-only-vs-live.txt`: local symbol-set diffs.
+- `live-only-vs-current-sdk.txt`, `live-only-vs-beta-sdk.txt`, `current-sdk-only-vs-live.txt`, `beta-sdk-only-vs-live.txt`: live-versus-SDK symbol-set diffs.
+- `current-sdk-only-vs-beta-sdk.txt`, `beta-sdk-only-vs-current-sdk.txt`: SDK-to-SDK symbol-set diffs.
 - `mediaremoted-*`: support daemon linkage, entitlements, and filtered strings.
 - `mediaremoteagent-*`: launch agent linkage, entitlements, and filtered strings.
 - `mediaremoted-policy-strings.txt`, `mediaremoteagent-policy-strings.txt`: focused policy-string captures for entitlement and permission research.
@@ -46,6 +48,8 @@ Raw captures are intentionally ignored by Git under `research/**/captures/`. Pro
 | Live-only vs Xcode 27 beta SDK | 2,566 |
 | Xcode 26 SDK-only vs live | 1,340 |
 | Xcode 27 beta SDK-only vs live | 1,389 |
+| Xcode 27 beta SDK-only vs Xcode 26 SDK | 51 |
+| Xcode 26 SDK-only vs Xcode 27 beta SDK | 3 |
 
 ## Reproduce
 

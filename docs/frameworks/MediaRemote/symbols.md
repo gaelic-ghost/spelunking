@@ -60,12 +60,16 @@ High-signal families from the live export and string capture:
 
 Use this section to compare macOS 26.5 against the macOS 27 beta SDK.
 
-Early SDK diff notes:
+See `sdk-live-differences.md` for the full SDK/live comparison from capture `research/MediaRemote/captures/20260716T091344Z`.
 
-- Xcode 27 beta appears to add richer now-playing content/media typing and artwork-related keys.
+SDK diff notes:
+
+- Xcode 27 beta adds 51 names that are absent from the Xcode 26 SDK stub.
+- None of those 51 beta-only SDK additions are exported by the active macOS 26.5.2 live framework image.
+- Xcode 27 beta appears to add richer now-playing content/media typing, app-entity path keys, push-token keys, playback-account options, and remote/fetchable artwork keys.
 - Xcode 27 beta adds route-status and now-playing-session error-domain symbols.
-- Xcode 27 beta adds `_MRCreateArrayFromXPCMessage`; Xcode 26 exposes the likely misspelled `_MRCreateArrayFomXPCMessage`.
-- Xcode 26 exposes `_MRLogCategoryDefault` and `_MRLogCategoryMirroringView`; those names were not present in the initial Xcode 27 beta stub diff.
+- Xcode 27 beta adds `_MRCreateArrayFromXPCMessage`; Xcode 26 and the active macOS 26.5.2 runtime expose the likely misspelled `_MRCreateArrayFomXPCMessage`.
+- Xcode 26 exposes `_MRLogCategoryDefault` and `_MRLogCategoryMirroringView`; those names are not present in the Xcode 27 beta stub diff.
 
 ## Safety Buckets
 
