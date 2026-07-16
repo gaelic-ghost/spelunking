@@ -7,6 +7,7 @@ Prefer small repeatable tools that capture evidence into `research/<Target>/` an
 ## Current Helpers
 
 - `extract-wallpaper-symbols.sh`: demangles relevant SDK `.tbd` exports for the Wallpaper normal XPC, Wallpaper Debug XPC, extension bridge surfaces, and `WallpaperAgent` debug receiver imports.
+- `inspect-wallpaper-debug-api.sh`: demangles dyld shared-cache exports for the complete Wallpaper Debug request, response, payload, and extension handler API surface.
 - `inspect-wallpaper-debug-receiver.sh`: prints focused `WallpaperAgent` receiver imports, debug strings, and x86_64 disassembly windows for the debug decode, extension lookup, dispatch, and error-response paths.
 - `inspect-wallpaper-swift-metadata.sh`: parses Wallpaper Swift metadata and disassembly anchors for `ContentType`, `ViewModelRefreshReason`, and normal-agent redraw candidate cases.
 - `inspect-wallpaper-supporting-types.sh`: prints supporting enum, store-content, and security-policy evidence for the normal-agent redraw blockers.

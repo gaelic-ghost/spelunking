@@ -47,13 +47,29 @@ public struct WallpaperAssetList: Codable, Equatable, Sendable {
         public var name: String
         public var id: String
         public var isDownloaded: Bool
+
+        public init(name: String, id: String, isDownloaded: Bool) {
+            self.name = name
+            self.id = id
+            self.isDownloaded = isDownloaded
+        }
     }
 
     public var assets: [Asset]
+
+    public init(assets: [Asset]) {
+        self.assets = assets
+    }
 }
 
 public struct WallpaperAssetDownloadState: Codable, Equatable, Sendable {
     public var assetID: String
     public var progress: Float
     public var isDownloaded: Bool
+
+    public init(assetID: String, progress: Float, isDownloaded: Bool) {
+        self.assetID = assetID
+        self.progress = progress
+        self.isDownloaded = isDownloaded
+    }
 }

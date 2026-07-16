@@ -134,6 +134,29 @@ rg -o '_\$s14WallpaperTypes[0-9A-Za-z_]+' \
   xcrun swift-demangle
 ```
 
+Shared-cache debug API export pass:
+
+```zsh
+tools/inspect-wallpaper-debug-api.sh
+```
+
+Observed shared-cache export facts:
+
+- `WallpaperDebugRequest` exports case constructors for
+  `accessAllAssets(WallpaperDebugAssetType)`, `downloadAsset(String)`,
+  `downloadAssetState(String)`, and `removeAsset(String)`.
+- `WallpaperDebugAssetType` exports no-payload case constructors for `all` and
+  `downloaded`, with `Codable`, `Hashable`, and `Equatable` conformances.
+- `WallpaperDebugResponse` exports case constructors for `success`,
+  `error(String)`, `allAssets(WallpaperAssetList)`, and
+  `downloadState(WallpaperAssetDownloadState)`.
+- `WallpaperAssetList`, `WallpaperAssetList.Asset`, and
+  `WallpaperAssetDownloadState` export the initializer/property surface used
+  by the local mirror.
+- `WallpaperExtensionKit.WallpaperExtensionDebugHandler.handleDebugRequest`
+  and `WallpaperExtensionProxy.handleDebugRequest` both use
+  `WallpaperDebugRequest` and return `WallpaperDebugResponse`.
+
 Extension bridge:
 
 ```zsh

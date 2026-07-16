@@ -26,17 +26,55 @@ struct SPKResearchTargetTests {
 
     @Test("Wallpaper debug mirror types preserve synthesized enum coding")
     func wallpaperDebugMirrorRoundTrips() throws {
-        let message = WallpaperDebugRequestMessage(
-            extensionIdentifier: "com.apple.wallpaper.extension.aerials",
-            request: .accessAllAssets(.downloaded)
-        )
+        let messages = [
+            WallpaperDebugRequestMessage(
+                extensionIdentifier: "com.apple.wallpaper.extension.aerials",
+                request: .accessAllAssets(.downloaded)
+            ),
+            WallpaperDebugRequestMessage(
+                extensionIdentifier: "com.apple.wallpaper.extension.aerials",
+                request: .accessAllAssets(.all)
+            ),
+            WallpaperDebugRequestMessage(
+                extensionIdentifier: "com.apple.wallpaper.extension.aerials",
+                request: .downloadAsset("asset-id")
+            ),
+            WallpaperDebugRequestMessage(
+                extensionIdentifier: "com.apple.wallpaper.extension.aerials",
+                request: .downloadAssetState("asset-id")
+            ),
+            WallpaperDebugRequestMessage(
+                extensionIdentifier: "com.apple.wallpaper.extension.aerials",
+                request: .removeAsset("asset-id")
+            ),
+        ]
 
-        let data = try JSONEncoder().encode(message)
-        let decoded = try JSONDecoder().decode(WallpaperDebugRequestMessage.self, from: data)
+        for message in messages {
+            let data = try JSONEncoder().encode(message)
+            let decoded = try JSONDecoder().decode(WallpaperDebugRequestMessage.self, from: data)
+            let json = String(decoding: data, as: UTF8.self)
 
-        #expect(decoded == message)
-        #expect(String(decoding: data, as: UTF8.self).contains("\"downloaded\""))
-        #expect(!String(decoding: data, as: UTF8.self).contains("rawValue"))
+            #expect(decoded == message)
+            #expect(!json.contains("rawValue"))
+        }
+
+        let responses: [WallpaperDebugResponse] = [
+            .success,
+            .error("message"),
+            .allAssets(WallpaperAssetList(assets: [
+                WallpaperAssetList.Asset(name: "Tahoe Day", id: "asset-id", isDownloaded: true),
+            ])),
+            .downloadState(WallpaperAssetDownloadState(assetID: "asset-id", progress: 1.0, isDownloaded: true)),
+        ]
+
+        for response in responses {
+            let data = try JSONEncoder().encode(response)
+            let decoded = try JSONDecoder().decode(WallpaperDebugResponse.self, from: data)
+            let json = String(decoding: data, as: UTF8.self)
+
+            #expect(decoded == response)
+            #expect(!json.contains("rawValue"))
+        }
     }
 
     @Test("Wallpaper normal mirror preserves no-payload enum coding")

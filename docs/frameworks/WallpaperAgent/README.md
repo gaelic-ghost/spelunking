@@ -109,6 +109,8 @@ Observed non-mutating results from this branch:
 - [x] SwiftPM local `WallpaperTypes` mirror and debug XPC probe coverage for
       all recovered `WallpaperDebugRequest` cases, with `downloadAsset` and
       `removeAsset` guarded behind `--execute`
+- [x] Shared-cache export pass for the complete Wallpaper Debug request,
+      response, payload, service, and extension handler surface
 - [x] SwiftPM SIP validation report that gates proof claims on
       `csrutil status`
 - [x] SwiftPM restart probe plan/execute command that captures before and
@@ -649,6 +651,10 @@ The initializer is exported as:
 init(extensionIdentifier: String, request: WallpaperDebugRequest)
 ```
 
+`WallpaperTypes.WallpaperDebugService.getter` is also exported and the agent
+imports it. The recovered runtime Mach service string is
+`com.apple.wallpaper.debug.service`.
+
 Runtime probing showed that a local mirror type in the `SpelunkingKit` module
 is not sufficient. The receiver returned XPC `_CodableError` with:
 
@@ -687,6 +693,15 @@ Recovered `WallpaperDebugRequest` cases:
 
 The enum is `Codable`.
 
+Shared-cache exports include case constructors for every recovered request:
+
+```swift
+WallpaperDebugRequest.accessAllAssets(WallpaperDebugAssetType)
+WallpaperDebugRequest.downloadAsset(String)
+WallpaperDebugRequest.downloadAssetState(String)
+WallpaperDebugRequest.removeAsset(String)
+```
+
 The repository helper exposes all four cases. The read/query cases can be sent
 directly:
 
@@ -717,6 +732,13 @@ Recovered `WallpaperDebugAssetType` cases:
 
 The enum is `Codable`, `Hashable`, and `Equatable`.
 
+Shared-cache exports include no-payload case constructors for both cases:
+
+```swift
+WallpaperDebugAssetType.all
+WallpaperDebugAssetType.downloaded
+```
+
 No `rawValue` symbols were recovered for `WallpaperDebugAssetType`; model it
 as a normal synthesized `Codable` enum, not a raw-string enum.
 
@@ -732,6 +754,15 @@ Recovered `WallpaperDebugResponse` cases:
 | `downloadState` | `WallpaperAssetDownloadState` | Download-state response. |
 
 The enum is `Codable`.
+
+Shared-cache exports include case constructors for every recovered response:
+
+```swift
+WallpaperDebugResponse.success
+WallpaperDebugResponse.error(String)
+WallpaperDebugResponse.allAssets(WallpaperAssetList)
+WallpaperDebugResponse.downloadState(WallpaperAssetDownloadState)
+```
 
 ### Asset List Payload
 
@@ -756,6 +787,8 @@ WallpaperAssetList.init(assets: [WallpaperAssetList.Asset])
 WallpaperAssetList.Asset.init(name: String, id: String, isDownloaded: Bool)
 ```
 
+The exported properties are `assets`, `name`, `id`, and `isDownloaded`.
+
 ### Download State Payload
 
 Recovered `WallpaperAssetDownloadState` shape:
@@ -774,9 +807,20 @@ The exported initializer is:
 init(assetID: String, progress: Float, isDownloaded: Bool)
 ```
 
+The exported properties are `assetID`, `progress`, and `isDownloaded`.
+
 ### Extension Bridge
 
-`WallpaperExtensionKit` exports the extension-side bridge:
+`WallpaperExtensionKit` exports both the extension-side handler protocol and
+the agent-side proxy bridge:
+
+```swift
+protocol WallpaperExtensionDebugHandler {
+    func handleDebugRequest(
+        _ request: WallpaperDebugRequest
+    ) async throws -> WallpaperDebugResponse
+}
+```
 
 ```swift
 WallpaperExtensionProxy.handleDebugRequest(
@@ -793,6 +837,12 @@ The shared-cache strings also expose Objective-C XPC bridge vocabulary:
 
 This suggests the agent receives the Swift/XPC debug message, then talks to the
 extension through an Objective-C-compatible ExtensionKit XPC wrapper.
+
+Repeatable export inventory:
+
+```zsh
+tools/inspect-wallpaper-debug-api.sh
+```
 
 ### Receiver-Side Implementation Trace
 
@@ -1159,6 +1209,8 @@ Not accessible or not assumed accessible:
 - Raw command inventory: `../../../research/WallpaperAgent/README.md`
 - SDK and receiver-import symbol helper:
   `../../../tools/extract-wallpaper-symbols.sh`
+- Shared-cache debug API export helper:
+  `../../../tools/inspect-wallpaper-debug-api.sh`
 - Receiver disassembly-window helper:
   `../../../tools/inspect-wallpaper-debug-receiver.sh`
 - Supporting enum/security helper:
