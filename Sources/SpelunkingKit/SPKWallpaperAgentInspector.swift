@@ -36,6 +36,16 @@ public struct SPKWallpaperSignalResult: Equatable, Sendable {
     public var targetedPIDs: [Int32]
 }
 
+public struct SPKWallpaperRestartProbeResult: Equatable, Sendable {
+    public var signal: Int32
+    public var execute: Bool
+    public var waitSeconds: Double
+    public var before: SPKWallpaperAgentSnapshot
+    public var targetedPIDs: [Int32]
+    public var after: SPKWallpaperAgentSnapshot?
+    public var respawnObserved: Bool?
+}
+
 public struct SPKSIPStatus: Equatable, Sendable {
     public enum State: Equatable, Sendable {
         case enabled
@@ -148,6 +158,55 @@ public struct SPKWallpaperAgentInspector: Sendable {
         return SPKWallpaperSignalResult(signal: signal, execute: execute, targetedPIDs: pids)
     }
 
+    public func restartProbe(signalName: String, execute: Bool, waitSeconds: Double = 5.0) throws -> SPKWallpaperRestartProbeResult {
+        let signal = try signalNumber(named: signalName)
+        let before = try snapshot()
+        let targetedPIDs = before.processes.map(\.pid)
+        guard !targetedPIDs.isEmpty else {
+            throw SPKWallpaperAgentError.noWallpaperAgentProcess
+        }
+
+        guard execute else {
+            return SPKWallpaperRestartProbeResult(
+                signal: signal,
+                execute: false,
+                waitSeconds: waitSeconds,
+                before: before,
+                targetedPIDs: targetedPIDs,
+                after: nil,
+                respawnObserved: nil
+            )
+        }
+
+        for pid in targetedPIDs {
+            guard Darwin.kill(pid, signal) == 0 else {
+                throw SPKWallpaperAgentError.commandFailed("kill(\(pid), \(signal)) failed with errno \(errno): \(String(cString: strerror(errno)))")
+            }
+        }
+
+        let deadline = Date().addingTimeInterval(waitSeconds)
+        var after = try snapshot()
+        while Date() < deadline {
+            let current = try snapshot()
+            if restartWasObserved(beforePIDs: targetedPIDs, afterPIDs: current.processes.map(\.pid)) {
+                after = current
+                break
+            }
+            usleep(250_000)
+            after = current
+        }
+
+        return SPKWallpaperRestartProbeResult(
+            signal: signal,
+            execute: true,
+            waitSeconds: waitSeconds,
+            before: before,
+            targetedPIDs: targetedPIDs,
+            after: after,
+            respawnObserved: restartWasObserved(beforePIDs: targetedPIDs, afterPIDs: after.processes.map(\.pid))
+        )
+    }
+
     public func sipStatus() throws -> SPKSIPStatus {
         let result = try runner.run("/usr/bin/csrutil", arguments: ["status"])
         let combinedOutput = [result.standardOutput, result.standardError]
@@ -231,6 +290,14 @@ public struct SPKWallpaperAgentInspector: Sendable {
             user: String(fields[3]),
             command: String(fields[4])
         )
+    }
+
+    private func restartWasObserved(beforePIDs: [Int32], afterPIDs: [Int32]) -> Bool {
+        guard !beforePIDs.isEmpty, !afterPIDs.isEmpty else {
+            return false
+        }
+
+        return afterPIDs.contains { !beforePIDs.contains($0) }
     }
 
     private func signalNumber(named name: String) throws -> Int32 {

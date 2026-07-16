@@ -44,6 +44,7 @@ swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper.debug.servi
 swift run spelunk wallpaper-agent debug-xpc-probe
 swift run spelunk wallpaper-agent debug-xpc-probe --request download-state --asset-id <asset-id>
 swift run spelunk wallpaper-agent sip-validation-report
+swift run spelunk wallpaper-agent restart-probe-plan
 swift run spelunk wallpaper-agent redraw-static-plan
 swift run spelunk wallpaper-agent signal-plan --signal TERM
 ```
@@ -53,6 +54,7 @@ Those commands are non-mutating. The mutating commands require `--execute`:
 ```zsh
 swift run spelunk wallpaper-agent redraw-static --execute
 swift run spelunk wallpaper-agent signal --execute --signal TERM
+swift run spelunk wallpaper-agent restart-probe --execute --signal TERM
 ```
 
 The helper deliberately does not offer a `kickstart` path.
@@ -67,7 +69,8 @@ Observed non-mutating results from this branch:
 | `debug-xpc-probe` with `accessAllAssets(downloaded)` | Succeeded on the current boot and decoded two downloaded Aerial assets. Current boot has SIP disabled, so this is not SIP-enabled proof yet. |
 | `debug-xpc-probe --extension com.apple.wallpaper.extension.not-real` | Succeeded on the current boot and decoded `WallpaperDebugResponse.error("No valid extension")`, confirming the receiver dispatch/error path. Current boot has SIP disabled. |
 | `debug-xpc-probe --request download-state` | Succeeded on the current boot and decoded `WallpaperAssetDownloadState` for a known asset id. Current boot has SIP disabled. |
-| `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, and signal plan; refused the SIP proof claim because SIP is disabled on this boot. |
+| `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, signal plan, and restart probe plan; refused the SIP proof claim because SIP is disabled on this boot. |
+| `restart-probe-plan` | Captured current target pid, planned `SIGTERM`, and left after/respawn evidence uncollected because it did not execute. |
 | `redraw-static-plan` | Found the current static desktop image URL without reapplying it. |
 | `signal-plan --signal TERM` | Found the current `WallpaperAgent` pid and planned `SIGTERM` without executing it. |
 
@@ -93,6 +96,8 @@ Observed non-mutating results from this branch:
       `accessAllAssets` and `downloadAssetState`
 - [x] SwiftPM SIP validation report that gates proof claims on
       `csrutil status`
+- [x] SwiftPM restart probe plan/execute command that captures before and
+      after pids without using `launchctl kickstart`
 - [x] Headless Ghidra string/data-reference pass for debug and redraw anchors
 - [x] Adjacent userland surface inventory for export daemon, Settings helper,
       diagnostic extension, WallpaperAgent plug-ins, ExtensionKit wallpaper
@@ -878,6 +883,19 @@ cleanest restart hypothesis from runtime:
 
 This is a controlled experiment, not a recommendation yet. Run it only when a
 visible desktop interruption is acceptable.
+
+The repository helper now has a proof-oriented version of this experiment:
+
+```zsh
+swift run spelunk wallpaper-agent restart-probe-plan
+swift run spelunk wallpaper-agent restart-probe --execute --signal TERM
+```
+
+The plan form is non-mutating and records the current target pid. The execute
+form sends the selected same-user POSIX signal, polls for a replacement
+`WallpaperAgent` pid for five seconds, and reports whether respawn was
+observed. It still needs to be run on a SIP-enabled boot before it can be
+promoted from candidate to proven restart path.
 
 `launchctl kickstart -k` is deliberately not part of this path.
 

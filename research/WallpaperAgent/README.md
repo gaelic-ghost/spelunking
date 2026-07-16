@@ -355,6 +355,15 @@ execute: false
 signal: 15
 targetedPIDs: 67606
 
+restartProbePlan:
+execute: false
+signal: 15
+waitSeconds: 5.0
+targetedPIDs: 67606
+beforePIDs: 67606
+afterPIDs: <not collected>
+respawnObserved: <not executed>
+
 sipProofClaim: not eligible because SIP is not enabled for this boot.
 ```
 
@@ -520,6 +529,7 @@ swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper
 swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper.debug.service
 swift run spelunk wallpaper-agent debug-xpc-probe
 swift run spelunk wallpaper-agent sip-validation-report
+swift run spelunk wallpaper-agent restart-probe-plan
 swift run spelunk wallpaper-agent redraw-static-plan
 swift run spelunk wallpaper-agent signal-plan --signal TERM
 ```
@@ -529,6 +539,7 @@ Mutating commands require an explicit execute flag:
 ```zsh
 swift run spelunk wallpaper-agent redraw-static --execute
 swift run spelunk wallpaper-agent signal --execute --signal TERM
+swift run spelunk wallpaper-agent restart-probe --execute --signal TERM
 ```
 
 Observed in this branch:
@@ -541,8 +552,10 @@ Observed in this branch:
 - `debug-xpc-probe`: decoded downloaded Aerial assets through
   `WallpaperDebugRequestMessage` on this SIP-disabled boot.
 - `sip-validation-report`: collected SIP status, inventory, debug-XPC read
-  probe, static redraw plan, and signal plan; reported `sipProofClaim: not
-  eligible because SIP is not enabled for this boot.`
+  probe, static redraw plan, signal plan, and restart probe plan; reported
+  `sipProofClaim: not eligible because SIP is not enabled for this boot.`
+- `restart-probe-plan`: reported the current target pid and did not collect
+  after/respawn evidence because it did not execute.
 - `redraw-static-plan`: reported the current desktop image URL without
   changing it.
 - `signal-plan --signal TERM`: reported the current target pid without sending
@@ -656,8 +669,9 @@ Do these only when visible desktop interruption is acceptable:
 
 1. Same-user `SIGTERM` restart probe:
    - record pid and `launchctl print` before
-   - run `swift run spelunk wallpaper-agent signal --execute --signal TERM`
-   - record pid and `launchctl print` after
+   - run `swift run spelunk wallpaper-agent restart-probe --execute --signal TERM`
+   - record pid and `launchctl print` after, using the command's
+     `respawnObserved` result as the first pass
    - capture logs around relaunch and redraw
 2. Public AppKit same-image reapply:
    - record current image URL and options for every `NSScreen`

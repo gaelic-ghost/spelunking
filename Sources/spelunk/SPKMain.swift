@@ -57,6 +57,15 @@ struct SPKMain {
             }
             let signalName = optionValue("--signal", in: arguments) ?? "TERM"
             printSignalResult(try inspector.signalAgent(signalName: signalName, execute: true))
+        case "restart-probe-plan":
+            let signalName = optionValue("--signal", in: arguments) ?? "TERM"
+            printRestartProbeResult(try inspector.restartProbe(signalName: signalName, execute: false))
+        case "restart-probe":
+            guard arguments.contains("--execute") else {
+                throw CLIError.missingExecuteFlag("Refusing to restart-probe WallpaperAgent without --execute. Use restart-probe-plan for a dry run.")
+            }
+            let signalName = optionValue("--signal", in: arguments) ?? "TERM"
+            printRestartProbeResult(try inspector.restartProbe(signalName: signalName, execute: true))
         case "redraw-static-plan":
             #if canImport(AppKit)
             printRedrawResult(try SPKWallpaperStaticRedraw().reapplyCurrentDesktopImages(execute: false))
@@ -98,6 +107,8 @@ struct SPKMain {
               spelunk wallpaper-agent sip-validation-report
               spelunk wallpaper-agent signal-plan [--signal TERM]
               spelunk wallpaper-agent signal --execute [--signal TERM]
+              spelunk wallpaper-agent restart-probe-plan [--signal TERM]
+              spelunk wallpaper-agent restart-probe --execute [--signal TERM]
               spelunk wallpaper-agent redraw-static-plan
               spelunk wallpaper-agent redraw-static --execute
             """
@@ -114,6 +125,8 @@ struct SPKMain {
               sip-validation-report
               signal-plan [--signal TERM]
               signal --execute [--signal TERM]
+              restart-probe-plan [--signal TERM]
+              restart-probe --execute [--signal TERM]
               redraw-static-plan
               redraw-static --execute
             """
@@ -152,6 +165,24 @@ struct SPKMain {
         print("execute: \(result.execute)")
         print("signal: \(result.signal)")
         print("targetedPIDs: \(result.targetedPIDs.map(String.init).joined(separator: ", "))")
+    }
+
+    private static func printRestartProbeResult(_ result: SPKWallpaperRestartProbeResult) {
+        print("execute: \(result.execute)")
+        print("signal: \(result.signal)")
+        print("waitSeconds: \(result.waitSeconds)")
+        print("targetedPIDs: \(result.targetedPIDs.map(String.init).joined(separator: ", "))")
+        print("beforePIDs: \(result.before.processes.map(\.pid).map(String.init).joined(separator: ", "))")
+        if let after = result.after {
+            print("afterPIDs: \(after.processes.map(\.pid).map(String.init).joined(separator: ", "))")
+        } else {
+            print("afterPIDs: <not collected>")
+        }
+        if let respawnObserved = result.respawnObserved {
+            print("respawnObserved: \(respawnObserved)")
+        } else {
+            print("respawnObserved: <not executed>")
+        }
     }
 
     private static func printRedrawResult(_ result: SPKDesktopImageRedrawResult) {
@@ -197,6 +228,10 @@ struct SPKMain {
         print("")
         print("signalPlan:")
         printSignalResult(try inspector.signalAgent(signalName: "TERM", execute: false))
+
+        print("")
+        print("restartProbePlan:")
+        printRestartProbeResult(try inspector.restartProbe(signalName: "TERM", execute: false))
 
         print("")
         if sipStatus.isEnabled {
