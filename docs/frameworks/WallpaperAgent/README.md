@@ -269,6 +269,80 @@ The closest normal-agent redraw candidates are:
 still requires exact Swift/XPC envelope construction and may be blocked by
 `AgentXPCSecurityPolicy`.
 
+### Supporting Enums
+
+Recovered supporting enum detail:
+
+| Type | Recovered cases or values | Evidence |
+| --- | --- | --- |
+| `ViewModelRefreshReason` | `launch`, `navigation`, `wallpaperInstallation` | Exported case constructor symbols in `Wallpaper.tbd`. |
+| `ContentType` | cases not recovered yet | `ContentType` is exported as `Codable`, `CaseIterable`, and `CustomStringConvertible`, but no case constructor symbols are present in the SDK stub. |
+| `AssertionValue` | cases not recovered yet | `AssertionValue` is exported as `Codable`, `Hashable`, and `CustomStringConvertible`, but no case constructor symbols are present in the SDK stub. |
+| `AssertionPresentationMode` | raw type `String`; concrete raw values not recovered yet | `init(rawValue:)` and `rawValue` are exported. |
+
+The private `Wallpaper` and `WallpaperTypes` Swift modules are not importable
+from this SDK, even though their `.tbd` exports exist. That blocks runtime
+queries such as `ContentType.allCases` from a normal Swift client until a
+separate private-module or metadata extraction path is available.
+
+### Choice and Settings Payloads
+
+Several normal-agent messages operate on `WallpaperTypes` payloads. These are
+not direct redraw commands, but they are part of the userland-visible message
+surface exposed by `AgentXPCMessage`.
+
+Recovered `WallpaperChoiceRequest` cases:
+
+| Case | Payload |
+| --- | --- |
+| `imageFolder` | `URL` |
+| `screenSaver` | `WallpaperChoiceRequest.ScreenSaverParameters` |
+| `photoLibraryAsset` | `String` |
+| `photoLibraryPerson` | `String` |
+| `photoLibraryCollection` | `String` |
+| `color` | `CGColorRef` |
+| `image` | `URL` |
+
+`ScreenSaverParameters` currently exposes:
+
+| Field | Type |
+| --- | --- |
+| `module` | `URL` |
+
+Recovered `WallpaperChoiceRequestAdditionResult` cases:
+
+| Case | Payload |
+| --- | --- |
+| `choice` | `WallpaperChoice.ID` |
+| `group` | `(WallpaperSettingsGroup.ID, WallpaperChoice.ID)` |
+
+Recovered `WallpaperSettingsViewModels` shape:
+
+```swift
+struct WallpaperSettingsViewModels: Codable, Equatable {
+    let desktop: WallpaperSettingsViewModel?
+    let screenSaver: WallpaperSettingsViewModel?
+}
+```
+
+Recovered `WallpaperSettingsViewModel` fields:
+
+| Field | Type |
+| --- | --- |
+| `groups` | `[WallpaperSettingsGroup]` |
+| `refreshPolicy` | `WallpaperSettingsViewModel.RefreshPolicy` |
+| `isModificationDisabled` | `Bool` |
+
+Recovered `WallpaperSettingsViewModel.RefreshPolicy` cases:
+
+| Case |
+| --- |
+| `default` |
+| `discretionary` |
+
+`WallpaperSettingsViewModel.ContentType` exists as an `Int` raw-value enum, but
+its concrete cases were not recovered from the SDK stub.
+
 ## WallpaperDebugServer API
 
 ### Transport
@@ -568,6 +642,7 @@ Not accessible or not assumed accessible:
 ## References
 
 - Raw command inventory: `../../../research/WallpaperAgent/README.md`
+- SDK symbol helper: `../../../tools/extract-wallpaper-symbols.sh`
 - Ghidra helper: `../../../tools/ghidra/DumpWallpaperDebugReferences.java`
 - LaunchAgent: `/System/Library/LaunchAgents/com.apple.wallpaper.plist`
 - Agent binary: `/System/Library/CoreServices/WallpaperAgent.app/Contents/MacOS/WallpaperAgent`

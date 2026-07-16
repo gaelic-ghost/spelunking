@@ -6,4 +6,5 @@ Prefer small repeatable tools that capture evidence into `research/<Target>/` an
 
 ## Current Helpers
 
+- `extract-wallpaper-symbols.sh`: demangles relevant SDK `.tbd` exports for the Wallpaper normal XPC, Wallpaper Debug XPC, and extension bridge surfaces.
 - `ghidra/DumpWallpaperDebugReferences.java`: prints WallpaperAgent function cross references for debug-service and redraw/rebuild strings after Ghidra analysis.

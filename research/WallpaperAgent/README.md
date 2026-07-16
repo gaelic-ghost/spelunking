@@ -102,6 +102,16 @@ find "$(xcrun --sdk macosx --show-sdk-path)/System/Library/PrivateFrameworks" \
 
 ## Demangling `.tbd` Symbols
 
+Use the bundled helper for the current extraction set:
+
+```zsh
+tools/extract-wallpaper-symbols.sh
+```
+
+The helper intentionally filters after demangling. Some Swift symbols compress
+type names in their mangled form, so filtering before `swift-demangle` can miss
+the `WallpaperTypes` debug protocol.
+
 Normal agent protocol:
 
 ```zsh
@@ -134,6 +144,34 @@ rg -o '_\$s21WallpaperExtensionKit[0-9A-Za-z_]+' \
   sort -u |
   xcrun swift-demangle
 ```
+
+The private modules are not importable directly from this SDK:
+
+```zsh
+xcrun swift -I "$(xcrun --sdk macosx --show-sdk-path)/System/Library/PrivateFrameworks" \
+  -F "$(xcrun --sdk macosx --show-sdk-path)/System/Library/PrivateFrameworks" \
+  -e 'import Wallpaper'
+```
+
+Observed result: `error: no such module 'Wallpaper'`. `WallpaperTypes` is the
+same. Treat SDK `.tbd` exports and shared-cache strings as the current
+repeatable source, not Swift source import.
+
+Additional recovered payloads from the fixed extractor:
+
+- `WallpaperChoiceRequest` cases: `imageFolder(URL)`,
+  `screenSaver(ScreenSaverParameters)`, `photoLibraryAsset(String)`,
+  `photoLibraryPerson(String)`, `photoLibraryCollection(String)`,
+  `color(CGColorRef)`, and `image(URL)`.
+- `WallpaperChoiceRequest.ScreenSaverParameters` has `module: URL`.
+- `WallpaperChoiceRequestAdditionResult` cases: `choice(WallpaperChoice.ID)`
+  and `group(WallpaperSettingsGroup.ID, WallpaperChoice.ID)`.
+- `WallpaperSettingsViewModels` has optional `desktop` and `screenSaver`
+  view models.
+- `WallpaperSettingsViewModel.RefreshPolicy` cases: `default` and
+  `discretionary`.
+- `WallpaperSettingsViewModel.ContentType` is an `Int` raw-value enum, but its
+  cases were not recovered from the SDK stub.
 
 ## Shared-Cache String Windows
 
