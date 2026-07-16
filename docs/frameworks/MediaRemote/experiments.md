@@ -142,6 +142,28 @@ Follow-up:
 
 Use the recovered selectors to map `MRXPCConnection` message lifetimes and `MRNowPlayingClientRequests` hydration paths before attempting any new mutating command surface.
 
+### Message Surface Extraction
+
+Status: baseline run complete
+
+Command:
+
+```sh
+tools/mediaremote-message-surfaces.zsh
+```
+
+Observed behavior:
+
+Capture `research/MediaRemote/experiments/messages/20260716T085551Z` extracted grouped XPC keys, transport symbols, serialization helpers, request/response log strings, cache-update strings, daemon request handlers, and protobuf message symbols from inventory capture `research/MediaRemote/captures/20260716T084528Z`.
+
+Permissions, entitlements, or SIP notes:
+
+This is a static extraction from local captures. It does not open an XPC connection, query `mediaremoted`, or mutate media state.
+
+Follow-up:
+
+Map `MRXPC_MESSAGE_ID_KEY` integer values and correlate `MRNowPlayingPlayerClientRequests` calls to specific message types or daemon handler names.
+
 ## Mutating Experiments
 
 Run only after the read-only baseline is documented.

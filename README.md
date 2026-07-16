@@ -26,6 +26,7 @@ The first research target is `MediaRemote.framework` on macOS 26.5 and the insta
 - `tools/mediaremote-entitlement-experiment.zsh`: repeatable local runner that builds `mr-internal-probe`, signs copied variants with candidate private entitlements, and captures runtime differences.
 - `tools/mediaremote-daemon-observe.zsh`: repeatable local runner that executes a probe and captures focused `mediaremoted`/unified-log evidence for the same time window.
 - `tools/mediaremote-interface-capture.zsh`: repeatable local runner that captures selected Objective-C runtime interfaces from the loaded framework into ignored research output.
+- `tools/mediaremote-message-surfaces.zsh`: repeatable extractor for XPC keys, message logs, request handlers, protobuf/message symbols, and transport helpers from an inventory capture.
 
 ## Research Shape
 
@@ -63,4 +64,5 @@ tools/mediaremote-inventory.zsh
 tools/mediaremote-entitlement-experiment.zsh
 tools/mediaremote-daemon-observe.zsh
 tools/mediaremote-interface-capture.zsh
+tools/mediaremote-message-surfaces.zsh
 ```
