@@ -36,6 +36,12 @@ plutil -p /System/Library/LaunchAgents/com.apple.facetimemessagestored.plist
 plutil -p /System/Library/LaunchAgents/com.apple.telephonyutilities.callservicesd.plist
 plutil -p /System/Library/PrivateFrameworks/TelephonyUtilities.framework/PlugIns/PhoneIntentHandler.appex/Contents/Info.plist
 dyld_info -exports -objc -all_dyld_cache
+find "$HOME/Library" -maxdepth 5 \( -iname '*call*history*' -o -iname '*CallHistory*' -o -path '*CallHistoryDB*' \) -print 2>/dev/null
+find "$HOME/Library" -maxdepth 5 \( -name '*.db' -o -name '*.sqlite' -o -name '*.sqlite3' \) -print 2>/dev/null | rg -i 'call|phone|facetime|voicemail'
+find "$HOME/Library/Containers" "$HOME/Library/Group Containers" -maxdepth 4 \( -iname '*Phone*' -o -iname '*FaceTime*' -o -iname '*Call*' -o -iname '*Telephony*' \) -print 2>/dev/null
+sqlite3 "$HOME/Library/Application Support/CallHistoryDB/CallHistory.storedata" ".tables"
+sqlite3 "$HOME/Library/Application Support/CallHistoryDB/CallHistory.storedata" "SELECT m.name || ':' || group_concat(p.name || ' ' || p.type, ', ') FROM sqlite_schema AS m JOIN pragma_table_info(m.name) AS p WHERE m.type='table' GROUP BY m.name ORDER BY m.name;"
+plutil -p "$HOME/Library/Application Support/CallHistoryDB/com.apple.callhistory.databaseInfo.plist"
 ```
 
 Observed `sdef` result:
@@ -48,7 +54,6 @@ Privacy note: no call-history rows, phone numbers, contacts, voicemail metadata,
 
 ## Next Raw Captures
 
-- call-history storage location and schema-only inventory
 - dyld shared cache extraction command and output paths
 - filtered Swift demangle output for call frameworks
 - notification/logging baseline

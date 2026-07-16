@@ -9,7 +9,7 @@
 - [x] Skim SDK `.tbd` metadata for `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`.
 - [x] Run a filtered dyld shared cache export probe.
 - [x] Inventory launchd jobs and XPC service plists.
-- [ ] Locate and inventory call-history storage schema without row data.
+- [x] Locate and inventory call-history storage schema without row data.
 - [ ] Extract live dyld shared cache images for full call private framework metadata.
 - [ ] Generate class/protocol/selector inventory.
 - [ ] Observe notification names without placing calls.

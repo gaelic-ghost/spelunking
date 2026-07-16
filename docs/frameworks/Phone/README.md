@@ -31,7 +31,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] SDK `.tbd` symbol skim for `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`
 - [x] Filtered dyld shared cache export probe
 - [x] LaunchAgent and XPC service inventory
-- [ ] Call-history storage schema inventory without row data
+- [x] Call-history storage schema inventory without row data
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
 - [ ] Read-only runtime experiments against app/framework state
 - [ ] OS comparison against another macOS build
@@ -87,6 +87,39 @@ Notable areas:
 - agent/service edges: mach lookup exceptions for `callservicesdaemon`, `CallHistoryPluginHelper`, `CallHistorySyncHelper`, `voicemail.vmd`, CommCenter, FaceTime message store, group activities, IDS, contacts, suggestions, and communication trust services
 
 Inference: macOS `Phone.app` is a FaceTime/call-services platform app with telephone, FaceTime audio, voicemail, call history, contacts, and call-control privileges layered through private daemons and frameworks. It is not a scriptable analogue of Messages.
+
+## Storage
+
+Verified call-history storage locations:
+
+- `~/Library/Application Support/CallHistoryDB/CallHistory.storedata`
+- `~/Library/Application Support/CallHistoryDB/CallHistory.storedata-shm`
+- `~/Library/Application Support/CallHistoryDB/CallHistory.storedata-wal`
+- `~/Library/Application Support/CallHistoryDB/com.apple.callhistory.databaseInfo.plist`
+- `~/Library/Application Support/CallHistoryTransactions/transactions.log`
+
+`com.apple.callhistory.databaseInfo.plist` reports `DatabaseVersionPerm` as `43`.
+
+Verified table inventory from `CallHistory.storedata` without reading row data:
+
+- `ZCALLDBPROPERTIES`
+- `ZCALLRECORD`
+- `ZEMERGENCYMEDIAITEM`
+- `ZHANDLE`
+- `Z_2REMOTEPARTICIPANTHANDLES`
+- `Z_METADATA`
+- `Z_MODELCACHE`
+- `Z_PRIMARYKEY`
+
+High-signal schema notes:
+
+- `ZCALLRECORD` is the main call record table. It includes answered/originated/read state, call type/category, disconnect cause, FaceTime data flag, message flag, junk/confidence fields, communication trust score, emergency/video flags, verification status, timestamps, duration, service provider, country code, location/name/address fields, unique identifiers, conversation ID, participant group identifiers, local participant UUIDs, originating device name, and originating UI type.
+- `ZHANDLE` stores normalized and raw handle values plus type.
+- `Z_2REMOTEPARTICIPANTHANDLES` joins remote participant calls to handles.
+- `ZCALLDBPROPERTIES`, `Z_METADATA`, `Z_MODELCACHE`, and `Z_PRIMARYKEY` are Core Data or store bookkeeping tables.
+- `ZEMERGENCYMEDIAITEM` tracks emergency media assets and upload state.
+
+No call rows, phone numbers, names, addresses, durations, timestamps, voicemail metadata, or transaction-log contents were captured in this documentation pass.
 
 ## Framework And Agent Map
 
@@ -192,7 +225,6 @@ Inference: Phone’s user-facing app sits above a broad `callservicesd` broker p
 
 ## Open Questions
 
-- Where is the live call-history database on macOS 26.5.2 for this user account, and which schema can be captured without row data?
 - Which dyld-cache classes back `PhoneKit`, `CallsAppServices`, `CallsDialer`, and `TelephonyUtilities` behavior?
 - Which `callservicesdaemon` XPC interfaces correspond to the broad `com.apple.telephonyutilities.callservicesd` entitlement values?
 - Which Phone App Intents are user-invocable, Siri-only, or private/system-only?
