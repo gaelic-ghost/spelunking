@@ -1,0 +1,233 @@
+Command: /usr/bin/log stream --style compact --level default --timeout 8 --predicate process == Phone OR subsystem/message contains Phone/mobilephone/CallHistory/TelephonyUtilities while opening Phone.app
+Date: Thu Jul 16 04:31:54 EDT 2026
+
+Filtering the log data using "process == "Phone" OR subsystem CONTAINS[c] "Phone" OR subsystem CONTAINS[c] "mobilephone" OR subsystem CONTAINS[c] "CallHistory" OR subsystem CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "Phone" OR composedMessage CONTAINS[c] "CallHistory" OR composedMessage CONTAINS[c] "TelephonyUtilities""
+Timestamp               Ty Process[PID:TID]
+2026-07-16 04:31:55.518 Df WindowServer[391:fca] [com.apple.SkyLight.processes:Focus] 5fa03[SetFrontProcess]: [DeferringManager] Updating policy {
+    advicePolicy: .frontmost;
+    frontmostProcess: 0x0-0x109109 (Phone) mainConnectionID: 9416F;
+} for reason: updated frontmost process
+2026-07-16 04:31:55.518 Df WindowServer[391:fca] [com.apple.SkyLight.processes:Focus] 5fa03[SetFrontProcess]: [DeferringManager] Deferring events from frontmost process PSN 0x0-0x109109 (Phone) -> <pid: 6135>
+2026-07-16 04:31:55.517 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135] from originator [osservice<com.apple.coreservices.launchservicesd>:361] with description <RBSAssertionDescriptor| "frontmost:6135" ID:398-361-4523 target:6135 attributes:[
+	<RBSDomainAttribute| domain:"com.apple.launchservicesd" name:"RoleUserInteractiveFocal" sourceEnvironment:"(null)">
+	]>
+2026-07-16 04:31:55.518 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] new deferring rules for pid:391: [
+    [391-1E9]; <keyboardFocus; Phone:0x0-0x109109>; () -> <pid: 6135>; reason: frontmost PSN --> outbound target,
+    [391-1E8]; <keyboardFocus; <frontmost>>; () -> <token: Phone:0x0-0x109109; pid: 391>; reason: frontmost PSN,
+    [391-1E7]; <keyboardFocus>; () -> <token: <frontmost>; pid: 391>; reason: Deferring to <frontmost>
+]
+2026-07-16 04:31:55.518 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] [keyboardFocus 0xc154d6c60] setRules:forPID(391): [
+    [391-1E9]; <keyboardFocus; Phone:0x0-0x109109>; () -> <pid: 6135>; reason: frontmost PSN --> outbound target,
+    [391-1E8]; <keyboardFocus; <frontmost>>; () -> <token: Phone:0x0-0x109109; pid: 391>; reason: frontmost PSN,
+    [391-1E7]; <keyboardFocus>; () -> <token: <frontmost>; pid: 391>; reason: Deferring to <frontmost>
+]
+2026-07-16 04:31:55.518 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] chain did update (setDeferringRules) <keyboardFocus; display: null> containsEndOfChain: YES; [
+    <token: <frontmost>; pid: 391>,
+    <token: Phone:0x0-0x109109; pid: 391>,
+    <pid: 6135>,
+    <token: viewbridge-key-window; pid: 6135>
+]
+2026-07-16 04:31:55.519 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Assertion 398-361-4523 (target:[app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135]) will be created as active
+2026-07-16 04:31:55.519 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135] from originator [osservice<com.apple.WindowServer(88)>:391] with description <RBSAssertionDescriptor| "FUSBFrontmostProcess" ID:398-391-4524 target:6135 attributes:[
+	<RBSDomainAttribute| domain:"com.apple.fuseboard" name:"Frontmost" sourceEnvironment:"(null)">,
+	<RBSAcquisitionCompletionAttribute| policy:AfterApplication>
+	]>
+2026-07-16 04:31:55.522 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Assertion 398-391-4524 (target:[app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135]) will be created as active
+2026-07-16 04:31:55.524 Df runningboardd[398:6a9a7] [com.apple.runningboard:monitor] Calculated state for app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>: running-active (role: UserInteractiveFocal) (endowments: <private>)
+2026-07-16 04:31:55.526 Df WindowServer[391:5a716] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:55.527 Df filecoordinationd[631:66d90] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:55.527 Df PerfPowerServices[375:69e75] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-Visible
+2026-07-16 04:31:55.527 Df UIKitSystem[712:6a834] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:55.526 Df runningboardd[398:69b01] [com.apple.runningboard:monitor] Calculated state for app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>: running-active (role: UserInteractiveFocal) (endowments: <private>)
+2026-07-16 04:31:55.528 Df gamepolicyd[788:69b03] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:55.528 A  Phone[6135:630ac] (RunningBoardServices) didChangeInheritances
+2026-07-16 04:31:55.528 Df runningboardd[398:6a9a5] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135] from originator [osservice<com.apple.coreservices.launchservicesd>:361] with description <RBSAssertionDescriptor| "notification:6135" ID:398-361-4525 target:6135 attributes:[
+	<RBSDomainAttribute| domain:"com.apple.launchservicesd" name:"LSNotification" sourceEnvironment:"(null)">
+	]>
+2026-07-16 04:31:55.529 Df runningboardd[398:6a9a5] [com.apple.runningboard:ttl] Assertion 398-361-4525 (target:[app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135]) will be created as active
+2026-07-16 04:31:55.529 Df runningboardd[398:69b01] [com.apple.runningboard:monitor] Calculated state for app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>: running-active (role: UserInteractiveFocal) (endowments: <private>)
+2026-07-16 04:31:55.529 Df WindowServer[391:61ed9] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:55.530 Df UIKitSystem[712:66d8f] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:55.530 Df gamepolicyd[788:69b04] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:55.547 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:55.547 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:55.548 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ didActivateAppKit (state: Running)
+2026-07-16 04:31:55.548 Df Phone[6135:50e60] [com.apple.synapse:DocumentWorkflows] application did become active: <private>
+2026-07-16 04:31:55.545 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] scene content state changed: preparing
+2026-07-16 04:31:55.545 Df UIKitSystem[712:6a834] [com.apple.FrontBoard:ProcessScene] [0x9fad11380:(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] Scene lifecycle state did change: Foreground
+2026-07-16 04:31:55.545 Df UIKitSystem[712:6a834] [com.apple.FrontBoard:ProcessScene] [0x9fad11380:(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] Scene state did change: FV-Focal[100].
+2026-07-16 04:31:55.546 Df UIKitSystem[712:6a834] [com.apple.FrontBoard:ProcessScene] [0x9fad11380:(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] Sending scene action [Logical Activate][0x68ff] to process 0x9facc1200 (watchdog: 1200.00s)
+2026-07-16 04:31:55.530 Df PerfPowerServices[375:69f99] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-Visible
+2026-07-16 04:31:55.530 Df filecoordinationd[631:6a9c6] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:55.575 Df dataaccessd[9695:6ac5d] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-Visible
+2026-07-16 04:31:55.576 Df dataaccessd[9695:6ac5d] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-Visible
+2026-07-16 04:31:55.578 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:55.578 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:55.579 Df Phone[6135:62866] [com.apple.xpc:connection] [0xb096fb980] activating connection: mach=false listener=false peer=false name=com.apple.TextInputUI.xpc.CursorUIViewService
+2026-07-16 04:31:55.579 Df Phone[6135:62866] [com.apple.xpc:connection] [0xb096fb980] invalidated after the last release of the connection object
+2026-07-16 04:31:55.580 Df Phone[6135:50e60] [com.apple.xpc:connection] [0xb096fae40] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-07-16 04:31:55.580 Df Phone[6135:50e60] [com.apple.xpc:connection] [0xb096fb980] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-07-16 04:31:55.580 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ isAttemptingTermination (state: Running)
+2026-07-16 04:31:55.580 Df Phone[6135:50e60] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0xb05358000> (B69E9873-363A-4421-AAA1-9AE4C3CD5FCB)
+2026-07-16 04:31:55.581 Df Phone[6135:50e60] [com.apple.UIKit:UIFocus] Focus system enabled
+2026-07-16 04:31:55.583 Df Phone[6135:50e60] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0xb05358000> (B69E9873-363A-4421-AAA1-9AE4C3CD5FCB)
+2026-07-16 04:31:55.583 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] Reloading input views for key-window scene responder: <CallsAppUI.RecentsViewController: 0xb04ea4000; > force:N
+2026-07-16 04:31:55.583 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _reloadInputViewsForKeyWindowSceneResponder: 1 force: 0, fromBecomeFirstResponder: 0 (automaticKeyboard: 1, reloadIdentifier: E7B638C1-ACA2-446A-ABBD-193D8AAB84EA)
+2026-07-16 04:31:55.583 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder: <CallsAppUI.RecentsViewController: 0xb04ea4000; >, automaticKeyboard: 1, force: 0
+2026-07-16 04:31:55.583 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, responderRequiresKeyboard 0 (automaticKeyboardEnabled: 1, activeInstance: <(null): 0x0>, self.isOnScreen: 0, requiresKBWhenFirstResponder: 0)
+2026-07-16 04:31:55.583 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, useKeyboard 0 (allowsSystemInputView: 0, !inputView <(null): 0x0>, responderRequiresKeyboard 0)
+2026-07-16 04:31:55.583 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, configuring _responderWithoutAutomaticAppearanceEnabled: <(null): 0x0> (_automaticAppearEnabled: 1)
+2026-07-16 04:31:55.583 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, needsIVPlaceholder: 0, needsIAVPlaceholder: 0, needsInputSetWithPlaceholder: 0
+2026-07-16 04:31:55.583 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder returning: <<UIInputViewSet: 0xb03b021c0>; (empty)>
+2026-07-16 04:31:55.584 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ isAttemptingTermination (state: Running)
+2026-07-16 04:31:55.584 Df Phone[6135:50e60] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <_UIViewHostingScene: 0xb06e59900> (UINSSceneHostingViewController-5A42D9B9-B015-4D93-8758-D96284C09006)
+2026-07-16 04:31:55.584 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] applicationShouldHandleReopen
+2026-07-16 04:31:55.584 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Checking AppleEvent for background launch data. (aevt/rapp)
+2026-07-16 04:31:55.584 Df Phone[6135:50e60] [com.apple.launchservices:default] LaunchServices: _LSOpenExtractBackgroundLaunchReasonFromAppleEvent() => false - <private>, err=Error Domain=NSOSStatusErrorDomain Code=-1701 UserInfo={_LSLine=1374, _LSFunction=<private>, _LSFile=<private>, _LSErrorMessage=<private>}
+2026-07-16 04:31:55.585 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] AppleEvent is NOT for background launch. (aevt/rapp)
+2026-07-16 04:31:55.585 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] App icon clicked; requesting recents scene
+2026-07-16 04:31:55.585 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ applicationReceivedReopenRequest (state: Running)
+2026-07-16 04:31:55.585 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ isLaunchComplete (state: Running)
+2026-07-16 04:31:55.585 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ allExpectedWindowsDidOpen (state: Running)
+2026-07-16 04:31:55.619 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:55.619 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:55.620 Df Phone[6135:50e60] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0xb06e59680> (NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D)
+2026-07-16 04:31:55.620 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground. (FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D)
+2026-07-16 04:31:55.620 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to foreground active. (FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D)
+2026-07-16 04:31:55.620 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Scene reached target state. (<private>)
+2026-07-16 04:31:55.620 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] No longer tracking scene state with target state: FG+A (<private>)
+2026-07-16 04:31:55.620 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Scene state change complete, dequeuing resumed.
+2026-07-16 04:31:55.620 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB  persistentID: B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:31:55.623 Df Phone[6135:50e60] [com.apple.TextInputUI:CursorUI] -[TUINSCursorUIController activate:]_block_invoke: Create CursorUIViewService: TUINSRemoteViewController
+2026-07-16 04:31:55.624 Df Phone[6135:50e60] [com.apple.xpc:connection] [0xb06e50c80] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-07-16 04:31:55.624 Df Phone[6135:50e60] [com.apple.xpc:connection] [0xb09704140] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-07-16 04:31:55.625 Df WindowServer[391:61ed9] [com.apple.BackBoard:EventDelivery] chain did update (setDeferringRules) <keyboardFocus; display: null> containsEndOfChain: YES; [
+    <token: <frontmost>; pid: 391>,
+    <token: Phone:0x0-0x109109; pid: 391>,
+    <pid: 6135>,
+    <token: viewbridge-key-window; pid: 6135>
+]
+2026-07-16 04:31:55.625 Df WindowServer[391:61ed9] [com.apple.BackBoard:EventDelivery] chain did update (setDeferringRules) <keyboardFocus; display: null> containsEndOfChain: YES; [
+    <token: <frontmost>; pid: 391>,
+    <token: Phone:0x0-0x109109; pid: 391>,
+    <pid: 6135>,
+    <token: viewbridge-key-window; pid: 6135>
+]
+2026-07-16 04:31:55.625 Df UIKitSystem[712:6a834] [com.apple.FrontBoard:ProcessScene] [0x9fad11380:(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] Scene action [Logical Activate][0x68ff] completed with success: 1
+2026-07-16 04:31:55.626 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] scene content state changed: ready
+2026-07-16 04:31:55.657 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Phone.6135; token: viewbridge-key-window>)
+2026-07-16 04:31:55.665 E  kernel[0:50e60] (Sandbox) Sandbox: Phone(6135) deny(1) iokit-open-user-client AppleNVMeEANUC
+2026-07-16 04:31:55.665 Df Phone[6135:50e60] (libMobileGestalt.dylib) IOServiceOpen failed for class 'AppleNVMeEAN'
+2026-07-16 04:31:55.665 Df kernel[0:50e60] IOUC AppleNVMeEANUC failed MACF in process pid 6135, Phone
+2026-07-16 04:31:55.666 Df Phone[6135:50e60] (libMobileGestalt.dylib) Could not open EAN service and connect
+2026-07-16 04:31:55.666 Df Phone[6135:50e60] (libMobileGestalt.dylib) Failed to copy 'aptk' from EAN
+2026-07-16 04:31:55.666 Df Phone[6135:50e60] (libMobileGestalt.dylib) Failed to copy APTicket properties. Falling back to default policy.
+2026-07-16 04:31:55.666 Df Phone[6135:50e60] (libMobileGestalt.dylib) Creating default MGSysConfigPolicy
+2026-07-16 04:31:55.666 Df Phone[6135:50e60] (libMobileGestalt.dylib) syscfg is not initialized!
+2026-07-16 04:31:55.666 Df Phone[6135:50e60] (libMobileGestalt.dylib) CFDictionaryRef copySyscfgDictionary(void) enumeration of <private> failed.
+2026-07-16 04:31:55.666 Df Phone[6135:50e60] (libMobileGestalt.dylib) Failed to find key <private>
+2026-07-16 04:31:55.668 Df Phone[6135:50e60] [com.apple.xpc:connection] [0xb05753c00] activating connection: mach=true listener=false peer=false name=com.apple.pbs.fetch_services
+2026-07-16 04:31:55.669 Df Phone[6135:50e60] [com.apple.xpc:connection] [0xb05753c00] invalidated after the last release of the connection object
+2026-07-16 04:31:55.671 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 1
+2026-07-16 04:31:55.671 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to window: <FaceTimeMac.MacFaceTimeWindow: 0xb052bd800>; contextId: 0x3528488F
+2026-07-16 04:31:55.683 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 1
+2026-07-16 04:31:55.683 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to window: <FaceTimeMac.MacFaceTimeWindow: 0xb052bd800>; contextId: 0x3528488F
+2026-07-16 04:31:55.684 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:55.692 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Phone.6135; token: viewbridge-key-window>)
+2026-07-16 04:31:55.693 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Evaluating dispatch of UIEvent: 0xb03d4b6c0; type: 11; subtype: 0; backing type: 11; shouldSend: 1; ignoreInteractionEvents: 0
+2026-07-16 04:31:55.693 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 11; subtype: 0; to windows: 1
+2026-07-16 04:31:55.693 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 11; subtype: 0; to window: <FaceTimeMac.MacFaceTimeWindow: 0xb052bd800>; contextId: 0x3528488F
+2026-07-16 04:31:55.693 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Evaluating dispatch of UIEvent: 0xb06fab100; type: 0; subtype: 0; backing type: 11; shouldSend: 0; ignoreInteractionEvents: 0, systemGestureStateChange: 0
+2026-07-16 04:31:55.694 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 1
+2026-07-16 04:31:55.694 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to window: <FaceTimeMac.MacFaceTimeWindow: 0xb052bd800>; contextId: 0x3528488F
+2026-07-16 04:31:55.702 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 1
+2026-07-16 04:31:55.702 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to window: <FaceTimeMac.MacFaceTimeWindow: 0xb052bd800>; contextId: 0x3528488F
+2026-07-16 04:31:55.709 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Evaluating dispatch of UIEvent: 0xb03d4b6c0; type: 11; subtype: 0; backing type: 11; shouldSend: 1; ignoreInteractionEvents: 0
+2026-07-16 04:31:55.709 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 11; subtype: 0; to windows: 1
+2026-07-16 04:31:55.709 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 11; subtype: 0; to window: <FaceTimeMac.MacFaceTimeWindow: 0xb052bd800>; contextId: 0x3528488F
+2026-07-16 04:31:55.709 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Evaluating dispatch of UIEvent: 0xb06fab100; type: 0; subtype: 0; backing type: 11; shouldSend: 0; ignoreInteractionEvents: 0, systemGestureStateChange: 0
+2026-07-16 04:31:55.737 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:55.780 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:55.780 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:55.805 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Phone.6135; token: viewbridge-key-window>)
+2026-07-16 04:31:55.806 A  Phone[6135:50e60] (CoreFoundation) Loading Preferences From User CFPrefsD
+2026-07-16 04:31:55.808 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 1
+2026-07-16 04:31:55.808 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to window: <FaceTimeMac.MacFaceTimeWindow: 0xb052bd800>; contextId: 0x3528488F
+2026-07-16 04:31:55.815 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 1
+2026-07-16 04:31:55.815 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to window: <FaceTimeMac.MacFaceTimeWindow: 0xb052bd800>; contextId: 0x3528488F
+2026-07-16 04:31:55.853 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:55.950 A  Phone[6135:630ac] (CoreSpotlight) end-index-batch
+2026-07-16 04:31:55.950 A  Phone[6135:630ac] (CoreSpotlight) index-items
+2026-07-16 04:31:55.950 Df Phone[6135:630ac] [com.apple.corespotlight:index] CSInlineDonation:<private>: Skipping donation (feature flag disabled)
+2026-07-16 04:31:55.952 Df Phone[6135:62866] [com.apple.corespotlight:index] CSInlineDonation:<private>: Skipping donation (feature flag disabled)
+2026-07-16 04:31:56.024 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Phone.6135; token: viewbridge-key-window>)
+2026-07-16 04:31:56.025 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:56.026 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:56.026 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:57.136 Df ContinuityCaptureAgent[630:68fa2] [com.apple.CMContinuityCapture:default] <private> Client Device Identifier:<redacted> Name:<redacted> Model:iPhone16,2 Wired:0 Wireless:1 Magic:0 Nearby:1 Capabilities:1 Version:26.5 devicePtr:0xa9f05fe40 status 8000880382
+2026-07-16 04:31:57.138 Df ContinuityCaptureAgent[630:68fa2] [com.apple.CMContinuityCapture:default] <private> Client Device Identifier:<redacted> Name:<redacted> Model:iPhone16,2 Wired:0 Wireless:1 Magic:0 Nearby:1 Capabilities:1 Version:26.5 devicePtr:0xa9ec3df40 status:8000880382 isDedicated:0
+2026-07-16 04:31:57.684 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Phone.6135; token: viewbridge-key-window>)
+2026-07-16 04:31:57.686 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 1
+2026-07-16 04:31:57.686 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to window: <FaceTimeMac.MacFaceTimeWindow: 0xb052bd800>; contextId: 0x3528488F
+2026-07-16 04:31:57.688 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardUI] Keyboard receives keyEvent type: 4; subtype: 0
+2026-07-16 04:31:57.863 Df WindowServer[391:fca] [com.apple.SkyLight:KeyboardEvent] [specialkey] - processHotKeyEvent: frontmost process Phone allows special key appSwitchFWD, so entering special key mode
+2026-07-16 04:31:58.523 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 1
+2026-07-16 04:31:58.523 Df Phone[6135:50e60] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to window: <FaceTimeMac.MacFaceTimeWindow: 0xb052bd800>; contextId: 0x3528488F
+2026-07-16 04:31:58.523 Df Phone[6135:630ac] [com.apple.useractivity:main] ENCODE: Caching encoded userInfo to use until we are marked dirty again, returning encoded result <private> opts={ LSUserActivityContainsFileProviderURL = 0; LSUserActivityContainsUnsynchronizedCloudDocs = 0; UAUserActivityContainsCloudDocsKey = 0;}
+2026-07-16 04:31:58.522 Df runningboardd[398:6a9a7] [com.apple.runningboard:ttl] Invalidating assertion 398-361-4523 (target:[app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135]) from originator [osservice<com.apple.coreservices.launchservicesd>:361]
+2026-07-16 04:31:58.524 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ requestSceneBackground: (state: Running)
+2026-07-16 04:31:58.528 Df runningboardd[398:6a9a7] [com.apple.runningboard:ttl] Invalidating assertion 398-361-4525 (target:[app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135]) from originator [osservice<com.apple.coreservices.launchservicesd>:361]
+2026-07-16 04:31:58.529 Df runningboardd[398:6a9a7] [com.apple.runningboard:ttl] Invalidating assertion 398-391-4524 (target:[app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135]) from originator [osservice<com.apple.WindowServer(88)>:391]
+2026-07-16 04:31:58.542 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] scene content state changed: notReady
+2026-07-16 04:31:58.542 Df UIKitSystem[712:6a834] [com.apple.FrontBoard:ProcessScene] [0x9fad11380:(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] Scene lifecycle state did change: Background
+2026-07-16 04:31:58.542 Df UIKitSystem[712:6a834] [com.apple.FrontBoard:ProcessScene] [0x9fad11380:(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] Scene state did change: FG-Active[90].
+2026-07-16 04:31:58.543 Df UIKitSystem[712:6a834] [com.apple.FrontBoard:ProcessScene] [0x9fad11380:(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] Sending scene action [Logical Deactivate][0xa440] to process 0x9facc1200 (watchdog: 1200.00s)
+2026-07-16 04:31:58.524 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Enqueued BG. (FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D)
+2026-07-16 04:31:58.524 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Kicked off dequeueing.
+2026-07-16 04:31:58.524 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Dequeued BG. (FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D)
+2026-07-16 04:31:58.524 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Dequeuing paused until state change is complete. (BG; <private>)
+2026-07-16 04:31:58.524 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Tracking scene state with target state: BG (<private>)
+2026-07-16 04:31:58.545 Df runningboardd[398:6a9a7] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135] from originator [osservice<com.apple.coreservices.launchservicesd>:361] with description <RBSAssertionDescriptor| "notification:6135" ID:398-361-4531 target:6135 attributes:[
+	<RBSDomainAttribute| domain:"com.apple.launchservicesd" name:"LSNotification" sourceEnvironment:"(null)">
+	]>
+2026-07-16 04:31:58.525 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Handle app event: appDidResignActive.
+2026-07-16 04:31:58.545 Df runningboardd[398:6a9a7] [com.apple.runningboard:ttl] Assertion 398-361-4531 (target:[app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>:6135]) will be created as active
+2026-07-16 04:31:58.526 Df Phone[6135:50e60] [com.apple.synapse:DocumentWorkflows] application did resign active: <private>
+2026-07-16 04:31:58.565 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:58.565 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:58.566 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] Reloading input views for key-window scene responder: <(null): 0x0; > force:N
+2026-07-16 04:31:58.566 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _reloadInputViewsForKeyWindowSceneResponder: 0 force: 0, fromBecomeFirstResponder: 0 (automaticKeyboard: 0, reloadIdentifier: 16EFADDF-5A62-4020-A940-E49A1C4CBF79)
+2026-07-16 04:31:58.566 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder: <(null): 0x0; >, automaticKeyboard: 0, force: 0
+2026-07-16 04:31:58.566 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, responderRequiresKeyboard 0 (automaticKeyboardEnabled: 0, activeInstance: <(null): 0x0>, self.isOnScreen: 0, requiresKBWhenFirstResponder: 0)
+2026-07-16 04:31:58.566 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, useKeyboard 0 (allowsSystemInputView: 0, !inputView <(null): 0x0>, responderRequiresKeyboard 0)
+2026-07-16 04:31:58.566 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, configuring _responderWithoutAutomaticAppearanceEnabled: <(null): 0x0> (_automaticAppearEnabled: 1)
+2026-07-16 04:31:58.566 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, needsIVPlaceholder: 0, needsIAVPlaceholder: 0, needsInputSetWithPlaceholder: 0
+2026-07-16 04:31:58.566 Df Phone[6135:50e60] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder returning: <<UIInputViewSet: 0xb03d48c00>; (empty)>
+2026-07-16 04:31:58.566 Df Phone[6135:50e60] [com.apple.UIKit:UIFocus] Focus system disabled
+2026-07-16 04:31:58.568 Df Phone[6135:50e60] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0xb05358000> (B69E9873-363A-4421-AAA1-9AE4C3CD5FCB)
+2026-07-16 04:31:58.568 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ isAttemptingTermination (state: Running)
+2026-07-16 04:31:58.568 Df Phone[6135:50e60] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0xb05358000> (B69E9873-363A-4421-AAA1-9AE4C3CD5FCB)
+2026-07-16 04:31:58.568 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ isAttemptingTermination (state: Running)
+2026-07-16 04:31:58.568 Df Phone[6135:50e60] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <_UIViewHostingScene: 0xb06e59900> (UINSSceneHostingViewController-5A42D9B9-B015-4D93-8758-D96284C09006)
+2026-07-16 04:31:58.569 Df Phone[6135:50e60] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0xb06e59680> (NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D)
+2026-07-16 04:31:58.569 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground inactive. (FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D)
+2026-07-16 04:31:58.569 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to background. (FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D)
+2026-07-16 04:31:58.569 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Scene reached target state. (<private>)
+2026-07-16 04:31:58.569 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] No longer tracking scene state with target state: BG (<private>)
+2026-07-16 04:31:58.569 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Scene state change complete, dequeuing resumed.
+2026-07-16 04:31:58.569 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB  persistentID: B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:31:58.573 Df useractivityd[694:6b280] [com.apple.useractivity:main] -- Demoting self.advertisingProcess to nil (was UserActivityClient(pid=6135/com.apple.mobilephone uuids={4116459D-1236-4EEC-AA87-606D6622CC6F 95AAE1C8-406B-4BB4-8518-9EA1054FF845 })) and trigger pickNewAdvertisement because the previous advertisingProcess had a current activity.
+2026-07-16 04:31:58.597 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11380:(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] Scene action [Logical Deactivate][0xa440] completed with success: 1
+2026-07-16 04:31:58.627 Df runningboardd[398:69b01] [com.apple.runningboard:monitor] Calculated state for app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>: running-active (role: UserInteractiveFocal) (endowments: <private>)
+2026-07-16 04:31:58.627 A  Phone[6135:630ac] (RunningBoardServices) didChangeInheritances
+2026-07-16 04:31:58.627 Df WindowServer[391:62a00] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:58.627 Df UIKitSystem[712:66d8f] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:58.627 Df filecoordinationd[631:6a9c6] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:58.627 Df gamepolicyd[788:69b04] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-NotVisible
+2026-07-16 04:31:58.627 Df PerfPowerServices[375:69f99] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-Visible
+2026-07-16 04:31:58.627 Df Phone[6135:50e60] [com.apple.AppKit:StateRestoration] -[NSPersistentUIManager flushAllChanges]
+2026-07-16 04:31:58.627 Df Phone[6135:50e60] [com.apple.AppKit:StateRestoration] -[NSPersistentUIManager flushAllChanges] finishing enqueued operations
+2026-07-16 04:31:58.627 Df Phone[6135:6b371] [com.apple.AppKit:StateRestoration] -[NSPersistentUIManager flushAllChanges]_block_invoke asyncing to main queue
+2026-07-16 04:31:58.628 Df Phone[6135:630ac] [com.apple.AppKit:StateRestoration] -[NSPersistentUIManager flushAllChanges]_block_invoke writing records
+2026-07-16 04:31:58.630 Df dataaccessd[9695:6ac5d] [com.apple.runningboard:monitor] Received state update for 6135 (app<application.com.apple.mobilephone.1152921500311895346.1152921500311895351(501)>, running-active-Visible
+2026-07-16 04:31:58.702 Df UIKitSystem[712:6a834] [com.apple.FrontBoard:ProcessScene] [0x9fad11380:(FBSceneManager):FUScene|com.apple.mobilephone(6135)|NSMenuBarScene_A8861597-5D5A-4C20-A5B5-55D88A0AA64D] Scene state did change: XX-None[0].

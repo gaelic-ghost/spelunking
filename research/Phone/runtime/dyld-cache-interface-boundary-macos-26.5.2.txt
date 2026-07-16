@@ -1,0 +1,88 @@
+# Phone dyld cache and interface tooling boundary
+# Captured on macOS 26.5.2 (25F84). Metadata only: no disassembly, no personal data.
+
+## active_cache
+
+Command:
+
+file /System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e /System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e.map
+
+Output:
+
+/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e:     Dyld shared cache version 1 arm64e
+/System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e.map: ASCII text
+
+## local_tooling
+
+Command:
+
+command -v dyld_shared_cache_util || true
+command -v class-dump || true
+command -v class-dump-swift || true
+command -v swift-reflection-dump || true
+command -v jtool2 || true
+command -v swift-api-digester || true
+command -v swift-symbolgraph-extract || true
+command -v nm || true
+command -v dyld_info || true
+command -v otool || true
+find /Applications/Xcode-beta.app/Contents/Developer -name 'dyld_shared_cache_util' -o -name 'swift-api-digester' -o -name 'swift-symbolgraph-extract' 2>/dev/null | sort
+
+Output:
+
+$HOME/.swiftly/bin/swift-api-digester
+$HOME/.swiftly/bin/swift-symbolgraph-extract
+/usr/bin/nm
+/usr/bin/dyld_info
+/usr/bin/otool
+/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-api-digester
+/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-symbolgraph-extract
+
+Interpretation: `dyld_shared_cache_util`, `class-dump`, `class-dump-swift`, `swift-reflection-dump`, and `jtool2` were not found in PATH or under the checked Xcode developer directory. `dyld_info`, `nm`, `otool`, `swift-api-digester`, and `swift-symbolgraph-extract` are available.
+
+## dyld_info_usage
+
+Command:
+
+dyld_info
+
+Relevant output:
+
+Usage: dyld_info <options>* <mach-o file>+ | -all_dir <dir> | -all_dyld_cache
+    -exports                    print all exported symbols
+    -imports                    print all symbols needed from other dylibs
+    -objc                       print objc classes, categories, etc
+    -swift_protocols            print swift protocol conformances
+    -all_dyld_cache             show specified info about all dylibs in the dyld cache
+
+## map_entries
+
+Command:
+
+rg -n '(/System/Library/PrivateFrameworks/(TelephonyUtilities|CallHistory|CallsXPC|CallsPersistence|PhoneAppIntents)\.framework|/System/iOSSupport/System/Library/PrivateFrameworks/(PhoneKit|CallsAppUI|CallsAppServices|CallsDialer|CallsSearch)\.framework)' /System/Volumes/Preboot/Cryptexes/OS/System/Library/dyld/dyld_shared_cache_arm64e.map
+
+Output:
+
+4507:/System/Library/PrivateFrameworks/TelephonyUtilities.framework/Versions/A/TelephonyUtilities
+5423:/System/Library/PrivateFrameworks/CallHistory.framework/Versions/A/CallHistory
+14073:/System/Library/PrivateFrameworks/CallsPersistence.framework/Versions/A/CallsPersistence
+14089:/System/Library/PrivateFrameworks/CallsXPC.framework/Versions/A/CallsXPC
+19455:/System/Library/PrivateFrameworks/PhoneAppIntents.framework/Versions/A/PhoneAppIntents
+28541:/System/iOSSupport/System/Library/PrivateFrameworks/CallsAppServices.framework/Versions/A/CallsAppServices
+28550:/System/iOSSupport/System/Library/PrivateFrameworks/CallsAppUI.framework/Versions/A/CallsAppUI
+28559:/System/iOSSupport/System/Library/PrivateFrameworks/CallsDialer.framework/Versions/A/CallsDialer
+28568:/System/iOSSupport/System/Library/PrivateFrameworks/CallsSearch.framework/Versions/A/CallsSearch
+29289:/System/iOSSupport/System/Library/PrivateFrameworks/PhoneKit.framework/Versions/A/PhoneKit
+
+## swiftinterface_search
+
+Command:
+
+find /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks -maxdepth 4 \( -name '*.swiftinterface' -o -name '*.private.swiftinterface' -o -name '*.swiftmodule' \) | rg '/(CallsXPC|CallsPersistence|PhoneAppIntents|TelephonyUtilities|CallHistory)\.framework/' | sort
+find /System/Library/PrivateFrameworks -maxdepth 3 \( -name '*.swiftinterface' -o -name '*.private.swiftinterface' -o -name '*.swiftmodule' \) 2>/dev/null | rg '/(CallsXPC|CallsPersistence|PhoneAppIntents|TelephonyUtilities|CallHistory)\.framework/' | sort
+
+Output:
+
+(no matches)
+
+Interpretation: the checked SDK and active private-framework directories did not expose Swift interface/module files for the selected Phone private frameworks.

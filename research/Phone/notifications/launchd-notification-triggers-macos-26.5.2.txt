@@ -1,0 +1,118 @@
+# Phone launchd notification trigger evidence
+# Captured from macOS 26.5.2 LaunchAgent/XPC plists.
+## /System/Library/LaunchAgents/com.apple.callhistoryd.plist
+  "Label" => "com.apple.callhistoryd"
+  "MachServices" => {
+    "com.apple.callhistoryd.service" => true
+    "com.apple.conversation.history" => true
+  "ProgramArguments" => [
+    0 => "/System/Library/PrivateFrameworks/CallHistory.framework/Support/callhistoryd"
+## /System/Library/LaunchAgents/com.apple.CallHistoryPluginHelper.plist
+  "Label" => "com.apple.CallHistoryPluginHelper"
+  "LaunchEvents" => {
+    "com.apple.notifyd.matching" => {
+      "com.apple.CallHistoryPluginHelper.launchnotification" => {
+        "Notification" => "com.apple.CallHistoryPluginHelper.launchnotification"
+  "MachServices" => {
+    "com.apple.CallHistoryPluginHelper" => true
+  "ProgramArguments" => [
+    0 => "/System/Library/PrivateFrameworks/CallHistory.framework/Support/CallHistoryPluginHelper"
+## /System/Library/LaunchAgents/com.apple.CallHistorySyncHelper.plist
+  "Label" => "com.apple.CallHistorySyncHelper"
+  "LaunchEvents" => {
+    "com.apple.notifyd.matching" => {
+      "com.apple.callhistorysync.idslaunchnotification" => {
+        "Notification" => "com.apple.callhistorysync.idslaunchnotification"
+  "MachServices" => {
+    "com.apple.CallHistorySyncHelper" => true
+    "com.apple.CallHistorySyncHelper.aps" => true
+  "ProgramArguments" => [
+    0 => "/System/Library/PrivateFrameworks/CallHistory.framework/Support/CallHistorySyncHelper"
+## /System/Library/LaunchAgents/com.apple.callintelligenced.plist
+  "Label" => "com.apple.callintelligenced"
+  "LaunchEvents" => {
+    "com.apple.notifyd.matching" => {
+        "Notification" => "com.apple.mobile.keybagd.first_unlock"
+  "MachServices" => {
+    "com.apple.callintelligenced.service" => true
+  "ProgramArguments" => [
+    0 => "/System/Library/PrivateFrameworks/CallIntelligence.framework/callintelligenced"
+## /System/Library/LaunchAgents/com.apple.facetimemessagestored.plist
+  "Label" => "com.apple.facetimemessagestored"
+  "MachServices" => {
+    "com.apple.aps.facetimemessagestored" => true
+    "com.apple.facetimemessagestored.service" => true
+    "com.apple.facetimemessagestored.videomessaging" => true
+    "com.apple.private.alloy.facetime.messaging-idswake" => true
+  "ProgramArguments" => [
+    0 => "/System/Library/PrivateFrameworks/FaceTimeMessageStore.framework/facetimemessagestored"
+## /System/Library/LaunchAgents/com.apple.telephonyutilities.callservicesd.plist
+  "Label" => "com.apple.telephonyutilities.callservicesd"
+  "LaunchEvents" => {
+    "com.apple.CTTelephonyCenter" => {
+      "com.apple.telephonyutilities.callservicesd.kCTSettingCallCapabilitiesChangedNotification" => {
+        "Name" => "kCTSettingCallCapabilitiesChangedNotification"
+      "com.apple.callhistory.save.distributed.notification" => {
+        "Name" => "com.apple.callhistory.save.distributed.notification"
+    "com.apple.notifyd.matching" => {
+      "com.apple.telephonyutilities.callservicesd.fakeincomingmessage" => {
+        "Notification" => "com.apple.telephonyutilities.callservicesd.fakeincomingmessage"
+      "com.apple.telephonyutilities.callservicesd.fakeoutgoingmessage" => {
+        "Notification" => "com.apple.telephonyutilities.callservicesd.fakeoutgoingmessage"
+      "com.apple.telephonyutilities.callservicesd.kFaceTimeChangedNotification" => {
+        "Notification" => "kFaceTimeChangedNotification"
+      "com.apple.telephonyutilities.callservicesd.kFZACAppBundleIdentifierLaunchNotification" => {
+        "Notification" => "kFZACAppBundleIdentifierLaunchNotification"
+      "com.apple.telephonyutilities.callservicesd.kFZVCAppBundleIdentifierLaunchNotification" => {
+        "Notification" => "kFZVCAppBundleIdentifierLaunchNotification"
+  "MachServices" => {
+    "com.apple.callkit.callcontrollerhost" => true
+    "com.apple.callkit.callsourcehost" => true
+    "com.apple.callkit.networkextension.messagecontrollerhost" => true
+    "com.apple.callkit.networkextension.voip" => true
+    "com.apple.callkit.notificationserviceextension.voip" => true
+    "com.apple.callkit.service" => true
+    "com.apple.copresence.conversationmanagerhost" => true
+    "com.apple.group-activities.conversationmanagerhost" => true
+    "com.apple.private.alloy.facetime.audio-idswake" => true
+    "com.apple.private.alloy.facetime.multi-idswake" => true
+    "com.apple.private.alloy.facetime.sync-idswake" => true
+    "com.apple.private.alloy.facetime.video-idswake" => true
+    "com.apple.private.alloy.phone.auth-idswake" => true
+    "com.apple.private.alloy.phonecontinuity-idswake" => true
+    "com.apple.private.alloy.phonecontinuity.ping-idswake" => true
+    "com.apple.telephonyutilities.callservicesdaemon.callcapabilities" => true
+    "com.apple.telephonyutilities.callservicesdaemon.callhistorycontroller" => true
+    "com.apple.telephonyutilities.callservicesdaemon.callhistorymanager" => true
+    "com.apple.telephonyutilities.callservicesdaemon.callprovidermanager" => true
+    "com.apple.telephonyutilities.callservicesdaemon.callstatecontroller" => true
+    "com.apple.telephonyutilities.callservicesdaemon.conversationmanager" => true
+    "com.apple.telephonyutilities.callservicesdaemon.conversationprovidermanager" => true
+    "com.apple.telephonyutilities.callservicesdaemon.neighborhood-activities" => true
+    "com.apple.telephonyutilities.callservicesdaemon.simulatedconversationcontroller" => true
+    "com.apple.telephonyutilities.callservicesdaemon.usernotificationprovider" => true
+    "com.apple.telephonyutilities.callservicesdaemon.voip" => true
+    "com.apple.telephonyutilities.callservicesdaemon.voip.push" => true
+    "com.apple.telephonyutilities.callservicesdaemon.voip.push.development" => true
+    "com.apple.usernotifications.delegate.com.apple.facetime" => true
+    "com.apple.usernotifications.delegate.com.apple.mobilephone" => true
+  "ProgramArguments" => [
+    0 => "/System/Library/PrivateFrameworks/TelephonyUtilities.framework/callservicesd"
+## /System/Library/PrivateFrameworks/TelephonyUtilities.framework/PlugIns/PhoneIntentHandler.appex/Contents/Info.plist
+  "CFBundleExecutable" => "PhoneIntentHandler"
+  "CFBundleIdentifier" => "com.apple.TelephonyUtilities.PhoneIntentHandler"
+  "CFBundleName" => "PhoneIntentHandler"
+        0 => "INAddCallParticipantIntent"
+        1 => "INJoinCallIntent"
+        2 => "INStartCallIntent"
+        3 => "INSearchCallHistoryIntent"
+        4 => "INPlayVoicemailIntent"
+## /System/Library/PrivateFrameworks/TelephonyBlastDoorSupport.framework/XPCServices/TelephonyBlastDoorService.xpc/Contents/Info.plist
+  "CFBundleExecutable" => "TelephonyBlastDoorService"
+  "CFBundleIdentifier" => "com.apple.TelephonyBlastDoorService"
+  "CFBundleName" => "TelephonyBlastDoorService"
+  "XPCService" => {
+## /System/Library/PrivateFrameworks/FaceTimeMacHelperCore.framework/XPCServices/FTConversationService.xpc/Contents/Info.plist
+missing
+## /System/Library/PrivateFrameworks/FaceTimeMacHelperCore.framework/XPCServices/FTLivePhotoService.xpc/Contents/Info.plist
+missing

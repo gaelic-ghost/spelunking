@@ -1,0 +1,72 @@
+# Messages launchd notification trigger evidence
+# Captured from macOS 26.5.2 LaunchAgent/XPC plists.
+## /System/Library/LaunchAgents/com.apple.imagent.plist
+  "Label" => "com.apple.imagent"
+  "LaunchEvents" => {
+      "com.apple.private.IMCore.LoggedIntoHSA2" => {
+        "Name" => "com.apple.private.IMCore.LoggedIntoHSA2"
+  "MachServices" => {
+    "com.apple.aps.imagent" => true
+    "com.apple.corespotlight.daemon.messages" => true
+    "com.apple.imagent.cache-delete" => true
+    "com.apple.imagent.desktop.auth" => true
+    "com.apple.madrid-idswake" => true
+    "com.apple.madrid.lite-idswake" => true
+    "com.apple.usernotifications.delegate.com.apple.iChat" => true
+    "com.apple.usernotifications.delegate.com.apple.MobileSMS" => true
+  "ProgramArguments" => [
+    0 => "/System/Library/PrivateFrameworks/IMCore.framework/imagent.app/Contents/MacOS/imagent"
+## /System/Library/LaunchAgents/com.apple.imautomatichistorydeletionagent.plist
+  "Label" => "com.apple.imautomatichistorydeletionagent"
+  "LaunchEvents" => {
+    "com.apple.notifyd.matching" => {
+      "com.apple.imautomatichistorydeletionagent.prefchange" => {
+        "Notification" => "com.apple.imautomatichistorydeletionagent.prefchange"
+      "com.apple.IMAutomaticHistoryDeletionAgent" => {
+  "ProgramArguments" => [
+    0 => "/System/Library/PrivateFrameworks/IMDPersistence.framework/IMAutomaticHistoryDeletionAgent.app/Contents/MacOS/IMAutomaticHistoryDeletionAgent"
+## /System/Library/LaunchAgents/com.apple.imtransferagent.plist
+  "Label" => "com.apple.imcore.imtransferagent"
+  "LaunchEvents" => {
+    "com.apple.notifyd.matching" => {
+      "com.apple.idstransfers.idslaunchnotification" => {
+        "Notification" => "com.apple.idstransfers.idslaunchnotification"
+  "MachServices" => {
+    "com.apple.imtransferservices.IMTransferAgent" => true
+  "ProgramArguments" => [
+    0 => "/System/Library/PrivateFrameworks/IMTransferServices.framework/IMTransferAgent.app/Contents/MacOS/IMTransferAgent"
+## /System/Library/PrivateFrameworks/IMDPersistence.framework/XPCServices/IMDPersistenceAgent.xpc/Contents/Info.plist
+  "CFBundleExecutable" => "IMDPersistenceAgent"
+  "CFBundleIdentifier" => "com.apple.imdpersistence.IMDPersistenceAgent"
+  "CFBundleName" => "IMDPersistenceAgent"
+  "CFBundleSignature" => "iMDb"
+  "CFBundleVisibleComponentName" => "Messages Database Agent"
+  "LSMinimumSystemVersion" => "26.5"
+  "UTImportedTypeDeclarations" => [
+  "XPCService" => {
+      1 => "identifier = com.apple.imagent and anchor apple"
+      2 => "identifier = com.apple.imdmessageservices.IMDMessageServicesAgent and anchor apple"
+      14 => "identifier = com.apple.AddressBook.FaceTimeService and anchor apple"
+      15 => "identifier = com.apple.imtool and anchor apple"
+      18 => "identifier = com.apple.messages.AssistantExtension and anchor apple"
+      19 => "identifier = com.apple.IMAutomaticHistoryDeletionAgent and anchor apple"
+      20 => "identifier = com.apple.messages.StorageManagementExtension and anchor apple"
+      24 => "identifier = com.apple.FaceTime and anchor apple"
+      37 => "identifier = com.apple.DiagnosticExtensions.IMDiagnosticExtension and anchor apple"
+## /System/Library/PrivateFrameworks/IMDMessageServices.framework/XPCServices/IMDMessageServicesAgent.xpc/Contents/Info.plist
+  "CFBundleExecutable" => "IMDMessageServicesAgent"
+  "CFBundleIdentifier" => "com.apple.imdmessageservices.IMDMessageServicesAgent"
+  "CFBundleName" => "IMDMessageServicesAgent"
+  "CFBundleSignature" => "iMsa"
+  "CFBundleVisibleComponentName" => "Message Services Agent"
+  "LSMinimumSystemVersion" => "26.5"
+  "UTImportedTypeDeclarations" => [
+  "XPCService" => {
+## /System/Library/PrivateFrameworks/IMTranscoding.framework/XPCServices/IMTranscoderAgent.xpc/Contents/Info.plist
+  "CFBundleExecutable" => "IMTranscoderAgent"
+  "CFBundleIdentifier" => "com.apple.imtranscoding.IMTranscoderAgent"
+  "CFBundleName" => "IMTranscoderAgent"
+  "CFBundleSignature" => "iMsT"
+  "CFBundleVisibleComponentName" => "Messages Transcoding Agent"
+  "LSMinimumSystemVersion" => "26.5"
+  "XPCService" => {

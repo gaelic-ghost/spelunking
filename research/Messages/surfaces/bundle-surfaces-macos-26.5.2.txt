@@ -1,0 +1,572 @@
+# Messages app and extension surface manifests
+# Captured on macOS 26.5.2 (25F84). Bundle metadata only.
+## /System/Applications/Messages.app/Contents/Info.plist
+{
+  "AppleEventSupported" => true
+  "BuildMachineOSBuild" => "23A344017"
+  "CAProcessCanAccessGPU" => true
+  "CFBundleAllowMixedLocalizations" => true
+  "CFBundleDevelopmentRegion" => "English"
+  "CFBundleDisplayName" => "Messages"
+  "CFBundleDocumentTypes" => [
+    0 => {
+      "CFBundleTypeName" => "Image"
+      "CFBundleTypeRole" => "Viewer"
+      "LSHandlerRank" => "None"
+      "LSItemContentTypes" => [
+        0 => "public.image"
+      ]
+    }
+    1 => {
+      "CFBundleTypeName" => "Audiovisual content"
+      "CFBundleTypeRole" => "Viewer"
+      "LSHandlerRank" => "None"
+      "LSItemContentTypes" => [
+        0 => "public.audiovisual-content"
+      ]
+    }
+    2 => {
+      "CFBundleTypeName" => "Plain Text"
+      "CFBundleTypeRole" => "Viewer"
+      "LSHandlerRank" => "None"
+      "LSItemContentTypes" => [
+        0 => "public.utf8-plain-text"
+      ]
+    }
+  ]
+  "CFBundleExecutable" => "Messages"
+  "CFBundleHelpBookFolder" => "MobileSMS.help"
+  "CFBundleHelpBookName" => "com.apple.MobileSMS.help"
+  "CFBundleIconFile" => "AppIcon"
+  "CFBundleIconName" => "AppIcon"
+  "CFBundleIcons" => {
+  }
+  "CFBundleIcons~ipad" => {
+  }
+  "CFBundleIdentifier" => "com.apple.MobileSMS"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "Messages"
+  "CFBundlePackageType" => "APPL"
+  "CFBundleShortVersionString" => "26.0"
+  "CFBundleSignature" => "????"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleURLTypes" => [
+    0 => {
+      "CFBundleURLName" => "SMS URL"
+      "CFBundleURLSchemes" => [
+        0 => "sms"
+      ]
+      "LSIsAppleDefaultForScheme" => true
+    }
+    1 => {
+      "CFBundleURLIsPrivate" => true
+      "CFBundleURLName" => "SMS Private URL"
+      "CFBundleURLSchemes" => [
+        0 => "sms-private"
+      ]
+    }
+    2 => {
+      "CFBundleURLName" => "Message Store URL"
+      "CFBundleURLSchemes" => [
+        0 => "itms-messages"
+        1 => "itms-messagess"
+      ]
+    }
+    3 => {
+      "CFBundleURLName" => "IMSG"
+      "CFBundleURLSchemes" => [
+        0 => "imessage"
+      ]
+      "LSIsAppleDefaultForScheme" => true
+    }
+    4 => {
+      "CFBundleURLName" => "iChat URL"
+      "CFBundleURLSchemes" => [
+        0 => "iChat"
+      ]
+      "LSIsAppleDefaultForScheme" => true
+    }
+    5 => {
+      "CFBundleURLName" => "Messages URL"
+      "CFBundleURLSchemes" => [
+        0 => "Messages"
+      ]
+      "LSIsAppleDefaultForScheme" => true
+    }
+    6 => {
+      "CFBundleURLName" => "CPIM"
+      "CFBundleURLSchemes" => [
+        0 => "im"
+      ]
+      "LSIsAppleDefaultForScheme" => true
+    }
+  ]
+  "CFBundleVersion" => "1450.600.61.1.5"
+  "CoreSpotlightContinuation" => true
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => "25F80"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F80"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "HPDHelpProjectIdentifier" => "messages"
+  "INAlternativeAppNames" => [
+    0 => {
+      "INAlternativeAppName" => "APP_NAME_SYNONYM_1"
+    }
+    1 => {
+      "INAlternativeAppName" => "APP_NAME_SYNONYM_2"
+    }
+  ]
+  "LSApplicationCategoryType" => "public.app-category.social-networking"
+  "LSCounterpartIdentifiers" => [
+    0 => "com.apple.MobileSMS"
+  ]
+  "LSEligibilityDeletionDomain" => 34
+  "LSMinimumSystemVersion" => "26.5"
+  "MDItemKeywords" => "Messages iChat iMessage"
+  "NSAppleScriptEnabled" => true
+  "NSCalendarsUsageDescription" => "Calendar access allows Messages to show suggestions related to current or upcoming events."
+  "NSFocusStatusUsageDescription" => "When you’re using Do Not Disturb or another Focus, Messages will let your contacts know that you have notifications silenced."
+  "NSHumanReadableCopyright" => "Copyright © 2002–2025 Apple Inc. All rights reserved."
+  "NSLocationTemporaryUsageDescriptionDictionary" => {
+    "SendLocationDescription" => "Your precise location is used to send your current location."
+  }
+  "NSLocationWhenInUseUsageDescription" => "You can send your location to someone in an iMessage."
+  "NSPhotoLibraryAddUsageDescription" => "Photo library write access allows you to add photos from your conversations to your photo library."
+  "NSPrincipalClass" => "SMSApplication"
+  "NSRegulatoryPrivacyDisclosure" => {
+    "NSRegulatoryPrivacyDisclosureCallRecords" => "If your device supports Dual SIM, access to your call records allows Messages to associate a contact with a preferred SIM."
+    "NSRegulatoryPrivacyDisclosureCamera" => "Camera access allows you to take photos or create a Memoji to add to your contacts or share in Messages."
+    "NSRegulatoryPrivacyDisclosureContacts" => "Contacts access allows Messages to show the names and photos of people in your conversations. The app will ask permission before accessing your contacts."
+    "NSRegulatoryPrivacyDisclosureLocation" => "Location access allows you to share your location in conversations. The app will ask permission before accessing your location."
+    "NSRegulatoryPrivacyDisclosureMediaLibrary" => "Media Library access allows you to share currently playing or recently played music in Messages."
+    "NSRegulatoryPrivacyDisclosureMicrophone" => "Microphone access allows you to record audio messages and to send messages with Memoji."
+    "NSRegulatoryPrivacyDisclosurePhoneNumber" => "Phone number access allows Messages to use your phone number to send and receive iMessages."
+    "NSRegulatoryPrivacyDisclosurePhotos" => "Photos access allows you to share your photos in Messages."
+    "NSRegulatoryPrivacyDisclosureSMSData" => "SMS data access allows you to send and receive SMS messages."
+    "NSRegulatoryPrivacyDisclosureSummary" => "To allow you to easily send and receive messages with your contacts, Messages will securely access sensors and your data such as your SMS data, contacts, and phone number. It may also access your call records if your device supports Dual SIM."
+    "NSRegulatoryPrivacyDisclosureTitle" => "Welcome to Messages"
+    "NSRegulatoryPrivacyDisclosureVersion" => "1.0"
+  }
+  "NSSupportsAutomaticTermination" => true
+  "NSSupportsSuddenTermination" => true
+  "NSUserActivityTypes" => [
+    0 => "com.apple.Messages"
+    1 => "com.apple.Messages.StateRestoration"
+  ]
+  "OSAScriptingDefinition" => "Messages"
+  "SBAppTags~ipad" => [
+  ]
+  "SBAppTags~iphone" => [
+  ]
+  "SBAppTags~ipod" => [
+  ]
+  "SBMatchingApplicationGenres" => [
+    0 => "Productivity"
+    1 => "Utilities"
+    2 => "Social Networking"
+  ]
+  "SBPreferredPriorityBand" => "PriorityBandSuspended"
+  "SBStarkLaunchModes" => [
+    0 => "Default"
+    1 => "Siri"
+  ]
+  "SPDatastoreVersion" => 1
+  "SPSearchBundle" => "SMSSearch"
+  "UIApplicationSceneManifest" => {
+    "UIApplicationSupportsMultipleScenes" => true
+    "UIApplicationSupportsSceneItemProviders" => true
+    "UISceneConfigurations" => {
+      "com.apple.PosterBoardUIServices.editor-overlay" => [
+        0 => {
+          "UISceneConfigurationName" => "Messages-EditorOverlayConfiguration"
+          "UISceneDelegateClassName" => "ChatKit.PosterEditorOverlaySceneDelegate"
+        }
+      ]
+      "CPTemplateApplicationSceneSessionRoleApplication" => [
+        0 => {
+          "UISceneClassName" => "CPTemplateApplicationScene"
+          "UISceneConfigurationName" => "Messages-Car"
+          "UISceneDelegateClassName" => "CKStarkManager"
+        }
+      ]
+      "UIWindowSceneSessionRoleAssistiveAccessApplication" => [
+        0 => {
+          "UISceneConfigurationName" => "Messages-ClarityUI"
+          "UISceneDelegateClassName" => "CKClarityUISceneDelegate"
+        }
+      ]
+    }
+  }
+  "UIApplicationShortcutItems" => [
+    0 => {
+      "UIApplicationShortcutItemIconType" => "UIApplicationShortcutIconTypeCompose"
+      "UIApplicationShortcutItemTitle" => "NEW_MESSAGE_ACTION"
+      "UIApplicationShortcutItemType" => "com.apple.mobilesms.newmessage"
+    }
+  ]
+  "UIBackgroundModes" => [
+    0 => "audio"
+  ]
+  "UIDeviceFamily" => [
+    0 => 2
+  ]
+  "UIGlobalUserInterfaceIdiomMac" => true
+  "UILaunchPlacementParameters" => {
+    "PreferredLaunchSize" => {
+      "Height" => 720
+      "Width" => 880
+    }
+  }
+  "UILaunchStoryboardName" => "LaunchScreen"
+  "UIStatusBarTintParameters" => {
+    "UINavigationBar" => {
+      "Style" => "UIBarStyleDefault"
+    }
+  }
+  "UISupportedInterfaceOrientations~ipad" => [
+    0 => "UIInterfaceOrientationPortrait"
+    1 => "UIInterfaceOrientationPortraitUpsideDown"
+    2 => "UIInterfaceOrientationLandscapeLeft"
+    3 => "UIInterfaceOrientationLandscapeRight"
+  ]
+  "UISupportedInterfaceOrientations~iphone" => [
+    0 => "UIInterfaceOrientationPortrait"
+    1 => "UIInterfaceOrientationLandscapeLeft"
+    2 => "UIInterfaceOrientationLandscapeRight"
+  ]
+  "UISupportedInterfaceOrientations~ipod" => [
+    0 => "UIInterfaceOrientationPortrait"
+    1 => "UIInterfaceOrientationLandscapeLeft"
+    2 => "UIInterfaceOrientationLandscapeRight"
+  ]
+  "UISupportsAssistiveAccess" => true
+  "UIUserInterfaceIdiomMac" => true
+  "UIViewControllerBasedStatusBarAppearance" => true
+  "UNUserNotificationCenter" => {
+    "UNAllowCriticalAlerts" => true
+    "UNAutomaticallyShowSettings" => true
+    "UNCustomSettingsBundle" => "MessagesNotificationFiltering"
+    "UNCustomSettingsDetailControllerClass" => "MessagesNotificationFilteringController"
+    "UNDaemonShouldReceiveBackgroundResponses" => true
+    "UNDefaultSettings" => {
+      "UNSettingAlerts" => true
+      "UNSettingBadges" => true
+      "UNSettingCarPlay" => true
+      "UNSettingLockScreen" => true
+      "UNSettingNotificationCenter" => true
+      "UNSettingSounds" => true
+      "UNSettingSpoken" => true
+    }
+    "UNSuppressDismissalSync" => true
+    "UNSuppressUserAuthorizationPrompt" => true
+    "UNUniversalApplicationIdentifier" => "com.apple.MobileSMS"
+  }
+  "UTExportedTypeDeclarations" => [
+    0 => {
+      "UTTypeConformsTo" => [
+        0 => "public.item"
+      ]
+      "UTTypeIdentifier" => "com.apple.messages.CKConversation"
+      "UTTypeTagSpecification" => {
+      }
+    }
+  ]
+}
+## /System/Applications/Messages.app/Contents/Extensions/MessagesActionExtension.appex/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "en"
+  "CFBundleDisplayName" => "MessagesActionExtension"
+  "CFBundleExecutable" => "MessagesActionExtension"
+  "CFBundleIdentifier" => "com.apple.MobileSMS.MessagesActionExtension"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "MessagesActionExtension"
+  "CFBundlePackageType" => "XPC!"
+  "CFBundleShortVersionString" => "26.0"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "1"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => "25F80"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F80"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "EXAppExtensionAttributes" => {
+    "EXExtensionPointIdentifier" => "com.apple.appintents-extension"
+  }
+  "LSMinimumSystemVersion" => "26.5"
+  "UIDeviceFamily" => [
+    0 => 2
+    1 => 6
+  ]
+}
+## /System/Applications/Messages.app/Contents/PlugIns/Messages Assistant Extension.appex/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "English"
+  "CFBundleDisplayName" => "Messages"
+  "CFBundleExecutable" => "Messages Assistant Extension"
+  "CFBundleIdentifier" => "com.apple.messages.AssistantExtension"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "Messages Assistant Extension"
+  "CFBundlePackageType" => "XPC!"
+  "CFBundleShortVersionString" => "1.0"
+  "CFBundleSignature" => "????"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "5500"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => "25F80"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F80"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSExtension" => {
+    "NSExtensionAttributes" => {
+      "IntentsSupported" => [
+        0 => "INEditMessageIntent"
+        1 => "INSearchForMessagesIntent"
+        2 => "INSendMessageIntent"
+        3 => "INPlayMessageSoundIntent"
+        4 => "INSetMessageAttributeIntent"
+        5 => "INUnsendMessagesIntent"
+      ]
+    }
+    "NSExtensionPointIdentifier" => "com.apple.intents-service"
+    "NSExtensionPointName" => "com.apple.intents-service"
+    "NSExtensionPrincipalClass" => "SOAssistantIntentHandler"
+  }
+  "NSHumanReadableCopyright" => "Copyright © 2013-2019 Apple Inc. All rights reserved."
+}
+## /System/Applications/Messages.app/Contents/PlugIns/Messages Reply Extension.appex/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "English"
+  "CFBundleDisplayName" => "Messages"
+  "CFBundleExecutable" => "Messages Reply Extension"
+  "CFBundleIdentifier" => "com.apple.messages.ReplyExtension"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "Messages Reply Extension"
+  "CFBundlePackageType" => "XPC!"
+  "CFBundleShortVersionString" => "1.0"
+  "CFBundleSignature" => "????"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "5500"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => "25F80"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F80"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSExtension" => {
+    "ApplicationIdentifier" => "com.apple.MobileSMS"
+    "com.apple.showsInExtensionsManager" => false
+    "NSExtensionAttributes" => {
+      "NSExtensionActivationRule" => {
+        "NSExtensionActivationSupportsFileWithMaxCount" => 10
+        "NSExtensionActivationSupportsImageWithMaxCount" => 10
+        "NSExtensionActivationSupportsMovieWithMaxCount" => 1
+        "NSExtensionActivationSupportsText" => true
+        "NSExtensionActivationSupportsWebURLWithMaxCount" => 99
+      }
+      "NSExtensionPointName" => "com.apple.share-services"
+      "NSExtensionPointVersion" => "1.0"
+    }
+    "NSExtensionContextClass" => "MessagesPlugInComposeBackToSender"
+    "NSExtensionPointIdentifier" => "com.apple.share-services"
+    "NSExtensionPrincipalClass" => "NSSharingContainerViewController"
+    "NSSharingAccountConfigurationViewControllerClass" => "MessagesAccountConfigurationController"
+    "NSSharingRecentIconFile" => "RecentIcon"
+    "NSSharingTitle" => "Message <SenderName>"
+    "NSSharingViewControllerClass" => "MessagesViewController"
+  }
+  "NSHumanReadableCopyright" => "Copyright © 2013-2019 Apple Inc. All rights reserved."
+}
+## /System/Applications/Messages.app/Contents/PlugIns/Messages Share Extension.appex/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "English"
+  "CFBundleDisplayName" => "Messages"
+  "CFBundleExecutable" => "Messages Share Extension"
+  "CFBundleIdentifier" => "com.apple.messages.ShareExtension"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "Messages Share Extension"
+  "CFBundlePackageType" => "XPC!"
+  "CFBundleShortVersionString" => "1.0"
+  "CFBundleSignature" => "????"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "5500"
+  "CNInProcessContactPicker" => true
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => "25F80"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F80"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSExtension" => {
+    "NSExtensionAttributes" => {
+      "NSExtensionActivationRule" => {
+        "NSExtensionActivationSupportsFileWithMaxCount" => 10
+        "NSExtensionActivationSupportsImageWithMaxCount" => 10
+        "NSExtensionActivationSupportsMovieWithMaxCount" => 1
+        "NSExtensionActivationSupportsText" => true
+        "NSExtensionActivationSupportsWebURLWithMaxCount" => 99
+      }
+      "NSExtensionPointName" => "com.apple.share-services"
+      "NSExtensionPointVersion" => "1.0"
+    }
+    "NSExtensionContextClass" => "MessagesPlugInComposeService"
+    "NSExtensionPointIdentifier" => "com.apple.share-services"
+    "NSExtensionPrincipalClass" => "NSSharingContainerViewController"
+    "NSSharingAccountConfigurationViewControllerClass" => "MessagesAccountConfigurationController"
+    "NSSharingRecentIconFile" => "RecentIcon"
+    "NSSharingViewControllerClass" => "MessagesViewController"
+  }
+  "NSHumanReadableCopyright" => "Copyright © 2013-2019 Apple Inc. All rights reserved."
+}
+## /System/Applications/Messages.app/Contents/PlugIns/Messages Storage Management Extension.appex/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "English"
+  "CFBundleDisplayName" => "Messages"
+  "CFBundleExecutable" => "Messages Storage Management Extension"
+  "CFBundleIdentifier" => "com.apple.messages.StorageManagementExtension"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "Messages Storage Management Extension"
+  "CFBundlePackageType" => "XPC!"
+  "CFBundleShortVersionString" => "1.0"
+  "CFBundleSignature" => "????"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "5500"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => "25F80"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F80"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSExtension" => {
+    "NSExtensionPointIdentifier" => "com.apple.storagemanagement"
+    "NSExtensionPointVersion" => "1.0"
+    "NSExtensionPrincipalClass" => "MessagesStorageManagementExtension"
+  }
+  "NSHumanReadableCopyright" => "Copyright © 2013-2019 Apple Inc. All rights reserved."
+}
+## /System/Applications/Messages.app/Contents/PlugIns/MessagesPluginNotificationExtension.appex/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "en"
+  "CFBundleDisplayName" => "MessagesPluginNotificationExtension"
+  "CFBundleExecutable" => "MessagesPluginNotificationExtension"
+  "CFBundleIdentifier" => "com.apple.MobileSMS.MessagesPluginNotificationExtension"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "MessagesPluginNotificationExtension"
+  "CFBundlePackageType" => "XPC!"
+  "CFBundleShortVersionString" => "1.0"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "1"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => "25F80"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F80"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSExtension" => {
+    "NSExtensionAttributes" => {
+      "UNNotificationExtensionCategory" => "com.apple.messages.notification.customplugin.category"
+      "UNNotificationExtensionInitialContentSizeRatio" => 0
+    }
+    "NSExtensionPointIdentifier" => "com.apple.usernotifications.content-extension"
+    "NSExtensionPrincipalClass" => "CKCustomPluginNotificationViewController"
+  }
+  "NSHumanReadableCopyright" => "Copyright © 2026 Apple Inc. All rights reserved."
+  "UIDeviceFamily" => [
+    0 => 2
+    1 => 6
+  ]
+}
+## /System/Applications/Messages.app/Contents/PlugIns/MessagesAppKitBridge.bundle/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "en"
+  "CFBundleExecutable" => "MessagesAppKitBridge"
+  "CFBundleIdentifier" => "com.apple.MessagesAppKitBridge"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "MessagesAppKitBridge"
+  "CFBundlePackageType" => "BNDL"
+  "CFBundleShortVersionString" => "1.0"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "1450.600.61.1.5"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => "25F80"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F80"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSHumanReadableCopyright" => "Copyright © 2019 Apple Inc. All rights reserved."
+  "NSPrincipalClass" => "CKAppKitBridge"
+}
+## /System/Applications/Messages.app/Contents/PlugIns/iChatDockTile.docktileplugin/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "English"
+  "CFBundleExecutable" => "iChatDockTile"
+  "CFBundleIdentifier" => "com.apple.iChatDockTilePlugIn"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "iChatDockTilePlugIn"
+  "CFBundlePackageType" => "BNDL"
+  "CFBundleShortVersionString" => "8.0"
+  "CFBundleSignature" => "fez!"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "5500"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => "25F80"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F80"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSPrincipalClass" => "iChatDockTilePlugIn"
+}

@@ -1,0 +1,128 @@
+{
+  "constants" : [
+    {
+      "lookupSymbol" : "IMMessageSentDistributedNotification",
+      "symbol" : "IMMessageSentDistributedNotification",
+      "value" : "IMMessageSentDistributedNotification"
+    },
+    {
+      "lookupSymbol" : "IMAccountActivatedNotification",
+      "symbol" : "IMAccountActivatedNotification",
+      "value" : "__kIMAccountActivatedNotification"
+    },
+    {
+      "lookupSymbol" : "IMAccountLoggedInNotification",
+      "symbol" : "IMAccountLoggedInNotification",
+      "value" : "__kIMAccountLoggedInNotification"
+    },
+    {
+      "lookupSymbol" : "IMAccountLoggedOutNotification",
+      "symbol" : "IMAccountLoggedOutNotification",
+      "value" : "__kIMAccountLoggedOutNotification"
+    },
+    {
+      "lookupSymbol" : "IMAccountLoginStatusChangedNotification",
+      "symbol" : "IMAccountLoginStatusChangedNotification",
+      "value" : "__kIMAccountLoginStatusChangedNotification"
+    },
+    {
+      "lookupSymbol" : "IMAccountRegistrationStatusChangedNotification",
+      "symbol" : "IMAccountRegistrationStatusChangedNotification",
+      "value" : "__kIMAccountRegistrationStatusChangedNotification"
+    },
+    {
+      "lookupSymbol" : "IMChatMessageReceivedNotification",
+      "symbol" : "IMChatMessageReceivedNotification",
+      "value" : "__kIMChatMessageReceivedNotification"
+    },
+    {
+      "lookupSymbol" : "IMChatMessageSendFailedNotification",
+      "symbol" : "IMChatMessageSendFailedNotification",
+      "value" : "__kIMChatMessageSendFailedNotification"
+    },
+    {
+      "lookupSymbol" : "IMChatRegistryMessageSendingNotification",
+      "symbol" : "IMChatRegistryMessageSendingNotification",
+      "value" : "__kIMChatRegistryMessageSendingNotification"
+    },
+    {
+      "lookupSymbol" : "IMChatRegistryMessageSentNotification",
+      "symbol" : "IMChatRegistryMessageSentNotification",
+      "value" : "__kIMChatRegistryMessageSentNotification"
+    },
+    {
+      "lookupSymbol" : "IMChatUnreadCountChangedNotification",
+      "symbol" : "IMChatUnreadCountChangedNotification",
+      "value" : "__kIMChatUnreadCountChangedNotification"
+    },
+    {
+      "lookupSymbol" : "IMFileTransferCreatedNotification",
+      "symbol" : "IMFileTransferCreatedNotification",
+      "value" : "__kIMFileTransferCreatedNotification"
+    },
+    {
+      "lookupSymbol" : "IMFileTransferUpdatedNotification",
+      "symbol" : "IMFileTransferUpdatedNotification",
+      "value" : "__kIMFileTransferUpdatedNotification"
+    },
+    {
+      "lookupSymbol" : "IMFileTransferFinishedNotification",
+      "symbol" : "IMFileTransferFinishedNotification",
+      "value" : "__kIMFileTransferFinishedNotification"
+    },
+    {
+      "lookupSymbol" : "IMDaemonWillConnectNotification",
+      "symbol" : "IMDaemonWillConnectNotification",
+      "value" : "__kIMDaemonWillConnectNotification"
+    },
+    {
+      "lookupSymbol" : "IMDaemonDidConnectNotification",
+      "symbol" : "IMDaemonDidConnectNotification",
+      "value" : "__kIMDaemonDidConnectNotification"
+    },
+    {
+      "lookupSymbol" : "IMDaemonDidDisconnectNotification",
+      "symbol" : "IMDaemonDidDisconnectNotification",
+      "value" : "__kIMDaemonDidDisconnectNotification"
+    },
+    {
+      "lookupSymbol" : "IMDaemonConnectionLostNotification",
+      "symbol" : "IMDaemonConnectionLostNotification",
+      "value" : "__kIMDaemonConnectionLostNotification"
+    },
+    {
+      "lookupSymbol" : "IMServiceDidConnectNotification",
+      "symbol" : "IMServiceDidConnectNotification",
+      "value" : "ServiceDidConnect"
+    },
+    {
+      "lookupSymbol" : "IMServiceDidDisconnectNotification",
+      "symbol" : "IMServiceDidDisconnectNotification",
+      "value" : "ServiceDidDisconnect"
+    },
+    {
+      "lookupSymbol" : "IMCloudKitFetchedSyncStatsNotification",
+      "symbol" : "IMCloudKitFetchedSyncStatsNotification",
+      "value" : "IMCloudKitFetchedSyncStatsNotification"
+    },
+    {
+      "lookupSymbol" : "IMCollaborationNoticesDidChangeNotification",
+      "symbol" : "IMCollaborationNoticesDidChangeNotification",
+      "value" : "__kIMCollaborationNoticesDidChangeNotification"
+    },
+    {
+      "lookupSymbol" : "IMNicknameDidChangeNotification",
+      "symbol" : "IMNicknameDidChangeNotification",
+      "value" : "__kIMNicknameDidChangeNotification"
+    },
+    {
+      "lookupSymbol" : "IMPinnedConversationsDidChangeNotification",
+      "symbol" : "IMPinnedConversationsDidChangeNotification",
+      "value" : "__kIMPinnedConversationsDidChangeNotification"
+    }
+  ],
+  "image" : {
+    "loaded" : true,
+    "path" : "\/System\/Library\/PrivateFrameworks\/IMCore.framework\/IMCore"
+  }
+}

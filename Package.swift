@@ -19,7 +19,11 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "SpelunkingKit"
+            name: "CSpelunkingNotify"
+        ),
+        .target(
+            name: "SpelunkingKit",
+            dependencies: ["CSpelunkingNotify"]
         ),
         .executableTarget(
             name: "spelunk",

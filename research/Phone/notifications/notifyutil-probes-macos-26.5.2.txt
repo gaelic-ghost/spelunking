@@ -1,0 +1,26 @@
+# Phone targeted notifyutil state probes
+# notifyutil on this macOS does not support listing all keys; these are targeted -g probes for names found in LaunchEvents or notification-like symbols.
+## com.apple.CallHistoryPluginHelper.launchnotification
+com.apple.CallHistoryPluginHelper.launchnotification 0
+## com.apple.callhistorysync.idslaunchnotification
+com.apple.callhistorysync.idslaunchnotification 0
+## com.apple.mobile.keybagd.first_unlock
+com.apple.mobile.keybagd.first_unlock 0
+## com.apple.telephonyutilities.callservicesd.fakeincomingmessage
+com.apple.telephonyutilities.callservicesd.fakeincomingmessage 0
+## com.apple.telephonyutilities.callservicesd.fakeoutgoingmessage
+com.apple.telephonyutilities.callservicesd.fakeoutgoingmessage 0
+## kFaceTimeChangedNotification
+kFaceTimeChangedNotification 0
+## kFZACAppBundleIdentifierLaunchNotification
+kFZACAppBundleIdentifierLaunchNotification 0
+## kFZVCAppBundleIdentifierLaunchNotification
+kFZVCAppBundleIdentifierLaunchNotification 0
+## CHCallInteractionsDidChangeDarwinNotification
+CHCallInteractionsDidChangeDarwinNotification 0
+## kCallHistoryDatabaseChangedNotification
+kCallHistoryDatabaseChangedNotification 0
+## TUCallCenterCallStatusChangedNotification
+TUCallCenterCallStatusChangedNotification 0
+## control.random.spelunking.nonexistent.26.5.2
+control.random.spelunking.nonexistent.26.5.2 0

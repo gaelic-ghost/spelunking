@@ -1,0 +1,131 @@
+# Messages XPC ownership evidence
+# Captured on macOS 26.5.2 (25F84). Metadata only: launchd plists, XPC service plists, and entitlements.
+
+## launchd_mach_services
+### /System/Library/LaunchAgents/com.apple.imagent.plist
+label: com.apple.imagent
+program: /System/Library/PrivateFrameworks/IMCore.framework/imagent.app/Contents/MacOS/imagent
+mach_services:
+- com.apple.aps.imagent
+- com.apple.corespotlight.daemon.messages
+- com.apple.imagent.cache-delete
+- com.apple.imagent.desktop.auth
+- com.apple.incoming-call-filter-server
+- com.apple.madrid-idswake
+- com.apple.madrid.lite-idswake
+- com.apple.usernotifications.delegate.com.apple.MobileSMS
+- com.apple.usernotifications.delegate.com.apple.iChat
+launch_events:
+- com.apple.distnoted.matching.com.apple.private.IMCore.LoggedIntoHSA2.Name = com.apple.private.IMCore.LoggedIntoHSA2
+- com.apple.distnoted.matching.com.apple.authkit.user-info-changed.Name = com.apple.authkit.user-info-changed
+
+### /System/Library/LaunchAgents/com.apple.imautomatichistorydeletionagent.plist
+label: com.apple.imautomatichistorydeletionagent
+program: /System/Library/PrivateFrameworks/IMDPersistence.framework/IMAutomaticHistoryDeletionAgent.app/Contents/MacOS/IMAutomaticHistoryDeletionAgent
+mach_services:
+launch_events:
+- com.apple.notifyd.matching.com.apple.imautomatichistorydeletionagent.prefchange.Notification = com.apple.imautomatichistorydeletionagent.prefchange
+
+### /System/Library/LaunchAgents/com.apple.imtransferagent.plist
+label: com.apple.imcore.imtransferagent
+program: /System/Library/PrivateFrameworks/IMTransferServices.framework/IMTransferAgent.app/Contents/MacOS/IMTransferAgent
+mach_services:
+- com.apple.imtransferservices.IMTransferAgent
+launch_events:
+- com.apple.notifyd.matching.com.apple.idstransfers.idslaunchnotification.Notification = com.apple.idstransfers.idslaunchnotification
+
+## xpc_service_allowlists
+### /System/Library/PrivateFrameworks/IMDPersistence.framework/XPCServices/IMDPersistenceAgent.xpc/Contents/Info.plist
+bundle_id: com.apple.imdpersistence.IMDPersistenceAgent
+name: IMDPersistenceAgent
+visible_name: Messages Database Agent
+service_type: User
+allowed_clients:
+- identifier = com.apple.MobileSMS.spotlight and anchor apple
+- identifier = com.apple.imagent and anchor apple
+- identifier = com.apple.imdmessageservices.IMDMessageServicesAgent and anchor apple
+- identifier = com.apple.Safari and anchor apple
+- identifier = com.apple.Safari.SandboxBroker and anchor apple
+- identifier = com.apple.SafariTechnologyPreview and anchor apple
+- identifier = com.apple.SafariTechnologyPreview.SandboxBroker and anchor apple
+- identifier = com.apple.Safari and certificate root = H"c9270c5bd7a6a89de3373797fa2a9db7558842ad"
+- identifier = com.apple.Safari.SandboxBroker and certificate root = H"c9270c5bd7a6a89de3373797fa2a9db7558842ad"
+- identifier = com.apple.Safari.automation and anchor apple
+- identifier = com.apple.Safari.automation.SandboxBroker and anchor apple
+- identifier = com.apple.Safari.automation and certificate root = H"c9270c5bd7a6a89de3373797fa2a9db7558842ad"
+- identifier = com.apple.Safari.automation.SandboxBroker and certificate root = H"c9270c5bd7a6a89de3373797fa2a9db7558842ad"
+- identifier = com.apple.iChat and anchor apple
+- identifier = com.apple.AddressBook.FaceTimeService and anchor apple
+- identifier = com.apple.imtool and anchor apple
+- identifier = com.apple.assistantd and anchor apple
+- identifier = com.apple.ContactsAgent and anchor apple
+- identifier = com.apple.messages.AssistantExtension and anchor apple
+- identifier = com.apple.IMAutomaticHistoryDeletionAgent and anchor apple
+- identifier = com.apple.messages.StorageManagementExtension and anchor apple
+- identifier = com.apple.controlcenter and anchor apple
+- identifier = com.apple.photolibraryd and anchor apple
+- identifier = com.apple.gamecenter.GameCenterUIService and anchor apple
+- identifier = com.apple.FaceTime and anchor apple
+- identifier = "com.apple.knowledge-agent" and anchor apple
+- identifier = com.apple.finder and anchor apple
+- identifier = com.apple.sociallayerd and anchor apple
+- identifier = com.apple.coreduetd and anchor apple
+- identifier = com.apple.peopled and anchor apple
+- identifier = com.apple.asktod and anchor apple
+- identifier = com.apple.suggestd and anchor apple
+- identifier = com.apple.omniSearch.SearchToolExtension and anchor apple
+- identifier = com.apple.SiriTester and anchor apple
+- identifier = com.apple.spotlighttesterctl and anchor apple
+- identifier = "com.apple.ise-incubation.Workflow" and anchor apple
+- identifier = "com.apple.ise-incubation.HyperData" and anchor apple
+- identifier = com.apple.DiagnosticExtensions.IMDiagnosticExtension and anchor apple
+
+### /System/Library/PrivateFrameworks/IMDMessageServices.framework/XPCServices/IMDMessageServicesAgent.xpc/Contents/Info.plist
+bundle_id: com.apple.imdmessageservices.IMDMessageServicesAgent
+name: IMDMessageServicesAgent
+visible_name: Message Services Agent
+service_type: Application
+allowed_clients:
+
+### /System/Library/PrivateFrameworks/IMTranscoding.framework/XPCServices/IMTranscoderAgent.xpc/Contents/Info.plist
+bundle_id: com.apple.imtranscoding.IMTranscoderAgent
+name: IMTranscoderAgent
+visible_name: Messages Transcoding Agent
+service_type: Application
+allowed_clients:
+
+## messages_app_selected_entitlements
+application_identifier: com.apple.MobileSMS
+database_access: true
+messages_storage: true
+messages_metadata_storage: true
+ids_messaging:
+- com.apple.private.alloy.biz
+- com.apple.madrid
+- com.apple.madrid.lite
+- com.apple.madrid.lite.relay
+telephonyutilities_callservicesd:
+- modify-calls
+- access-calls
+- access-call-providers
+- modify-pending-collaboration
+mach_lookup:
+- com.apple.IdentityLookup.MessageFilter
+- com.apple.MessagesBlastDoorService
+- com.apple.ScreenTimeAgent
+- com.apple.ScreenTimeAgent.communication
+- com.apple.ScreenTimeAgent.private
+- com.apple.commcenter.coretelephony.xpc
+- com.apple.imdpersistence.IMDPersistenceAgent
+- com.apple.imfoundation.IMRemoteURLConnectionAgent
+- com.apple.imtranscoding.IMTranscoderAgent
+- com.apple.photos.ImageConversionService
+- com.apple.private.screen-time
+- com.apple.private.suggestd.reminders
+- com.apple.proactive.experiments.responses
+- com.apple.suggestd.contacts
+- com.apple.suggestd.messages
+- com.apple.suggestd.reminders
+- com.apple.telephonyutilities.callservicesdaemon.callstatecontroller
+- com.apple.telephonyutilities.callservicesdaemon.conversationmanager
+- com.apple.transparencyd.ids

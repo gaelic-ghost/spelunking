@@ -1,0 +1,68 @@
+{
+  "constants" : [
+    {
+      "error" : "dlsym(0x36556a128, IMDMessageRecordRetractNotification): symbol not found",
+      "lookupSymbol" : "IMDMessageRecordRetractNotification",
+      "symbol" : "IMDMessageRecordRetractNotification"
+    },
+    {
+      "error" : "dlsym(0x36556a128, IMDNotificationsPostNotification): symbol not found",
+      "lookupSymbol" : "IMDNotificationsPostNotification",
+      "symbol" : "IMDNotificationsPostNotification"
+    },
+    {
+      "error" : "dlsym(0x36556a128, IMDNotificationsPostUrgentNotification): symbol not found",
+      "lookupSymbol" : "IMDNotificationsPostUrgentNotification",
+      "symbol" : "IMDNotificationsPostUrgentNotification"
+    },
+    {
+      "error" : "dlsym(0x36556a128, IMDNotificationsRetractNotification): symbol not found",
+      "lookupSymbol" : "IMDNotificationsRetractNotification",
+      "symbol" : "IMDNotificationsRetractNotification"
+    },
+    {
+      "error" : "dlsym(0x36556a128, IMDNotificationsUpdatePostedNotification): symbol not found",
+      "lookupSymbol" : "IMDNotificationsUpdatePostedNotification",
+      "symbol" : "IMDNotificationsUpdatePostedNotification"
+    },
+    {
+      "lookupSymbol" : "IMDPersistenceServiceResettingNotification",
+      "symbol" : "IMDPersistenceServiceResettingNotification",
+      "value" : "IMDPersistenceServiceResettingNotification"
+    },
+    {
+      "lookupSymbol" : "IMDSMSFailedToSendNotification",
+      "symbol" : "IMDSMSFailedToSendNotification",
+      "value" : "__kIMDSMSFailedToSendNotification"
+    },
+    {
+      "lookupSymbol" : "IMDSMSMarkAsReadCompletedNotification",
+      "symbol" : "IMDSMSMarkAsReadCompletedNotification",
+      "value" : "__kIMDSMSMarkAsReadCompletedNotification"
+    },
+    {
+      "error" : "dlsym(0x36556a128, IMDChatRegistryAddedChatNotification): symbol not found",
+      "lookupSymbol" : "IMDChatRegistryAddedChatNotification",
+      "symbol" : "IMDChatRegistryAddedChatNotification"
+    },
+    {
+      "error" : "dlsym(0x36556a128, IMDFileTransferCreatedNotification): symbol not found",
+      "lookupSymbol" : "IMDFileTransferCreatedNotification",
+      "symbol" : "IMDFileTransferCreatedNotification"
+    },
+    {
+      "error" : "dlsym(0x36556a128, IMDFileTransferUpdatedNotification): symbol not found",
+      "lookupSymbol" : "IMDFileTransferUpdatedNotification",
+      "symbol" : "IMDFileTransferUpdatedNotification"
+    },
+    {
+      "error" : "dlsym(0x36556a128, IMDSMSMessageSentNotification): symbol not found",
+      "lookupSymbol" : "IMDSMSMessageSentNotification",
+      "symbol" : "IMDSMSMessageSentNotification"
+    }
+  ],
+  "image" : {
+    "loaded" : true,
+    "path" : "\/System\/Library\/PrivateFrameworks\/IMDPersistence.framework\/IMDPersistence"
+  }
+}

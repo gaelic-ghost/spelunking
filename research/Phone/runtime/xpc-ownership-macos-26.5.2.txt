@@ -1,0 +1,184 @@
+# Phone XPC ownership evidence
+# Captured on macOS 26.5.2 (25F84). Metadata only: launchd plists, XPC service plists, and entitlements.
+
+## launchd_mach_services
+### /System/Library/LaunchAgents/com.apple.callhistoryd.plist
+label: com.apple.callhistoryd
+program: /System/Library/PrivateFrameworks/CallHistory.framework/Support/callhistoryd
+mach_services:
+- com.apple.callhistoryd.service
+- com.apple.conversation.history
+launch_events:
+
+### /System/Library/LaunchAgents/com.apple.CallHistoryPluginHelper.plist
+label: com.apple.CallHistoryPluginHelper
+program: /System/Library/PrivateFrameworks/CallHistory.framework/Support/CallHistoryPluginHelper
+mach_services:
+- com.apple.CallHistoryPluginHelper
+launch_events:
+- com.apple.notifyd.matching.com.apple.CallHistoryPluginHelper.launchnotification.Notification = com.apple.CallHistoryPluginHelper.launchnotification
+
+### /System/Library/LaunchAgents/com.apple.CallHistorySyncHelper.plist
+label: com.apple.CallHistorySyncHelper
+program: /System/Library/PrivateFrameworks/CallHistory.framework/Support/CallHistorySyncHelper
+mach_services:
+- com.apple.CallHistorySyncHelper
+- com.apple.CallHistorySyncHelper.aps
+launch_events:
+- com.apple.notifyd.matching.com.apple.callhistorysync.idslaunchnotification.Notification = com.apple.callhistorysync.idslaunchnotification
+
+### /System/Library/LaunchAgents/com.apple.callintelligenced.plist
+label: com.apple.callintelligenced
+program: /System/Library/PrivateFrameworks/CallIntelligence.framework/callintelligenced
+mach_services:
+- com.apple.callintelligenced.service
+launch_events:
+- com.apple.notifyd.matching.com.apple.mobile.keybagd.first_unlock.Notification = com.apple.mobile.keybagd.first_unlock
+
+### /System/Library/LaunchAgents/com.apple.facetimemessagestored.plist
+label: com.apple.facetimemessagestored
+program: /System/Library/PrivateFrameworks/FaceTimeMessageStore.framework/facetimemessagestored
+mach_services:
+- com.apple.aps.facetimemessagestored
+- com.apple.facetimemessagestored.service
+- com.apple.facetimemessagestored.videomessaging
+- com.apple.private.alloy.facetime.messaging-idswake
+launch_events:
+
+### /System/Library/LaunchAgents/com.apple.telephonyutilities.callservicesd.plist
+label: com.apple.telephonyutilities.callservicesd
+program: /System/Library/PrivateFrameworks/TelephonyUtilities.framework/callservicesd
+mach_services:
+- com.apple.callkit.callcontrollerhost
+- com.apple.callkit.callsourcehost
+- com.apple.callkit.networkextension.messagecontrollerhost
+- com.apple.callkit.networkextension.voip
+- com.apple.callkit.notificationserviceextension.voip
+- com.apple.callkit.service
+- com.apple.copresence.conversationmanagerhost
+- com.apple.group-activities.conversationmanagerhost
+- com.apple.private.alloy.facetime.audio-idswake
+- com.apple.private.alloy.facetime.multi-idswake
+- com.apple.private.alloy.facetime.sync-idswake
+- com.apple.private.alloy.facetime.video-idswake
+- com.apple.private.alloy.phone.auth-idswake
+- com.apple.private.alloy.phonecontinuity-idswake
+- com.apple.private.alloy.phonecontinuity.ping-idswake
+- com.apple.telephonyutilities.callservicesdaemon.callcapabilities
+- com.apple.telephonyutilities.callservicesdaemon.callhistorycontroller
+- com.apple.telephonyutilities.callservicesdaemon.callhistorymanager
+- com.apple.telephonyutilities.callservicesdaemon.callprovidermanager
+- com.apple.telephonyutilities.callservicesdaemon.callstatecontroller
+- com.apple.telephonyutilities.callservicesdaemon.conversationmanager
+- com.apple.telephonyutilities.callservicesdaemon.conversationprovidermanager
+- com.apple.telephonyutilities.callservicesdaemon.neighborhood-activities
+- com.apple.telephonyutilities.callservicesdaemon.simulatedconversationcontroller
+- com.apple.telephonyutilities.callservicesdaemon.usernotificationprovider
+- com.apple.telephonyutilities.callservicesdaemon.voip
+- com.apple.telephonyutilities.callservicesdaemon.voip.push
+- com.apple.telephonyutilities.callservicesdaemon.voip.push.development
+- com.apple.usernotifications.delegate.com.apple.facetime
+- com.apple.usernotifications.delegate.com.apple.mobilephone
+launch_events:
+- com.apple.CTTelephonyCenter.com.apple.telephonyutilities.callservicesd.kCTSettingCallCapabilitiesChangedNotification.Name = kCTSettingCallCapabilitiesChangedNotification
+- com.apple.distnoted.matching.com.apple.callhistory.save.distributed.notification.Name = com.apple.callhistory.save.distributed.notification
+- com.apple.notifyd.matching.com.apple.telephonyutilities.callservicesd.kFaceTimeChangedNotification.Notification = kFaceTimeChangedNotification
+- com.apple.notifyd.matching.com.apple.telephonyutilities.callservicesd.fakeoutgoingmessage.Notification = com.apple.telephonyutilities.callservicesd.fakeoutgoingmessage
+- com.apple.notifyd.matching.com.apple.telephonyutilities.callservicesd.fakeincomingmessage.Notification = com.apple.telephonyutilities.callservicesd.fakeincomingmessage
+- com.apple.notifyd.matching.com.apple.telephonyutilities.callservicesd.kFZACAppBundleIdentifierLaunchNotification.Notification = kFZACAppBundleIdentifierLaunchNotification
+- com.apple.notifyd.matching.com.apple.telephonyutilities.callservicesd.kFZVCAppBundleIdentifierLaunchNotification.Notification = kFZVCAppBundleIdentifierLaunchNotification
+
+## xpc_and_intents_services
+### /System/Library/PrivateFrameworks/TelephonyUtilities.framework/PlugIns/PhoneIntentHandler.appex/Contents/Info.plist
+bundle_id: com.apple.TelephonyUtilities.PhoneIntentHandler
+name: PhoneIntentHandler
+intents:
+- INAddCallParticipantIntent
+- INJoinCallIntent
+- INStartCallIntent
+- INSearchCallHistoryIntent
+- INPlayVoicemailIntent
+xpc_service_type: 
+
+### /System/Library/PrivateFrameworks/TelephonyBlastDoorSupport.framework/XPCServices/TelephonyBlastDoorService.xpc/Contents/Info.plist
+bundle_id: com.apple.TelephonyBlastDoorService
+name: TelephonyBlastDoorService
+intents:
+xpc_service_type: Application
+
+### /System/Library/PrivateFrameworks/FaceTimeMacHelperCore.framework/XPCServices/FTConversationService.xpc/Contents/Info.plist
+missing
+
+### /System/Library/PrivateFrameworks/FaceTimeMacHelperCore.framework/XPCServices/FTLivePhotoService.xpc/Contents/Info.plist
+missing
+
+## phone_app_selected_entitlements
+application_identifier: 
+callhistory_read_write: true
+callhistory_sync: true
+callhistory_storage: true
+voicemail_client: true
+telephonyutilities_callservicesd:
+- modify-calls
+- access-calls
+- background-calls
+- access-screen-calls
+- access-call-providers
+- access-call-capabilities
+- modify-call-capabilities
+- screen-sharing-remote-control
+- access-media-priorities
+- access-participant-reactions
+- record-calls
+- screen-calls
+- translate-calls
+- smart-holding
+commcenter_fine_grained:
+- cellular-plan
+- spi
+- phone
+- identity
+- sms
+- data-usage
+- data-allowed
+- data-allowed-write
+mach_lookup:
+- com.apple.CallHistoryPluginHelper
+- com.apple.CallHistorySyncHelper
+- com.apple.commcenter.xpc
+- com.apple.facetimemessagestored.service
+- com.apple.group-activities.conversationmanagerhost
+- com.apple.idsremoteurlconnectionagent.embedded.auth
+- com.apple.imagent.desktop.Launched
+- com.apple.imagent.desktop.auth
+- com.apple.imdpersistence.IMDPersistenceAgent
+- com.apple.telephonyutilities.callservicesdaemon.accountscontroller
+- com.apple.telephonyutilities.callservicesdaemon.callhistorycontroller
+- com.apple.telephonyutilities.callservicesdaemon.callprovidermanager
+- com.apple.telephonyutilities.callservicesdaemon.callstatecontroller
+- com.apple.telephonyutilities.callservicesdaemon.conversationmanager
+- com.apple.voicemail.vmd
+
+## phone_intent_handler_selected_entitlements
+callhistory_read: true
+callhistory_read_write: true
+voicemail_storage: true
+voicemail_client: true
+telephonyutilities_callservicesd:
+- access-calls
+- access-call-providers
+- modify-calls
+- screen-calls
+- access-call-capabilities
+- modify-call-capabilities
+- register-gft-service
+mach_lookup:
+- com.apple.CallHistorySyncHelper
+- com.apple.commcenter.xpc
+- com.apple.facetimemessagestored.service
+- com.apple.imdpersistence.IMDPersistenceAgent
+- com.apple.telephonyutilities.callservicesdaemon.callprovidermanager
+- com.apple.telephonyutilities.callservicesdaemon.callstatecontroller
+- com.apple.telephonyutilities.callservicesdaemon.conversationmanager
+- com.apple.telephonyutilities.callservicesdaemon.conversationprovidermanager
+- com.apple.voicemail.vmd

@@ -1,0 +1,14 @@
+{
+  "constants" : [
+    {
+      "kind" : "cStringPointer",
+      "lookupSymbol" : "CHCallInteractionsDidChangeDarwinNotification",
+      "symbol" : "CHCallInteractionsDidChangeDarwinNotification",
+      "value" : "com.apple.callhistory.notification.call-interactions-changed"
+    }
+  ],
+  "image" : {
+    "loaded" : true,
+    "path" : "\/System\/Library\/PrivateFrameworks\/CallHistory.framework\/CallHistory"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "constants" : [
+    {
+      "lookupSymbol" : "TUCallCenterCallConnectedNotification",
+      "symbol" : "TUCallCenterCallConnectedNotification",
+      "value" : "TUCallCenterCallConnectedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallCenterCallStatusChangedNotification",
+      "symbol" : "TUCallCenterCallStatusChangedNotification",
+      "value" : "TUCallCenterCallStatusChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallCenterCallStartedConnectingNotification",
+      "symbol" : "TUCallCenterCallStartedConnectingNotification",
+      "value" : "TUCallCenterCallStartedConnectingNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallCenterCallerIDChangedNotification",
+      "symbol" : "TUCallCenterCallerIDChangedNotification",
+      "value" : "TUCallCenterCallerIDChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallCenterConferenceParticipantsChangedNotification",
+      "symbol" : "TUCallCenterConferenceParticipantsChangedNotification",
+      "value" : "TUCallCenterConferenceParticipantsChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallIsOnHoldChangedNotification",
+      "symbol" : "TUCallIsOnHoldChangedNotification",
+      "value" : "TUCallIsOnHoldChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallIsSendingAudioChangedNotification",
+      "symbol" : "TUCallIsSendingAudioChangedNotification",
+      "value" : "TUCallIsSendingAudioChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallIsSendingVideoChangedNotification",
+      "symbol" : "TUCallIsSendingVideoChangedNotification",
+      "value" : "TUCallIsSendingVideoChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallIsUplinkMutedChangedNotification",
+      "symbol" : "TUCallIsUplinkMutedChangedNotification",
+      "value" : "TUCallIsUplinkMutedChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallRecordingStateChangedNotification",
+      "symbol" : "TUCallRecordingStateChangedNotification",
+      "value" : "TUCallRecordingStateChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallTranslationStateChangedNotification",
+      "symbol" : "TUCallTranslationStateChangedNotification",
+      "value" : "TUCallTranslationStateChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallHistoryControllerRecentCallsDidChangeNotification",
+      "symbol" : "TUCallHistoryControllerRecentCallsDidChangeNotification",
+      "value" : "TUCallHistoryControllerRecentCallsDidChangeNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallHistoryControllerUnreadCallCountDidChangeNotification",
+      "symbol" : "TUCallHistoryControllerUnreadCallCountDidChangeNotification",
+      "value" : "TUCallHistoryControllerUnreadCallCountDidChangeNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallCapabilitiesFaceTimeAvailabilityChangedNotification",
+      "symbol" : "TUCallCapabilitiesFaceTimeAvailabilityChangedNotification",
+      "value" : "TUCallCapabilitiesFaceTimeAvailabilityChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallCapabilitiesSupportsTelephonyCallsChangedNotification",
+      "symbol" : "TUCallCapabilitiesSupportsTelephonyCallsChangedNotification",
+      "value" : "TUCallCapabilitiesSupportsTelephonyCallsChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallCapabilitiesWiFiCallingChangedNotification",
+      "symbol" : "TUCallCapabilitiesWiFiCallingChangedNotification",
+      "value" : "TUCallCapabilitiesWiFiCallingChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallCapabilitiesRelayCallingChangedNotification",
+      "symbol" : "TUCallCapabilitiesRelayCallingChangedNotification",
+      "value" : "TUCallCapabilitiesRelayCallingChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUConversationManagerDidBecomeAvailableNotification",
+      "symbol" : "TUConversationManagerDidBecomeAvailableNotification",
+      "value" : "TUConversationManagerDidBecomeAvailableNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallProviderManagerProvidersChangedNotification",
+      "symbol" : "TUCallProviderManagerProvidersChangedNotification",
+      "value" : "TUCallProviderManagerProvidersChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUCallConversationChangedNotification",
+      "symbol" : "TUCallConversationChangedNotification",
+      "value" : "TUCallConversationChangedNotification"
+    },
+    {
+      "lookupSymbol" : "TUPrivacyRulesChangedNotification",
+      "symbol" : "TUPrivacyRulesChangedNotification",
+      "value" : "com.apple.TelephonyUtilities.TUPrivacyManager.RulesChanged"
+    }
+  ],
+  "image" : {
+    "loaded" : true,
+    "path" : "\/System\/Library\/PrivateFrameworks\/TelephonyUtilities.framework\/TelephonyUtilities"
+  }
+}

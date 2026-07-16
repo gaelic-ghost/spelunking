@@ -1,0 +1,1060 @@
+Command: /usr/bin/log stream --style compact --level default --timeout 8 --predicate process == Messages OR subsystem/message contains Messages/MobileSMS/IMDPersistence while opening Messages.app
+Date: Thu Jul 16 04:31:38 EDT 2026
+
+Filtering the log data using "process == "Messages" OR subsystem CONTAINS[c] "Messages" OR subsystem CONTAINS[c] "MobileSMS" OR subsystem CONTAINS[c] "IMDPersistence" OR composedMessage CONTAINS[c] "Messages" OR composedMessage CONTAINS[c] "MobileSMS""
+Timestamp               Ty Process[PID:TID]
+2026-07-16 04:31:38.990 Df perl[80901:6a648] [com.apple.CoreAnalytics:client] Queueing exit procedure onto XPC queue. Any further messages sent will be discarded. activeSendTransactions=0
+2026-07-16 04:31:38.990 Df perl[80901:6a64f] [com.apple.CoreAnalytics:client] Cancelling XPC connection. Any further reply handler invocations will not retry messages
+2026-07-16 04:31:39.039 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] from originator [osservice<com.apple.coreservices.launchservicesd>:361] with description <RBSAssertionDescriptor| "frontmost:6081" ID:398-361-4498 target:6081 attributes:[
+	<RBSDomainAttribute| domain:"com.apple.launchservicesd" name:"RoleUserInteractiveFocal" sourceEnvironment:"(null)">
+	]>
+2026-07-16 04:31:39.039 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Assertion 398-361-4498 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) will be created as active
+2026-07-16 04:31:39.040 Df WindowServer[391:fca] [com.apple.SkyLight.processes:Focus] 5fa03[SetFrontProcess]: [DeferringManager] Updating policy {
+    advicePolicy: .frontmost;
+    frontmostProcess: 0x0-0x108108 (Messages) mainConnectionID: 6FEBB;
+} for reason: updated frontmost process
+2026-07-16 04:31:39.040 Df WindowServer[391:fca] [com.apple.SkyLight.processes:Focus] 5fa03[SetFrontProcess]: [DeferringManager] Deferring events from frontmost process PSN 0x0-0x108108 (Messages) -> <pid: 6081>
+2026-07-16 04:31:39.040 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] new deferring rules for pid:391: [
+    [391-1E0]; <keyboardFocus; Messages:0x0-0x108108>; () -> <pid: 6081>; reason: frontmost PSN --> outbound target,
+    [391-1DF]; <keyboardFocus; <frontmost>>; () -> <token: Messages:0x0-0x108108; pid: 391>; reason: frontmost PSN,
+    [391-1DE]; <keyboardFocus>; () -> <token: <frontmost>; pid: 391>; reason: Deferring to <frontmost>
+]
+2026-07-16 04:31:39.040 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] [keyboardFocus 0xc154d6c60] setRules:forPID(391): [
+    [391-1E0]; <keyboardFocus; Messages:0x0-0x108108>; () -> <pid: 6081>; reason: frontmost PSN --> outbound target,
+    [391-1DF]; <keyboardFocus; <frontmost>>; () -> <token: Messages:0x0-0x108108; pid: 391>; reason: frontmost PSN,
+    [391-1DE]; <keyboardFocus>; () -> <token: <frontmost>; pid: 391>; reason: Deferring to <frontmost>
+]
+2026-07-16 04:31:39.040 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] chain did update (setDeferringRules) <keyboardFocus; display: null> containsEndOfChain: YES; [
+    <token: <frontmost>; pid: 391>,
+    <token: Messages:0x0-0x108108; pid: 391>,
+    <pid: 6081>,
+    <token: viewbridge-key-window; pid: 6081>
+]
+2026-07-16 04:31:39.042 A  Messages[6081:63fde] (RunningBoardServices) didChangeInheritances
+2026-07-16 04:31:39.042 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ requestSceneForegroundActive: (state: Running)
+2026-07-16 04:31:39.042 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Enqueued FG+A. (FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800)
+2026-07-16 04:31:39.042 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Kicked off dequeueing.
+2026-07-16 04:31:39.042 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeued FG+A. (FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800)
+2026-07-16 04:31:39.042 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeuing paused until state change is complete. (FG+A; <private>)
+2026-07-16 04:31:39.042 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Tracking scene state with target state: FG+A (<private>)
+2026-07-16 04:31:39.041 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] from originator [osservice<com.apple.WindowServer(88)>:391] with description <RBSAssertionDescriptor| "FUSBFrontmostProcess" ID:398-391-4499 target:6081 attributes:[
+	<RBSDomainAttribute| domain:"com.apple.fuseboard" name:"Frontmost" sourceEnvironment:"(null)">,
+	<RBSAcquisitionCompletionAttribute| policy:AfterApplication>
+	]>
+2026-07-16 04:31:39.041 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Assertion 398-391-4499 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) will be created as active
+2026-07-16 04:31:39.043 A  Messages[6081:63fde] (SyncedDefaults) kvs/cloud-sync
+2026-07-16 04:31:39.043 A  Messages[6081:62823] (SyncedDefaults) kvs/cloud-sync
+2026-07-16 04:31:39.045 Df runningboardd[398:6a674] [com.apple.runningboard:monitor] Calculated state for app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>: running-active (role: UserInteractiveFocal) (endowments: <private>)
+2026-07-16 04:31:39.045 Df runningboardd[398:6a674] [com.apple.runningboard:monitor] Calculated state for app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>: running-active (role: UserInteractiveFocal) (endowments: <private>)
+2026-07-16 04:31:39.046 A  Messages[6081:62823] (SyncedDefaults) kvs/synchronize
+2026-07-16 04:31:39.046 A  Messages[6081:62823] (SyncedDefaults) kvs/get-change-token
+2026-07-16 04:31:39.046 A  Messages[6081:6648d] (SyncedDefaults) kvs/synchronize
+2026-07-16 04:31:39.046 A  Messages[6081:6648d] (SyncedDefaults) kvs/get-change-token
+2026-07-16 04:31:39.046 A  Messages[6081:63fde] (RunningBoardServices) didChangeInheritances
+2026-07-16 04:31:39.048 Df UIKitSystem[712:6a46a] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:39.049 A  Messages[6081:62823] (SyncedDefaults) kvs/save-change-token
+2026-07-16 04:31:39.049 A  Messages[6081:6648d] (SyncedDefaults) kvs/save-change-token
+2026-07-16 04:31:39.046 Df WindowServer[391:62a51] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:39.046 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] from originator [osservice<com.apple.coreservices.launchservicesd>:361] with description <RBSAssertionDescriptor| "notification:6081" ID:398-361-4500 target:6081 attributes:[
+	<RBSDomainAttribute| domain:"com.apple.launchservicesd" name:"LSNotification" sourceEnvironment:"(null)">
+	]>
+2026-07-16 04:31:39.046 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Assertion 398-361-4500 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) will be created as active
+2026-07-16 04:31:39.050 Df UIKitSystem[712:66d8f] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:39.050 Df WindowServer[391:62a51] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:39.052 Df PerfPowerServices[375:69e75] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-Visible
+2026-07-16 04:31:39.052 Df gamepolicyd[788:69b04] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:39.047 Df runningboardd[398:69aff] [com.apple.runningboard:monitor] Calculated state for app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>: running-active (role: UserInteractiveFocal) (endowments: <private>)
+2026-07-16 04:31:39.052 Df PerfPowerServices[375:69f99] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-Visible
+2026-07-16 04:31:39.053 Df gamepolicyd[788:69b03] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:39.055 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] scene content state changed: preparing
+2026-07-16 04:31:39.055 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad10fc0:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] Scene lifecycle state did change: Foreground
+2026-07-16 04:31:39.055 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad10fc0:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] Scene state did change: FV-Focal[100].
+2026-07-16 04:31:39.055 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad10fc0:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] Sending scene action [Logical Activate][0xf302] to process 0x9facc0d80 (watchdog: 1200.00s)
+2026-07-16 04:31:39.056 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:39.057 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:39.057 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ didActivateAppKit (state: Running)
+2026-07-16 04:31:39.057 Df Messages[6081:50c63] [com.apple.synapse:DocumentWorkflows] application did become active: <private>
+2026-07-16 04:31:39.063 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:39.063 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:39.064 Df Messages[6081:6648d] [com.apple.xpc:connection] [0x9dbc888c0] activating connection: mach=false listener=false peer=false name=com.apple.TextInputUI.xpc.CursorUIViewService
+2026-07-16 04:31:39.064 Df Messages[6081:6a66e] [com.apple.xpc:connection] [0x9dbc888c0] invalidated after the last release of the connection object
+2026-07-16 04:31:39.064 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dc685180> (NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800)
+2026-07-16 04:31:39.065 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground. (FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800)
+2026-07-16 04:31:39.065 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to foreground active. (FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800)
+2026-07-16 04:31:39.065 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene reached target state. (<private>)
+2026-07-16 04:31:39.065 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] No longer tracking scene state with target state: FG+A (<private>)
+2026-07-16 04:31:39.065 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state change complete, dequeuing resumed.
+2026-07-16 04:31:39.065 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.MobileSMS(6081)|978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C  persistentID: 978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C
+2026-07-16 04:31:39.065 Df Messages[6081:50c63] [com.apple.xpc:connection] [0x9de3e66c0] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-07-16 04:31:39.065 Df Messages[6081:50c63] [com.apple.xpc:connection] [0x9de3e4500] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-07-16 04:31:39.065 Df filecoordinationd[631:6a47e] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:39.067 Df filecoordinationd[631:6a47e] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:39.069 E  kernel[0:6a471] (Sandbox) Sandbox: donotdisturbd(667) deny(1) process-info-pidinfo others [Messages(6081)]
+2026-07-16 04:31:39.067 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ isAttemptingTermination (state: Running)
+2026-07-16 04:31:39.068 A  Messages[6081:50c63] (TCC) TCCAccessRequest() IPC
+2026-07-16 04:31:39.068 A  Messages[6081:50c63] (TCC) TCCAccessRequest() IPC
+2026-07-16 04:31:39.068 A  Messages[6081:6648d] (DoNotDisturb) com.apple.donotdisturb.DNDAppConfigurationService.getCurrentAppConfigurationForActionIdentifier
+2026-07-16 04:31:39.068 Df Messages[6081:6648d] [com.apple.donotdisturb:AppConfiguration] [com.apple.MobileSMS:4C5268EB-080F-4C18-AEF9-42D2831FDDED] Getting current app configuration for action identifier <private>
+2026-07-16 04:31:39.070 E  Messages[6081:6648d] [com.apple.donotdisturb:AppConfiguration] [com.apple.MobileSMS:4C5268EB-080F-4C18-AEF9-42D2831FDDED] Error when getting current app configuration for action identifier <private>, error='Error Domain=DNDErrorDomain Code=1007 "No current action is available. Supply the caller with the default." UserInfo={NSLocalizedDescription=No current action is available. Supply the caller with the default.}'
+2026-07-16 04:31:39.070 Df Messages[6081:6648d] [com.apple.appintents:General] Beginning InitializeAction <<SB:0A927133FF41>>
+2026-07-16 04:31:39.070 Df Messages[6081:6648d] [com.apple.appintents:Execution] [InitializeAction <<N:0A927133FF41>>] Found ConversationListFocusFilterAction matching ConversationListFocusFilterAction registered with AppManager
+2026-07-16 04:31:39.070 Df Messages[6081:6648d] [com.apple.appintents:Execution] Prepared enableFocusFiltering to Bool(nil))
+2026-07-16 04:31:39.070 Df Messages[6081:6648d] [com.apple.appintents:General] Ending InitializeAction <<SE:0A927133FF41>>
+2026-07-16 04:31:39.070 Df Messages[6081:6648d] [com.apple.appintents:General] Beginning ResolveParameters <<SB:C2A790804B49>>
+2026-07-16 04:31:39.070 Df Messages[6081:6648d] [com.apple.appintents:General] Ending ResolveParameters <<SE:C2A790804B49>>
+2026-07-16 04:31:39.071 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] Found 0 message guids to mark as read: (first (null) last (null)) for 1 IDs (first <private> last <private>) services <private>
+2026-07-16 04:31:39.071 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] Reindexing messages as read in spotlight
+2026-07-16 04:31:39.073 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] Could not find chat from last message so defaulted to <private>
+2026-07-16 04:31:39.073 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] daemon unread count : 0, client unread count :0 chatGuids <private>
+2026-07-16 04:31:39.074 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] Found 0 message guids to mark as read: (first (null) last (null)) for 1 IDs (first <private> last <private>) services <private>
+2026-07-16 04:31:39.074 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] Reindexing messages as read in spotlight
+2026-07-16 04:31:39.074 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] Could not find chat from last message so defaulted to <private>
+2026-07-16 04:31:39.071 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dc040280> (978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C)
+2026-07-16 04:31:39.075 Df Messages[6081:50c63] [com.apple.UIKit:UIFocus] Focus system enabled
+2026-07-16 04:31:39.076 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dc040280> (978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C)
+2026-07-16 04:31:39.076 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] Reloading input views for key-window scene responder: <CKMessageEntryRichTextView: 0x9da9f0000; baseClass = UITextView; frame = (7 0; 261.5 39); opaque = NO; > force:N
+2026-07-16 04:31:39.076 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _reloadInputViewsForKeyWindowSceneResponder: 1 force: 0, fromBecomeFirstResponder: 0 (automaticKeyboard: 1, reloadIdentifier: 223C2CB9-5CB1-4421-91CD-C0BEA2BE6D04)
+2026-07-16 04:31:39.076 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder: <CKMessageEntryRichTextView: 0x9da9f0000; baseClass = UITextView; frame = (7 0; 261.5 39); opaque = NO; >, automaticKeyboard: 1, force: 0
+2026-07-16 04:31:39.076 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, responderRequiresKeyboard 1 (automaticKeyboardEnabled: 1, activeInstance: <UIKeyboardAutomatic: 0x9db69a300; frame = {{0, 0}, {0, 0}}; alpha = 1.000000; isHidden = 0; tAMIC = 1>, self.isOnScreen: 0, requiresKBWhenFirstResponder: 1)
+2026-07-16 04:31:39.076 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, useKeyboard 0 (allowsSystemInputView: 0, !inputView <(null): 0x0>, responderRequiresKeyboard 1)
+2026-07-16 04:31:39.076 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, configuring _responderWithoutAutomaticAppearanceEnabled: <(null): 0x0> (_automaticAppearEnabled: 1)
+2026-07-16 04:31:39.076 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, needsIVPlaceholder: 0, needsIAVPlaceholder: 0, needsInputSetWithPlaceholder: 0
+2026-07-16 04:31:39.076 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder returning: <<UIInputViewSet: 0x9d9384240>; (empty)>
+2026-07-16 04:31:39.076 Df Messages[6081:50c63] [com.apple.UIKit:InputSessionChange] -_teardownExistingDelegate:(nil) forSetDelegate:<CKMessageEntryRichTextView: 0x9da9f0000> force:NO delayEndInputSession:NO
+2026-07-16 04:31:39.077 Df Messages[6081:50c63] [com.apple.UIKit:SmartReply] Handling responseContextDidChange - existing: <private>, new: <private>
+2026-07-16 04:31:39.077 Df Messages[6081:50c63] [com.apple.UIKit:SmartReply] Handling setting state to: <private>
+2026-07-16 04:31:39.077 Df Messages[6081:50c63] [com.apple.UIKit:SmartReply] Will regenerate smart replies for responseContextDidChange
+2026-07-16 04:31:39.079 Df Messages[6081:50c63] [com.apple.RemoteTextInput:InputSessionChange] -[RTIInputSystemClient beginAllowingRemoteTextInput:]  Begin allowing remote text input: <private>
+2026-07-16 04:31:39.079 Df Messages[6081:50c63] [com.apple.RemoteTextInput:InputSessionChange] -[RTIInputSystemClient _modifyTextEditingAllowedForReason:notify:animated:modifyAllowancesBlock:completion:]  Text editing allowed did change (editingAllowedAfter = YES)
+2026-07-16 04:31:39.080 Df Messages[6081:50c63] [com.apple.RemoteTextInput:InputSessionChange] -[RTIInputSystemClient _beginSessionWithID:forServices:force:]  Begin text input session. sessionID = <private>, options = <private>
+2026-07-16 04:31:39.080 Df Messages[6081:6a66e] [com.apple.RemoteTextInput:InputSessionChange] -[RTIInputSystemServiceSession beginRemoteTextInputSessionWithID:options:documentTraits:initialDocumentState:]  Begin input session: <private>
+2026-07-16 04:31:39.081 Df Messages[6081:50c63] [com.apple.RemoteTextInput:RTILog] -[RTIInputSystemClient remoteTextInputSessionWithID:textSuggestionsChanged:]  Text input session suggestions changed. sessionID = <private>
+2026-07-16 04:31:39.081 Df Messages[6081:62823] [com.apple.RemoteTextInput:RTILog] -[RTIInputSystemServiceSession remoteTextInputSessionWithID:textSuggestionsChanged:]  Input session: <private> text suggestions changed
+2026-07-16 04:31:39.069 A  IMDPersistenceAgent[688:63414] (IMDPersistence) com.apple.messages.IMDPCommandDispatcher
+2026-07-16 04:31:39.075 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] daemon unread count : 0, client unread count :0 chatGuids <private>
+2026-07-16 04:31:39.070 Df IMDPersistenceAgent[688:63414] [com.apple.Messages:Database] _IMDMessageRecordCopyAndMarkAsReadMessagesReceivedPriorToDateMatchingChatGUIDs
+2026-07-16 04:31:39.072 A  IMDPersistenceAgent[688:63414] (IMDPersistence) com.apple.messages.IMDPCommandDispatcher
+2026-07-16 04:31:39.069 Df donotdisturbd[667:6a471] [com.apple.donotdisturb:AppConfiguration] Client request to get current app configuration: bundleIdentifier=com.apple.MobileSMS
+2026-07-16 04:31:39.074 A  IMDPersistenceAgent[688:6a569] (IMDPersistence) com.apple.messages.IMDPCommandDispatcher
+2026-07-16 04:31:39.074 Df IMDPersistenceAgent[688:6a569] [com.apple.Messages:Database] _IMDMessageRecordCopyAndMarkAsReadMessagesReceivedPriorToDateMatchingChatGUIDs
+2026-07-16 04:31:39.081 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ isAttemptingTermination (state: Running)
+2026-07-16 04:31:39.074 A  IMDPersistenceAgent[688:6a569] (IMDPersistence) com.apple.messages.IMDPCommandDispatcher
+2026-07-16 04:31:39.082 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.082 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.083 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.083 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.083 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.083 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.086 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:39.086 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:39.086 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] Found 0 message guids to mark as read: (first (null) last (null)) for 1 IDs (first <private> last <private>) services <private>
+2026-07-16 04:31:39.086 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] Reindexing messages as read in spotlight
+2026-07-16 04:31:39.086 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] Could not find chat from last message so defaulted to <private>
+2026-07-16 04:31:39.086 Df imagent[662:1832] [com.apple.Messages:MarkAsRead+Msgs] daemon unread count : 0, client unread count :0 chatGuids <private>
+2026-07-16 04:31:39.086 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:39.086 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:39.087 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:39.087 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:39.087 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:39.087 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:39.091 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.092 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.092 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.092 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.092 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.092 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.083 A  IMDPersistenceAgent[688:63414] (IMDPersistence) com.apple.messages.IMDPCommandDispatcher
+2026-07-16 04:31:39.085 Df IMDPersistenceAgent[688:63414] [com.apple.Messages:Database] _IMDMessageRecordCopyAndMarkAsReadMessagesReceivedPriorToDateMatchingChatGUIDs
+2026-07-16 04:31:39.086 A  IMDPersistenceAgent[688:63414] (IMDPersistence) com.apple.messages.IMDPCommandDispatcher
+2026-07-16 04:31:39.097 E  Messages[6081:50c63] [com.apple.UIKit:CompositionalLayout] Invalid absolute dimension, must be > 0.0. NOTE: This will be a hard-assert soon, please update your call site.
+2026-07-16 04:31:39.097 E  Messages[6081:50c63] [com.apple.UIKit:CompositionalLayout] Invalid absolute dimension, must be > 0.0. NOTE: This will be a hard-assert soon, please update your call site.
+2026-07-16 04:31:39.097 E  Messages[6081:50c63] [com.apple.UIKit:CompositionalLayout] Invalid absolute dimension, must be > 0.0. NOTE: This will be a hard-assert soon, please update your call site.
+2026-07-16 04:31:39.099 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Messages.6081; token: viewbridge-key-window>)
+2026-07-16 04:31:39.097 E  Messages[6081:50c63] [com.apple.UIKit:CompositionalLayout] Invalid absolute dimension, must be > 0.0. NOTE: This will be a hard-assert soon, please update your call site.
+2026-07-16 04:31:39.102 Df runningboardd[398:68e36] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] with description <RBSAssertionDescriptor| "systemAnimationFence" ID:398-6081-4504 target:6081 attributes:[
+	<RBSLegacyAttribute| requestedReason:FinishTask reason:FinishTask flags:( AllowIdleSleep PreventTaskSuspend PreventTaskThrottleDown )>,
+	<RBSAcquisitionCompletionAttribute| policy:AfterValidation>
+	]>
+2026-07-16 04:31:39.097 E  Messages[6081:50c63] [com.apple.UIKit:UICollectionLayout] <CKConversationListCollectionViewCompositionalLayout: 0x9dc041680> ran into an error when computing the layout for section at index 2 in container <_UICollectionLayoutContainer: 0x9daff5900 contentSize={320, 939}; contentInsets={0, 0, 0, 0}}>. Container calculated by applying insets ({88, 0, 0, 0}) from sectionInsetsReference "safeArea" to collection view frame {{0, 0}, {320, 939}}.
+UICollectionView behavior with this layout is undefined. Break on UICollectionViewCompositionalLayoutAlertForInvalidLayout to catch this in the debugger.
+Error: There is no room for this NSCollectionLayoutGroup to fit into its parent group or section, or it has no room for any subitems itself. Inspect the parent and ensure the contentInsets ({0, 0, 0, 0}) do not result in a negative effectiveContentSize when applied to size: {320, 939}.
+Group: <NSCollectionLayoutGroup 0x9d9387480 size={.absolute(0), .absolute(0)}>
+	 layoutDirection: .horizontal
+	 interItemSpacing=.fixed(0)
+	 subitems=
+		 <NSCollectionLayoutItem 0x9dbc65740 size={.absolute(0), .absolute(0)}>
+2026-07-16 04:31:39.102 Df runningboardd[398:68e36] [com.apple.runningboard:ttl] Assertion 398-6081-4504 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) will be created as inactive as start-time-defining assertions exist
+2026-07-16 04:31:39.104 Df Messages[6081:6a66e] [com.apple.inputAnalytics.client:IASignalAnalytics] channel:<private> signal:<private> uniqueStringId:<private> creationTimestamp:<private> timestamp:<private> payload:<private>
+2026-07-16 04:31:39.126 Df Messages[6081:6a66e] [com.apple.xpc:connection] [0x9de2003c0] activating connection: mach=false listener=false peer=false name=com.apple.TextInputUI.xpc.CursorUIViewService
+2026-07-16 04:31:39.126 Df Messages[6081:6648d] [com.apple.xpc:connection] [0x9de2003c0] invalidated after the last release of the connection object
+2026-07-16 04:31:39.132 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad10fc0:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] Scene action [Logical Activate][0xf302] completed with success: 1
+2026-07-16 04:31:39.132 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Invalidating assertion 398-6081-4504 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]
+2026-07-16 04:31:39.132 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] scene content state changed: ready
+2026-07-16 04:31:39.134 Df Messages[6081:50c63] [com.apple.xpc:connection] [0x9de202800] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-07-16 04:31:39.134 Df Messages[6081:50c63] [com.apple.xpc:connection] [0x9de2003c0] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-07-16 04:31:39.135 Df Messages[6081:50c63] (MessagesSupport) Got nil datasource items for layoutSection - bailing out of layout generation
+2026-07-16 04:31:39.139 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] applicationShouldHandleReopen
+2026-07-16 04:31:39.139 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Checking AppleEvent for background launch data. (aevt/rapp)
+2026-07-16 04:31:39.139 Df Messages[6081:50c63] [com.apple.launchservices:default] LaunchServices: _LSOpenExtractBackgroundLaunchReasonFromAppleEvent() => false - <private>, err=Error Domain=NSOSStatusErrorDomain Code=-1701 UserInfo={_LSLine=1374, _LSFunction=<private>, _LSFile=<private>, _LSErrorMessage=<private>}
+2026-07-16 04:31:39.139 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] AppleEvent is NOT for background launch. (aevt/rapp)
+2026-07-16 04:31:39.140 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ applicationReceivedReopenRequest (state: Running)
+2026-07-16 04:31:39.140 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ isLaunchComplete (state: Running)
+2026-07-16 04:31:39.140 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ allExpectedWindowsDidOpen (state: Running)
+2026-07-16 04:31:39.151 Df Messages[6081:50c63] [com.apple.TextInputUI:CursorUI] -[TUINSCursorUIController activate:]_block_invoke: Create CursorUIViewService: TUINSRemoteViewController
+2026-07-16 04:31:39.152 Df Messages[6081:50c63] [com.apple.xpc:connection] [0x9de3e6580] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-07-16 04:31:39.152 Df Messages[6081:50c63] [com.apple.xpc:connection] [0x9db59a580] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-07-16 04:31:39.152 Df WindowServer[391:62a00] [com.apple.BackBoard:EventDelivery] chain did update (setDeferringRules) <keyboardFocus; display: null> containsEndOfChain: YES; [
+    <token: <frontmost>; pid: 391>,
+    <token: Messages:0x0-0x108108; pid: 391>,
+    <pid: 6081>,
+    <token: viewbridge-key-window; pid: 6081>
+]
+2026-07-16 04:31:39.153 Df WindowServer[391:62a00] [com.apple.BackBoard:EventDelivery] chain did update (setDeferringRules) <keyboardFocus; display: null> containsEndOfChain: YES; [
+    <token: <frontmost>; pid: 391>,
+    <token: Messages:0x0-0x108108; pid: 391>,
+    <pid: 6081>,
+    <token: viewbridge-key-window; pid: 6081>
+]
+2026-07-16 04:31:39.156 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.157 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.157 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.158 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.158 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.158 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.158 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Calculated base desired scrollIntent CurrentTime, calling into trigger: <private> to update intent.
+2026-07-16 04:31:39.159 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents-EntryViewActiveTrigger] Switching intent from CurrentTime to CurrentTime because hasSendLaterPluginInfo: false
+2026-07-16 04:31:39.159 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Trigger: <private> calculated scroll request: <private>
+2026-07-16 04:31:39.160 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardUI] Keyboard inserts text
+2026-07-16 04:31:39.164 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – update #1 – reason: text changed - speed: 0.001088
+2026-07-16 04:31:39.164 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – trying to find next animation for identifiers: <private>
+2026-07-16 04:31:39.164 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – do nothing for identifier translationTextView because there is no associated text view.
+2026-07-16 04:31:39.164 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] do nothing for identifier textView because there was no next animation in the text view.
+2026-07-16 04:31:39.164 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – There is no next text animation to animate.
+2026-07-16 04:31:39.164 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – Cannot check passed time because there is no current managed text animation.
+2026-07-16 04:31:39.186 Df Messages[6081:50c63] [com.apple.TextInputUI:CursorUI] -[TUINSCursorUIController activate:]_block_invoke: Create CursorUIViewService: TUINSRemoteViewController
+2026-07-16 04:31:39.186 Df Messages[6081:50c63] [com.apple.xpc:connection] [0x9de3e4500] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-07-16 04:31:39.186 Df Messages[6081:50c63] [com.apple.xpc:connection] [0x9de3e66c0] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-07-16 04:31:39.187 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:39.189 Df WindowServer[391:62a00] [com.apple.BackBoard:EventDelivery] chain did update (setDeferringRules) <keyboardFocus; display: null> containsEndOfChain: YES; [
+    <token: <frontmost>; pid: 391>,
+    <token: Messages:0x0-0x108108; pid: 391>,
+    <pid: 6081>,
+    <token: viewbridge-key-window; pid: 6081>
+]
+2026-07-16 04:31:39.190 Df WindowServer[391:62a00] [com.apple.BackBoard:EventDelivery] chain did update (setDeferringRules) <keyboardFocus; display: null> containsEndOfChain: YES; [
+    <token: <frontmost>; pid: 391>,
+    <token: Messages:0x0-0x108108; pid: 391>,
+    <pid: 6081>,
+    <token: viewbridge-key-window; pid: 6081>
+]
+2026-07-16 04:31:39.238 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticDataAuto, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.238 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticData, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+    "Optional-en::9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset"
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.257 Df Messages[6081:6648d] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticDataAuto, locO: 1, iO: 1, latO: 1, cO: 1, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+) was cached: 1, cachedOnly: 1
+2026-07-16 04:31:39.257 Df Messages[6081:6648d] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticData, locO: 1, iO: 1, latO: 1, cO: 1, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+    "Optional-en::9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset"
+) was cached: 1, cachedOnly: 1
+2026-07-16 04:31:39.257 Df Messages[6081:6648d] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticDataAuto, locO: 1, iO: 1, latO: 1, cO: 1, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+) was cached: 1, cachedOnly: 1
+2026-07-16 04:31:39.257 Df Messages[6081:6648d] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticData, locO: 1, iO: 1, latO: 1, cO: 1, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+    "Optional-en::9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset"
+) was cached: 1, cachedOnly: 1
+2026-07-16 04:31:39.257 Df Messages[6081:6648d] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticDataAuto, locO: 1, iO: 1, latO: 1, cO: 1, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+) was cached: 1, cachedOnly: 1
+2026-07-16 04:31:39.257 Df Messages[6081:6648d] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticData, locO: 1, iO: 1, latO: 1, cO: 1, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+    "Optional-en::9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset"
+) was cached: 1, cachedOnly: 1
+2026-07-16 04:31:39.258 Df Messages[6081:6648d] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticDataAuto, locO: 1, iO: 1, latO: 1, cO: 1, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+) was cached: 1, cachedOnly: 1
+2026-07-16 04:31:39.258 Df Messages[6081:6648d] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticData, locO: 1, iO: 1, latO: 1, cO: 1, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+    "Optional-en::9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset"
+) was cached: 1, cachedOnly: 1
+2026-07-16 04:31:39.259 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticDataAuto, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.259 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticData, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+    "Optional-en::9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset"
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.259 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticDataAuto, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.259 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticData, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+    "Optional-en::9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset"
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.260 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticDataAuto, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.260 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticData, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+    "Optional-en::9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset"
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.260 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticDataAuto, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.260 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticData, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+    "Optional-en::9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset"
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.275 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Messages.6081; token: viewbridge-key-window>)
+2026-07-16 04:31:39.278 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.278 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.278 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.278 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.278 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.278 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.279 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Calculated base desired scrollIntent CurrentTime, calling into trigger: <private> to update intent.
+2026-07-16 04:31:39.279 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents-EntryViewActiveTrigger] Switching intent from CurrentTime to CurrentTime because hasSendLaterPluginInfo: false
+2026-07-16 04:31:39.279 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Trigger: <private> calculated scroll request: <private>
+2026-07-16 04:31:39.279 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardUI] Keyboard inserts text
+2026-07-16 04:31:39.284 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – update #2 – reason: text changed - speed: 0.002175
+2026-07-16 04:31:39.284 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – trying to find next animation for identifiers: <private>
+2026-07-16 04:31:39.284 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – do nothing for identifier translationTextView because there is no associated text view.
+2026-07-16 04:31:39.284 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] do nothing for identifier textView because there was no next animation in the text view.
+2026-07-16 04:31:39.284 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – There is no next text animation to animate.
+2026-07-16 04:31:39.284 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – Cannot check passed time because there is no current managed text animation.
+2026-07-16 04:31:39.298 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticDataAuto, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.298 Df Messages[6081:63fde] [com.apple.DataDeliveryServices:Query] assetsForQuery: <query: com.apple.MobileAsset.LinguisticData, locO: 1, iO: 1, latO: 1, cO: 0, <filter: {
+    AssetLocale = "{(\134n    \134"en_US\134",\134n    en\134n)}";
+}>> final result: (
+    "Optional-en::9e5af7e2cffff3cded5db21909fd7d3a58b4ed43.asset"
+) was cached: 1, cachedOnly: 0
+2026-07-16 04:31:39.329 Df osascript[80964:6a6f0] [com.apple.CoreAnalytics:client] Queueing exit procedure onto XPC queue. Any further messages sent will be discarded. activeSendTransactions=0
+2026-07-16 04:31:39.329 Df osascript[80964:6a6f3] [com.apple.CoreAnalytics:client] Cancelling XPC connection. Any further reply handler invocations will not retry messages
+2026-07-16 04:31:39.329 Df WindowServer[391:fca] [com.apple.SkyLight.processes:Focus] 0[outside of RPC]: [DeferringManager] Updating policy {
+    advicePolicy: .frontmost;
+    frontmostProcess: 0x0-0x108108 (Messages) mainConnectionID: 6FEBB;
+} for reason: deferringPolicyEvaluationSuppression
+2026-07-16 04:31:39.330 Df WindowServer[391:fca] [com.apple.SkyLight.processes:Focus] 0[outside of RPC]: [DeferringManager] Deferring events from frontmost process PSN 0x0-0x108108 (Messages) -> <pid: 6081>
+2026-07-16 04:31:39.330 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] new deferring rules for pid:391: [
+    [391-1E3]; <keyboardFocus; Messages:0x0-0x108108>; () -> <pid: 6081>; reason: frontmost PSN --> outbound target,
+    [391-1E2]; <keyboardFocus; <frontmost>>; () -> <token: Messages:0x0-0x108108; pid: 391>; reason: frontmost PSN,
+    [391-1E1]; <keyboardFocus>; () -> <token: <frontmost>; pid: 391>; reason: Deferring to <frontmost>
+]
+2026-07-16 04:31:39.330 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] [keyboardFocus 0xc154d6c60] setRules:forPID(391): [
+    [391-1E3]; <keyboardFocus; Messages:0x0-0x108108>; () -> <pid: 6081>; reason: frontmost PSN --> outbound target,
+    [391-1E2]; <keyboardFocus; <frontmost>>; () -> <token: Messages:0x0-0x108108; pid: 391>; reason: frontmost PSN,
+    [391-1E1]; <keyboardFocus>; () -> <token: <frontmost>; pid: 391>; reason: Deferring to <frontmost>
+]
+2026-07-16 04:31:39.330 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] chain did update (setDeferringRules) <keyboardFocus; display: null> containsEndOfChain: YES; [
+    <token: <frontmost>; pid: 391>,
+    <token: Messages:0x0-0x108108; pid: 391>,
+    <pid: 6081>,
+    <token: viewbridge-key-window; pid: 6081>
+]
+2026-07-16 04:31:39.363 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Messages.6081; token: viewbridge-key-window>)
+2026-07-16 04:31:39.372 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.373 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.373 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.373 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.373 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.373 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:39.373 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Calculated base desired scrollIntent CurrentTime, calling into trigger: <private> to update intent.
+2026-07-16 04:31:39.373 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents-EntryViewActiveTrigger] Switching intent from CurrentTime to CurrentTime because hasSendLaterPluginInfo: false
+2026-07-16 04:31:39.373 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Trigger: <private> calculated scroll request: <private>
+2026-07-16 04:31:39.374 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardUI] Keyboard inserts text
+2026-07-16 04:31:39.378 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – update #3 – reason: text changed - speed: 0.003262
+2026-07-16 04:31:39.378 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – trying to find next animation for identifiers: <private>
+2026-07-16 04:31:39.378 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – do nothing for identifier translationTextView because there is no associated text view.
+2026-07-16 04:31:39.378 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] do nothing for identifier textView because there was no next animation in the text view.
+2026-07-16 04:31:39.378 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – There is no next text animation to animate.
+2026-07-16 04:31:39.378 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – Cannot check passed time because there is no current managed text animation.
+2026-07-16 04:31:39.391 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:39.419 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:39.544 A  Messages[6081:6648d] (CoreSpotlight) end-index-batch
+2026-07-16 04:31:39.544 A  Messages[6081:6648d] (CoreSpotlight) index-items
+2026-07-16 04:31:39.544 Df Messages[6081:6a66e] [com.apple.corespotlight:index] CSInlineDonation:<private>: Skipping donation (feature flag disabled)
+2026-07-16 04:31:39.561 Df perl[81078:6a779] [com.apple.CoreAnalytics:client] Queueing exit procedure onto XPC queue. Any further messages sent will be discarded. activeSendTransactions=0
+2026-07-16 04:31:39.561 Df perl[81078:6a77e] [com.apple.CoreAnalytics:client] Cancelling XPC connection. Any further reply handler invocations will not retry messages
+2026-07-16 04:31:39.620 Df perl[81079:6a780] [com.apple.CoreAnalytics:client] Queueing exit procedure onto XPC queue. Any further messages sent will be discarded. activeSendTransactions=0
+2026-07-16 04:31:39.620 Df perl[81079:6a781] [com.apple.CoreAnalytics:client] Cancelling XPC connection. Any further reply handler invocations will not retry messages
+2026-07-16 04:31:39.663 A  Messages[6081:50c63] (CoreFoundation) Loading Preferences From User CFPrefsD
+2026-07-16 04:31:39.664 A  Messages[6081:50c63] (CoreFoundation) Loading Preferences From System CFPrefsD
+2026-07-16 04:31:39.664 Df Messages[6081:6a66e] [com.apple.xpc:connection] [0x9de3e57c0] activating connection: mach=true listener=false peer=false name=mul-xpc (Apple)_OpenStep
+2026-07-16 04:31:39.665 Df Messages[6081:6648d] [com.apple.TextInputUI:SmartReply] Cancelled Smart Reply generateCandidates
+2026-07-16 04:31:39.665 Df Messages[6081:6648d] [com.apple.TextInputUI:CandidateGeneration] All generators are not complete.
+2026-07-16 04:31:39.665 Df Messages[6081:6648d] [com.apple.TextInputUI:CandidateGeneration] All generators are complete, dispatching to `completionBlockJustOnce`
+2026-07-16 04:31:39.665 Df Messages[6081:6648d] [com.apple.TextInputUI:CandidateGeneration] Could not match any valid candidates of any source. `containerToPush` will be nil. <private>
+2026-07-16 04:31:39.665 Df Messages[6081:6648d] [com.apple.TextInputUI:CandidateGeneration] Preparing to push (null) to candidate receiver, for request token: <private>
+2026-07-16 04:31:39.665 E  Messages[6081:6648d] [com.apple.TextInputUI:CandidateGeneration] containerToPush is nil, will not push anything to candidate receiver for request token: <private>
+2026-07-16 04:31:39.684 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForWindow: untracked window, ignoring.
+2026-07-16 04:31:39.684 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForWindow: untracked window, ignoring.
+2026-07-16 04:31:39.686 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Creating internal non-hosting window tracking scene with persistentID: NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:39.686 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ isLaunchedToBackgroundOnly (state: Running)
+2026-07-16 04:31:39.686 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Creating internal non-hosting window tracking scene with persistentID: NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7
+2026-07-16 04:31:39.686 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ isLaunchedToBackgroundOnly (state: Running)
+2026-07-16 04:31:39.686 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081][0x2437] Received scene request...
+2026-07-16 04:31:39.687 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] Creating scene with sceneID "FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA" for persistenceID "NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA" with specification FUSystemWindowSceneSpecification
+2026-07-16 04:31:39.688 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Initialized with connection: 0x9f9c10a50.
+2026-07-16 04:31:39.688 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Registered new scene: <FBUIApplicationWorkspaceScene: 0x9fad11a40; (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA> (fromRemnant = 0)
+2026-07-16 04:31:39.688 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA][1] Scene activated.
+2026-07-16 04:31:39.688 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] scene content state changed: preparing
+2026-07-16 04:31:39.688 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Scene lifecycle state did change: Foreground
+2026-07-16 04:31:39.688 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Scene state did change: FV-Focal[100].
+2026-07-16 04:31:39.689 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Sending scene action [Logical Activate][0xa36] to process 0x9facc0d80 (watchdog: 1200.00s)
+2026-07-16 04:31:39.689 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Sending scene create.
+2026-07-16 04:31:39.689 Df UIKitSystem[712:1aea] [com.apple.UIKit:KBProxyForwarding] <StateMachine:0x9fb84f580> Created with presentation environment: <0x9f9c13db0:<_UISceneKeyboardProxyLayerForwardingPresentationScene: 0x9f9c13db0> Tracking scene: <FBScene: 0x9fac7d300; FBSceneManager:FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA>>
+2026-07-16 04:31:39.690 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: <private>, expirationHandler: <__NSGlobalBlock__: 0x1f9e4def8>
+2026-07-16 04:31:39.690 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-07-16 04:31:39.690 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-07-16 04:31:39.690 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x9dbcc0230>
+2026-07-16 04:31:39.690 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] with description <RBSAssertionDescriptor| "Shared Background Assertion 47 for com.apple.MobileSMS" ID:398-6081-4513 target:6081 attributes:[
+	<RBSLegacyAttribute| requestedReason:FinishTask reason:FinishTask flags:( PreventTaskSuspend )>,
+	<RBSAcquisitionCompletionAttribute| policy:AfterValidation>
+	]>
+2026-07-16 04:31:39.690 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <private>
+2026-07-16 04:31:39.690 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Assertion 398-6081-4513 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) will be created as inactive as start-time-defining assertions exist
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Created background task <private>.
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Should send trait collection or coordinate space update, interface style 2 -> 2, <UIWindowScene: 0x9de1bc280> (NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9de1bc280> (NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9de1bc280> (NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9de1bc280> (NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] (UIKitMacHelper) Now tracking scene:  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA persistentID: (null)
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9de1bc280> (NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene will connect. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to foreground active. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.691 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.MobileSMS(6081)|978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C  persistentID: 978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C
+2026-07-16 04:31:39.692 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081][0x2437] Request complete! Created scene FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA (persistenceID NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.692 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081][0xfe7] Received scene request...
+2026-07-16 04:31:39.692 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] Creating scene with sceneID "FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7" for persistenceID "NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7" with specification FUSystemWindowSceneSpecification
+2026-07-16 04:31:39.693 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Initialized with connection: 0x9f9c10a50.
+2026-07-16 04:31:39.693 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Registered new scene: <FBUIApplicationWorkspaceScene: 0x9fad11b00; (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7> (fromRemnant = 0)
+2026-07-16 04:31:39.693 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7][1] Scene activated.
+2026-07-16 04:31:39.693 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] scene content state changed: preparing
+2026-07-16 04:31:39.693 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Scene lifecycle state did change: Foreground
+2026-07-16 04:31:39.693 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Scene state did change: FV-Focal[100].
+2026-07-16 04:31:39.693 Df UIKitSystem[712:1aea] [com.apple.UIKit:KBProxyForwarding] <StateMachine:0x9fb84fcc0> Created with presentation environment: <0x9f9c7fde0:<_UISceneKeyboardProxyLayerForwardingPresentationScene: 0x9f9c7fde0> Tracking scene: <FBScene: 0x9fac7d200; FBSceneManager:FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7>>
+2026-07-16 04:31:39.693 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Sending scene action [Logical Activate][0xe4b5] to process 0x9facc0d80 (watchdog: 1200.00s)
+2026-07-16 04:31:39.693 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Sending scene create.
+2026-07-16 04:31:39.693 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081][0xfe7] Request complete! Created scene FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7 (persistenceID NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.694 Df Messages[6081:50c63] [com.apple.UIKit:InputWindowController] Change from input view set: (null)
+2026-07-16 04:31:39.694 Df Messages[6081:50c63] [com.apple.UIKit:InputWindowController] Change to input view set: (null)
+2026-07-16 04:31:39.695 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] didCreateScene ENTRY  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA  persistentID: NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA  NSWindow: 0
+2026-07-16 04:31:39.695 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Decrementing scene creation tracking. NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:39.695 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Did not find in-flight scene creation tracking for NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:39.695 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] didCreateScene EXIT  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA  persistentID: NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:39.695 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Should send trait collection or coordinate space update, interface style 2 -> 2, <UIWindowScene: 0x9de1be800> (NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.695 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9de1be800> (NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.695 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9de1be800> (NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.695 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9de1be800> (NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.695 Df Messages[6081:50c63] (UIKitMacHelper) Now tracking scene:  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7 persistentID: (null)
+2026-07-16 04:31:39.696 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9de1be800> (NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.696 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene will connect. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.696 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.696 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to foreground active. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.696 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.MobileSMS(6081)|978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C  persistentID: 978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C
+2026-07-16 04:31:39.697 Df Messages[6081:50c63] [com.apple.UIKit:InputWindowController] Change from input view set: (null)
+2026-07-16 04:31:39.697 Df Messages[6081:50c63] [com.apple.UIKit:InputWindowController] Change to input view set: (null)
+2026-07-16 04:31:39.698 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] didCreateScene ENTRY  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7  persistentID: NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7  NSWindow: 0
+2026-07-16 04:31:39.698 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Decrementing scene creation tracking. NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7
+2026-07-16 04:31:39.698 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Did not find in-flight scene creation tracking for NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7
+2026-07-16 04:31:39.698 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] didCreateScene EXIT  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7  persistentID: NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7
+2026-07-16 04:31:39.701 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Scene action [Logical Activate][0xa36] completed with success: 1
+2026-07-16 04:31:39.701 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Internal non-hosting window tracking scene has been created with sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:39.701 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] scene content state changed: ready
+2026-07-16 04:31:39.701 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.701 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Scene action [Logical Activate][0xe4b5] completed with success: 1
+2026-07-16 04:31:39.701 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ allExpectedWindowsDidOpen (state: Running)
+2026-07-16 04:31:39.701 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] scene content state changed: ready
+2026-07-16 04:31:39.701 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Internal non-hosting window tracking scene has been created with sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7
+2026-07-16 04:31:39.701 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.708 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ allExpectedWindowsDidOpen (state: Running)
+2026-07-16 04:31:39.708 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:39.708 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:39.931 Df perl[81134:6a7d5] [com.apple.CoreAnalytics:client] Queueing exit procedure onto XPC queue. Any further messages sent will be discarded. activeSendTransactions=0
+2026-07-16 04:31:39.931 Df perl[81134:6a7d9] [com.apple.CoreAnalytics:client] Cancelling XPC connection. Any further reply handler invocations will not retry messages
+2026-07-16 04:31:40.118 Df dasd[369:699e3] [com.apple.duetactivityscheduler:scoring] 501:com.apple.intelligenceplatform.IntelligencePlatformCore.AutonamingMessagesPipeline:C65D74:[
+	{name: Device Activity Policy, policyWeight: 20.000, response: {33, 0.00, [{deviceActivity == 1}]}}
+ ], Decision: MNP}
+2026-07-16 04:31:40.148 Df dasd[369:699e3] [com.apple.duetactivityscheduler:scoring] 501:com.apple.messages.reparentingmonitor:E04A41:[
+	{name: Device Activity Policy, policyWeight: 20.000, response: {33, 0.00, [{deviceActivity == 1}]}}
+ ], Decision: MNP}
+2026-07-16 04:31:40.187 A  Messages[6081:6648d] (CoreSpotlight) end-index-batch
+2026-07-16 04:31:40.187 A  Messages[6081:6648d] (CoreSpotlight) index-items
+2026-07-16 04:31:40.187 Df Messages[6081:6648d] [com.apple.corespotlight:index] CSInlineDonation:<private>: Skipping donation (feature flag disabled)
+2026-07-16 04:31:40.213 Df Messages[6081:6648d] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 59
+2026-07-16 04:31:40.213 Df Messages[6081:6648d] [com.apple.UIKit:BackgroundTask] Ending task with identifier 59 and description: <private>, _expireHandler: <__NSGlobalBlock__: 0x1f9e4def8>
+2026-07-16 04:31:40.213 Df Messages[6081:6648d] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <private> (used by background task with identifier 59: <private>)
+2026-07-16 04:31:40.213 Df Messages[6081:6648d] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x9dbcc0230> for task identifier: 59
+2026-07-16 04:31:40.214 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Invalidating assertion 398-6081-4513 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]
+2026-07-16 04:31:40.728 Df perl[81179:6a817] [com.apple.CoreAnalytics:client] Queueing exit procedure onto XPC queue. Any further messages sent will be discarded. activeSendTransactions=0
+2026-07-16 04:31:40.728 Df perl[81179:6a819] [com.apple.CoreAnalytics:client] Cancelling XPC connection. Any further reply handler invocations will not retry messages
+2026-07-16 04:31:40.765 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Messages.6081; token: viewbridge-key-window>)
+2026-07-16 04:31:40.773 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:40.773 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Window state changed: minimized: 0 onInvisibleSpace: 0 orderedOut: 1 tabbedOut: 0 (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:40.773 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ requestSceneBackground: (state: Running)
+2026-07-16 04:31:40.773 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Enqueued BG. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:40.773 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Kicked off dequeueing.
+2026-07-16 04:31:40.773 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeued BG. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:40.773 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeuing paused until state change is complete. (BG; <private>)
+2026-07-16 04:31:40.773 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Tracking scene state with target state: BG (<private>)
+2026-07-16 04:31:40.774 Df UIKitSystem[712:66d8f] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] Received destroy scenes request: NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:40.774 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:40.774 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Window state changed: minimized: 0 onInvisibleSpace: 0 orderedOut: 1 tabbedOut: 0 (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:40.774 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ requestSceneBackground: (state: Running)
+2026-07-16 04:31:40.774 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Enqueued BG. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:40.774 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] scene content state changed: notReady
+2026-07-16 04:31:40.774 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Scene lifecycle state did change: Background
+2026-07-16 04:31:40.774 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Scene state did change: FG-Active[90].
+2026-07-16 04:31:40.774 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Sending action(s): <UIDestroySceneAction: 0x02c80005>
+2026-07-16 04:31:40.774 Df UIKitSystem[712:66d8f] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] Received destroy scenes request: NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7
+2026-07-16 04:31:40.774 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Sending scene action [Logical Deactivate][0x7dd6] to process 0x9facc0d80 (watchdog: 1200.00s)
+2026-07-16 04:31:40.774 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] scene content state changed: notReady
+2026-07-16 04:31:40.775 Df UIKitSystem[712:6a67b] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Scene lifecycle state did change: Background
+2026-07-16 04:31:40.775 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Sending action(s): <UIDestroySceneAction: 0x02c80006>
+2026-07-16 04:31:40.775 Df UIKitSystem[712:6a67b] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Scene state did change: FG-Active[90].
+2026-07-16 04:31:40.775 Df UIKitSystem[712:6a67b] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Sending scene action [Logical Deactivate][0x80f6] to process 0x9facc0d80 (watchdog: 1200.00s)
+2026-07-16 04:31:40.776 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081: Ignoring client settings change from untracked scene with scene identifier: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:40.779 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:40.779 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9de1bc280> (NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground inactive. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to background. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene reached target state. (<private>)
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] No longer tracking scene state with target state: BG (<private>)
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state change complete, dequeuing resumed.
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeued BG. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeuing paused until state change is complete. (BG; <private>)
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Tracking scene state with target state: BG (<private>)
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.MobileSMS(6081)|978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C  persistentID: 978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: <private>, expirationHandler: <__NSGlobalBlock__: 0x1f9e4def8>
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-07-16 04:31:40.780 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x9dc682670>
+2026-07-16 04:31:40.780 Df runningboardd[398:68e36] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] with description <RBSAssertionDescriptor| "Shared Background Assertion 48 for com.apple.MobileSMS" ID:398-6081-4514 target:6081 attributes:[
+	<RBSLegacyAttribute| requestedReason:FinishTask reason:FinishTask flags:( PreventTaskSuspend )>,
+	<RBSAcquisitionCompletionAttribute| policy:AfterValidation>
+	]>
+2026-07-16 04:31:40.780 Df runningboardd[398:68e36] [com.apple.runningboard:ttl] Assertion 398-6081-4514 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) will be created as inactive as start-time-defining assertions exist
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <private>
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Created background task <private>.
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.BaseBoard:BSAction] Reply (error: response-not-possible) <UIDestroySceneAction: 0x02c80005>
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9de1be800> (NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:40.781 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] Invalidating scene: (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground inactive. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to background. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene reached target state. (<private>)
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] No longer tracking scene state with target state: BG (<private>)
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state change complete, dequeuing resumed.
+2026-07-16 04:31:40.781 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Unregistering scene: <FBUIApplicationWorkspaceScene: 0x9fad11a40; (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA>
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.MobileSMS(6081)|978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C  persistentID: 978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C
+2026-07-16 04:31:40.781 Df UIKitSystem[712:6a67b] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Sending scene destroy.
+2026-07-16 04:31:40.781 Df Messages[6081:50c63] [com.apple.BaseBoard:BSAction] Reply (error: response-not-possible) <UIDestroySceneAction: 0x02c80006>
+2026-07-16 04:31:40.781 Df UIKitSystem[712:1aea] [com.apple.UIKit:KBProxyForwarding] <StateMachine:0x9fb84f580> Presentation environment invalidated: <_UISceneKeyboardProxyLayerForwardingPresentationScene: 0x9f9c13db0> Tracking scene: <FBScene: 0x9fac7d300; (null):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA>
+2026-07-16 04:31:40.782 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] Invalidating scene: (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7
+2026-07-16 04:31:40.782 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Unregistering scene: <FBUIApplicationWorkspaceScene: 0x9fad11b00; (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7>
+2026-07-16 04:31:40.782 Df UIKitSystem[712:6a67b] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Sending scene destroy.
+2026-07-16 04:31:40.782 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:40.782 Df UIKitSystem[712:1aea] [com.apple.UIKit:KBProxyForwarding] <StateMachine:0x9fb84fcc0> Presentation environment invalidated: <_UISceneKeyboardProxyLayerForwardingPresentationScene: 0x9f9c7fde0> Tracking scene: <FBScene: 0x9fac7d200; (null):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7>
+2026-07-16 04:31:40.782 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:40.782 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:40.782 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:40.782 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:40.783 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:40.783 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Calculated base desired scrollIntent CurrentTime, calling into trigger: <private> to update intent.
+2026-07-16 04:31:40.783 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents-EntryViewActiveTrigger] Switching intent from CurrentTime to CurrentTime because hasSendLaterPluginInfo: false
+2026-07-16 04:31:40.783 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Trigger: <private> calculated scroll request: <private>
+2026-07-16 04:31:40.785 Df Messages[6081:63fde] [com.apple.TextInputUI:SmartReply] Cancelled Smart Reply generateCandidates
+2026-07-16 04:31:40.785 Df Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] All generators are not complete.
+2026-07-16 04:31:40.785 Df Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] All generators are complete, dispatching to `completionBlockJustOnce`
+2026-07-16 04:31:40.785 Df Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] Could not match any valid candidates of any source. `containerToPush` will be nil. <private>
+2026-07-16 04:31:40.785 Df Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] Preparing to push (null) to candidate receiver, for request token: <private>
+2026-07-16 04:31:40.785 E  Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] containerToPush is nil, will not push anything to candidate receiver for request token: <private>
+2026-07-16 04:31:40.785 E  UIKitSystem[712:6a67b] [com.apple.FrontBoard:ProcessScene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] No scene exists for this identity (didUpdateClientSettingsWithDiff)
+2026-07-16 04:31:40.786 Df Messages[6081:50c63] (UIKitMacHelper) No longer tracking scene: sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA persistentID: (null)
+2026-07-16 04:31:40.786 Df Messages[6081:50c63] [com.apple.UIKit:KeyWindow] Scene will invalidate: UIWindowScene: 0x9de1bc280; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:FUScene%7Ccom.apple.MobileSMS(6081)%7CNonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:40.786 Df Messages[6081:50c63] [com.apple.UIKit:EventEnvironment] Enqueuing clear events of window: <UITextEffectsWindow: 0x9db5ea300>; contextId: 0x12AC9E5A
+2026-07-16 04:31:40.786 Df Messages[6081:50c63] [com.apple.UIKit:EventEnvironment] Performing clear events of window: <UITextEffectsWindow: 0x9db5ea300>; contextId: 0x12AC9E5A
+2026-07-16 04:31:40.786 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene did disconnect. (BGCtrl, FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA)
+2026-07-16 04:31:40.786 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] willDestroyScene  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA  persistentID: NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:40.786 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] willDestroyScene (lock)  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA  persistentID: NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA
+2026-07-16 04:31:40.789 Df Messages[6081:50c63] (UIKitMacHelper) No longer tracking scene: sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7 persistentID: (null)
+2026-07-16 04:31:40.789 Df UIKitSystem[712:6a67b] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Scene action [Logical Deactivate][0x7dd6] completed with success: 1
+2026-07-16 04:31:40.789 Df Messages[6081:50c63] [com.apple.UIKit:KeyWindow] Scene will invalidate: UIWindowScene: 0x9de1be800; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:FUScene%7Ccom.apple.MobileSMS(6081)%7CNonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7
+2026-07-16 04:31:40.789 Df UIKitSystem[712:6a67b] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Scene action [Logical Deactivate][0x80f6] completed with success: 1
+2026-07-16 04:31:40.789 Df Messages[6081:50c63] [com.apple.UIKit:EventEnvironment] Enqueuing clear events of window: <UITextEffectsWindow: 0x9db447200>; contextId: 0x0
+2026-07-16 04:31:40.789 Df Messages[6081:50c63] [com.apple.UIKit:EventEnvironment] Performing clear events of window: <UITextEffectsWindow: 0x9db447200>; contextId: 0x0
+2026-07-16 04:31:40.789 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene did disconnect. (BGCtrl, FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7)
+2026-07-16 04:31:40.789 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] willDestroyScene  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7  persistentID: NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7
+2026-07-16 04:31:40.789 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] willDestroyScene (lock)  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7  persistentID: NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7
+2026-07-16 04:31:40.791 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:40.791 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:40.792 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA][1] Scene invalidated.
+2026-07-16 04:31:40.792 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – update #4 – reason: text changed - speed: 0.004343
+2026-07-16 04:31:40.792 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11a40:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_C537A6C0-FB4E-46AC-AB4D-9D50593E44CA] Invalidated for connection: 0x9f9c10a50.
+2026-07-16 04:31:40.792 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – trying to find next animation for identifiers: <private>
+2026-07-16 04:31:40.792 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7][1] Scene invalidated.
+2026-07-16 04:31:40.792 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – do nothing for identifier translationTextView because there is no associated text view.
+2026-07-16 04:31:40.792 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_31F183A1-969D-46DA-9172-1C2FA678C0F7] Invalidated for connection: 0x9f9c10a50.
+2026-07-16 04:31:40.792 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] do nothing for identifier textView because there was no next animation in the text view.
+2026-07-16 04:31:40.792 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – There is no next text animation to animate.
+2026-07-16 04:31:40.792 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – Cannot check passed time because there is no current managed text animation.
+2026-07-16 04:31:40.840 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:41.025 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Messages.6081; token: viewbridge-key-window>)
+2026-07-16 04:31:41.027 Df WindowServer[391:5a716] [com.apple.iohid:default] Connection added: IOHIDEventSystemConnection uuid:E324F54F-EAEB-4A32-8FF1-BB26941E4AB3 pid:6081 process:Messages type:Passive entitlements:0x0 caller:HIToolbox: _TISCopyAttachedKeyboardLanguages + 112 attributes:(null) state:0x0 events:0 mask:0x0 dropped:0 dropStatus:0 droppedMask:0x0 lastDroppedTime:NONE
+2026-07-16 04:31:41.030 Df Messages[6081:50c63] [com.apple.iohid:oversized] Released connection: E324F54F-EAEB-4A32-8FF1-BB26941E4AB3
+{
+    UUID = "E324F54F-EAEB-4A32-8FF1-BB26941E4AB3";
+    caller = "HIToolbox: _TISCopyAttachedKeyboardLanguages + 112";
+    dispatchQueue = 0;
+    eventCount = 0;
+    eventMask = 0;
+    port = 200291;
+    resetCount = 0;
+    runloop = 0;
+    services =     (
+        4294970509,
+        4294972204
+    );
+    virtualServices =     (
+    );
+}
+2026-07-16 04:31:41.030 Df WindowServer[391:5a716] [com.apple.iohid:default] Connection removed: IOHIDEventSystemConnection uuid:E324F54F-EAEB-4A32-8FF1-BB26941E4AB3 pid:6081 process:Messages type:Passive entitlements:0x0 caller:HIToolbox: _TISCopyAttachedKeyboardLanguages + 112 attributes:(null) state:0x1 events:0 mask:0x0 dropped:0 dropStatus:0 droppedMask:0x0 lastDroppedTime:NONE
+2026-07-16 04:31:41.032 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:41.032 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:41.033 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.033 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.033 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.033 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.033 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.033 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.033 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Calculated base desired scrollIntent CurrentTime, calling into trigger: <private> to update intent.
+2026-07-16 04:31:41.033 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents-EntryViewActiveTrigger] Switching intent from CurrentTime to CurrentTime because hasSendLaterPluginInfo: false
+2026-07-16 04:31:41.033 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Trigger: <private> calculated scroll request: <private>
+2026-07-16 04:31:41.035 Df Messages[6081:62823] [com.apple.TextInputUI:SmartReply] Cancelled Smart Reply generateCandidates
+2026-07-16 04:31:41.035 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] All generators are not complete.
+2026-07-16 04:31:41.035 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] All generators are complete, dispatching to `completionBlockJustOnce`
+2026-07-16 04:31:41.035 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] Could not match any valid candidates of any source. `containerToPush` will be nil. <private>
+2026-07-16 04:31:41.035 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] Preparing to push (null) to candidate receiver, for request token: <private>
+2026-07-16 04:31:41.035 E  Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] containerToPush is nil, will not push anything to candidate receiver for request token: <private>
+2026-07-16 04:31:41.038 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – update #5 – reason: text changed - speed: 0.005427
+2026-07-16 04:31:41.038 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – trying to find next animation for identifiers: <private>
+2026-07-16 04:31:41.038 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – do nothing for identifier translationTextView because there is no associated text view.
+2026-07-16 04:31:41.038 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] do nothing for identifier textView because there was no next animation in the text view.
+2026-07-16 04:31:41.038 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – There is no next text animation to animate.
+2026-07-16 04:31:41.038 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – Cannot check passed time because there is no current managed text animation.
+2026-07-16 04:31:41.113 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:41.234 A  Messages[6081:6a66e] (CoreSpotlight) end-index-batch
+2026-07-16 04:31:41.234 A  Messages[6081:6a66e] (CoreSpotlight) index-items
+2026-07-16 04:31:41.234 Df Messages[6081:6a66e] [com.apple.corespotlight:index] CSInlineDonation:<private>: Skipping donation (feature flag disabled)
+2026-07-16 04:31:41.240 Df Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] Performing delayed generation for token=<private>
+2026-07-16 04:31:41.307 Df Messages[6081:63fde] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 60
+2026-07-16 04:31:41.307 Df Messages[6081:63fde] [com.apple.UIKit:BackgroundTask] Ending task with identifier 60 and description: <private>, _expireHandler: <__NSGlobalBlock__: 0x1f9e4def8>
+2026-07-16 04:31:41.308 Df Messages[6081:63fde] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <private> (used by background task with identifier 60: <private>)
+2026-07-16 04:31:41.308 Df Messages[6081:63fde] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x9dc682670> for task identifier: 60
+2026-07-16 04:31:41.308 Df runningboardd[398:68e36] [com.apple.runningboard:ttl] Invalidating assertion 398-6081-4514 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]
+2026-07-16 04:31:41.834 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Messages.6081; token: viewbridge-key-window>)
+2026-07-16 04:31:41.840 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.841 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.841 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.842 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.842 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.842 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.842 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Calculated base desired scrollIntent CurrentTime, calling into trigger: <private> to update intent.
+2026-07-16 04:31:41.842 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents-EntryViewActiveTrigger] Switching intent from CurrentTime to CurrentTime because hasSendLaterPluginInfo: false
+2026-07-16 04:31:41.842 Df Messages[6081:50c63] [com.apple.Messages:ScrollIntents] Trigger: <private> calculated scroll request: <private>
+2026-07-16 04:31:41.844 Df Messages[6081:6a66e] [com.apple.TextInputUI:SmartReply] Document state contextBeforeInput length is zero.
+2026-07-16 04:31:41.844 Df Messages[6081:6a66e] [com.apple.TextInputUI:SmartReply] Cancelled smart reply generation due to nil ICH
+2026-07-16 04:31:41.844 Df Messages[6081:6a66e] [com.apple.TextInputUI:SmartReply] Cancelled Smart Reply generateCandidates
+2026-07-16 04:31:41.844 Df Messages[6081:6a66e] [com.apple.TextInputUI:CandidateGeneration] All generators are not complete.
+2026-07-16 04:31:41.844 Df Messages[6081:6a66e] [com.apple.TextInputUI:CandidateGeneration] All generators are complete, dispatching to `completionBlockJustOnce`
+2026-07-16 04:31:41.844 Df Messages[6081:6a66e] [com.apple.TextInputUI:CandidateGeneration] Could not match any valid candidates of any source. `containerToPush` will be nil. <private>
+2026-07-16 04:31:41.844 Df Messages[6081:6a66e] [com.apple.TextInputUI:CandidateGeneration] Preparing to push (null) to candidate receiver, for request token: <private>
+2026-07-16 04:31:41.844 E  Messages[6081:6a66e] [com.apple.TextInputUI:CandidateGeneration] containerToPush is nil, will not push anything to candidate receiver for request token: <private>
+2026-07-16 04:31:41.845 Df Messages[6081:6a66e] [com.apple.TextInputUI:CandidateGeneration] Performing delayed generation for token=<private>
+2026-07-16 04:31:41.850 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – update #6 – reason: text changed - speed: 0.006507
+2026-07-16 04:31:41.850 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – trying to find next animation for identifiers: <private>
+2026-07-16 04:31:41.850 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – do nothing for identifier translationTextView because there is no associated text view.
+2026-07-16 04:31:41.850 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] do nothing for identifier textView because there was no next animation in the text view.
+2026-07-16 04:31:41.850 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – There is no next text animation to animate.
+2026-07-16 04:31:41.850 Df Messages[6081:50c63] [com.apple.Messages:TextEffectCoordinator_entry_view] tick: 0 – Cannot check passed time because there is no current managed text animation.
+2026-07-16 04:31:41.908 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:41.945 Df Messages[6081:50c63] [com.apple.AppKit:TextGeneration] Requesting Smart Reply using token <private>
+2026-07-16 04:31:41.946 Df Messages[6081:6a66e] [com.apple.TextInputUI:SmartReply] Document state contextBeforeInput length is zero.
+2026-07-16 04:31:41.946 Df Messages[6081:6a66e] [com.apple.TextInputUI:CandidateGeneration] All generators are not complete.
+2026-07-16 04:31:41.947 Df Messages[6081:63fde] [com.apple.TextInputUI:SmartReply] Feature available for MessagesReply: YES
+2026-07-16 04:31:41.947 Df Messages[6081:63fde] [com.apple.TextInputUI:SmartReply] Preparing smart reply candidate generation request (ID: <private>) for state: (not nil),  context: <TIInputContextHistory: 0x9d93b0000, id: <private>>, candidate: <private>, lastEntry: <private>
+2026-07-16 04:31:41.947 Df Messages[6081:63fde] [com.apple.TextInputUI:SmartReply] Smart reply generation requested (ID: <private>) for context: <TIInputContextHistory 0x9d93b0000>, entryPoint: <private>
+2026-07-16 04:31:41.947 Df Messages[6081:63fde] [com.apple.inputAnalytics.client:IASignalAnalytics] channel:<private> signal:<private> uniqueStringId:<private> timestamp:<private> payload:<private>
+2026-07-16 04:31:41.947 Df Messages[6081:63fde] [com.apple.TextInputUI:TextComposerWrapper] >>>> performShortFormSmartResponseGeneration_async called for id: [<private>]
+2026-07-16 04:31:41.947 Df Messages[6081:63fde] [com.apple.TextInputUI:TextComposerWrapper] >>>> did not find cached value for id: [<private>]
+2026-07-16 04:31:41.948 Df Messages[6081:6a66e] [com.apple.TextInputUI:TextComposerWrapper] performShortFormSmartResponseGeneration
+2026-07-16 04:31:41.948 Df Messages[6081:63fde] [com.apple.TextInputUI:TextComposerWrapper] >>>> <private> adding in-progress task with id:[<private>] to cache. cache size before addition is: 3
+2026-07-16 04:31:41.948 Df Messages[6081:63fde] [com.apple.TextInputUI:TextComposerWrapper] >>>> awaiting payload value.
+2026-07-16 04:31:41.968 Df Messages[6081:63fde] [com.apple.TextInputUI:TextComposerWrapper] Created payload: <private>
+2026-07-16 04:31:41.968 Df Messages[6081:6a66e] [com.apple.TextInputUI:SmartReply] Smart reply generation response for (ID: <private>): <TUISmartReplyResponse 0x9de2ddf80> with text: <private> (contentWarning: 0) for context: <TIInputContextHistory 0x9d93b0000, threadId: <private>>
+2026-07-16 04:31:41.968 Df Messages[6081:6a66e] [com.apple.TextInputUI:SmartReply] srResponse.threadIdentifier="<private>" self.currentInputContextHistory.threadIdentifier="<private>"
+2026-07-16 04:31:41.968 Df Messages[6081:6a66e] [com.apple.inputAnalytics.client:IASignalAnalytics] channel:<private> signal:<private> uniqueStringId:<private> timestamp:<private> payload:<private>
+2026-07-16 04:31:41.968 Df Messages[6081:6a66e] [com.apple.TextInputUI:SmartReply] Returning new smart reply candidates for request (ID: <private>): <private> type: short, entry point candidate: <private>, timeout: 0
+2026-07-16 04:31:41.968 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] All generators are complete, dispatching to `completionBlockJustOnce`
+2026-07-16 04:31:41.968 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] Assigning candidates of source type SmartReply to `containerToPush` - <private>
+2026-07-16 04:31:41.968 Df Messages[6081:62823] [com.apple.inputAnalytics.client:IASignalAnalytics] channel:<private> signal:<private> uniqueStringId:<private> timestamp:<private> payload:<private>
+2026-07-16 04:31:41.968 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] Preparing to push <private> to candidate receiver, for request token: <private>
+2026-07-16 04:31:41.968 Df Messages[6081:6a66e] [com.apple.TextInputUI:CandidateGeneration] containerToPush has an autocorrection list.  pushing to candidate receiver with request token. <private>.
+2026-07-16 04:31:41.968 Df Messages[6081:50c63] [com.apple.AppKit:TextGeneration] Smart Reply response received: <private>
+2026-07-16 04:31:41.968 Df Messages[6081:50c63] [com.apple.AppKit:TextGeneration] Displaying 1 Smart Reply candidates for request: <private>
+2026-07-16 04:31:41.968 Df Messages[6081:50c63] [com.apple.inputAnalytics.client:IASignalAnalytics] channel:<private> signal:<private> uniqueStringId:<private> timestamp:<private> payload:<private>
+2026-07-16 04:31:41.968 Df Messages[6081:50c63] [com.apple.inputAnalytics.client:IASignalAnalytics] channel:<private> signal:<private> uniqueStringId:<private> timestamp:<private> payload:<private>
+2026-07-16 04:31:41.971 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Messages.6081; token: viewbridge-key-window>)
+2026-07-16 04:31:41.974 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForWindow: untracked window, ignoring.
+2026-07-16 04:31:41.974 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForWindow: untracked window, ignoring.
+2026-07-16 04:31:41.976 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Creating internal non-hosting window tracking scene with persistentID: NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:41.976 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ isLaunchedToBackgroundOnly (state: Running)
+2026-07-16 04:31:41.976 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Creating internal non-hosting window tracking scene with persistentID: NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B
+2026-07-16 04:31:41.976 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ isLaunchedToBackgroundOnly (state: Running)
+2026-07-16 04:31:41.976 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081][0x31b1] Received scene request...
+2026-07-16 04:31:41.976 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] Creating scene with sceneID "FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87" for persistenceID "NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87" with specification FUSystemWindowSceneSpecification
+2026-07-16 04:31:41.977 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Initialized with connection: 0x9f9c10a50.
+2026-07-16 04:31:41.977 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Registered new scene: <FBUIApplicationWorkspaceScene: 0x9fad11b00; (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87> (fromRemnant = 0)
+2026-07-16 04:31:41.977 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87][1] Scene activated.
+2026-07-16 04:31:41.977 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] scene content state changed: preparing
+2026-07-16 04:31:41.977 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Scene lifecycle state did change: Foreground
+2026-07-16 04:31:41.977 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Scene state did change: FV-Focal[100].
+2026-07-16 04:31:41.978 Df UIKitSystem[712:1aea] [com.apple.UIKit:KBProxyForwarding] <StateMachine:0x9fb420e00> Created with presentation environment: <0x9f9c98d20:<_UISceneKeyboardProxyLayerForwardingPresentationScene: 0x9f9c98d20> Tracking scene: <FBScene: 0x9fac7d200; FBSceneManager:FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87>>
+2026-07-16 04:31:41.978 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Sending scene action [Logical Activate][0xfcea] to process 0x9facc0d80 (watchdog: 1200.00s)
+2026-07-16 04:31:41.978 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Sending scene create.
+2026-07-16 04:31:41.978 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081][0x31b1] Request complete! Created scene FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87 (persistenceID NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:41.978 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081][0xd30c] Received scene request...
+2026-07-16 04:31:41.978 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] Creating scene with sceneID "FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B" for persistenceID "NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B" with specification FUSystemWindowSceneSpecification
+2026-07-16 04:31:41.979 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Initialized with connection: 0x9f9c10a50.
+2026-07-16 04:31:41.979 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Registered new scene: <FBUIApplicationWorkspaceScene: 0x9fad11740; (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B> (fromRemnant = 0)
+2026-07-16 04:31:41.979 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B][1] Scene activated.
+2026-07-16 04:31:41.979 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] scene content state changed: preparing
+2026-07-16 04:31:41.979 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Scene lifecycle state did change: Foreground
+2026-07-16 04:31:41.979 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Scene state did change: FV-Focal[100].
+2026-07-16 04:31:41.979 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Sending scene action [Logical Activate][0x7c29] to process 0x9facc0d80 (watchdog: 1200.00s)
+2026-07-16 04:31:41.979 Df UIKitSystem[712:1aea] [com.apple.UIKit:KBProxyForwarding] <StateMachine:0x9fb84fd80> Created with presentation environment: <0x9f9c98ed0:<_UISceneKeyboardProxyLayerForwardingPresentationScene: 0x9f9c98ed0> Tracking scene: <FBScene: 0x9fac7d400; FBSceneManager:FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B>>
+2026-07-16 04:31:41.979 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Sending scene create.
+2026-07-16 04:31:41.980 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081][0xd30c] Request complete! Created scene FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B (persistenceID NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.981 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: <private>, expirationHandler: <__NSGlobalBlock__: 0x1f9e4def8>
+2026-07-16 04:31:41.981 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-07-16 04:31:41.981 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-07-16 04:31:41.981 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x9dc680910>
+2026-07-16 04:31:41.981 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <private>
+2026-07-16 04:31:41.981 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Created background task <private>.
+2026-07-16 04:31:41.981 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Should send trait collection or coordinate space update, interface style 2 -> 2, <UIWindowScene: 0x9dec04280> (NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:41.981 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dec04280> (NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dec04280> (NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dec04280> (NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] (UIKitMacHelper) Now tracking scene:  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87 persistentID: (null)
+2026-07-16 04:31:41.981 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] with description <RBSAssertionDescriptor| "Shared Background Assertion 49 for com.apple.MobileSMS" ID:398-6081-4515 target:6081 attributes:[
+	<RBSLegacyAttribute| requestedReason:FinishTask reason:FinishTask flags:( PreventTaskSuspend )>,
+	<RBSAcquisitionCompletionAttribute| policy:AfterValidation>
+	]>
+2026-07-16 04:31:41.981 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Assertion 398-6081-4515 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) will be created as inactive as start-time-defining assertions exist
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dec04280> (NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene will connect. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to foreground active. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.MobileSMS(6081)|978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C  persistentID: 978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Should send trait collection or coordinate space update, interface style 2 -> 2, <UIWindowScene: 0x9dec04500> (NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dec04500> (NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dec04500> (NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.982 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dec04500> (NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.983 Df Messages[6081:50c63] (UIKitMacHelper) Now tracking scene:  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B persistentID: (null)
+2026-07-16 04:31:41.983 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dec04500> (NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.983 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene will connect. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.983 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.983 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to foreground active. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.983 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.MobileSMS(6081)|978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C  persistentID: 978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C
+2026-07-16 04:31:41.983 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:41.985 Df Messages[6081:50c63] [com.apple.UIKit:InputWindowController] Change from input view set: (null)
+2026-07-16 04:31:41.985 Df Messages[6081:50c63] [com.apple.UIKit:InputWindowController] Change to input view set: (null)
+2026-07-16 04:31:41.985 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] didCreateScene ENTRY  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87  persistentID: NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87  NSWindow: 0
+2026-07-16 04:31:41.985 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Decrementing scene creation tracking. NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:41.985 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Did not find in-flight scene creation tracking for NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:41.985 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] didCreateScene EXIT  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87  persistentID: NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:41.986 Df Messages[6081:50c63] [com.apple.UIKit:InputWindowController] Change from input view set: (null)
+2026-07-16 04:31:41.986 Df Messages[6081:50c63] [com.apple.UIKit:InputWindowController] Change to input view set: (null)
+2026-07-16 04:31:41.986 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] didCreateScene ENTRY  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B  persistentID: NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B  NSWindow: 0
+2026-07-16 04:31:41.986 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Decrementing scene creation tracking. NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B
+2026-07-16 04:31:41.986 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Did not find in-flight scene creation tracking for NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B
+2026-07-16 04:31:41.986 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] didCreateScene EXIT  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B  persistentID: NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B
+2026-07-16 04:31:41.988 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Scene action [Logical Activate][0xfcea] completed with success: 1
+2026-07-16 04:31:41.988 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Internal non-hosting window tracking scene has been created with sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:41.988 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] scene content state changed: ready
+2026-07-16 04:31:41.988 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Scene action [Logical Activate][0x7c29] completed with success: 1
+2026-07-16 04:31:41.988 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:41.988 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] scene content state changed: ready
+2026-07-16 04:31:41.989 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ allExpectedWindowsDidOpen (state: Running)
+2026-07-16 04:31:41.990 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Internal non-hosting window tracking scene has been created with sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B
+2026-07-16 04:31:41.990 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.990 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ allExpectedWindowsDidOpen (state: Running)
+2026-07-16 04:31:41.998 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:41.998 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:42.017 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:42.038 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Messages.6081; token: viewbridge-key-window>)
+2026-07-16 04:31:42.039 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:42.123 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 0
+2026-07-16 04:31:42.141 Df Messages[6081:50c63] [com.apple.AppKit:TextGeneration] Requesting Smart Reply using token <private>
+2026-07-16 04:31:42.141 Df Messages[6081:62823] [com.apple.TextInputUI:SmartReply] Document state contextBeforeInput length is zero.
+2026-07-16 04:31:42.141 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] All generators are not complete.
+2026-07-16 04:31:42.142 Df Messages[6081:6a66e] [com.apple.TextInputUI:SmartReply] Feature available for MessagesReply: YES
+2026-07-16 04:31:42.142 Df Messages[6081:6a66e] [com.apple.TextInputUI:SmartReply] Preparing smart reply candidate generation request (ID: <private>) for state: (not nil),  context: <TIInputContextHistory: 0x9d93aba20, id: <private>>, candidate: <private>, lastEntry: <private>
+2026-07-16 04:31:42.142 Df Messages[6081:6a66e] [com.apple.TextInputUI:SmartReply] Smart reply generation requested (ID: <private>) for context: <TIInputContextHistory 0x9d93aba20>, entryPoint: <private>
+2026-07-16 04:31:42.142 Df Messages[6081:6a66e] [com.apple.inputAnalytics.client:IASignalAnalytics] channel:<private> signal:<private> uniqueStringId:<private> timestamp:<private> payload:<private>
+2026-07-16 04:31:42.142 Df Messages[6081:6a66e] [com.apple.TextInputUI:TextComposerWrapper] >>>> performShortFormSmartResponseGeneration_async called for id: [<private>]
+2026-07-16 04:31:42.142 Df Messages[6081:6a66e] [com.apple.TextInputUI:TextComposerWrapper] >>>> did not find cached value for id: [<private>]
+2026-07-16 04:31:42.142 Df Messages[6081:6a66e] [com.apple.TextInputUI:TextComposerWrapper] >>>> <private> adding in-progress task with id:[<private>] to cache. cache size before addition is: 4
+2026-07-16 04:31:42.142 Df Messages[6081:62823] [com.apple.TextInputUI:TextComposerWrapper] performShortFormSmartResponseGeneration
+2026-07-16 04:31:42.142 Df Messages[6081:6a66e] [com.apple.TextInputUI:TextComposerWrapper] >>>> awaiting payload value.
+2026-07-16 04:31:42.158 Df Messages[6081:6a66e] [com.apple.TextInputUI:TextComposerWrapper] Created payload: <private>
+2026-07-16 04:31:42.158 Df Messages[6081:62823] [com.apple.TextInputUI:SmartReply] Smart reply generation response for (ID: <private>): <TUISmartReplyResponse 0x9de2dc850> with text: <private> (contentWarning: 0) for context: <TIInputContextHistory 0x9d93aba20, threadId: <private>>
+2026-07-16 04:31:42.158 Df Messages[6081:62823] [com.apple.TextInputUI:SmartReply] srResponse.threadIdentifier="<private>" self.currentInputContextHistory.threadIdentifier="<private>"
+2026-07-16 04:31:42.158 Df Messages[6081:62823] [com.apple.inputAnalytics.client:IASignalAnalytics] channel:<private> signal:<private> uniqueStringId:<private> timestamp:<private> payload:<private>
+2026-07-16 04:31:42.158 Df Messages[6081:62823] [com.apple.TextInputUI:SmartReply] Returning new smart reply candidates for request (ID: <private>): <private> type: short, entry point candidate: <private>, timeout: 0
+2026-07-16 04:31:42.158 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] All generators are complete, dispatching to `completionBlockJustOnce`
+2026-07-16 04:31:42.158 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] Assigning candidates of source type SmartReply to `containerToPush` - <private>
+2026-07-16 04:31:42.158 Df Messages[6081:62823] [com.apple.inputAnalytics.client:IASignalAnalytics] channel:<private> signal:<private> uniqueStringId:<private> timestamp:<private> payload:<private>
+2026-07-16 04:31:42.158 Df Messages[6081:62823] [com.apple.TextInputUI:CandidateGeneration] Preparing to push <private> to candidate receiver, for request token: <private>
+2026-07-16 04:31:42.158 Df Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] containerToPush has an autocorrection list.  pushing to candidate receiver with request token. <private>.
+2026-07-16 04:31:42.158 Df Messages[6081:50c63] [com.apple.AppKit:TextGeneration] Smart Reply response received: <private>
+2026-07-16 04:31:42.158 Df Messages[6081:50c63] [com.apple.AppKit:TextGeneration] Displaying 1 Smart Reply candidates for request: <private>
+2026-07-16 04:31:42.323 A  Messages[6081:63fde] (CoreSpotlight) end-index-batch
+2026-07-16 04:31:42.323 A  Messages[6081:63fde] (CoreSpotlight) index-items
+2026-07-16 04:31:42.323 Df Messages[6081:63fde] [com.apple.corespotlight:index] CSInlineDonation:<private>: Skipping donation (feature flag disabled)
+2026-07-16 04:31:42.359 Df Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] Performing delayed generation for token=<private>
+2026-07-16 04:31:42.506 Df Messages[6081:6a66e] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 61
+2026-07-16 04:31:42.506 Df Messages[6081:6a66e] [com.apple.UIKit:BackgroundTask] Ending task with identifier 61 and description: <private>, _expireHandler: <__NSGlobalBlock__: 0x1f9e4def8>
+2026-07-16 04:31:42.506 Df Messages[6081:6a66e] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <private> (used by background task with identifier 61: <private>)
+2026-07-16 04:31:42.506 Df Messages[6081:6a66e] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x9dc680910> for task identifier: 61
+2026-07-16 04:31:42.506 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Invalidating assertion 398-6081-4515 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]
+2026-07-16 04:31:42.610 Df Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] Performing delayed generation for token=<private>
+2026-07-16 04:31:43.543 Df Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] Performing delayed generation for token=<private>
+2026-07-16 04:31:43.547 Df WindowServer[391:fca] [com.apple.BackBoard:EventDelivery] destinations for Keyboard event: (<keyboardFocus; Messages.6081; token: viewbridge-key-window>)
+2026-07-16 04:31:43.548 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 1
+2026-07-16 04:31:43.548 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to window: <CKUICatalystWindow: 0x9dbe33480>; contextId: 0xDB3B2CB6
+2026-07-16 04:31:43.549 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardUI] Keyboard receives keyEvent type: 4; subtype: 0
+2026-07-16 04:31:43.692 Df WindowServer[391:fca] [com.apple.SkyLight:KeyboardEvent] [specialkey] - processHotKeyEvent: frontmost process Messages allows special key appSwitchFWD, so entering special key mode
+2026-07-16 04:31:43.732 Df Messages[6081:63fde] [com.apple.TextInputUI:CandidateGeneration] Performing delayed generation for token=<private>
+2026-07-16 04:31:44.309 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Invalidating assertion 398-361-4498 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) from originator [osservice<com.apple.coreservices.launchservicesd>:361]
+2026-07-16 04:31:44.310 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to windows: 1
+2026-07-16 04:31:44.310 Df Messages[6081:50c63] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 4; subtype: 0; to window: <CKUICatalystWindow: 0x9dbe33480>; contextId: 0xDB3B2CB6
+2026-07-16 04:31:44.311 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Invalidating assertion 398-361-4500 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) from originator [osservice<com.apple.coreservices.launchservicesd>:361]
+2026-07-16 04:31:44.311 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ requestSceneBackground: (state: Running)
+2026-07-16 04:31:44.311 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Enqueued BG. (FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800)
+2026-07-16 04:31:44.311 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Kicked off dequeueing.
+2026-07-16 04:31:44.311 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeued BG. (FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800)
+2026-07-16 04:31:44.311 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeuing paused until state change is complete. (BG; <private>)
+2026-07-16 04:31:44.311 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Tracking scene state with target state: BG (<private>)
+2026-07-16 04:31:44.312 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] from originator [osservice<com.apple.coreservices.launchservicesd>:361] with description <RBSAssertionDescriptor| "notification:6081" ID:398-361-4519 target:6081 attributes:[
+	<RBSDomainAttribute| domain:"com.apple.launchservicesd" name:"LSNotification" sourceEnvironment:"(null)">
+	]>
+2026-07-16 04:31:44.312 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Assertion 398-361-4519 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) will be created as active
+2026-07-16 04:31:44.312 Df runningboardd[398:69aff] [com.apple.runningboard:ttl] Invalidating assertion 398-391-4499 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) from originator [osservice<com.apple.WindowServer(88)>:391]
+2026-07-16 04:31:44.313 Df useractivityd[694:63a01] [com.apple.useractivity:main] -- Demoting self.advertisingProcess to nil (was UserActivityClient(pid=6081/com.apple.MobileSMS uuids={CD883A1E-DB5F-452B-ABC5-5031FFEA54CB })) and trigger pickNewAdvertisement because the previous advertisingProcess had a current activity.
+2026-07-16 04:31:44.315 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:44.315 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Window state changed: minimized: 0 onInvisibleSpace: 0 orderedOut: 1 tabbedOut: 0 (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:44.315 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ requestSceneBackground: (state: Running)
+2026-07-16 04:31:44.315 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Enqueued BG. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:44.316 Df UIKitSystem[712:66d8f] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] Received destroy scenes request: NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:44.316 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] _updateWindowStateForSystemSceneWithIdentifier (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:44.316 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Window state changed: minimized: 0 onInvisibleSpace: 0 orderedOut: 1 tabbedOut: 0 (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:44.316 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ requestSceneBackground: (state: Running)
+2026-07-16 04:31:44.316 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] scene content state changed: notReady
+2026-07-16 04:31:44.316 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Scene lifecycle state did change: Background
+2026-07-16 04:31:44.316 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Sending action(s): <UIDestroySceneAction: 0x02c80007>
+2026-07-16 04:31:44.316 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Scene state did change: FG-Active[90].
+2026-07-16 04:31:44.316 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Enqueued BG. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:44.317 Df Messages[6081:50c63] [com.apple.AppKit:TextGeneration] Smart Reply not accepted: <private>
+2026-07-16 04:31:44.316 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Sending scene action [Logical Deactivate][0xfa66] to process 0x9facc0d80 (watchdog: 1200.00s)
+2026-07-16 04:31:44.317 Df Messages[6081:50c63] [com.apple.inputAnalytics.client:IASignalAnalytics] channel:<private> signal:<private> uniqueStringId:<private> timestamp:<private> payload:<private>
+2026-07-16 04:31:44.317 Df UIKitSystem[712:6a834] [com.apple.FuseBoard:Common] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] Received destroy scenes request: NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B
+2026-07-16 04:31:44.318 Df Messages[6081:50c63] [com.apple.synapse:DocumentWorkflows] application did resign active: <private>
+2026-07-16 04:31:44.317 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] scene content state changed: notReady
+2026-07-16 04:31:44.317 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Scene lifecycle state did change: Background
+2026-07-16 04:31:44.317 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Sending action(s): <UIDestroySceneAction: 0x02c80008>
+2026-07-16 04:31:44.317 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Scene state did change: FG-Active[90].
+2026-07-16 04:31:44.317 Df UIKitSystem[712:6a46a] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Sending scene action [Logical Deactivate][0xfea2] to process 0x9facc0d80 (watchdog: 1200.00s)
+2026-07-16 04:31:44.326 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] scene content state changed: notReady
+2026-07-16 04:31:44.327 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad10fc0:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] Scene lifecycle state did change: Background
+2026-07-16 04:31:44.327 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad10fc0:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] Scene state did change: FG-Active[90].
+2026-07-16 04:31:44.327 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad10fc0:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] Sending scene action [Logical Deactivate][0xd58d] to process 0x9facc0d80 (watchdog: 1200.00s)
+2026-07-16 04:31:44.327 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:31:44.327 E  Messages[6081:50c63] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:31:44.328 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dec04280> (NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:44.328 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground inactive. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:44.328 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to background. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:44.328 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.MobileSMS(6081)|978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C  persistentID: 978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] Reloading input views for key-window scene responder: <(null): 0x0; > force:N
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _reloadInputViewsForKeyWindowSceneResponder: 0 force: 0, fromBecomeFirstResponder: 0 (automaticKeyboard: 0, reloadIdentifier: DED4DA6B-0865-414C-AC8E-6DC54B44DC47)
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder: <(null): 0x0; >, automaticKeyboard: 0, force: 0
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, responderRequiresKeyboard 0 (automaticKeyboardEnabled: 0, activeInstance: <UIKeyboardAutomatic: 0x9db69a300; frame = {{0, 0}, {0, 0}}; alpha = 1.000000; isHidden = 0; tAMIC = 1>, self.isOnScreen: 0, requiresKBWhenFirstResponder: 0)
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, useKeyboard 0 (allowsSystemInputView: 0, !inputView <(null): 0x0>, responderRequiresKeyboard 0)
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, configuring _responderWithoutAutomaticAppearanceEnabled: <(null): 0x0> (_automaticAppearEnabled: 1)
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder, needsIVPlaceholder: 0, needsIAVPlaceholder: 0, needsInputSetWithPlaceholder: 0
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:KeyboardSceneDelegate] _inputViewsForResponder returning: <<UIInputViewSet: 0x9d93a5500>; (empty)>
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:InputSessionChange] -_teardownExistingDelegate:<CKMessageEntryRichTextView: 0x9da9f0000> forSetDelegate:(nil) force:NO delayEndInputSession:NO
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.RemoteTextInput:InputSessionChange] -[RTIInputSystemClient endRemoteTextInputSessionWithID:options:completion:]  Ending text input session. sessionID = <private>, options = <private>
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.RemoteTextInput:InputSessionChange] -[RTIInputSystemClient _endSessionWithID:forServices:options:completion:]  End input session: <private>
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.RemoteTextInput:InputSessionChange] -[RTIInputSystemClient endAllowingRemoteTextInput:completion:]  End allowing remote text input: <private>
+2026-07-16 04:31:44.329 Df Messages[6081:62823] [com.apple.RemoteTextInput:InputSessionChange] -[RTIInputSystemServiceSession endRemoteTextInputSessionWithID:options:completion:]  End input session: <private>
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.RemoteTextInput:InputSessionChange] -[RTIInputSystemClient _modifyTextEditingAllowedForReason:notify:animated:modifyAllowancesBlock:completion:]  Text editing allowed did change (editingAllowedAfter = NO)
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:SmartReply] Handling responseContextDidChange - existing: <private>, new: <private>
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:SmartReply] Will regenerate smart replies for responseContextDidChange
+2026-07-16 04:31:44.329 Df Messages[6081:50c63] [com.apple.UIKit:SmartReply] Setting state to found ICH: <private>
+2026-07-16 04:31:44.330 Df Messages[6081:50c63] [com.apple.RemoteTextInput:RTILog] -[RTIInputSystemClient remoteTextInputSessionWithID:textSuggestionsChanged:]  Text input session suggestions changed. sessionID = (null)
+2026-07-16 04:31:44.330 Df Messages[6081:50c63] [com.apple.UIKit:UIFocus] Focus system disabled
+2026-07-16 04:31:44.330 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dc040280> (978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C)
+2026-07-16 04:31:44.330 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ isAttemptingTermination (state: Running)
+2026-07-16 04:31:44.333 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dc040280> (978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C)
+2026-07-16 04:31:44.335 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] @ isAttemptingTermination (state: Running)
+2026-07-16 04:31:44.336 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.336 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.336 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.336 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.336 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.336 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.337 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:44.337 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:44.337 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:44.337 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:44.338 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:44.338 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:44.338 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:44.338 A  Messages[6081:50c63] (CoreServicesInternal) CFURLResolveBookmarkData
+2026-07-16 04:31:44.340 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.341 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.341 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.341 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.341 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.341 Df Messages[6081:50c63] [com.apple.calls.communicationsfilter:Default] Item in the cache.
+2026-07-16 04:31:44.346 Df runningboardd[398:68e36] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] with description <RBSAssertionDescriptor| "systemAnimationFence" ID:398-6081-4520 target:6081 attributes:[
+	<RBSLegacyAttribute| requestedReason:FinishTask reason:FinishTask flags:( AllowIdleSleep PreventTaskSuspend PreventTaskThrottleDown )>,
+	<RBSAcquisitionCompletionAttribute| policy:AfterValidation>
+	]>
+2026-07-16 04:31:44.346 Df runningboardd[398:68e36] [com.apple.runningboard:ttl] Assertion 398-6081-4520 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) will be created as inactive as start-time-defining assertions exist
+2026-07-16 04:31:44.348 E  Messages[6081:50c63] [com.apple.UIKit:CompositionalLayout] Invalid absolute dimension, must be > 0.0. NOTE: This will be a hard-assert soon, please update your call site.
+2026-07-16 04:31:44.348 E  Messages[6081:50c63] [com.apple.UIKit:CompositionalLayout] Invalid absolute dimension, must be > 0.0. NOTE: This will be a hard-assert soon, please update your call site.
+2026-07-16 04:31:44.348 E  Messages[6081:50c63] [com.apple.UIKit:CompositionalLayout] Invalid absolute dimension, must be > 0.0. NOTE: This will be a hard-assert soon, please update your call site.
+2026-07-16 04:31:44.348 E  Messages[6081:50c63] [com.apple.UIKit:CompositionalLayout] Invalid absolute dimension, must be > 0.0. NOTE: This will be a hard-assert soon, please update your call site.
+2026-07-16 04:31:44.348 E  Messages[6081:50c63] [com.apple.UIKit:UICollectionLayout] <CKConversationListCollectionViewCompositionalLayout: 0x9dc041680> ran into an error when computing the layout for section at index 2 in container <_UICollectionLayoutContainer: 0x9daaeb940 contentSize={320, 939}; contentInsets={0, 0, 0, 0}}>. Container calculated by applying insets ({88, 0, 0, 0}) from sectionInsetsReference "safeArea" to collection view frame {{0, 0}, {320, 939}}.
+UICollectionView behavior with this layout is undefined. Break on UICollectionViewCompositionalLayoutAlertForInvalidLayout to catch this in the debugger.
+Error: There is no room for this NSCollectionLayoutGroup to fit into its parent group or section, or it has no room for any subitems itself. Inspect the parent and ensure the contentInsets ({0, 0, 0, 0}) do not result in a negative effectiveContentSize when applied to size: {320, 939}.
+Group: <NSCollectionLayoutGroup 0x9d93a6280 size={.absolute(0), .absolute(0)}>
+	 layoutDirection: .horizontal
+	 interItemSpacing=.fixed(0)
+	 subitems=
+		 <NSCollectionLayoutItem 0x9de67d3e0 size={.absolute(0), .absolute(0)}>
+2026-07-16 04:31:44.370 Df UIKitSystem[712:1aea] [com.apple.FuseBoard:Common] app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081: Ignoring client settings change from untracked scene with scene identifier: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:44.370 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: <private>, expirationHandler: <__NSGlobalBlock__: 0x1f9e4def8>
+2026-07-16 04:31:44.370 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-07-16 04:31:44.370 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-07-16 04:31:44.370 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x9ddb45360>
+2026-07-16 04:31:44.370 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <private>
+2026-07-16 04:31:44.370 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Acquiring assertion targeting [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081] with description <RBSAssertionDescriptor| "Shared Background Assertion 50 for com.apple.MobileSMS" ID:398-6081-4521 target:6081 attributes:[
+	<RBSLegacyAttribute| requestedReason:FinishTask reason:FinishTask flags:( PreventTaskSuspend )>,
+	<RBSAcquisitionCompletionAttribute| policy:AfterValidation>
+	]>
+2026-07-16 04:31:44.370 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] Invalidating scene: (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:44.370 Df Messages[6081:50c63] [com.apple.UIKit:BackgroundTask] Created background task <private>.
+2026-07-16 04:31:44.370 Df runningboardd[398:69b01] [com.apple.runningboard:ttl] Assertion 398-6081-4521 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) will be created as inactive as start-time-defining assertions exist
+2026-07-16 04:31:44.370 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Unregistering scene: <FBUIApplicationWorkspaceScene: 0x9fad11b00; (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87>
+2026-07-16 04:31:44.370 Df Messages[6081:50c63] [com.apple.BaseBoard:BSAction] Reply (error: response-not-possible) <UIDestroySceneAction: 0x02c80007>
+2026-07-16 04:31:44.370 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Sending scene destroy.
+2026-07-16 04:31:44.370 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dec04500> (NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:44.370 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground inactive. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:44.371 Df UIKitSystem[712:1aea] [com.apple.UIKit:KBProxyForwarding] <StateMachine:0x9fb420e00> Presentation environment invalidated: <_UISceneKeyboardProxyLayerForwardingPresentationScene: 0x9f9c98d20> Tracking scene: <FBScene: 0x9fac7d200; (null):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87>
+2026-07-16 04:31:44.371 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to background. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:44.371 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.MobileSMS(6081)|978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C  persistentID: 978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C
+2026-07-16 04:31:44.371 Df Messages[6081:50c63] (MessagesSupport) Got nil datasource items for layoutSection - bailing out of layout generation
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.BaseBoard:BSAction] Reply (error: response-not-possible) <UIDestroySceneAction: 0x02c80008>
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 0, <UIWindowScene: 0x9dc685180> (NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800)
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state will change to foreground inactive. (FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800)
+2026-07-16 04:31:44.375 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] Invalidating scene: (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state changed to background. (FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800)
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene reached target state. (<private>)
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] No longer tracking scene state with target state: BG (<private>)
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state change complete, dequeuing resumed.
+2026-07-16 04:31:44.375 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:ProcessWorkspace] [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451>:6081] Unregistering scene: <FBUIApplicationWorkspaceScene: 0x9fad11740; (FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B>
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeued BG. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:44.375 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Sending scene destroy.
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeuing paused until state change is complete. (BG; <private>)
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene was already in requested state. Skipping.
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state change complete, dequeuing resumed.
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeued BG. (FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Dequeuing paused until state change is complete. (BG; <private>)
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene was already in requested state. Skipping.
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene state change complete, dequeuing resumed.
+2026-07-16 04:31:44.375 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.MobileSMS(6081)|978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C  persistentID: 978F1DD7-62DD-412C-BB2B-BD54DDC5BD7C
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] (UIKitMacHelper) No longer tracking scene: sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87 persistentID: (null)
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] [com.apple.UIKit:KeyWindow] Scene will invalidate: UIWindowScene: 0x9dec04280; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:FUScene%7Ccom.apple.MobileSMS(6081)%7CNonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] [com.apple.UIKit:EventEnvironment] Enqueuing clear events of window: <UITextEffectsWindow: 0x9db447200>; contextId: 0x78F38E80
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] [com.apple.UIKit:EventEnvironment] Performing clear events of window: <UITextEffectsWindow: 0x9db447200>; contextId: 0x78F38E80
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene did disconnect. (BGCtrl, FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87)
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] willDestroyScene  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87  persistentID: NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] willDestroyScene (lock)  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87  persistentID: NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] (UIKitMacHelper) No longer tracking scene: sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B persistentID: (null)
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] [com.apple.UIKit:KeyWindow] Scene will invalidate: UIWindowScene: 0x9dec04500; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:FUScene%7Ccom.apple.MobileSMS(6081)%7CNonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] [com.apple.UIKit:EventEnvironment] Enqueuing clear events of window: <UITextEffectsWindow: 0x9db5ea300>; contextId: 0x84EB9E1E
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] [com.apple.UIKit:EventEnvironment] Performing clear events of window: <UITextEffectsWindow: 0x9db5ea300>; contextId: 0x84EB9E1E
+2026-07-16 04:31:44.377 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] Scene did disconnect. (BGCtrl, FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B)
+2026-07-16 04:31:44.378 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] willDestroyScene  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B  persistentID: NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B
+2026-07-16 04:31:44.378 Df Messages[6081:50c63] [com.apple.UIKit.MacHelper:Lifecycle] willDestroyScene (lock)  sceneID: FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B  persistentID: NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B
+2026-07-16 04:31:44.379 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Scene action [Logical Deactivate][0xfa66] completed with success: 1
+2026-07-16 04:31:44.379 Df runningboardd[398:68e36] [com.apple.runningboard:ttl] Invalidating assertion 398-6081-4520 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]
+2026-07-16 04:31:44.380 Df UIKitSystem[712:1aea] [com.apple.UIKit:KBProxyForwarding] <StateMachine:0x9fb84fd80> Presentation environment invalidated: <_UISceneKeyboardProxyLayerForwardingPresentationScene: 0x9f9c98ed0> Tracking scene: <FBScene: 0x9fac7d400; (null):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B>
+2026-07-16 04:31:44.380 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Scene action [Logical Deactivate][0xfea2] completed with success: 1
+2026-07-16 04:31:44.380 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad10fc0:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] Scene action [Logical Deactivate][0xd58d] completed with success: 1
+2026-07-16 04:31:44.381 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87][1] Scene invalidated.
+2026-07-16 04:31:44.381 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11b00:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_641D9781-1B87-4460-B099-1819083B5E87] Invalidated for connection: 0x9f9c10a50.
+2026-07-16 04:31:44.381 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B][1] Scene invalidated.
+2026-07-16 04:31:44.381 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad11740:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NonHostingNSWindowScene_81964D97-E230-418D-9651-BB61833D790B] Invalidated for connection: 0x9f9c10a50.
+2026-07-16 04:31:44.416 A  Messages[6081:63fde] (RunningBoardServices) didChangeInheritances
+2026-07-16 04:31:44.416 Df runningboardd[398:69aff] [com.apple.runningboard:monitor] Calculated state for app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>: running-active (role: UserInteractiveFocal) (endowments: <private>)
+2026-07-16 04:31:44.417 Df UIKitSystem[712:66d8f] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:44.417 Df WindowServer[391:62a00] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:44.417 Df filecoordinationd[631:66d90] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:44.417 Df gamepolicyd[788:69b03] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-NotVisible
+2026-07-16 04:31:44.417 Df PerfPowerServices[375:69e75] [com.apple.runningboard:monitor] Received state update for 6081 (app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>, running-active-Visible
+2026-07-16 04:31:44.423 Df Messages[6081:50c63] [com.apple.AppKit:StateRestoration] -[NSPersistentUIManager flushAllChanges]
+2026-07-16 04:31:44.423 Df Messages[6081:50c63] [com.apple.AppKit:StateRestoration] -[NSPersistentUIManager flushAllChanges] finishing enqueued operations
+2026-07-16 04:31:44.423 Df Messages[6081:63fde] [com.apple.AppKit:StateRestoration] -[NSPersistentUIManager flushAllChanges]_block_invoke asyncing to main queue
+2026-07-16 04:31:44.423 Df Messages[6081:62823] [com.apple.AppKit:StateRestoration] -[NSPersistentUIManager flushAllChanges]_block_invoke writing records
+2026-07-16 04:31:44.484 Df UIKitSystem[712:66d8f] [com.apple.FrontBoard:ProcessScene] [0x9fad10fc0:(FBSceneManager):FUScene|com.apple.MobileSMS(6081)|NSMenuBarScene_2AA25E1C-6D20-46B0-B5D5-F70E4E308800] Scene state did change: XX-None[0].
+2026-07-16 04:31:44.628 Df perl[81519:6a9e5] [com.apple.CoreAnalytics:client] Queueing exit procedure onto XPC queue. Any further messages sent will be discarded. activeSendTransactions=0
+2026-07-16 04:31:44.628 Df perl[81519:6aa0b] [com.apple.CoreAnalytics:client] Cancelling XPC connection. Any further reply handler invocations will not retry messages
+2026-07-16 04:31:44.816 A  Messages[6081:62823] (CoreSpotlight) end-index-batch
+2026-07-16 04:31:44.816 A  Messages[6081:62823] (CoreSpotlight) index-items
+2026-07-16 04:31:44.816 Df Messages[6081:63fde] [com.apple.corespotlight:index] CSInlineDonation:<private>: Skipping donation (feature flag disabled)
+2026-07-16 04:31:44.895 Df Messages[6081:63fde] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 62
+2026-07-16 04:31:44.895 Df Messages[6081:63fde] [com.apple.UIKit:BackgroundTask] Ending task with identifier 62 and description: <private>, _expireHandler: <__NSGlobalBlock__: 0x1f9e4def8>
+2026-07-16 04:31:44.896 Df Messages[6081:63fde] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <private> (used by background task with identifier 62: <private>)
+2026-07-16 04:31:44.896 Df Messages[6081:63fde] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x9ddb45360> for task identifier: 62
+2026-07-16 04:31:44.896 Df runningboardd[398:68e36] [com.apple.runningboard:ttl] Invalidating assertion 398-6081-4521 (target:[app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]) from originator [app<application.com.apple.MobileSMS.1152921500311888381.1152921500311888451(501)>:6081]
