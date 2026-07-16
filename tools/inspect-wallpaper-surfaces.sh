@@ -78,6 +78,34 @@ print_filtered_symbols() {
         sed -n "1,${limit}p"
 }
 
+print_appintents_actions() {
+    title="$1"
+    metadata="$2"
+
+    printf '### %s\n\n' "$title"
+    if [ ! -f "$metadata" ]; then
+        printf 'missing: %s\n' "$metadata"
+        return
+    fi
+    if ! command -v jq >/dev/null 2>&1; then
+        printf 'jq unavailable; metadata path: %s\n' "$metadata"
+        return
+    fi
+
+    jq -r '
+        .actions
+        | to_entries[]
+        | [
+            .key,
+            (.value.title.key // ""),
+            (.value.descriptionMetadata.descriptionText.key // ""),
+            (.value.openAppWhenRun | tostring),
+            ((.value.parameters // []) | map(.name + ":" + (.title.key // "")) | join(", "))
+        ]
+        | @tsv
+    ' "$metadata"
+}
+
 print_header 'Launchd surfaces'
 print_plist /System/Library/LaunchAgents/com.apple.wallpaper.plist
 print_plist /System/Library/LaunchDaemons/com.apple.wallpaper.export.plist
@@ -105,6 +133,17 @@ print_header 'Feature flags and logging preferences'
 print_plist /System/Library/FeatureFlags/Domain/Wallpaper.plist
 print_plist /System/Library/FeatureFlags/Domain/NeptuneWallpaper.plist
 print_plist /System/Library/Preferences/Logging/Subsystems/com.apple.wallpaper.plist
+
+print_header 'App Intents metadata summaries'
+print_appintents_actions \
+    'WallpaperControlsExtension App Intents actions' \
+    /System/Library/CoreServices/WallpaperAgent.app/Contents/PlugIns/WallpaperControlsExtension.appex/Contents/Resources/Metadata.appintents/extract.actionsdata
+print_appintents_actions \
+    'WallpaperIntents App Intents actions' \
+    /System/Library/CoreServices/WallpaperAgent.app/Contents/PlugIns/WallpaperIntents.appex/Contents/Resources/Metadata.appintents/extract.actionsdata
+print_appintents_actions \
+    'WallpaperSettingsIntents App Intents actions' \
+    /System/Library/ExtensionKit/Extensions/WallpaperSettingsIntents.appex/Contents/Resources/Metadata.appintents/extract.actionsdata
 
 print_header 'Filtered string evidence'
 print_filtered_strings \

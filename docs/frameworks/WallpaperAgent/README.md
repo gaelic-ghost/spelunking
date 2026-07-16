@@ -289,17 +289,46 @@ sysdiagnose-style evidence, not as a redraw/reset hook.
 
 | Bundle identifier | Executable | Extension point | Relevant evidence |
 | --- | --- | --- | --- |
-| `com.apple.wallpaper.agent.controls` | `WallpaperControlsExtension` | `com.apple.widgetkit-extension` | `SkipShuffledContentAction`, `SkipShuffledContentButton`, `com.apple.wallpaper.skip`, and the description "Skips to the next wallpaper when using a shuffled collection." |
-| `com.apple.wallpaper.agent.WallpaperIntents` | `WallpaperIntents` | `com.apple.appintents-extension` | `SetWallpaperIntent`, `SetWallpaperPhotoIntent`, `WallpaperEntityQuery`, `_wallpaper`, `_showAsScreenSaver`, "Set Wallpaper Photo", and "Show As Screen Saver". |
+| `com.apple.wallpaper.agent.controls` | `WallpaperControlsExtension` | `com.apple.widgetkit-extension` | Metadata action `SkipShuffledContentAction`, title `Skip Wallpaper`, `openAppWhenRun=false`, no parameters; binary strings also expose `SkipShuffledContentButton`, `com.apple.wallpaper.skip`, and the description "Skips to the next wallpaper when using a shuffled collection." |
+| `com.apple.wallpaper.agent.WallpaperIntents` | `WallpaperIntents` | `com.apple.appintents-extension` | Metadata actions `SetWallpaperIntent` and `SetWallpaperPhotoIntent`, both `openAppWhenRun=false`; symbols and strings also expose `WallpaperEntityQuery`, `_wallpaper`, `_photo`, `_showOnAllSpaces`, `_showAsScreenSaver`, "Set Wallpaper Photo", and "Show As Screen Saver". |
 
 The controls extension lines up with the normal-agent
 `skipShuffledContent`/`canSkipShuffledContent` methods. It is a narrow
-shuffle-advance control and not a generic redraw hook.
+shuffle-advance control and not a generic redraw hook. The App Intents
+metadata marks the action discoverable and does not list any input parameters,
+so the userland surface appears to be "advance shuffled wallpaper if the
+current wallpaper supports it."
 
 The App Intents extension appears to expose wallpaper selection actions for
-Shortcuts/Siri-style callers. It is a userland-accessible automation surface
-for changing wallpaper choices, but the observed vocabulary is setting a
-wallpaper or wallpaper photo, not refreshing the current runtime in place.
+Shortcuts/Siri-style callers. `SetWallpaperIntent` is titled `Set Wallpaper`
+with the description "Sets the wallpaper from the list of available system
+wallpapers." Its parameters are `wallpaper`, `showOnAllSpaces`, and
+`showAsScreenSaver`. `SetWallpaperPhotoIntent` is titled `Set Wallpaper Photo`
+with the description "Sets the wallpaper to the specified image." Its
+parameters are `photo` and `showOnAllSpaces`.
+
+Conclusion: these are userland-visible automation surfaces for changing
+wallpaper selection. They are not a reset primitive and not a redraw of the
+current runtime in place.
+
+### Wallpaper Settings Intents
+
+`WallpaperSettingsIntents.appex` has bundle identifier
+`com.apple.settings-intents.WallpaperIntents` and declares the WidgetKit
+extension point `com.apple.widgetkit-extension`. Its App Intents metadata
+exposes:
+
+| Identifier | Title | Behavior |
+| --- | --- | --- |
+| `OpenWallpaperDeepLinks` | `Wallpaper` | Opens Settings (`openAppWhenRun=true`) to one of `root`, `screenSaver`, or `clockAppearance`. |
+| `ScreenSaverNameIntent` | `Main Display Screen Saver Name` | Reads the main-display screen saver name. |
+| `UpdateShowAsScreenSaverEntityValueIntent` | `Update Show wallpaper as screen saver on main display` | Updates the main-display "show wallpaper as screen saver" boolean. |
+| `UpdateShowAsWallpaperEntityValueIntent` | `Update Show screen saver as wallpaper on main display` | Updates the main-display "show screen saver as wallpaper" boolean. |
+| `UpdateShowScreenSaverOnAllSpacesEntityValueIntent` | `Update Show screen saver on all Spaces` | Updates the screen-saver all-Spaces boolean. |
+| `UpdateShowWallpaperOnAllSpacesEntityValueIntent` | `Update Show wallpaper on all Spaces` | Updates the wallpaper all-Spaces boolean. |
+
+These are discoverable ordinary App Intents surfaces. The update actions are
+state-mutating Settings toggles, not generic repaint or agent lifecycle hooks.
 
 ### ExtensionKit Wallpaper Providers
 
@@ -325,10 +354,7 @@ The separate `Wallpaper.appex` has bundle identifier
 `com.apple.Settings.extension.ui`; it is the Settings UI extension, not a
 wallpaper provider.
 
-`WallpaperSettingsIntents.appex` has bundle identifier
-`com.apple.settings-intents.WallpaperIntents` and declares the WidgetKit
-extension point `com.apple.widgetkit-extension`; it is not a wallpaper provider
-extension.
+`WallpaperSettingsIntents.appex` is not a wallpaper provider extension.
 
 ### Feature Flags and Logging
 
@@ -918,8 +944,9 @@ invalidation path. It does not prove any external trigger.
 | Private `ensureViewModelIsUpToDate` | Send normal `AgentXPCMessage.ensureViewModelIsUpToDate([ContentType], ViewModelRefreshReason)` to `com.apple.wallpaper`. | Mach lookup is visible, but the local `Wallpaper.AgentXPCMessage` mirror fails decode with `NSCocoaErrorDomain (4865)`. | Private protocol, may be entitlement-gated. | Best private redraw candidate, envelope still blocked |
 | Private `snapshotAllSpaces` | Send normal diagnostic request to `com.apple.wallpaper`. | Local no-payload mirror reaches the service but fails decode and returns an empty reply. | Could be diagnostic-only. | Useful probe, not a redraw primitive |
 | Private debug asset service | Send `WallpaperDebugRequestMessage` to `com.apple.wallpaper.debug.service`. | Wire shape and read-only handler access are proven on this SIP-disabled boot. Needs identical proof on a SIP-enabled boot. | Asset mutations possible if using `downloadAsset` or `removeAsset`; current helper exposes only read/query requests. No generic redraw vocabulary. | Useful debug API surface, not a redraw candidate |
-| Wallpaper controls widget | Use `com.apple.wallpaper.agent.controls` / `com.apple.wallpaper.skip`. | WidgetKit/App Intents surface is discoverable. | Only advances shuffled content. | Narrow shuffle hook only |
-| Wallpaper App Intents | Use `SetWallpaperIntent` or `SetWallpaperPhotoIntent`. | App Intents extension is discoverable. Invocation path still needs a controlled Shortcuts/App Intents proof. | Changes wallpaper choices rather than refreshing the current runtime in place. | Automation surface, not reset |
+| Wallpaper controls widget | Use `com.apple.wallpaper.agent.controls` / metadata action `SkipShuffledContentAction`. | WidgetKit/App Intents metadata is discoverable; action title is `Skip Wallpaper`, `openAppWhenRun=false`, no parameters. Invocation path still needs controlled proof. | Only advances shuffled wallpaper content. | Narrow shuffle hook only |
+| Wallpaper App Intents | Use `SetWallpaperIntent` or `SetWallpaperPhotoIntent`. | App Intents metadata is discoverable; actions are titled `Set Wallpaper` and `Set Wallpaper Photo`, both `openAppWhenRun=false`. Invocation path still needs controlled proof. | Changes wallpaper choices rather than refreshing the current runtime in place. | Automation surface, not reset |
+| Wallpaper Settings Intents | Use `WallpaperSettingsIntents` deep links, reads, or update actions. | Metadata exposes `OpenWallpaperDeepLinks`, `ScreenSaverNameIntent`, and four Settings property update actions. | Opens Settings or mutates screen-saver/wallpaper Settings booleans. | Settings automation, not reset |
 | Export daemon | Call `com.apple.wallpaper.export`. | Service is discoverable, but protocol uses `com.apple.private.wallpaper.export`. | Entitlement-gated and state-mutating export/preboot path. | Not a redraw candidate |
 | Settings helper XPC | Call `WallpaperHelper.xpc` / `removeWallpaperFiles:`. | XPC bundle is discoverable. Authorization and callers are not mapped. | Wallpaper file removal, not redraw. | Cleanup surface only |
 | Diagnostic extension | Invoke `WallpaperDiagnosticExtension.appex`. | Diagnostic extension metadata is discoverable. | Evidence collection only. | Not a redraw candidate |
@@ -1038,6 +1065,8 @@ Accessible or likely accessible:
 - Public `NSWorkspace` desktop picture APIs
 - App Intents / WidgetKit surfaces declared by WallpaperAgent plug-ins,
   pending controlled invocation proof
+- App Intents / WidgetKit surfaces declared by
+  `WallpaperSettingsIntents.appex`, pending controlled invocation proof
 - Read-only inspection of launchd job state with `launchctl print`
 - Unified log reads permitted to the current user
 

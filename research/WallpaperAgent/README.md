@@ -507,6 +507,15 @@ LC_ALL=C strings -a /System/Library/CoreServices/WallpaperAgent.app/Contents/Plu
 ```
 
 ```zsh
+jq -r '.actions | to_entries[] | [.key, .value.title.key, (.value.descriptionMetadata.descriptionText.key // ""), (.value.openAppWhenRun|tostring), ((.value.parameters // []) | map(.name + ":" + (.title.key // "")) | join(", "))] | @tsv' \
+  /System/Library/CoreServices/WallpaperAgent.app/Contents/PlugIns/WallpaperControlsExtension.appex/Contents/Resources/Metadata.appintents/extract.actionsdata
+jq -r '.actions | to_entries[] | [.key, .value.title.key, (.value.descriptionMetadata.descriptionText.key // ""), (.value.openAppWhenRun|tostring), ((.value.parameters // []) | map(.name + ":" + (.title.key // "")) | join(", "))] | @tsv' \
+  /System/Library/CoreServices/WallpaperAgent.app/Contents/PlugIns/WallpaperIntents.appex/Contents/Resources/Metadata.appintents/extract.actionsdata
+jq -r '.actions | to_entries[] | [.key, .value.title.key, (.value.descriptionMetadata.descriptionText.key // ""), (.value.openAppWhenRun|tostring), ((.value.parameters // []) | map(.name + ":" + (.title.key // "")) | join(", "))] | @tsv' \
+  /System/Library/ExtensionKit/Extensions/WallpaperSettingsIntents.appex/Contents/Resources/Metadata.appintents/extract.actionsdata
+```
+
+```zsh
 LC_ALL=C strings -a /System/Library/PrivateFrameworks/PreferencePanesSupport.framework/Versions/A/XPCServices/WallpaperHelper.xpc/Contents/MacOS/WallpaperHelper |
   rg -i 'wallpaper|reload|refresh|redraw|xpc|helper|notification|distributed|darwin|defaults|UserDefaults|desktop|screen|set|get|url|extension'
 ```
@@ -536,9 +545,22 @@ Key observations:
 - `WallpaperControlsExtension.appex` is a WidgetKit extension with
   `SkipShuffledContentAction`, `SkipShuffledContentButton`, and
   `com.apple.wallpaper.skip`.
+- `WallpaperControlsExtension` App Intents metadata exposes one discoverable
+  action: `SkipShuffledContentAction`, title `Skip Wallpaper`,
+  `openAppWhenRun=false`, no parameters.
 - `WallpaperIntents.appex` is an App Intents extension with
   `SetWallpaperIntent`, `SetWallpaperPhotoIntent`, `WallpaperEntityQuery`,
   `_wallpaper`, and `_showAsScreenSaver`.
+- `WallpaperIntents` App Intents metadata exposes `SetWallpaperIntent`
+  (`Set Wallpaper`, parameters `wallpaper`, `showOnAllSpaces`,
+  `showAsScreenSaver`) and `SetWallpaperPhotoIntent` (`Set Wallpaper Photo`,
+  parameters `photo`, `showOnAllSpaces`).
+- `WallpaperSettingsIntents.appex` metadata exposes discoverable Settings
+  actions: `OpenWallpaperDeepLinks`, `ScreenSaverNameIntent`,
+  `UpdateShowAsScreenSaverEntityValueIntent`,
+  `UpdateShowAsWallpaperEntityValueIntent`,
+  `UpdateShowScreenSaverOnAllSpacesEntityValueIntent`, and
+  `UpdateShowWallpaperOnAllSpacesEntityValueIntent`.
 - `Wallpaper.plist` feature flags expose `Gradients` and `LivePreviews` as
   `FeatureComplete`.
 - `NeptuneWallpaper.plist` exposes `one` as `FeatureComplete`.

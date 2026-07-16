@@ -9,5 +9,5 @@ Prefer small repeatable tools that capture evidence into `research/<Target>/` an
 - `extract-wallpaper-symbols.sh`: demangles relevant SDK `.tbd` exports for the Wallpaper normal XPC, Wallpaper Debug XPC, extension bridge surfaces, and `WallpaperAgent` debug receiver imports.
 - `inspect-wallpaper-debug-receiver.sh`: prints focused `WallpaperAgent` receiver imports, debug strings, and x86_64 disassembly windows for the debug decode, extension lookup, dispatch, and error-response paths.
 - `inspect-wallpaper-supporting-types.sh`: prints supporting enum, store-content, and security-policy evidence for the normal-agent redraw blockers.
-- `inspect-wallpaper-surfaces.sh`: prints a bounded inventory of Wallpaper launchd jobs, plug-ins, ExtensionKit providers, helper XPCs, diagnostic extensions, feature flags, logging preferences, and filtered string/symbol evidence.
+- `inspect-wallpaper-surfaces.sh`: prints a bounded inventory of Wallpaper launchd jobs, plug-ins, ExtensionKit providers, helper XPCs, diagnostic extensions, feature flags, logging preferences, App Intents metadata summaries, and filtered string/symbol evidence.
 - `ghidra/DumpWallpaperDebugReferences.java`: prints WallpaperAgent string and symbol cross references for debug-service, Swift/XPC receiver, and redraw/rebuild anchors after Ghidra analysis.
