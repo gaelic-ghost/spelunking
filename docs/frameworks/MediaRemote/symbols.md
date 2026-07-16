@@ -40,7 +40,21 @@ Notable Xcode 27 beta additions include:
 
 ## Constants and Notifications
 
-Record interesting constants, notification names, command identifiers, route identifiers, and error domains here.
+Important notification and key families are now broken out in:
+
+- `now-playing-architecture.md`
+- `xpc-and-messages.md`
+- `routes-output-devices.md`
+
+High-signal families from the live export and string capture:
+
+- now-playing application/client/player/origin APIs
+- playback queue request and content item APIs
+- command dispatch APIs
+- endpoint/output-context/output-device APIs
+- XPC serialization and message-key helpers
+- route discovery session APIs
+- group-session and handoff APIs
 
 ## Version Differences
 
@@ -52,3 +66,30 @@ Early SDK diff notes:
 - Xcode 27 beta adds route-status and now-playing-session error-domain symbols.
 - Xcode 27 beta adds `_MRCreateArrayFromXPCMessage`; Xcode 26 exposes the likely misspelled `_MRCreateArrayFomXPCMessage`.
 - Xcode 26 exposes `_MRLogCategoryDefault` and `_MRLogCategoryMirroringView`; those names were not present in the initial Xcode 27 beta stub diff.
+
+## Safety Buckets
+
+Read-only first:
+
+- `MRMediaRemoteGetNowPlayingInfo*`
+- `MRMediaRemoteGetNowPlayingClient*`
+- `MRMediaRemoteGetNowPlayingPlayer*`
+- `MRMediaRemoteRegisterForNowPlayingNotifications`
+- `MRAVRoutingDiscoverySessionCopyAvailableEndpoints`
+- `MRAVRoutingDiscoverySessionCopyAvailableOutputDevices`
+- `MRAVEndpointCopyOutputDevices`
+- `MRAVOutputContextCopyOutputDevices`
+- `MRAVOutputDeviceGet*` and `Copy*`
+
+Mutating or control-capable:
+
+- `MRMediaRemoteSendCommand*`
+- `MRMediaRemoteSetNowPlaying*`
+- `MRMediaRemoteSetPlaybackState*`
+- `MRMediaRemoteSetPlaybackQueue*`
+- `MRMediaRemoteSetCanBeNowPlaying*`
+- `MRMediaRemoteSetSupportedCommands*`
+- `MRAVEndpointSet*`, `Add*`, `Remove*`, `Move*`, `Migrate`
+- `MRAVOutputContextSet*`, `Add*`, `Remove*`, `RemoveAll*`
+
+Do not wrap mutating functions in default tools until the relevant target identity, daemon boundary, and failure modes are documented.

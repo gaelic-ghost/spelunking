@@ -24,18 +24,18 @@ The first evidence capture is recorded in `../../../research/MediaRemote/baselin
 
 - [x] Active framework path
 - [x] Beta SDK framework path
-- [ ] `otool` metadata for extracted framework binary
+- [x] `otool` metadata for support binaries
 - [x] exported symbols from live dyld cache
 - [x] Objective-C class names from exported symbols
 - [ ] protocols
-- [ ] selectors
-- [ ] strings
-- [ ] notifications
+- [x] selectors and method strings from dyld capture
+- [x] strings
+- [x] notifications
 - [x] entitlements for support binaries
 - [x] related daemons and agents
-- [ ] related services and XPC endpoints
+- [x] related services and XPC endpoints
 - [ ] generated headers or interfaces
-- [x] first read-only runtime experiment
+- [x] read-only runtime experiments
 
 ## Interesting Areas
 
@@ -60,3 +60,16 @@ Initial local evidence shows the active framework directories are dyld-cache fra
 See `live-dyld-cache.md` for the first live export classification and read-only now-playing probe result.
 
 See `runtime-probes.md` for the Spotify and fixture-backed runtime results.
+
+## Topic Files
+
+- `inventory-captures.md`: repeatable capture workflow and latest capture inventory.
+- `live-dyld-cache.md`: dyld-cache inspection notes, live/SDK symbol counts, and export buckets.
+- `symbols.md`: exported symbol families and SDK differences.
+- `now-playing-architecture.md`: now-playing identity, notifications, metadata keys, playback queues, and controller generations.
+- `runtime-probes.md`: local Swift probes and observed runtime behavior.
+- `agents-daemons.md`: `mediaremoted`, `mediaremoteagent`, entitlements, mach services, and daemon authority boundaries.
+- `xpc-and-messages.md`: XPC service names, message keys, command paths, endpoint routing, and serialization hints.
+- `routes-output-devices.md`: endpoint, route, output context, output device, and discovery surfaces.
+- `experiments.md`: experiment log and next steps.
+- `references.md`: links within this research package.

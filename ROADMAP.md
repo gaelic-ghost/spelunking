@@ -9,17 +9,18 @@
 
 ## Phase 1: MediaRemote Baseline
 
-- [ ] Locate active macOS 26.5 framework paths and installed macOS 27 beta SDK framework paths.
-- [ ] Record framework metadata: install names, architectures, linked libraries, entitlements, strings, exported symbols, Objective-C classes, protocols, selectors, and notifications.
-- [ ] Compare macOS 26.5 and macOS 27 beta SDK symbol surfaces.
+- [x] Locate active macOS 26.5 framework paths and installed macOS 27 beta SDK framework paths.
+- [x] Record framework metadata: install names, architectures, linked libraries, entitlements, strings, exported symbols, Objective-C classes, selectors, and notifications.
+- [x] Compare macOS 26.5 and macOS 27 beta SDK symbol surfaces.
 - [x] Query the live dyld shared-cache export surface for `MediaRemote.framework`.
-- [ ] Identify public wrappers, private headers, generated headers, XPC services, launchd jobs, daemons, and related frameworks.
-- [ ] Document userland-callable APIs for now-playing metadata, playback commands, queue information, origin discovery, and route or destination behavior.
-- [ ] Mark calls that require entitlements, elevated privileges, SIP-disabled conditions, or private-framework linking.
+- [x] Identify local wrapper examples, XPC services, launchd-adjacent jobs, daemons, and related frameworks.
+- [ ] Generate or recover private headers/interfaces for high-value symbols.
+- [x] Document userland-callable APIs for now-playing metadata, playback commands, queue information, origin discovery, and route or destination behavior.
+- [x] Mark calls that require entitlements, elevated privileges, SIP-disabled conditions, or private-framework linking.
 - [x] Build one small Swift helper that safely probes now-playing state without mutating playback.
 - [x] Test the read-only helper against active Spotify playback.
 - [x] Build a metadata-only now-playing fixture and test whether it appears through MediaRemote.
-- [ ] Confirm non-empty now-playing dictionary shape through notification registration, player/client-specific queries, or an app-bundle fixture.
+- [ ] Confirm non-empty now-playing dictionary shape through origin/player-path APIs, daemon-facing inspection, or an app-bundle fixture.
 
 ## Phase 2: Media Control Experiments
 

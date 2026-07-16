@@ -25,6 +25,24 @@ typealias MRMediaRemoteGetNowPlayingClient = @convention(c) (
     @escaping @convention(block) (AnyObject?) -> Void
 ) -> Void
 
+typealias MRMediaRemoteGetNowPlayingClients = @convention(c) (
+    DispatchQueue,
+    @escaping @convention(block) (NSArray?) -> Void
+) -> Void
+
+typealias MRMediaRemoteGetNowPlayingPlayer = @convention(c) (
+    DispatchQueue,
+    @escaping @convention(block) (AnyObject?) -> Void
+) -> Void
+
+typealias MRMediaRemoteGetNowPlayingInfoForObject = @convention(c) (
+    AnyObject,
+    DispatchQueue,
+    @escaping @convention(block) (CFDictionary?) -> Void
+) -> Void
+
+typealias MRNowPlayingClientGetBundleIdentifier = @convention(c) (AnyObject) -> NSString?
+
 enum SPKProbeError: Error, CustomStringConvertible {
     case frameworkLoadFailed([String])
     case missingSymbol(String)
@@ -58,13 +76,28 @@ struct SPKMRNowPlayingProbe {
         let arguments = Set(CommandLine.arguments.dropFirst())
         let shouldPrime = arguments.contains("--prime") || arguments.contains("--all")
         let shouldReadApplication = arguments.contains("--application") || arguments.contains("--all")
+        let shouldReadClients = arguments.contains("--clients") || arguments.contains("--all")
+        let shouldReadPlayer = arguments.contains("--player") || arguments.contains("--all")
+        let observeSeconds = parseObserveSeconds(arguments: Array(CommandLine.arguments.dropFirst()))
 
         if shouldPrime {
             try primeNowPlayingNotifications(handle: handle)
         }
 
+        if let observeSeconds {
+            try observeNowPlayingNotifications(handle: handle, seconds: observeSeconds)
+        }
+
         if shouldReadApplication {
             try readNowPlayingApplication(handle: handle)
+        }
+
+        if shouldReadClients {
+            try readNowPlayingClients(handle: handle)
+        }
+
+        if shouldReadPlayer {
+            try readNowPlayingPlayer(handle: handle)
         }
 
         try readNowPlayingInfo(handle: handle)
@@ -148,6 +181,153 @@ struct SPKMRNowPlayingProbe {
         try readClient(handle: handle)
     }
 
+    private static func readNowPlayingClients(handle: UnsafeMutableRawPointer) throws {
+        let symbolName = "MRMediaRemoteGetNowPlayingClients"
+
+        guard let symbol = dlsym(handle, symbolName) else {
+            throw SPKProbeError.missingSymbol(symbolName)
+        }
+
+        let function = unsafeBitCast(symbol, to: MRMediaRemoteGetNowPlayingClients.self)
+        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let semaphore = DispatchSemaphore(value: 0)
+
+        print("MediaRemote read-only now-playing clients probe")
+
+        function(callbackQueue) { clients in
+            defer { semaphore.signal() }
+
+            guard let clients else {
+                print("Now-playing clients: <nil>")
+                return
+            }
+
+            print("Now-playing clients: \(clients.count) item(s)")
+
+            for (index, item) in clients.enumerated() {
+                guard let client = item as AnyObject? else {
+                    print("Client[\(index)]: <nil>")
+                    continue
+                }
+
+                print("Client[\(index)]: \(summarizeObject(client, handle: handle))")
+
+                if let info = try? readInfoForObject(
+                    handle: handle,
+                    symbolName: "MRMediaRemoteGetNowPlayingInfoForClient",
+                    object: client
+                ) {
+                    printDictionary(info, prefix: "Client[\(index)] info")
+                }
+            }
+        }
+
+        guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
+            throw SPKProbeError.callbackTimedOut(seconds: 5)
+        }
+    }
+
+    private static func readNowPlayingPlayer(handle: UnsafeMutableRawPointer) throws {
+        let symbolName = "MRMediaRemoteGetNowPlayingPlayer"
+
+        guard let symbol = dlsym(handle, symbolName) else {
+            throw SPKProbeError.missingSymbol(symbolName)
+        }
+
+        let function = unsafeBitCast(symbol, to: MRMediaRemoteGetNowPlayingPlayer.self)
+        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let semaphore = DispatchSemaphore(value: 0)
+
+        print("MediaRemote read-only now-playing player probe")
+
+        function(callbackQueue) { player in
+            defer { semaphore.signal() }
+
+            guard let player else {
+                print("Now-playing player: <nil>")
+                return
+            }
+
+            print("Now-playing player: \(summarizeObject(player, handle: handle))")
+
+            if let info = try? readInfoForObject(
+                handle: handle,
+                symbolName: "MRMediaRemoteGetNowPlayingInfoForPlayer",
+                object: player
+            ) {
+                printDictionary(info, prefix: "Player info")
+            }
+        }
+
+        guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
+            throw SPKProbeError.callbackTimedOut(seconds: 5)
+        }
+    }
+
+    private static func readInfoForObject(
+        handle: UnsafeMutableRawPointer,
+        symbolName: String,
+        object: AnyObject
+    ) throws -> NSDictionary? {
+        guard let symbol = dlsym(handle, symbolName) else {
+            throw SPKProbeError.missingSymbol(symbolName)
+        }
+
+        let function = unsafeBitCast(symbol, to: MRMediaRemoteGetNowPlayingInfoForObject.self)
+        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let semaphore = DispatchSemaphore(value: 0)
+        var result: NSDictionary?
+
+        function(object, callbackQueue) { dictionary in
+            result = dictionary as NSDictionary?
+            semaphore.signal()
+        }
+
+        guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
+            throw SPKProbeError.callbackTimedOut(seconds: 5)
+        }
+
+        return result
+    }
+
+    private static func observeNowPlayingNotifications(
+        handle: UnsafeMutableRawPointer,
+        seconds: Int
+    ) throws {
+        try primeNowPlayingNotifications(handle: handle)
+
+        print("Observing now-playing notifications for \(seconds)s")
+
+        let notificationNames = [
+            "kMRMediaRemoteNowPlayingInfoDidChangeNotification",
+            "kMRMediaRemoteNowPlayingApplicationDidChangeNotification",
+            "kMRMediaRemoteNowPlayingApplicationIsPlayingDidChangeNotification",
+            "kMRMediaRemotePlaybackStateDidChangeNotification",
+            "kMRMediaRemoteSupportedCommandsDidChangeNotification"
+        ]
+        let center = NotificationCenter.default
+        var observers: [NSObjectProtocol] = []
+
+        for name in notificationNames {
+            let observer = center.addObserver(
+                forName: Notification.Name(name),
+                object: nil,
+                queue: nil
+            ) { notification in
+                let userInfo = notification.userInfo ?? [:]
+                print("Notification: \(notification.name.rawValue) userInfoKeys=\(userInfo.keys.map(String.init(describing:)).sorted())")
+            }
+
+            observers.append(observer)
+        }
+
+        RunLoop.current.run(until: Date().addingTimeInterval(TimeInterval(seconds)))
+
+        for observer in observers {
+            center.removeObserver(observer)
+        }
+    }
+
     private static func readBool(
         handle: UnsafeMutableRawPointer,
         symbolName: String,
@@ -207,7 +387,7 @@ struct SPKMRNowPlayingProbe {
 
         function(callbackQueue) { client in
             if let client {
-                print("Now-playing client: \(type(of: client)) \(client)")
+                print("Now-playing client: \(summarizeObject(client, handle: handle))")
             } else {
                 print("Now-playing client: <nil>")
             }
@@ -250,5 +430,49 @@ struct SPKMRNowPlayingProbe {
         default:
             return String(describing: value)
         }
+    }
+
+    private static func summarizeObject(_ object: AnyObject, handle: UnsafeMutableRawPointer) -> String {
+        var parts = ["\(type(of: object))", "\(object)"]
+
+        if let symbol = dlsym(handle, "MRNowPlayingClientGetBundleIdentifier") {
+            let function = unsafeBitCast(symbol, to: MRNowPlayingClientGetBundleIdentifier.self)
+            if let bundleID = function(object) {
+                parts.append("bundleIdentifier=\(bundleID)")
+            }
+        }
+
+        return parts.joined(separator: " ")
+    }
+
+    private static func printDictionary(_ dictionary: NSDictionary?, prefix: String) {
+        guard let dictionary else {
+            print("\(prefix): <nil>")
+            return
+        }
+
+        print("\(prefix): \(dictionary.count) key(s)")
+
+        for key in dictionary.allKeys.map(String.init(describing:)).sorted() {
+            guard let value = dictionary[key] else {
+                continue
+            }
+
+            print("\(prefix).\(key): \(summarize(value))")
+        }
+    }
+
+    private static func parseObserveSeconds(arguments: [String]) -> Int? {
+        guard let observeIndex = arguments.firstIndex(of: "--observe") else {
+            return nil
+        }
+
+        let nextIndex = arguments.index(after: observeIndex)
+
+        guard nextIndex < arguments.endIndex else {
+            return 10
+        }
+
+        return Int(arguments[nextIndex]) ?? 10
     }
 }

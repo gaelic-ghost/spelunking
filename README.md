@@ -18,7 +18,7 @@ The first research target is `MediaRemote.framework` on macOS 26.5 and the insta
 ## Current Tools
 
 - `spelunk`: prints the current seeded research target paths.
-- `mr-now-playing-probe`: read-only dynamic `MediaRemote.framework` probe for `MRMediaRemoteGetNowPlayingInfo`.
+- `mr-now-playing-probe`: read-only dynamic `MediaRemote.framework` probe for global now-playing info, app PID/is-playing/client state, client/player lists, and short notification observation windows.
 - `now-playing-fixture`: metadata-only fixture for testing whether `MPNowPlayingInfoCenter` publication appears through MediaRemote.
 - `tools/mediaremote-inventory.zsh`: repeatable local capture script for dyld-cache exports, imports, strings, ObjC names, SDK diffs, support binaries, resources, and entitlements.
 
@@ -45,3 +45,11 @@ Keep raw captures in `research/<Name>/` and promote only cleaned, reusable knowl
 - macOS 26.5 versus macOS 27 beta SDK differences
 
 See `docs/frameworks/MediaRemote/README.md` for the starting outline.
+
+Useful current commands:
+
+```sh
+swift run mr-now-playing-probe --all
+swift run mr-now-playing-probe --observe 10 --application
+tools/mediaremote-inventory.zsh
+```

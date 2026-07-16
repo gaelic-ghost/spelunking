@@ -15,6 +15,10 @@ Locally evidenced app-level signatures, based on private Canopy adapter source i
 - `MRMediaRemoteGetNowPlayingApplicationPID(dispatch_queue_t, block(int))`
 - `MRMediaRemoteGetNowPlayingApplicationIsPlaying(dispatch_queue_t, block(bool))`
 - `MRMediaRemoteGetNowPlayingClient(dispatch_queue_t, block(id))`
+- `MRMediaRemoteGetNowPlayingClients(dispatch_queue_t, block(NSArray?))`
+- `MRMediaRemoteGetNowPlayingPlayer(dispatch_queue_t, block(id?))`
+- `MRMediaRemoteGetNowPlayingInfoForClient(id, dispatch_queue_t, block(CFDictionary?))`
+- `MRMediaRemoteGetNowPlayingInfoForPlayer(id, dispatch_queue_t, block(CFDictionary?))`
 - `MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_queue_t)`
 
 Rejected guessed signatures:
@@ -58,10 +62,46 @@ Result: callback returned nil dictionary
 
 Interpretation: Spotify playback is not currently visible to this direct MediaRemote path on this machine, or this path requires a different origin/player/client-specific query before it exposes Spotify.
 
+Expanded probe with Spotify actively playing `Bad Omens - THE DEATH OF PEACE OF MIND`:
+
+```text
+Primed: MRMediaRemoteRegisterForNowPlayingNotifications
+Primed: MRMediaRemoteSetWantsNowPlayingNotifications(true)
+MediaRemote read-only now-playing application probe
+Application is playing: false
+Application PID: 0
+Now-playing client: <nil>
+MediaRemote read-only now-playing clients probe
+Now-playing clients: 0 item(s)
+MediaRemote read-only now-playing player probe
+Now-playing player: <nil>
+MediaRemote read-only now-playing probe
+Symbol: MRMediaRemoteGetNowPlayingInfo
+Result: callback returned nil dictionary
+```
+
+Notification observation with a Spotify pause/play cycle:
+
+```text
+Primed: MRMediaRemoteRegisterForNowPlayingNotifications
+Primed: MRMediaRemoteSetWantsNowPlayingNotifications(true)
+Observing now-playing notifications for 8s
+MediaRemote read-only now-playing application probe
+Application is playing: false
+Application PID: 0
+Now-playing client: <nil>
+MediaRemote read-only now-playing probe
+Symbol: MRMediaRemoteGetNowPlayingInfo
+Result: callback returned nil dictionary
+```
+
+No now-playing notifications were observed during the play/pause cycle.
+
+Current interpretation: the simple global APIs are not enough for Spotify on this machine. The next useful paths are origin/player-path resolution, app-bundle identity experiments, or direct daemon/XPC inspection.
+
 ## Next Runtime Steps
 
-- Add a notification observer mode for `kMRMediaRemoteNowPlayingInfoDidChangeNotification`, app-change, and is-playing-change notifications.
-- Use `MRMediaRemoteRegisterForNowPlayingNotifications` and keep a run loop alive before fetching again.
-- Query players and clients with `MRMediaRemoteGetNowPlayingPlayer`, `MRMediaRemoteGetNowPlayingClients`, and player/client-specific info calls using locally evidenced signatures.
+- Try origin/player-path resolution paths rather than only global now-playing calls.
+- Inspect daemon-facing XPC traffic/service surfaces before any mutating command path.
 - Build an app-bundle fixture if CLI `MPNowPlayingInfoCenter` remains invisible.
 - Keep command dispatch and route mutation out of runtime probes until read-only state and identity surfaces are understood.
