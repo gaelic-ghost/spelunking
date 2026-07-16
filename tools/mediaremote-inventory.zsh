@@ -7,6 +7,7 @@ capture_root="research/${target}/captures/${timestamp}"
 framework="/System/Library/PrivateFrameworks/${target}.framework/Versions/A/${target}"
 sdk_current="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/PrivateFrameworks/${target}.framework/${target}.tbd"
 sdk_beta="/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/PrivateFrameworks/${target}.framework/${target}.tbd"
+symbols_tool="$(xcrun --find symbols 2>/dev/null || true)"
 
 mkdir -p "${capture_root}"
 
@@ -46,6 +47,17 @@ run_capture "dyld-oslogstrings.txt" dyld_info -section __TEXT __oslogstring "${f
 run_capture "dyld-objc-classnames.txt" dyld_info -section __TEXT __objc_classname "${framework}"
 run_capture "dyld-objc-method-names.txt" dyld_info -section __TEXT __objc_methname "${framework}"
 run_capture "dyld-objc-method-types.txt" dyld_info -section __TEXT __objc_methtype "${framework}"
+
+if [[ -n "${symbols_tool}" ]]; then
+  run_capture "symbols-nowplaying-targets.txt" "${symbols_tool}" -arch arm64e -noHeaders -noRegions -noSources \
+    -lookup '*MRMediaRemoteGetNowPlayingInfo*' \
+    -lookup '*MRMediaRemoteRequestNowPlayingPlaybackQueue*' \
+    -lookup '*MRNowPlayingOriginClient*' \
+    -lookup '*MRNowPlayingPlayerClient*' \
+    -lookup '*MRNowPlayingClientRequests*' \
+    -lookup '*MRXPC*' \
+    "${framework}"
+fi
 
 if [[ -f "${sdk_current}" ]]; then
   run_capture "sdk-current-tbd.txt" sed -n '1,240p' "${sdk_current}"
@@ -96,6 +108,7 @@ fi
   log "- timestamp: ${timestamp}"
   log "- capture root: ${capture_root}"
   log "- framework: ${framework}"
+  log "- selected developer directory: $(xcode-select -p 2>/dev/null || true)"
   log "- live symbols: $(wc -l < "${capture_root}/live-symbols.txt" | tr -d ' ')"
 
   if [[ -f "${capture_root}/sdk-current-symbols.txt" ]]; then

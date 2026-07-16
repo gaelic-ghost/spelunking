@@ -29,6 +29,24 @@ Separate endpoint classes are implied by logs:
 
 Inference: MediaRemote multiplexes several app/client-facing modules over a shared XPC connection and routes messages by ID/API name to registered endpoint handlers.
 
+`symbols-nowplaying-targets.txt` identifies the core Objective-C wrapper class for this transport:
+
+- `MRXPCConnection`
+- `-[MRXPCConnection initWithConnection:queue:defaultReplyQueue:]`
+- `-[MRXPCConnection _registerCallbacks]`
+- `-[MRXPCConnection addCustomXPCHandler:forKey:]`
+- `-[MRXPCConnection removeCustomXPCHandler:]`
+- `-[MRXPCConnection sendMessageWithType:queue:reply:]`
+- `-[MRXPCConnection sendMessage:queue:reply:]`
+- `-[MRXPCConnection sendSyncMessageWithType:error:]`
+- `-[MRXPCConnection sendSyncMessage:error:]`
+- `-[MRXPCConnection pid]`
+- `-[MRXPCConnection uid]`
+- `-[MRXPCConnection messageHandler]`
+- `-[MRXPCConnection invalidationHandler]`
+
+Inference: most client-visible C calls likely reduce to dictionary/protobuf payloads sent through this wrapper, with `MRXPC_MESSAGE_ID_KEY` selecting the daemon-side operation and callback blocks bridged back through the default reply queue.
+
 ## Command XPC Paths
 
 Command logs identify daemon and app directions:

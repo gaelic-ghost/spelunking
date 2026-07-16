@@ -10,10 +10,11 @@ Raw captures are intentionally ignored by Git under `research/**/captures/`. Pro
 
 | Field | Value |
 | --- | --- |
-| Timestamp | `20260716T080533Z` |
-| Capture root | `research/MediaRemote/captures/20260716T080533Z` |
+| Timestamp | `20260716T080910Z` |
+| Capture root | `research/MediaRemote/captures/20260716T080910Z` |
 | Active framework image | `/System/Library/PrivateFrameworks/MediaRemote.framework/Versions/A/MediaRemote` |
 | Active OS | macOS 26.5.2, build 25F84 |
+| Selected developer directory | `/Applications/Xcode-beta.app/Contents/Developer` |
 | Selected Xcode SDK | Xcode 26.6, MacOSX26.5 SDK |
 | Beta SDK | Xcode 27.0 beta |
 
@@ -24,6 +25,7 @@ Raw captures are intentionally ignored by Git under `research/**/captures/`. Pro
 - `dyld-function-starts.txt`: function-start names and addresses, useful for recovering internal method/function neighborhoods when header dumping is unavailable.
 - `dyld-cstrings.txt`, `dyld-oslogstrings.txt`: string and os-log evidence from the live framework image.
 - `dyld-objc-classnames.txt`, `dyld-objc-method-names.txt`, `dyld-objc-method-types.txt`: best-effort Objective-C sections from dyld tooling.
+- `symbols-nowplaying-targets.txt`: Xcode `symbols` lookup output for now-playing, playback-queue, player-client, client-request, and `MRXPC` method neighborhoods.
 - `sdk-current-symbols.txt`, `sdk-beta-symbols.txt`: symbols named by the installed Xcode 26 and Xcode 27 beta `.tbd` stubs.
 - `live-only-vs-current-sdk.txt`, `live-only-vs-beta-sdk.txt`, `current-sdk-only-vs-live.txt`, `beta-sdk-only-vs-live.txt`: local symbol-set diffs.
 - `mediaremoted-*`: support daemon linkage, entitlements, and filtered strings.
@@ -56,4 +58,5 @@ The script creates a new timestamped directory under `research/MediaRemote/captu
 
 - The live framework path is a dyld shared-cache image path; the framework directory is mostly a shell on disk.
 - `dyld_info -objc` cannot currently print all Objective-C metadata for this dyld-cache image. Exported Objective-C symbols and string sections are more useful for class and selector discovery.
+- Xcode's `symbols` tool can resolve richer Objective-C method neighborhoods directly from the dyld shared cache without extracting the framework image.
 - Capture files include command headers because the script records the command that generated each artifact.

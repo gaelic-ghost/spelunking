@@ -73,6 +73,35 @@ The path-derived objects are useful for identity, but they are not interchangeab
 
 Inference: for richer metadata, the next cleaner path is likely through `MRNowPlayingOriginClientManager`/`MRNowPlayingPlayerClient` behavior or a request API that accepts the full player path, not through the raw path-derived client/player object alone.
 
+`symbols-nowplaying-targets.txt` confirms that this wrapper path is real Objective-C implementation, not just naming noise. High-value internal methods include:
+
+- `-[MRNowPlayingOriginClientManager playerClientForPlayerPath:]`
+- `-[MRNowPlayingOriginClientManager clientForPlayerPath:]`
+- `-[MRNowPlayingOriginClientManager originClientForPlayerPath:]`
+- `-[MRNowPlayingOriginClientManager originClientRequestsForPlayerPath:]`
+- `-[MRNowPlayingOriginClientManager playerClientRequestsForPlayerPath:]`
+- `-[MRNowPlayingOriginClient nowPlayingClientForPlayerPath:]`
+- `-[MRNowPlayingOriginClient existingNowPlayingClientForPlayerPath:]`
+- `-[MRNowPlayingClient initWithPlayerPath:]`
+- `-[MRNowPlayingPlayerClient initWithPlayerPath:]`
+- `-[MRNowPlayingPlayerClientRequests initWithPlayerPath:]`
+
+The request-side class also names the likely state buckets:
+
+- `playbackState`
+- `supportedCommands`
+- `playbackQueue`
+- `playerProperties`
+- `updateContentItems:`
+- `updateContentItemArtwork:`
+- `enqueuePlaybackQueueRequest:completion:`
+- `_handleEnqueuedPlaybackQueueRequest:completion:`
+- `handleSupportedCommandsRequestWithCompletion:`
+- `handlePlaybackStateRequestWithCompletion:`
+- `handlePlayerPropertiesRequestWithCompletion:`
+
+Inference: a stable metadata/queue probe should either ask the public C layer for an API that accepts a full player path, or dynamically construct the internal request/client wrapper from the active `MRPlayerPath` and call accessors on that wrapper. Passing the raw path-derived client or player into higher-level C APIs is confirmed unsafe.
+
 ## Controller Generations
 
 OS log strings identify several now-playing controller implementations:
