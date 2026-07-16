@@ -87,7 +87,8 @@ Observed non-mutating results from this branch:
       diagnostic extension, WallpaperAgent plug-ins, ExtensionKit wallpaper
       extensions, feature flags, logging preferences, and filtered
       string/symbol evidence
-- [ ] Receiver-side implementation trace of `WallpaperDebugServer`
+- [x] Static receiver-side implementation trace of `WallpaperDebugServer`
+      decode, async handoff, extension dispatch inputs, and response reply
 - [ ] SIP-enabled proof that an ordinary client can successfully call the
       private Swift/XPC envelope
 - [ ] SIP-enabled proof for a non-mutating redraw request
@@ -629,6 +630,64 @@ The shared-cache strings also expose Objective-C XPC bridge vocabulary:
 This suggests the agent receives the Swift/XPC debug message, then talks to the
 extension through an Objective-C-compatible ExtensionKit XPC wrapper.
 
+### Receiver-Side Implementation Trace
+
+Static disassembly of the x86_64 slice of `WallpaperAgent` gives a concrete
+receiver flow for the debug service. Ghidra still timed out full analysis on
+the Swift-heavy binary, but the post-script and narrow `otool` windows
+recovered the relevant call sequence.
+
+Imported-symbol evidence from the agent includes:
+
+| Imported symbol | Meaning |
+| --- | --- |
+| `WallpaperTypes.WallpaperDebugService.getter` | The service name is supplied by `WallpaperTypes`, not only a raw string in the agent. |
+| `WallpaperTypes.WallpaperDebugRequestMessage` metadata | The receiver knows the concrete request envelope type. |
+| `WallpaperTypes.WallpaperDebugRequestMessage : Decodable` | The receiver decodes incoming XPC payloads as this envelope. |
+| `WallpaperTypes.WallpaperDebugRequestMessage.extensionIdentifier` | The receiver reads the target extension identifier from the decoded envelope. |
+| `WallpaperTypes.WallpaperDebugRequestMessage.request` | The receiver reads the debug request enum from the decoded envelope. |
+| `WallpaperTypes.WallpaperDebugRequest` metadata | The async path allocates storage for the request enum. |
+| `WallpaperTypes.WallpaperDebugResponse` metadata | The async path allocates storage for the response enum. |
+| `WallpaperTypes.WallpaperDebugResponse : Encodable` | The receiver replies with an encodable debug response. |
+| `WallpaperExtensionKit.WallpaperExtensionProxy.handleDebugRequest` | The extension-side forwarding primitive is linked into the agent. |
+| `XPC.XPCListener` and `IncomingSessionRequest.accept` | The debug service uses Swift XPC listener/session handling. |
+| `XPC.XPCReceivedMessage.decode(as:)` | Incoming messages are decoded as Swift `Decodable` payloads. |
+| `XPC.XPCReceivedMessage.handoffReply(to:_:)` | The receiver hands reply work off asynchronously. |
+| `XPC.XPCReceivedMessage.reply(_:)` | The receiver sends the final encoded response on the original XPC message. |
+
+The key x86_64 receiver window starts at `0x10009b455`:
+
+1. Load `XPCReceivedMessage` metadata.
+2. Load `WallpaperDebugRequestMessage` metadata.
+3. Load the `WallpaperDebugRequestMessage : Decodable` conformance.
+4. Call `XPCReceivedMessage.decode(as:)`.
+5. On decode failure, release the Swift error and return without entering the
+   extension-dispatch path.
+6. On decode success, retain the decoded message and original received
+   message, allocate a reply context, and call `handoffReply(to:_:)`.
+7. The async continuation allocates `WallpaperDebugRequest` and
+   `WallpaperDebugResponse` task storage.
+8. The continuation calls `WallpaperDebugRequestMessage.request` and
+   `WallpaperDebugRequestMessage.extensionIdentifier`.
+9. The continuation dispatches with the recovered `(request,
+   extensionIdentifier)` pair. The exact callee name is still not recovered
+   from the stripped Swift function pointer, but the imported
+   `WallpaperExtensionProxy.handleDebugRequest` symbol is the matching
+   extension-side request primitive.
+10. The response continuation loads `WallpaperDebugResponse` metadata plus its
+    `Encodable` conformance and calls `XPCReceivedMessage.reply(_:)`.
+
+This proves the receiver is not expecting a bare dictionary or a method-name
+selector. It expects a Swift/XPC message whose body decodes exactly as
+`WallpaperDebugRequestMessage` and whose reply encodes exactly as
+`WallpaperDebugResponse`.
+
+The trace did not recover a separate debug-service authorization check. That
+absence is not proof of open access: Swift XPC listener setup, ExtensionKit
+host policy, sandbox policy, or framework-level checks may still reject an
+ordinary client before or during dispatch. Treat ordinary-client access as
+unproven until a SIP-enabled runtime probe succeeds.
+
 ### Extension Identifiers
 
 Built-in wallpaper extensions observed in `/System/Library/ExtensionKit/Extensions`:
@@ -788,13 +847,11 @@ Not accessible or not assumed accessible:
    desktop image on each screen.
 2. Run a controlled same-user `SIGTERM` respawn probe outside active desktop
    work, with pid before/after, launchd state, and log evidence.
-3. Use Ghidra or another Mach-O/Swift metadata path to inspect
-   `WallpaperDebugServer` implementation details:
-   - decode call site
-   - message envelope type
-   - audit-token or code-signing checks
-   - extension selection logic
-   - error handling
+3. Deepen the remaining `WallpaperDebugServer` implementation trace:
+   - identify the stripped extension-dispatch callee after
+     `extensionIdentifier` and `request` extraction
+   - trace `WallpaperDebugResponse.error(String)` construction paths
+   - identify any listener/session-level audit-token or code-signing checks
 4. Recover `Wallpaper.ContentType` cases and any raw values.
 5. Recover `AssertionValue` cases and presentation-mode raw strings.
 6. Extend the Swift helper to encode private Swift/XPC messages only after the
@@ -803,8 +860,10 @@ Not accessible or not assumed accessible:
 ## References
 
 - Raw command inventory: `../../../research/WallpaperAgent/README.md`
-- SDK symbol helper: `../../../tools/extract-wallpaper-symbols.sh`
-- Ghidra helper: `../../../tools/ghidra/DumpWallpaperDebugReferences.java`
+- SDK and receiver-import symbol helper:
+  `../../../tools/extract-wallpaper-symbols.sh`
+- Ghidra string and symbol xref helper:
+  `../../../tools/ghidra/DumpWallpaperDebugReferences.java`
 - LaunchAgent: `/System/Library/LaunchAgents/com.apple.wallpaper.plist`
 - Agent binary: `/System/Library/CoreServices/WallpaperAgent.app/Contents/MacOS/WallpaperAgent`
 - SDK stubs:

@@ -22,6 +22,23 @@ demangle_module_symbols() {
         rg "$pattern"
 }
 
+demangle_binary_symbols() {
+    title="$1"
+    binary_path="$2"
+    pattern="$3"
+
+    printf '\n## %s\n\n' "$title"
+    if [ ! -f "$binary_path" ]; then
+        printf 'missing: %s\n' "$binary_path" >&2
+        return 1
+    fi
+
+    nm -j "$binary_path" 2>/dev/null |
+        sort -u |
+        xcrun swift-demangle |
+        rg "$pattern"
+}
+
 demangle_module_symbols \
     "Wallpaper normal agent protocol" \
     "$private_frameworks/Wallpaper.framework/Versions/A/Wallpaper.tbd" \
@@ -36,3 +53,8 @@ demangle_module_symbols \
     "WallpaperExtensionKit bridge" \
     "$private_frameworks/WallpaperExtensionKit.framework/Versions/A/WallpaperExtensionKit.tbd" \
     "handleDebugRequest|DebugRequest|DebugResponse|invalidateSnapshots|HostProxy|WallpaperProxy|ExportedObject|XPC"
+
+demangle_binary_symbols \
+    "WallpaperAgent debug receiver imports" \
+    "/System/Library/CoreServices/WallpaperAgent.app/Contents/MacOS/WallpaperAgent" \
+    "WallpaperDebug(Request|Response|Service)|WallpaperDebugRequestMessage|WallpaperExtensionProxy\\.handleDebugRequest|XPCListener|IncomingSessionRequest|XPCReceivedMessage\\.(decode|handoffReply|reply)|XPCPeerHandler|AgentXPCProtocol|ensureViewModelIsUpToDate"

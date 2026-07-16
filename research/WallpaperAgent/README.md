@@ -173,6 +173,22 @@ Additional recovered payloads from the fixed extractor:
 - `WallpaperSettingsViewModel.ContentType` is an `Int` raw-value enum, but its
   cases were not recovered from the SDK stub.
 
+`tools/extract-wallpaper-symbols.sh` also extracts the agent's receiver-side
+debug imports from the live `WallpaperAgent` binary. Important imports:
+
+- `WallpaperTypes.WallpaperDebugService.getter`
+- `WallpaperTypes.WallpaperDebugRequestMessage.extensionIdentifier`
+- `WallpaperTypes.WallpaperDebugRequestMessage.request`
+- `WallpaperTypes.WallpaperDebugRequestMessage : Decodable`
+- `WallpaperTypes.WallpaperDebugRequest` metadata
+- `WallpaperTypes.WallpaperDebugResponse : Encodable`
+- `WallpaperExtensionKit.WallpaperExtensionProxy.handleDebugRequest`
+- `XPC.XPCListener`
+- `XPC.XPCListener.IncomingSessionRequest.accept`
+- `XPC.XPCReceivedMessage.decode(as:)`
+- `XPC.XPCReceivedMessage.handoffReply(to:_:)`
+- `XPC.XPCReceivedMessage.reply(_:)`
+
 ## Shared-Cache String Windows
 
 ```zsh
@@ -379,6 +395,55 @@ Observed Ghidra notes from this branch:
 - Demangled `AgentXPCProtocol` requirement strings for `diagnosticState`,
   `snapshotAllSpaces`, and `ensureViewModelIsUpToDate` were present in the
   imported agent image.
+
+Additional receiver-side trace from the expanded script and narrow disassembly
+windows:
+
+```zsh
+/Applications/Ghidra/ghidra_12.1.2_PUBLIC/support/analyzeHeadless \
+  /tmp/WallpaperAgentGhidra WallpaperAgent \
+  -import /System/Library/CoreServices/WallpaperAgent.app/Contents/MacOS/WallpaperAgent \
+  -scriptPath "$PWD/tools/ghidra" \
+  -postScript DumpWallpaperDebugReferences.java \
+  -analysisTimeoutPerFile 180 \
+  -deleteProject
+```
+
+```zsh
+otool -arch x86_64 -tV /System/Library/CoreServices/WallpaperAgent.app/Contents/MacOS/WallpaperAgent |
+  awk '$1 >= "000000010009b400" && $1 <= "000000010009bc80" { print }'
+```
+
+Key addresses from the x86_64 slice:
+
+- `0x10009b455`: debug request receiver path.
+- `0x10009b4de`: loads `WallpaperDebugRequestMessage` metadata.
+- `0x10009b52e`: loads `WallpaperDebugRequestMessage : Decodable`.
+- `0x10009b54d`: calls `XPCReceivedMessage.decode(as:)`.
+- `0x10009b685`: calls `XPCReceivedMessage.handoffReply(to:_:)`.
+- `0x10009b892`: async path loads `WallpaperDebugRequest` metadata.
+- `0x10009b8ba`: async path loads `WallpaperDebugResponse` metadata.
+- `0x10009b930`: calls `WallpaperDebugRequestMessage.request`.
+- `0x10009b935`: calls
+  `WallpaperDebugRequestMessage.extensionIdentifier`.
+- `0x10009ba4f`: loads `WallpaperDebugResponse : Encodable`.
+- `0x10009ba64`: calls `XPCReceivedMessage.reply(_:)`.
+
+Ghidra symbol cross-reference notes:
+
+- `WallpaperDebugRequestMessage : Decodable` has a parameter reference in
+  `FUN_10009b455` at `0x10009b52e`.
+- `WallpaperDebugResponse : Encodable` has a parameter reference at
+  `0x10009ba4f`.
+- `WallpaperDebugResponse.error(String)` has read references around
+  `0x100144158` and `0x100144347`, which look like error-response construction
+  paths but were not traced in this slice.
+
+Interpretation: the debug listener receives a Swift/XPC request, decodes the
+body as `WallpaperDebugRequestMessage`, extracts `request` and
+`extensionIdentifier`, dispatches asynchronously, then replies by encoding
+`WallpaperDebugResponse`. This rules out a plain XPC dictionary protocol for
+successful calls.
 
 ## Controlled Experiments To Capture
 
