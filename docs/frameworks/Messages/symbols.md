@@ -24,14 +24,44 @@ Inference: the macOS app is a UIKit/iOSSupport-style app shell using ChatKit and
 
 ## Framework Availability Notes
 
-Framework directories exist for `IMCore`, `IMDPersistence`, `IMDaemonCore`, `CallsXPC`, and related private frameworks, but direct binary paths such as `/System/Library/PrivateFrameworks/IMCore.framework/IMCore` were not present on this machine.
+Framework directories exist for `IMCore`, `IMDPersistence`, `IMDaemonCore`, `CallsXPC`, and related private frameworks. Many root Mach-O paths are dyld-cache install names rather than ordinary on-disk files; `dlopen` can still resolve some of them through the active dyld shared cache.
 
-Use one of these next:
+Use these sources together:
 
 - dyld shared cache extraction for full live macOS symbols and Objective-C metadata
 - SDK `.tbd` files for exported symbol names
 - generated Swift interfaces when available
 - runtime class listing from a small read-only helper
+
+## Objective-C Runtime Capture
+
+Raw captures:
+
+- `research/Messages/runtime/objc-runtime-im-macos-26.5.2.json`
+- `research/Messages/runtime/objc-runtime-imcore-macos-26.5.2.json`
+
+The narrow `IM*` runtime capture loaded `IMCore`, `IMSharedUtilities`, and `IMFoundation` and found:
+
+- 888 matching classes
+- 150 matching protocols
+
+Notable observed classes include:
+
+- `IMAccount`, `IMAccountController`, `IMHandle`
+- `IMChat`, `IMChatHistoryController`, `IMChatRegistry`, `IMMessage`
+- `IMAttachment`, `IMAttachmentBlastdoor`
+- `IMDDatabase`, `IMDDatabaseClient`, `IMDChatRecord`, `IMDMessageRecord`, `IMDAttachmentRecord`
+- `IMDCoreSpotlightBaseIndexer`, `IMDCoreSpotlightMessageBodyIndexer`, `IMDCoreSpotlightSearchableItemGenerator`
+- `IMAutomation`, `IMAutomationMessageSend`, `IMAutomationBatchMessageOperations`, `IMCoreAutomationHook`, `IMCoreAutomationNotifications`
+
+Selector/property examples from the capture:
+
+- `IMAccount`: aliases, registration state, relay capability, login state, service name, block-list, buddy-list, profile, and `canSendMessages`
+- `IMHandle`: canonical/person-handle style identity surface
+- `IMChat` and chat-item classes: conversation and transcript model surfaces
+- `IMD*`: persistence records, batch fetchers, Spotlight indexers, CloudKit/indexing lifecycle helpers
+
+The broader `IM*` plus `CK*` capture is retained because Messages links CloudKit-heavy surfaces, but most `CK*` entries are generic CloudKit runtime classes and should not be counted as Messages-specific without additional filtering.
 
 ## Dyld Shared Cache Export Probe
 

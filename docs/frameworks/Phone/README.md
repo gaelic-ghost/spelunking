@@ -34,8 +34,8 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Call-history storage schema inventory without row data
 - [x] Public iPhoneOS 27.0 SDK header/interface inventory for CallKit and LiveCommunicationKit
 - [x] Private `.tbd` notification and type-family inventory
+- [x] Read-only Objective-C runtime metadata capture for call-history, TelephonyUtilities, and CallKit surfaces
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
-- [ ] Read-only runtime experiments against app/framework state
 - [ ] OS comparison against another macOS build
 
 ## Boundary Map
@@ -181,6 +181,34 @@ It also links to macOS private frameworks including:
 - `IDS`
 - `TelephonyUtilities`
 - `CommunicationTrust`
+
+## Runtime Metadata Notes
+
+Verified by the local `spelunk objc-runtime` helper loading:
+
+- `/System/Library/PrivateFrameworks/TelephonyUtilities.framework/TelephonyUtilities`
+- `/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory`
+- `/System/Library/Frameworks/CallKit.framework/CallKit`
+
+The capture also attempted `/System/Library/PrivateFrameworks/CallHistoryDB.framework/CallHistoryDB`; dyld reported no active file or dyld-cache image for that install name on this machine.
+
+The `TU*`, `CH*`, `Call*`, `CX*`, and `Phone*` capture produced 439 Objective-C classes and 181 Objective-C protocols on macOS 26.5.2. This is runtime metadata, not a generated public/private interface; method and property names are observed selectors/properties and still need behavior confirmation.
+
+High-signal observed class families:
+
+- call history model/storage: `CHManager`, `CHRecentCall`, `CHHandle`, `CHPersistentContainer`, `CHTransaction`, `CallDBManager`, `CallDBManagerClient`, `CallHistoryDBHandle`
+- telephony/call services: `TUCall`, `TUCallCenter`, `TUCallProvider`, `TUCallServicesInterface`, `TUCallHistoryController`, `TUCallHistoryManager`, `TUConversation`, `TUConversationManager`, `TUConversationProvider`
+- call features: `TUCallRecording*`, `TUCallTranslation*`, `TUCallScreenShareAttributes`, `TUCollaboration*`, `TUConversationReactionsController`
+- public CallKit runtime: `CXCall`, `CXCallController`, `CXProvider`, `CXTransaction`, `CXCallDirectory*`, `CXVoicemail*`
+
+Observed selector/property examples:
+
+- `CHManager` exposes recent-call fetching, coalescing, counting, read-state changes, delete/reset/clear operations, database size, sync transactions, and call-timer methods.
+- `CHRecentCall` exposes call status/type/category, answered/originated/read state, participant handles, junk/verification/trust fields, emergency media fields, duration/date, local participant IDs, and message/voicemail-adjacent flags.
+- `CHHandle` exposes normalized value, raw value, handle type, pseudonym, and temporary-handle checks.
+- `TU*` classes expose the call-services model layer around live calls, conversations, call providers, call history controllers, recording, translation, continuity, and collaboration.
+
+Inference: Phone's local architecture splits persisted recents (`CH*` and `CallDB*`) from live call/conversation services (`TU*`) and public integration (`CX*`). The runtime metadata supports the storage and service split; it does not prove third-party access to private call mutation or history APIs.
 
 ## SDK Symbol Notes
 

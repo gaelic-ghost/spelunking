@@ -13,8 +13,9 @@
 - [x] Read public SDK headers/interfaces for CallKit and LiveCommunicationKit.
 - [x] Demangle private SDK `.tbd` Swift symbols for PhoneAppIntents, CallsXPC, CallsPersistence, and TelephonyUtilities.
 - [x] Capture private SDK notification constant families.
+- [x] Capture read-only Objective-C runtime metadata for CallHistory, TelephonyUtilities, and CallKit with `spelunk objc-runtime`.
 - [ ] Extract live dyld shared cache images for full call private framework metadata.
-- [ ] Generate class/protocol/selector inventory.
+- [ ] Generate full class/protocol/selector inventory for `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`.
 - [ ] Classify notification constants by delivery mechanism without placing calls.
 - [ ] Attach read-only logging predicates while manually opening Phone.
 

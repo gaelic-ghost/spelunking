@@ -34,8 +34,8 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] LaunchAgent and XPC service inventory
 - [x] Public iPhoneOS 27.0 SDK header inventory for Messages, MessageUI, and Shared With You
 - [x] Private `.tbd` notification and type-family inventory
+- [x] Read-only Objective-C runtime metadata capture for IM private frameworks
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
-- [ ] Read-only runtime experiments against app/framework state
 - [ ] OS comparison against another macOS build
 
 ## Boundary Map
@@ -221,6 +221,33 @@ Verified active framework/app inventory includes:
 The active app binary links to iOSSupport frameworks including `ChatKit`, `IMCore`, and `IMSharedUtilities`, plus macOS private frameworks including `IDSFoundation`, `FTServices`, and `FTClientServices`.
 
 Many private framework directories do not expose a direct on-disk Mach-O binary at the framework root on this macOS build. Their live implementations appear to be dyld shared cache residents or otherwise represented through framework metadata/stubs. Use dyld shared cache extraction for live symbol work.
+
+## Runtime Metadata Notes
+
+Verified by the local `spelunk objc-runtime` helper loading:
+
+- `/System/Library/PrivateFrameworks/IMCore.framework/IMCore`
+- `/System/Library/PrivateFrameworks/IMSharedUtilities.framework/IMSharedUtilities`
+- `/System/Library/PrivateFrameworks/IMFoundation.framework/IMFoundation`
+
+The narrow `IM*` capture produced 888 Objective-C classes and 150 Objective-C protocols on macOS 26.5.2. This is runtime metadata, not a generated public interface; method and property names are observed selectors/properties and still need behavior confirmation before being treated as stable contracts.
+
+High-signal observed class families:
+
+- account and identity: `IMAccount`, `IMAccountController`, `IMAccountUtilities`, `IMHandle`, `IMAddressBook`, `IMContactStore`, `IMBusinessNameManager`
+- chat/message model: `IMChat`, `IMMessage`, `IMHandle`, `IMChatHistoryController`, `IMChatRegistry`, `IMChatItem`, `IMMessagePartChatItem`, `IMAssociatedMessageItem`
+- attachments and transfer: `IMAttachment`, `IMAttachmentBlastdoor`, `IMFileTransfer`, preview generators, and attachment metadata classes
+- persistence/indexing: `IMDDatabase`, `IMDDatabaseClient`, `IMDChatRecord`, `IMDMessageRecord`, `IMDAttachmentRecord`, `IMDCoreSpotlight*` indexers
+- automation/hooks: `IMAutomation`, `IMAutomationMessageSend`, `IMAutomationBatchMessageOperations`, `IMCoreAutomationHook`, `IMCoreAutomationNotifications`
+- collaboration and shared state: `IMCollaboration*`, `IMCloudKit*`, nickname, pinning, and sync-related classes
+
+Observed selector/property examples:
+
+- `IMAccount` exposes account state, aliases, relay capability, registration, login, service, block-list, buddy-list, profile, and `canSendMessages` properties/selectors.
+- `IMChat` and adjacent chat classes expose local conversation state and history/controller relationships, but this capture does not prove a supported send or mutation contract outside the platform app.
+- `IMD*` classes line up with the `chat.db` schema and Spotlight/CloudKit lifecycle tables, supporting the persistence-agent model described above.
+
+Inference: Messages' local architecture has a visible split between user/app model classes (`IMAccount`, `IMChat`, `IMMessage`, attachments), daemon/persistence classes (`IMD*`), and explicit automation/testing hooks (`IMAutomation*`, `IMCoreAutomation*`). The runtime metadata confirms these names exist in the active OS runtime; it does not establish that third-party processes can call them safely or with sufficient entitlements.
 
 ## SDK Symbol Notes
 

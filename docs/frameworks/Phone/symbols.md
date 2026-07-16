@@ -29,14 +29,42 @@ Inference: `Phone.app` is not only a dialer. It is a Swift/UIKit app layered ove
 
 ## Framework Availability Notes
 
-Framework directories exist for `CallsXPC`, `CallsPersistence`, and `TelephonyUtilities`, but direct root Mach-O paths were not present for several active private frameworks on this machine.
+Framework directories exist for `CallsXPC`, `CallsPersistence`, and `TelephonyUtilities`. Many root Mach-O paths are dyld-cache install names rather than ordinary on-disk files; `dlopen` can still resolve some of them through the active dyld shared cache.
 
-Use one of these next:
+Use these sources together:
 
 - dyld shared cache extraction for full live macOS symbols and Objective-C metadata
 - SDK `.tbd` files for exported symbol names
 - generated Swift interfaces when available
 - runtime class listing from a small read-only helper
+
+## Objective-C Runtime Capture
+
+Raw capture:
+
+- `research/Phone/runtime/objc-runtime-callservices-macos-26.5.2.json`
+
+The runtime capture loaded `TelephonyUtilities`, `CallHistory`, and public `CallKit`. It attempted `CallHistoryDB`, but dyld reported that install name was not present as a file or in the dyld cache on this machine.
+
+The `TU*`, `CH*`, `Call*`, `CX*`, and `Phone*` capture found:
+
+- 439 matching classes
+- 181 matching protocols
+
+Notable observed classes include:
+
+- `CHManager`, `CHRecentCall`, `CHHandle`, `CHPersistentContainer`, `CHTransaction`
+- `CallDBManager`, `CallDBManagerClient`, `CallDBManagerServer`, `CallHistoryDBHandle`
+- `TUCall`, `TUCallCenter`, `TUCallProvider`, `TUCallServicesInterface`, `TUCallHistoryController`, `TUCallHistoryManager`
+- `TUConversation`, `TUConversationManager`, `TUConversationProvider`, `TUConversationParticipant`
+- `CXCall`, `CXCallController`, `CXProvider`, `CXTransaction`, `CXCallDirectoryManager`, `CXVoicemail`
+
+Selector/property examples from the capture:
+
+- `CHManager`: recent-call fetch/count/coalesce, read-state, deletion/reset, database-size, sync-transaction, and call-timer selectors
+- `CHRecentCall`: call status/type/category, caller display fields, remote participant handles, emergency media, junk/verification/trust fields, duration/date, and message state
+- `CHHandle`: normalized value, raw value, type, pseudonym, and temporary-handle checks
+- `TU*`: live call, provider, conversation, call-history-controller, recording, translation, continuity, and collaboration surfaces
 
 ## Dyld Shared Cache Export Probe
 

@@ -50,6 +50,7 @@ rg -o '_\$s[^,[:space:]]+' /Applications/Xcode-beta.app/Contents/Developer/Platf
 rg -o '_\$s[^,[:space:]]+' /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/TelephonyUtilities.framework/Versions/A/TelephonyUtilities.tbd | tr -d "'" | swift-demangle
 rg -o "_[A-Za-z0-9_]*(Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/TelephonyUtilities.framework/Versions/A/TelephonyUtilities.tbd
 rg -o "_[A-Za-z0-9_]*(Notification|Changed|Did[A-Za-z0-9_]*|Will[A-Za-z0-9_]*)" /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/CallHistory.framework/Versions/A/CallHistory.tbd
+swift run spelunk objc-runtime --image /System/Library/PrivateFrameworks/TelephonyUtilities.framework/TelephonyUtilities --image /System/Library/PrivateFrameworks/CallHistory.framework/CallHistory --image /System/Library/PrivateFrameworks/CallHistoryDB.framework/CallHistoryDB --image /System/Library/Frameworks/CallKit.framework/CallKit --prefix TU --prefix CH --prefix Call --prefix CX --prefix Phone --methods --properties --protocols --json > research/Phone/runtime/objc-runtime-callservices-macos-26.5.2.json
 ```
 
 Observed `sdef` result:
@@ -63,5 +64,6 @@ Privacy note: no call-history rows, phone numbers, contacts, voicemail metadata,
 ## Next Raw Captures
 
 - dyld shared cache extraction command and output paths
+- generated interfaces for call private frameworks
 - notification delivery classification
 - logging baseline

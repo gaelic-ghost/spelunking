@@ -13,8 +13,9 @@
 - [x] Read public iPhoneOS SDK headers for Messages, MessageUI, and Shared With You.
 - [x] Demangle private SDK `.tbd` Swift symbols for IMCore import/export families.
 - [x] Capture private SDK notification constant families.
+- [x] Capture read-only Objective-C runtime metadata for IM private frameworks with `spelunk objc-runtime`.
 - [ ] Extract live dyld shared cache images for full IM private framework metadata.
-- [ ] Generate class/protocol/selector inventory.
+- [ ] Generate full class/protocol/selector inventory for `IMDPersistence`, `IMDaemonCore`, and `MessagesKit`.
 - [ ] Classify notification constants by delivery mechanism without sending messages.
 - [ ] Attach read-only logging predicates while manually using Messages.
 
