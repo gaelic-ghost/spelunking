@@ -632,6 +632,7 @@ swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80
 swift run spelunk wallpaper-agent normal-xpc-probe --request diagnostic-state
 swift run spelunk wallpaper-agent sip-validation-report
 swift run spelunk wallpaper-agent restart-probe-plan
+swift run spelunk wallpaper-agent launchctl-kill-plan --signal TERM
 swift run spelunk wallpaper-agent redraw-static-plan
 swift run spelunk wallpaper-agent redraw-probe-plan
 swift run spelunk wallpaper-agent signal-plan --signal TERM
@@ -643,6 +644,7 @@ Mutating commands require an explicit execute flag:
 swift run spelunk wallpaper-agent redraw-static --execute
 swift run spelunk wallpaper-agent signal --execute --signal TERM
 swift run spelunk wallpaper-agent restart-probe --execute --signal TERM
+swift run spelunk wallpaper-agent launchctl-kill --execute --signal TERM
 swift run spelunk wallpaper-agent redraw-probe --execute
 ```
 
@@ -663,10 +665,14 @@ Observed in this branch:
   NSCocoaErrorDomain (4865)`.
 - `sip-validation-report`: collected SIP status, inventory, debug-XPC read
   probe, static redraw plan, redraw probe plan, signal plan, restart probe
-  plan, and bounded log snapshot; reported `sipProofClaim: not eligible
-  because SIP is not enabled for this boot.`
+  plan, launchctl-kill plan, and bounded log snapshot; reported
+  `sipProofClaim: not eligible because SIP is not enabled for this boot.`
 - `restart-probe-plan`: reported the current target pid and did not collect
   after/respawn evidence because it did not execute.
+- `launchctl-kill-plan --signal TERM`: planned
+  `/bin/launchctl kill SIGTERM gui/501/com.apple.wallpaper.agent`, reported
+  the current target pid, and did not collect exit/after/respawn evidence
+  because it did not execute.
 - `redraw-probe-plan`: reported the current desktop image URL and did not
   collect after/preserved-image evidence because it did not execute.
 - `redraw-static-plan`: reported the current desktop image URL without

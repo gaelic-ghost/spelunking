@@ -54,6 +54,21 @@ public struct SPKWallpaperRestartProbeResult: Equatable, Sendable {
     public var respawnObserved: Bool?
 }
 
+public struct SPKWallpaperLaunchctlKillProbeResult: Equatable, Sendable {
+    public var signal: Int32
+    public var signalName: String
+    public var execute: Bool
+    public var waitSeconds: Double
+    public var serviceTarget: String
+    public var commandArguments: [String]
+    public var before: SPKWallpaperAgentSnapshot
+    public var after: SPKWallpaperAgentSnapshot?
+    public var exitCode: Int32?
+    public var standardOutput: String?
+    public var standardError: String?
+    public var respawnObserved: Bool?
+}
+
 public struct SPKSIPStatus: Equatable, Sendable {
     public enum State: Equatable, Sendable {
         case enabled
@@ -248,6 +263,64 @@ public struct SPKWallpaperAgentInspector: Sendable {
         )
     }
 
+    public func launchctlKillProbe(signalName: String, execute: Bool, waitSeconds: Double = 5.0) throws -> SPKWallpaperLaunchctlKillProbeResult {
+        let signal = try signalNumber(named: signalName)
+        let launchctlSignalName = try canonicalLaunchctlSignalName(named: signalName)
+        let before = try snapshot()
+        guard !before.processes.isEmpty else {
+            throw SPKWallpaperAgentError.noWallpaperAgentProcess
+        }
+
+        let serviceTarget = "gui/\(before.uid)/com.apple.wallpaper.agent"
+        let commandArguments = ["kill", launchctlSignalName, serviceTarget]
+
+        guard execute else {
+            return SPKWallpaperLaunchctlKillProbeResult(
+                signal: signal,
+                signalName: launchctlSignalName,
+                execute: false,
+                waitSeconds: waitSeconds,
+                serviceTarget: serviceTarget,
+                commandArguments: commandArguments,
+                before: before,
+                after: nil,
+                exitCode: nil,
+                standardOutput: nil,
+                standardError: nil,
+                respawnObserved: nil
+            )
+        }
+
+        let launchctlResult = try runner.run("/bin/launchctl", arguments: commandArguments)
+        let beforePIDs = before.processes.map(\.pid)
+        let deadline = Date().addingTimeInterval(waitSeconds)
+        var after = try snapshot()
+        while Date() < deadline {
+            let current = try snapshot()
+            if restartWasObserved(beforePIDs: beforePIDs, afterPIDs: current.processes.map(\.pid)) {
+                after = current
+                break
+            }
+            usleep(250_000)
+            after = current
+        }
+
+        return SPKWallpaperLaunchctlKillProbeResult(
+            signal: signal,
+            signalName: launchctlSignalName,
+            execute: true,
+            waitSeconds: waitSeconds,
+            serviceTarget: serviceTarget,
+            commandArguments: commandArguments,
+            before: before,
+            after: after,
+            exitCode: launchctlResult.exitCode,
+            standardOutput: launchctlResult.standardOutput,
+            standardError: launchctlResult.standardError,
+            respawnObserved: restartWasObserved(beforePIDs: beforePIDs, afterPIDs: after.processes.map(\.pid))
+        )
+    }
+
     public func sipStatus() throws -> SPKSIPStatus {
         let result = try runner.run("/usr/bin/csrutil", arguments: ["status"])
         let combinedOutput = [result.standardOutput, result.standardError]
@@ -351,6 +424,21 @@ public struct SPKWallpaperAgentInspector: Sendable {
             return SIGINT
         case "KILL", "SIGKILL":
             return SIGKILL
+        default:
+            throw SPKWallpaperAgentError.unsupportedSignalName(name)
+        }
+    }
+
+    private func canonicalLaunchctlSignalName(named name: String) throws -> String {
+        switch try signalNumber(named: name) {
+        case SIGTERM:
+            return "SIGTERM"
+        case SIGHUP:
+            return "SIGHUP"
+        case SIGINT:
+            return "SIGINT"
+        case SIGKILL:
+            return "SIGKILL"
         default:
             throw SPKWallpaperAgentError.unsupportedSignalName(name)
         }

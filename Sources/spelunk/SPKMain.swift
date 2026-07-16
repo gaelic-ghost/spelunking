@@ -73,6 +73,15 @@ struct SPKMain {
             }
             let signalName = optionValue("--signal", in: arguments) ?? "TERM"
             printRestartProbeResult(try inspector.restartProbe(signalName: signalName, execute: true))
+        case "launchctl-kill-plan":
+            let signalName = optionValue("--signal", in: arguments) ?? "TERM"
+            printLaunchctlKillProbeResult(try inspector.launchctlKillProbe(signalName: signalName, execute: false))
+        case "launchctl-kill":
+            guard arguments.contains("--execute") else {
+                throw CLIError.missingExecuteFlag("Refusing to run launchctl kill for WallpaperAgent without --execute. Use launchctl-kill-plan for a dry run.")
+            }
+            let signalName = optionValue("--signal", in: arguments) ?? "TERM"
+            printLaunchctlKillProbeResult(try inspector.launchctlKillProbe(signalName: signalName, execute: true))
         case "redraw-static-plan":
             #if canImport(AppKit)
             printRedrawResult(try SPKWallpaperStaticRedraw().reapplyCurrentDesktopImages(execute: false))
@@ -133,6 +142,8 @@ struct SPKMain {
               spelunk wallpaper-agent signal --execute [--signal TERM]
               spelunk wallpaper-agent restart-probe-plan [--signal TERM]
               spelunk wallpaper-agent restart-probe --execute [--signal TERM]
+              spelunk wallpaper-agent launchctl-kill-plan [--signal TERM]
+              spelunk wallpaper-agent launchctl-kill --execute [--signal TERM]
               spelunk wallpaper-agent redraw-static-plan
               spelunk wallpaper-agent redraw-static --execute
               spelunk wallpaper-agent redraw-probe-plan
@@ -155,6 +166,8 @@ struct SPKMain {
               signal --execute [--signal TERM]
               restart-probe-plan [--signal TERM]
               restart-probe --execute [--signal TERM]
+              launchctl-kill-plan [--signal TERM]
+              launchctl-kill --execute [--signal TERM]
               redraw-static-plan
               redraw-static --execute
               redraw-probe-plan
@@ -245,6 +258,37 @@ struct SPKMain {
         }
     }
 
+    private static func printLaunchctlKillProbeResult(_ result: SPKWallpaperLaunchctlKillProbeResult) {
+        print("execute: \(result.execute)")
+        print("signal: \(result.signal)")
+        print("signalName: \(result.signalName)")
+        print("waitSeconds: \(result.waitSeconds)")
+        print("serviceTarget: \(result.serviceTarget)")
+        print("command: /bin/launchctl \(result.commandArguments.joined(separator: " "))")
+        print("beforePIDs: \(result.before.processes.map(\.pid).map(String.init).joined(separator: ", "))")
+        if let after = result.after {
+            print("afterPIDs: \(after.processes.map(\.pid).map(String.init).joined(separator: ", "))")
+        } else {
+            print("afterPIDs: <not collected>")
+        }
+        if let exitCode = result.exitCode {
+            print("exitCode: \(exitCode)")
+        } else {
+            print("exitCode: <not executed>")
+        }
+        if let standardOutput = result.standardOutput, !standardOutput.isEmpty {
+            print("stdout: \(standardOutput.trimmingCharacters(in: .whitespacesAndNewlines))")
+        }
+        if let standardError = result.standardError, !standardError.isEmpty {
+            print("stderr: \(standardError.trimmingCharacters(in: .whitespacesAndNewlines))")
+        }
+        if let respawnObserved = result.respawnObserved {
+            print("respawnObserved: \(respawnObserved)")
+        } else {
+            print("respawnObserved: <not executed>")
+        }
+    }
+
     private static func printRedrawResult(_ result: SPKDesktopImageRedrawResult) {
         print("execute: \(result.execute)")
         for entry in result.entries {
@@ -317,6 +361,10 @@ struct SPKMain {
         print("")
         print("restartProbePlan:")
         printRestartProbeResult(try inspector.restartProbe(signalName: "TERM", execute: false))
+
+        print("")
+        print("launchctlKillPlan:")
+        printLaunchctlKillProbeResult(try inspector.launchctlKillProbe(signalName: "TERM", execute: false))
 
         print("")
         print("logSnapshot:")

@@ -47,6 +47,7 @@ swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80
 swift run spelunk wallpaper-agent sip-validation-report
 swift run spelunk wallpaper-agent normal-xpc-probe --request diagnostic-state
 swift run spelunk wallpaper-agent restart-probe-plan
+swift run spelunk wallpaper-agent launchctl-kill-plan --signal TERM
 swift run spelunk wallpaper-agent redraw-static-plan
 swift run spelunk wallpaper-agent redraw-probe-plan
 swift run spelunk wallpaper-agent signal-plan --signal TERM
@@ -58,6 +59,7 @@ Those commands are non-mutating. The mutating commands require `--execute`:
 swift run spelunk wallpaper-agent redraw-static --execute
 swift run spelunk wallpaper-agent signal --execute --signal TERM
 swift run spelunk wallpaper-agent restart-probe --execute --signal TERM
+swift run spelunk wallpaper-agent launchctl-kill --execute --signal TERM
 swift run spelunk wallpaper-agent redraw-probe --execute
 ```
 
@@ -74,9 +76,10 @@ Observed non-mutating results from this branch:
 | `debug-xpc-probe --extension com.apple.wallpaper.extension.not-real` | Succeeded on the current boot and decoded `WallpaperDebugResponse.error("No valid extension")`, confirming the receiver dispatch/error path. Current boot has SIP disabled. |
 | `debug-xpc-probe --request download-state` | Succeeded on the current boot and decoded `WallpaperAssetDownloadState` for a known asset id. Current boot has SIP disabled. |
 | `log-snapshot --last 10m --limit 12` | Captured recent `WallpaperAgent` unified log lines showing debug XPC peer connection activation and `handleDebugRequest` begin/end events. |
-| `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, redraw probe plan, signal plan, restart probe plan, and a bounded log snapshot; refused the SIP proof claim because SIP is disabled on this boot. |
+| `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, redraw probe plan, signal plan, restart probe plan, launchctl-kill plan, and a bounded log snapshot; refused the SIP proof claim because SIP is disabled on this boot. |
 | `normal-xpc-probe --request diagnostic-state` | Reached `com.apple.wallpaper` but received an empty old-coder reply; logs showed `Accepted XPC Connection` followed by `Failed to Decode XPC Message: NSCocoaErrorDomain (4865)`. |
 | `restart-probe-plan` | Captured current target pid, planned `SIGTERM`, and left after/respawn evidence uncollected because it did not execute. |
+| `launchctl-kill-plan --signal TERM` | Planned `/bin/launchctl kill SIGTERM gui/<uid>/com.apple.wallpaper.agent`, captured the current pid, and left exit/after/respawn evidence uncollected because it did not execute. |
 | `redraw-probe-plan` | Captured current desktop image URL and options, and left after/preserved-image evidence uncollected because it did not execute. |
 | `redraw-static-plan` | Found the current static desktop image URL without reapplying it. |
 | `signal-plan --signal TERM` | Found the current `WallpaperAgent` pid and planned `SIGTERM` without executing it. |
@@ -105,6 +108,9 @@ Observed non-mutating results from this branch:
       `csrutil status`
 - [x] SwiftPM restart probe plan/execute command that captures before and
       after pids without using `launchctl kickstart`
+- [x] SwiftPM `launchctl kill` probe plan/execute command that captures the
+      user-bootstrap service target, command arguments, before/after pids, and
+      launchctl exit output without using `launchctl kickstart`
 - [x] SwiftPM redraw probe plan/execute command that captures before and
       after `NSWorkspace` desktop image state
 - [x] SwiftPM unified-log snapshot command for bounded `WallpaperAgent`
@@ -972,6 +978,8 @@ The repository helper now has a proof-oriented version of this experiment:
 ```zsh
 swift run spelunk wallpaper-agent restart-probe-plan
 swift run spelunk wallpaper-agent restart-probe --execute --signal TERM
+swift run spelunk wallpaper-agent launchctl-kill-plan --signal TERM
+swift run spelunk wallpaper-agent launchctl-kill --execute --signal TERM
 ```
 
 The plan form is non-mutating and records the current target pid. The execute
@@ -979,6 +987,18 @@ form sends the selected same-user POSIX signal, polls for a replacement
 `WallpaperAgent` pid for five seconds, and reports whether respawn was
 observed. It still needs to be run on a SIP-enabled boot before it can be
 promoted from candidate to proven restart path.
+
+The `launchctl-kill-plan` form is also non-mutating. On this boot it planned:
+
+```text
+/bin/launchctl kill SIGTERM gui/501/com.apple.wallpaper.agent
+```
+
+The execute form asks launchd to deliver the selected signal to the user
+bootstrap service target, then records the launchctl exit status, stdout,
+stderr, after-pids, and whether a new `WallpaperAgent` pid appeared. It is a
+separate candidate from direct POSIX signaling and still needs SIP-enabled
+runtime proof before promotion.
 
 Use the log snapshot immediately before and after the execute form to capture
 relaunch, reload, generation, runtime, or snapshot evidence:
@@ -1054,6 +1074,8 @@ Accessible or likely accessible:
 
 - Process discovery for the same user's `WallpaperAgent`
 - Same-user process signaling, pending SIP-enabled proof
+- Same-user `launchctl kill` against
+  `gui/<uid>/com.apple.wallpaper.agent`, pending SIP-enabled proof
 - Mach lookup attempts for `com.apple.wallpaper`
 - Mach lookup attempts for `com.apple.wallpaper.debug.service`
 - Read-only `WallpaperDebugRequestMessage` calls to
