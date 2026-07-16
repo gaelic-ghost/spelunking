@@ -24,6 +24,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 
 - [x] Active app path
 - [x] App bundle identifier and URL schemes
+- [x] App extension, plugin, URL, AppleScript, and intent surface inventory
 - [x] App entitlement snapshot
 - [x] Confirm no AppleScript dictionary via `sdef`
 - [x] Active and SDK framework constellation inventory
@@ -330,6 +331,7 @@ Inference: Phone’s user-facing app sits above a broad `callservicesd` broker p
 ## References
 
 - `research/Phone/README.md`
+- `docs/frameworks/Phone/surfaces.md`
 - `docs/frameworks/Phone/storage.md`
 - `docs/frameworks/Phone/symbols.md`
 - `docs/frameworks/Phone/notifications.md`

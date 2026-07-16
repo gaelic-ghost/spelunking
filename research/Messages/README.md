@@ -30,8 +30,18 @@ sqlite3 "$HOME/Library/Messages/chat.db" "SELECT m.name || '|' || p.cid || '|' |
 sqlite3 "$HOME/Library/Messages/chat.db" "SELECT type || '|' || name || '|' || tbl_name || '|' || COALESCE(sql, '') FROM sqlite_schema WHERE type IN ('index','trigger','view') ORDER BY type, tbl_name, name;"
 sqlite3 "$HOME/Library/Messages/chat.db" "SELECT type || '|' || name || '|' || tbl_name || '|' || COALESCE(sql, '') FROM sqlite_schema WHERE type='table' ORDER BY name;"
 sdef /System/Applications/Messages.app
+mkdir -p research/Messages/surfaces
 plutil -p /System/Applications/Messages.app/Contents/Info.plist
+plutil -p /System/Applications/Messages.app/Contents/Extensions/MessagesActionExtension.appex/Contents/Info.plist
+plutil -p "/System/Applications/Messages.app/Contents/PlugIns/Messages Assistant Extension.appex/Contents/Info.plist"
+plutil -p "/System/Applications/Messages.app/Contents/PlugIns/Messages Reply Extension.appex/Contents/Info.plist"
+plutil -p "/System/Applications/Messages.app/Contents/PlugIns/Messages Share Extension.appex/Contents/Info.plist"
+plutil -p "/System/Applications/Messages.app/Contents/PlugIns/Messages Storage Management Extension.appex/Contents/Info.plist"
+plutil -p /System/Applications/Messages.app/Contents/PlugIns/MessagesPluginNotificationExtension.appex/Contents/Info.plist
+plutil -p /System/Applications/Messages.app/Contents/PlugIns/MessagesAppKitBridge.bundle/Contents/Info.plist
+plutil -p /System/Applications/Messages.app/Contents/PlugIns/iChatDockTile.docktileplugin/Contents/Info.plist
 codesign -d --entitlements :- /System/Applications/Messages.app
+codesign -dv /System/Applications/Messages.app
 otool -L /System/Applications/Messages.app/Contents/MacOS/Messages
 find /System/Library/PrivateFrameworks /System/iOSSupport/System/Library/PrivateFrameworks -maxdepth 3 \( -name '*.xpc' -o -name '*.appex' -o -name '*.app' -o -name 'LaunchServices' \) 2>/dev/null | rg 'IM|Message|MobileSMS|Phone|Call|Telephony|FaceTime' | sort
 find /System/Library/LaunchAgents /System/Library/LaunchDaemons /Library/LaunchAgents /Library/LaunchDaemons -maxdepth 1 -type f \( -iname '*im*' -o -iname '*message*' -o -iname '*call*' -o -iname '*phone*' -o -iname '*telephony*' -o -iname '*facetime*' \) -print 2>/dev/null | sort

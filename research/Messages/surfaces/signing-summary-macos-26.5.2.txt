@@ -1,0 +1,38 @@
+# Messages bundle signing summary
+# Captured on macOS 26.5.2 (25F84).
+## /System/Applications/Messages.app
+Identifier=com.apple.MobileSMS
+Format=app bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Applications/Messages.app/Contents/Extensions/MessagesActionExtension.appex
+Identifier=com.apple.MobileSMS.MessagesActionExtension
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Applications/Messages.app/Contents/PlugIns/Messages Assistant Extension.appex
+Identifier=com.apple.messages.AssistantExtension
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Applications/Messages.app/Contents/PlugIns/Messages Reply Extension.appex
+Identifier=com.apple.messages.ReplyExtension
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Applications/Messages.app/Contents/PlugIns/Messages Share Extension.appex
+Identifier=com.apple.messages.ShareExtension
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Applications/Messages.app/Contents/PlugIns/Messages Storage Management Extension.appex
+Identifier=com.apple.messages.StorageManagementExtension
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Applications/Messages.app/Contents/PlugIns/MessagesPluginNotificationExtension.appex
+Identifier=com.apple.MobileSMS.MessagesPluginNotificationExtension
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Applications/Messages.app/Contents/PlugIns/MessagesAppKitBridge.bundle
+Identifier=com.apple.MessagesAppKitBridge
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Applications/Messages.app/Contents/PlugIns/iChatDockTile.docktileplugin
+Identifier=com.apple.iChatDockTilePlugIn
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set

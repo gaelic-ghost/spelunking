@@ -1,0 +1,23 @@
+# Phone bundle signing summary
+# Captured on macOS 26.5.2 (25F84).
+## /System/Applications/Phone.app
+Identifier=com.apple.mobilephone
+Format=app bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+Runtime Version=26.5.0
+## /System/Applications/Phone.app/Contents/PlugIns/FaceTimeMacHelper.bundle
+Identifier=com.apple.MacHelper
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Applications/Phone.app/Contents/PlugIns/PhoneDockTile.docktileplugin
+Identifier=com.apple.Phone-docktileplugin
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Applications/Phone.app/Contents/PlugIns/RemotePeoplePicker.appex
+Identifier=com.apple.FaceTime.RemotePeoplePicker
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set
+## /System/Library/PrivateFrameworks/TelephonyUtilities.framework/PlugIns/PhoneIntentHandler.appex
+Identifier=com.apple.TelephonyUtilities.PhoneIntentHandler
+Format=bundle with Mach-O universal (x86_64 arm64e)
+TeamIdentifier=not set

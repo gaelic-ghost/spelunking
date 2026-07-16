@@ -23,8 +23,14 @@ xcrun --sdk macosx --show-sdk-version
 find /System/Library/PrivateFrameworks /System/Library/Frameworks -maxdepth 1 \( -iname '*Message*' -o -iname '*IM*' -o -iname '*Telephony*' -o -iname '*Call*' -o -iname '*Phone*' \) -print | sort
 find /Applications /System/Applications -maxdepth 3 \( -iname '*Phone*.app' -o -iname '*Messages*.app' -o -iname '*FaceTime*.app' \) -print 2>/dev/null | sort
 sdef /System/Applications/Phone.app
+mkdir -p research/Phone/surfaces
 plutil -p /System/Applications/Phone.app/Contents/Info.plist
+plutil -p /System/Applications/Phone.app/Contents/PlugIns/FaceTimeMacHelper.bundle/Contents/Info.plist
+plutil -p /System/Applications/Phone.app/Contents/PlugIns/PhoneDockTile.docktileplugin/Contents/Info.plist
+plutil -p /System/Applications/Phone.app/Contents/PlugIns/RemotePeoplePicker.appex/Contents/Info.plist
+plutil -p /System/Library/PrivateFrameworks/TelephonyUtilities.framework/PlugIns/PhoneIntentHandler.appex/Contents/Info.plist
 codesign -d --entitlements :- /System/Applications/Phone.app
+codesign -dv /System/Applications/Phone.app
 otool -L /System/Applications/Phone.app/Contents/MacOS/Phone
 find /System/Library/PrivateFrameworks /System/iOSSupport/System/Library/PrivateFrameworks -maxdepth 3 \( -name '*.xpc' -o -name '*.appex' -o -name '*.app' -o -name 'LaunchServices' \) 2>/dev/null | rg 'IM|Message|MobileSMS|Phone|Call|Telephony|FaceTime' | sort
 find /System/Library/LaunchAgents /System/Library/LaunchDaemons /Library/LaunchAgents /Library/LaunchDaemons -maxdepth 1 -type f \( -iname '*im*' -o -iname '*message*' -o -iname '*call*' -o -iname '*phone*' -o -iname '*telephony*' -o -iname '*facetime*' \) -print 2>/dev/null | sort

@@ -3,6 +3,7 @@
 ## Read-Only Experiments
 
 - [x] Verify app path and bundle metadata.
+- [x] Capture app extension, plugin, URL, AppleScript, and intent surfaces.
 - [x] Confirm absence of an AppleScript dictionary.
 - [x] Capture app entitlements.
 - [x] Capture app binary linked libraries.

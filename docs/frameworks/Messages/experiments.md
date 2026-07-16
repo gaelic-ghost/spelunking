@@ -3,6 +3,7 @@
 ## Read-Only Experiments
 
 - [x] Verify app path and bundle metadata.
+- [x] Capture app extension, plugin, URL, AppleScript, and intent surfaces.
 - [x] Dump AppleScript dictionary.
 - [x] Inventory `chat.db` tables and columns without row data.
 - [x] Capture `chat.db` schema, indexes, and triggers without row data.

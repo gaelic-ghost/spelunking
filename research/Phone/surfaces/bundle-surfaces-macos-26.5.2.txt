@@ -1,0 +1,189 @@
+# Phone app and extension surface manifests
+# Captured on macOS 26.5.2 (25F84). Bundle metadata only.
+## /System/Applications/Phone.app/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "en"
+  "CFBundleDisplayName" => "Phone"
+  "CFBundleExecutable" => "Phone"
+  "CFBundleHelpBookFolder" => "phoneapp.help"
+  "CFBundleHelpBookName" => "com.apple.phoneapp.help"
+  "CFBundleIconFile" => "AppIcon"
+  "CFBundleIconName" => "AppIcon"
+  "CFBundleIdentifier" => "com.apple.mobilephone"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "Phone"
+  "CFBundlePackageType" => "APPL"
+  "CFBundleShortVersionString" => "1.0"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleURLTypes" => [
+    0 => {
+      "CFBundleTypeRole" => "Editor"
+      "CFBundleURLName" => "Telephony URL"
+      "CFBundleURLSchemes" => [
+        0 => "tel"
+        1 => "telephony"
+        2 => "facetime-audio"
+        3 => "tel-phoneapp"
+        4 => "phoneapp"
+        5 => "vmshow"
+      ]
+    }
+  ]
+  "CFBundleVersion" => "1"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => ""
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F63"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "HPDHelpProjectIdentifier" => "phoneapp"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSDockTilePlugIn" => "PhoneDockTile.docktileplugin"
+  "NSSupportsAutomaticTermination" => true
+  "NSSupportsSuddenTermination" => true
+  "NSUserActivityTypes" => [
+    0 => "com.apple.facetime.handoff"
+  ]
+  "UIApplicationSceneManifest" => {
+    "UIApplicationSupportsMultipleScenes" => true
+  }
+  "UIApplicationSupportsIndirectInputEvents" => true
+  "UIDeviceFamily" => [
+    0 => 6
+  ]
+}
+## /System/Applications/Phone.app/Contents/PlugIns/FaceTimeMacHelper.bundle/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "en"
+  "CFBundleExecutable" => "FaceTimeMacHelper"
+  "CFBundleIdentifier" => "com.apple.MacHelper"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "FaceTimeMacHelper"
+  "CFBundlePackageType" => "BNDL"
+  "CFBundleShortVersionString" => "1.0"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "1"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => ""
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F63"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSPrincipalClass" => "FaceTimeMacHelper.WrappedFaceTimeMacAppKitHelper"
+}
+## /System/Applications/Phone.app/Contents/PlugIns/PhoneDockTile.docktileplugin/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "English"
+  "CFBundleExecutable" => "PhoneDockTile"
+  "CFBundleIdentifier" => "com.apple.Phone-docktileplugin"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "PhoneDockTilePlugIn"
+  "CFBundlePackageType" => "BNDL"
+  "CFBundleShortVersionString" => "3.0"
+  "CFBundleSignature" => "face"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "3080"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => ""
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F63"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSPrincipalClass" => "PhoneDockTilePlugIn"
+}
+## /System/Applications/Phone.app/Contents/PlugIns/RemotePeoplePicker.appex/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "en"
+  "CFBundleDisplayName" => "RemotePeoplePicker"
+  "CFBundleExecutable" => "RemotePeoplePicker"
+  "CFBundleIconFile" => "icon"
+  "CFBundleIdentifier" => "com.apple.FaceTime.RemotePeoplePicker"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "RemotePeoplePicker"
+  "CFBundlePackageType" => "XPC!"
+  "CFBundleShortVersionString" => "1.0"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "1"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => ""
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F63"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "EXAppExtensionAttributes" => {
+    "EXExtensionPointIdentifier" => "com.apple.groupactivities"
+    "EXSceneManifest" => {
+      "EXDefaultScene" => {
+        "EXViewControllerClassName" => "RemotePeoplePicker.PeoplePickerShellViewController"
+      }
+    }
+  }
+  "LSMinimumSystemVersion" => "26.5"
+  "NSExtension" => {
+    "NSExtensionPointIdentifier" => "com.apple.groupactivities"
+  }
+}
+## /System/Library/PrivateFrameworks/TelephonyUtilities.framework/PlugIns/PhoneIntentHandler.appex/Contents/Info.plist
+{
+  "BuildMachineOSBuild" => "23A344017"
+  "CFBundleDevelopmentRegion" => "en"
+  "CFBundleDisplayName" => "IntentHandler"
+  "CFBundleExecutable" => "PhoneIntentHandler"
+  "CFBundleIdentifier" => "com.apple.TelephonyUtilities.PhoneIntentHandler"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "PhoneIntentHandler"
+  "CFBundlePackageType" => "XPC!"
+  "CFBundleShortVersionString" => "1.0"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "1"
+  "DTCompiler" => "com.apple.compilers.llvm.clang.1_0"
+  "DTPlatformBuild" => ""
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "26.5"
+  "DTSDKBuild" => "25F63"
+  "DTSDKName" => "macosx26.5.internal"
+  "DTXcode" => "2630"
+  "DTXcodeBuild" => "17E6107"
+  "LSMinimumSystemVersion" => "26.5"
+  "NSExtension" => {
+    "NSExtensionAttributes" => {
+      "IntentsRestrictedWhileLocked" => [
+      ]
+      "IntentsSupported" => [
+        0 => "INAddCallParticipantIntent"
+        1 => "INJoinCallIntent"
+        2 => "INStartCallIntent"
+        3 => "INSearchCallHistoryIntent"
+        4 => "INPlayVoicemailIntent"
+      ]
+    }
+    "NSExtensionPointIdentifier" => "com.apple.intents-service"
+    "NSExtensionPrincipalClass" => "IntentRouter"
+  }
+  "UIBackgroundModes" => [
+  ]
+}

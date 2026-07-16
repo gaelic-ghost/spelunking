@@ -24,6 +24,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 
 - [x] Active app path
 - [x] App bundle identifier, URL schemes, and scripting flags
+- [x] App extension, plugin, URL, AppleScript, and intent surface inventory
 - [x] App entitlement snapshot
 - [x] AppleScript scripting dictionary
 - [x] `chat.db` table and column inventory without row data
@@ -342,6 +343,7 @@ Inference: database access is brokered through a privileged XPC service with a t
 ## References
 
 - `research/Messages/README.md`
+- `docs/frameworks/Messages/surfaces.md`
 - `docs/frameworks/Messages/storage.md`
 - `docs/frameworks/Messages/symbols.md`
 - `docs/frameworks/Messages/notifications.md`
