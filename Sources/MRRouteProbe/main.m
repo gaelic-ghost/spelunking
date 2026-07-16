@@ -17,6 +17,7 @@ static BOOL shouldProbeEndpointLocalizedName = NO;
 static BOOL shouldProbeEndpointUniqueIdentifier = NO;
 static BOOL shouldProbeOutputContexts = NO;
 static BOOL shouldProbeOutputDevices = NO;
+static NSString *routingContextUID = nil;
 
 static void *requireSymbol(void *handle, const char *name) {
     void *symbol = dlsym(handle, name);
@@ -25,6 +26,21 @@ static void *requireSymbol(void *handle, const char *name) {
         exit(2);
     }
     return symbol;
+}
+
+static NSString *argumentValueAfter(NSArray<NSString *> *arguments, NSString *optionName) {
+    NSUInteger index = [arguments indexOfObject:optionName];
+    if (index == NSNotFound) {
+        return nil;
+    }
+
+    NSUInteger valueIndex = index + 1;
+    if (valueIndex >= arguments.count || [arguments[valueIndex] hasPrefix:@"--"]) {
+        fprintf(stderr, "mr-route-probe: missing value after %s\n", optionName.UTF8String);
+        exit(64);
+    }
+
+    return arguments[valueIndex];
 }
 
 static void printStringValue(NSString *label, CFStringRef value) {
@@ -192,6 +208,7 @@ int main(void) {
         shouldProbeEndpointUniqueIdentifier = [arguments containsObject:@"--uid"] || [arguments containsObject:@"--endpoint-details"];
         shouldProbeOutputContexts = [arguments containsObject:@"--contexts"];
         shouldProbeOutputDevices = [arguments containsObject:@"--output-devices"];
+        routingContextUID = argumentValueAfter(arguments, @"--routing-context");
 
         void *handle = dlopen("/System/Library/PrivateFrameworks/MediaRemote.framework/Versions/A/MediaRemote", RTLD_NOW);
         if (handle == NULL) {
@@ -202,7 +219,13 @@ int main(void) {
         printf("MediaRemote read-only route/output-device probe\n");
 
         MRObjectWithStringFunc getLocalEndpoint = (MRObjectWithStringFunc)requireSymbol(handle, "MRAVEndpointGetLocalEndpoint");
-        id localEndpoint = getLocalEndpoint(NULL);
+        if (routingContextUID == nil) {
+            printf("Routing context UID: <default NULL>\n");
+        } else {
+            printf("Routing context UID: %s\n", routingContextUID.UTF8String);
+        }
+
+        id localEndpoint = getLocalEndpoint((__bridge CFStringRef)routingContextUID);
         describeEndpoint(handle, localEndpoint, @"Local endpoint");
 
         if (shouldProbeOutputContexts) {

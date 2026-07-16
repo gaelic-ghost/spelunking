@@ -27,6 +27,7 @@ Output context probe: skipped; pass --contexts to query shared output contexts
 
 The helper deliberately keeps endpoint identity getters, output-device copying, and shared output-context lookups behind explicit flags:
 
+- `--routing-context <uid>`: passes a routing-context UID to `MRAVEndpointGetLocalEndpoint`; by default the helper passes `NULL`.
 - `--localized-name`: calls `MRAVEndpointGetLocalizedName`.
 - `--uid`: calls `MRAVEndpointGetUniqueIdentifier`.
 - `--endpoint-details`: calls both endpoint identity getters.
@@ -56,6 +57,26 @@ Getter isolation:
 | `20260716T092644Z` | `--contexts` | shared system audio and screen contexts returned nil | none beyond baseline |
 
 Interpretation: on this macOS 26.5.2 run, the first `MRAVEndpointGetLocalEndpoint(NULL)` call is enough to hydrate MediaRemote route/volume state. The endpoint localized-name, UID, output-device, and shared-context reads did not add distinct XPC message IDs in these captures.
+
+Routing-context isolation:
+
+| Capture | Flags | Probe Result | Added Message IDs |
+| --- | --- | --- | --- |
+| `20260716T093257Z` | none | endpoint class only with `NULL` routing context | baseline set above |
+| `20260716T093305Z` | `--routing-context LOCAL` | endpoint class only with explicit `LOCAL` routing context | none beyond baseline |
+| `20260716T093325Z` | `--routing-context SPK-SYNTHETIC-ROUTING-CONTEXT` | endpoint class only with synthetic routing context | none beyond baseline |
+
+Interpretation: the route/volume and `0x0200000000000018` now-playing side path is not specific to the `NULL` fallback or the `LOCAL` routing context. It appears during `MRAVLocalEndpoint` creation or cache hydration for any tested routing-context UID.
+
+Static setup path from disassembly:
+
+- `_MRAVEndpointGetLocalEndpoint` is a thin exported wrapper. It opens an autorelease pool and sends `+[MRAVLocalEndpoint sharedLocalEndpointForRoutingContextWithUID:]`.
+- `+[MRAVLocalEndpoint sharedLocalEndpointForRoutingContextWithUID:]` derives a default UID from `MRAVOutputContext.sharedAudioPresentationContext.uniqueIdentifier` when passed `NULL`, then synchronously consults or updates a context-UID-to-local-endpoint map.
+- The cache-miss block chooses an `MRAVConcreteOutputContext` for shared audio-presentation or shared system-audio contexts, otherwise calls `+[MRAVConcreteOutputContext createOutputContextWithUniqueIdentifier:]`.
+- The block allocates `MRAVLocalEndpoint`, calls `-[MRAVLocalEndpoint initWithOutputContext:]`, and may attach an `MROutputContextController` for shared audio-presentation/system-audio contexts.
+- `-[MRAVLocalEndpoint initWithOutputContext:]` calls the superclass initializer with the output context and `MRAVOutputDevice.localDeviceUID`, sets origin to `MROrigin.localOrigin`, then registers for `MRActiveGroupSessionInfoDidChangeNotification`.
+
+Inference: the repeated `ConcreteOutputContext` warnings and identical XPC message set across `NULL`, `LOCAL`, and synthetic routing-context runs point at shared output-context/local-endpoint creation rather than endpoint detail getters. The exact internal call that sends `0x0200000000000018` was not recovered from the endpoint disassembly path; the immediate constructors for that ID remain `MRMediaRemoteService` player-path resolution wrappers documented in `message-id-map.md`.
 
 ## Endpoint Surface
 

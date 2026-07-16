@@ -238,6 +238,8 @@ tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-ro
 tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe --uid
 tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe --output-devices
 tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe --contexts
+tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe --routing-context LOCAL
+tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe --routing-context SPK-SYNTHETIC-ROUTING-CONTEXT
 ```
 
 Observed behavior:
@@ -257,6 +259,13 @@ Getter isolation:
 - Capture `20260716T092620Z` with `--uid` returned UID `LOCAL` and added no message IDs beyond the default run.
 - Capture `20260716T092638Z` with `--output-devices` returned zero endpoint output devices and added no message IDs beyond the default run.
 - Capture `20260716T092644Z` with `--contexts` returned nil shared system audio/screen contexts and added no message IDs beyond the default run.
+- Capture `20260716T093305Z` with `--routing-context LOCAL` returned an endpoint class only and added no message IDs beyond the default run.
+- Capture `20260716T093325Z` with `--routing-context SPK-SYNTHETIC-ROUTING-CONTEXT` returned an endpoint class only and added no message IDs beyond the default run.
+
+Static disassembly evidence:
+
+- `_MRAVEndpointGetLocalEndpoint` forwards to `+[MRAVLocalEndpoint sharedLocalEndpointForRoutingContextWithUID:]`.
+- The local-endpoint cache-miss path creates or reuses an `MRAVConcreteOutputContext`, allocates `MRAVLocalEndpoint`, initializes it with the output context, sets local origin, and registers group-session notification observation.
 
 Daemon/log evidence:
 
@@ -268,7 +277,7 @@ This proves endpoint creation is read-only in intent but daemon-visible in behav
 
 Follow-up:
 
-Map why `MRAVEndpointGetLocalEndpoint(NULL)` takes the now-playing player-path side path (`0x0200000000000018`), then compare the same endpoint behavior against the macOS 27 beta SDK.
+Map which output-context/controller initializer sends the now-playing player-path side path (`0x0200000000000018`), then compare the same endpoint behavior against the macOS 27 beta SDK.
 
 ## Mutating Experiments
 

@@ -137,5 +137,7 @@ Follow-up captures:
 | `20260716T092620Z` | `--uid` | returned UID `LOCAL` and did not add message IDs beyond the default run |
 | `20260716T092638Z` | `--output-devices` | returned zero endpoint output devices and did not add message IDs beyond the default run |
 | `20260716T092644Z` | `--contexts` | returned nil shared system audio/screen contexts and did not add message IDs beyond the default run |
+| `20260716T093305Z` | `--routing-context LOCAL` | returned the same endpoint class and did not add message IDs beyond the default run |
+| `20260716T093325Z` | `--routing-context SPK-SYNTHETIC-ROUTING-CONTEXT` | returned the same endpoint class and did not add message IDs beyond the default run |
 
-Interpretation: local endpoint creation is a safe read-oriented probe, but not a zero-daemon-contact probe. MediaRemote lazily initializes route/volume state during `MRAVEndpointGetLocalEndpoint(NULL)` before the helper asks for localized name, UID, output devices, or shared contexts.
+Interpretation: local endpoint creation is a safe read-oriented probe, but not a zero-daemon-contact probe. MediaRemote lazily initializes route/volume state during `MRAVEndpointGetLocalEndpoint` before the helper asks for localized name, UID, output devices, or shared contexts. The repeated result for `NULL`, `LOCAL`, and synthetic routing-context UIDs points at `MRAVLocalEndpoint` or output-context hydration rather than a specific routing-context value.
