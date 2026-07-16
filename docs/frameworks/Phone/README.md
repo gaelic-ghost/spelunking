@@ -40,6 +40,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for call-history, TelephonyUtilities, and CallKit surfaces
 - [x] Read-only Objective-C runtime metadata capture for CallsXPC, CallsPersistence, and PhoneAppIntents surfaces
+- [x] Focused hook, XPC, host/vendor, call-history, and conversation runtime inventory
 - [x] Bounded app-open log observation
 - [x] First-pass notification delivery classification from launchd and SDK symbol evidence
 - [x] Bounded app-open notification observer baseline without payload values
@@ -226,6 +227,20 @@ Inference: Phone's local architecture splits persisted recents (`CH*` and `CallD
 
 See `runtime.md` for app-open log observations covering the FaceTime app controller, Calls recents controller, FaceTimeMac window, Spotlight indexing, and Continuity Capture touchpoints.
 
+## Hook And XPC Notes
+
+See `hooks.md` for the focused hook-surface inventory generated from Objective-C runtime metadata.
+
+High-signal private hook families include:
+
+- `TUCallCenterXPCServer`, with private selectors for dialing requests, current call updates, recording, translation, smart holding, call pulling, call screening, greetings, and receptionist replies
+- `TUConversationManagerXPCServer`, with conversation-link, SharePlay, activity-session, collaboration, Messages group, screen sharing, and participant-control selectors
+- `TUCallHistoryControllerXPCServer` and `TUCallHistoryManagerXPCServer`, with client registration, deleted-recents, recent-call reporting, and participant UUID update selectors
+- `CHManager`, `CHCallInteractionManager`, `CallDBManager`, `CallHistoryDBHandle`, and related store/handle classes for persisted call-history mediation
+- `CXProviderHostProtocol`, `CXCallControllerHostProtocol`, and `CXVoicemailControllerHostProtocol`, with private CallKit host/vendor selectors
+
+Inference: Phone's private hooks center on `callservicesd` XPC protocols, CallHistory manager layers, and CallKit host internals. They are better evidence for brokered Apple platform architecture than for direct local database mutation.
+
 ## SDK Symbol Notes
 
 Verified from macOS 27.0 SDK `.tbd` files.
@@ -350,6 +365,7 @@ Inference: Phone’s user-facing app sits above a broad `callservicesd` broker p
 - `docs/frameworks/Phone/symbols.md`
 - `docs/frameworks/Phone/notifications.md`
 - `docs/frameworks/Phone/types.md`
+- `docs/frameworks/Phone/hooks.md`
 - `docs/frameworks/Phone/runtime.md`
 - `docs/frameworks/Phone/experiments.md`
 - Apple Developer Documentation: [CallKit framework](https://developer.apple.com/documentation/callkit)

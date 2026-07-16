@@ -122,6 +122,8 @@ sdef: couldn't get sdef for /System/Applications/Phone.app (error -192)
 
 Privacy note: no call-history rows, phone numbers, contacts, voicemail metadata, or call content were intentionally captured. Continuity Capture device identifiers and names were redacted from the raw app-open and URL-scheme log streams.
 
+Generated artifact note: `research/Phone/runtime/hook-surface-inventory-macos-26.5.2.json` is a focused class/protocol subset generated from the Objective-C runtime captures above. The source capture list and filter description are stored inside the JSON artifact.
+
 ## Next Raw Captures
 
 - dyld shared cache extraction with a capable external/local extractor

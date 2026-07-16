@@ -40,6 +40,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for IM private frameworks
 - [x] Read-only Objective-C runtime metadata capture for IMD persistence, daemon, and MessagesKit surfaces
+- [x] Focused hook, XPC, automation, query, and listener runtime inventory
 - [x] Bounded app-open log observation
 - [x] First-pass notification delivery classification from launchd and SDK symbol evidence
 - [x] Bounded app-open notification observer baseline without payload values
@@ -266,6 +267,20 @@ Inference: Messages' local architecture has a visible split between user/app mod
 
 See `runtime.md` for app-open log observations covering `imagent`, `IMDPersistenceAgent`, mark-read database calls, App Intents focus filtering, Spotlight indexing, and the message-entry UI responder.
 
+## Hook And XPC Notes
+
+See `hooks.md` for the focused hook-surface inventory generated from Objective-C runtime metadata.
+
+High-signal private hook families include:
+
+- `IMDaemonChatSendMessageProtocol`, with private selectors for send, edit, scheduled-message, group-photo, attachment resend, junk-report, and translation operations
+- `IMDaemonChatModifyReadStateProtocol`, with mark-read, mark-saved, expressive-send, and notify-recipient selectors
+- `IMDaemonAutomationProtocol`, with explicit automation, simulation, replay, and test selectors
+- `IMDMessageQueries`, `IMDChatQueries`, and `IMDNotificationQueries`, with persistence/query selectors that line up with `chat.db`, unread counts, index state, and SharePlay notification state
+- listener and routing classes such as `IMDIncomingClientConnectionListener`, `IMDPersistenceServiceListener`, `IMDBackgroundMessagingAPIListener`, `IMDaemonCore.ClientConnection`, and `IMDaemonCore.XPCClientConnectionRouteProvider`
+
+Inference: Messages' private hooks are protocol and daemon oriented. They are better evidence for Apple-client-to-daemon architecture than for a supported local integration path.
+
 ## SDK Symbol Notes
 
 Verified from the macOS 27.0 SDK `IMCore.tbd`:
@@ -363,6 +378,7 @@ Inference: database access is brokered through a privileged XPC service with a t
 - `docs/frameworks/Messages/symbols.md`
 - `docs/frameworks/Messages/notifications.md`
 - `docs/frameworks/Messages/types.md`
+- `docs/frameworks/Messages/hooks.md`
 - `docs/frameworks/Messages/runtime.md`
 - `docs/frameworks/Messages/experiments.md`
 - Apple Developer Documentation: [Messages framework](https://developer.apple.com/documentation/messages)

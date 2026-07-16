@@ -20,6 +20,7 @@
 - [x] Capture read-only Objective-C runtime metadata for IM private frameworks with `spelunk objc-runtime`.
 - [x] First-pass classify notification delivery mechanisms from launchd and SDK symbol evidence.
 - [x] Generate first-pass class/protocol/selector inventory for `IMDPersistence`, `IMDaemonCore`, and `MessagesKit`.
+- [x] Generate focused hook, XPC, automation, query, and listener inventory from runtime metadata.
 - [x] Capture bounded default-level log stream while opening Messages.
 - [x] Probe root URL schemes without recipients or message payloads.
 - [x] Resolve first-pass runtime string values for selected IMCore and IMDPersistence notification constants.

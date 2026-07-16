@@ -119,6 +119,8 @@ find /System/Library/PrivateFrameworks -maxdepth 3 \( -name '*.swiftinterface' -
 
 Privacy note: the SQLite commands captured table and column names only. The app-open and URL-scheme log streams were bounded to root URLs and activation behavior. No row data, message text, handles, recipients, attachment names, or counts were intentionally captured.
 
+Generated artifact note: `research/Messages/runtime/hook-surface-inventory-macos-26.5.2.json` is a focused class/protocol subset generated from the Objective-C runtime captures above. The source capture list and filter description are stored inside the JSON artifact.
+
 ## Next Raw Captures
 
 - dyld shared cache extraction with a capable external/local extractor
