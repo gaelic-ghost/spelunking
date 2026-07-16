@@ -43,6 +43,7 @@ swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper
 swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper.debug.service
 swift run spelunk wallpaper-agent debug-xpc-probe
 swift run spelunk wallpaper-agent debug-xpc-probe --request download-state --asset-id <asset-id>
+swift run spelunk wallpaper-agent sip-validation-report
 swift run spelunk wallpaper-agent redraw-static-plan
 swift run spelunk wallpaper-agent signal-plan --signal TERM
 ```
@@ -66,6 +67,7 @@ Observed non-mutating results from this branch:
 | `debug-xpc-probe` with `accessAllAssets(downloaded)` | Succeeded on the current boot and decoded two downloaded Aerial assets. Current boot has SIP disabled, so this is not SIP-enabled proof yet. |
 | `debug-xpc-probe --extension com.apple.wallpaper.extension.not-real` | Succeeded on the current boot and decoded `WallpaperDebugResponse.error("No valid extension")`, confirming the receiver dispatch/error path. Current boot has SIP disabled. |
 | `debug-xpc-probe --request download-state` | Succeeded on the current boot and decoded `WallpaperAssetDownloadState` for a known asset id. Current boot has SIP disabled. |
+| `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, and signal plan; refused the SIP proof claim because SIP is disabled on this boot. |
 | `redraw-static-plan` | Found the current static desktop image URL without reapplying it. |
 | `signal-plan --signal TERM` | Found the current `WallpaperAgent` pid and planned `SIGTERM` without executing it. |
 
@@ -89,6 +91,8 @@ Observed non-mutating results from this branch:
       and same-user signal dry run
 - [x] SwiftPM local `WallpaperTypes` mirror and read-only debug XPC probe for
       `accessAllAssets` and `downloadAssetState`
+- [x] SwiftPM SIP validation report that gates proof claims on
+      `csrutil status`
 - [x] Headless Ghidra string/data-reference pass for debug and redraw anchors
 - [x] Adjacent userland surface inventory for export daemon, Settings helper,
       diagnostic extension, WallpaperAgent plug-ins, ExtensionKit wallpaper
@@ -852,7 +856,7 @@ invalidation path. It does not prove any external trigger.
 | Public desktop-image reapply | Use AppKit `NSWorkspace` desktop image APIs to set the same current image URL for each screen. | Public userland API. Should be SIP-compatible. | Mutates wallpaper settings or timestamps; may not affect dynamic/video wallpaper. | Best public redraw candidate for static desktop pictures |
 | Private `ensureViewModelIsUpToDate` | Send normal `AgentXPCMessage.ensureViewModelIsUpToDate([ContentType], ViewModelRefreshReason)` to `com.apple.wallpaper`. | Mach lookup is visible, but message envelope and authorization are not solved. | Private protocol, may be entitlement-gated. | Best private redraw candidate |
 | Private `snapshotAllSpaces` | Send normal diagnostic request to `com.apple.wallpaper`. | Same as above. | Could be diagnostic-only. | Useful probe, not a redraw primitive |
-| Private debug asset service | Send `WallpaperDebugRequestMessage` to `com.apple.wallpaper.debug.service`. | Mach lookup is visible, but envelope and handler access are unproven. | Asset mutations possible. No generic redraw vocabulary. | Not currently a redraw candidate |
+| Private debug asset service | Send `WallpaperDebugRequestMessage` to `com.apple.wallpaper.debug.service`. | Wire shape and read-only handler access are proven on this SIP-disabled boot. Needs identical proof on a SIP-enabled boot. | Asset mutations possible if using `downloadAsset` or `removeAsset`; current helper exposes only read/query requests. No generic redraw vocabulary. | Useful debug API surface, not a redraw candidate |
 | Wallpaper controls widget | Use `com.apple.wallpaper.agent.controls` / `com.apple.wallpaper.skip`. | WidgetKit/App Intents surface is discoverable. | Only advances shuffled content. | Narrow shuffle hook only |
 | Wallpaper App Intents | Use `SetWallpaperIntent` or `SetWallpaperPhotoIntent`. | App Intents extension is discoverable. Invocation path still needs a controlled Shortcuts/App Intents proof. | Changes wallpaper choices rather than refreshing the current runtime in place. | Automation surface, not reset |
 | Export daemon | Call `com.apple.wallpaper.export`. | Service is discoverable, but protocol uses `com.apple.private.wallpaper.export`. | Entitlement-gated and state-mutating export/preboot path. | Not a redraw candidate |
@@ -924,6 +928,9 @@ Accessible or likely accessible:
 - Same-user process signaling, pending SIP-enabled proof
 - Mach lookup attempts for `com.apple.wallpaper`
 - Mach lookup attempts for `com.apple.wallpaper.debug.service`
+- Read-only `WallpaperDebugRequestMessage` calls to
+  `com.apple.wallpaper.debug.service`, proven on this SIP-disabled boot and
+  pending SIP-enabled rerun
 - Read-only discovery of `com.apple.wallpaper.export`,
   `WallpaperHelper.xpc`, `WallpaperDiagnosticExtension.appex`, bundled
   WallpaperAgent plug-ins, and ExtensionKit wallpaper providers
@@ -942,22 +949,25 @@ Not accessible or not assumed accessible:
   `com.apple.private.wallpaper.export`
 - Receiver-side tracing that requires task port access
 - `launchctl kickstart -k` as a reset mechanism
-- Calling private messages without solving the Swift/XPC envelope and security
-  policy
+- Calling normal-agent private messages without solving the Swift/XPC envelope
+  and security policy
 
 ## Next Experiments
 
-1. Run a controlled public AppKit redraw probe that reapplies the same static
+1. Reboot or move to a SIP-enabled runtime, then run
+   `swift run spelunk wallpaper-agent sip-validation-report` and preserve the
+   complete output.
+2. Run a controlled public AppKit redraw probe that reapplies the same static
    desktop image on each screen.
-2. Run a controlled same-user `SIGTERM` respawn probe outside active desktop
+3. Run a controlled same-user `SIGTERM` respawn probe outside active desktop
    work, with pid before/after, launchd state, and log evidence.
-3. Deepen the remaining `WallpaperDebugServer` implementation trace:
+4. Deepen the remaining `WallpaperDebugServer` implementation trace:
    - identify any listener/session-level audit-token or code-signing checks
    - decompile the exact string composition for `No valid extension` and
      `Unable to handle request:`
-4. Recover `Wallpaper.ContentType` cases and any raw values.
-5. Recover `AssertionValue` cases and presentation-mode raw strings.
-6. Extend the Swift helper to encode private Swift/XPC messages only after the
+5. Recover `Wallpaper.ContentType` cases and any raw values.
+6. Recover `AssertionValue` cases and presentation-mode raw strings.
+7. Extend the Swift helper to encode private Swift/XPC messages only after the
    exact metadata identity is solved.
 
 ## References

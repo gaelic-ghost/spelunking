@@ -46,6 +46,8 @@ struct SPKMain {
         case "debug-xpc-probe":
             let request = try debugXPCProbeRequest(arguments: arguments)
             printDebugXPCProbe(inspector.probeDebugXPCMessage(request))
+        case "sip-validation-report":
+            try printSIPValidationReport(inspector: inspector)
         case "signal-plan":
             let signalName = optionValue("--signal", in: arguments) ?? "TERM"
             printSignalResult(try inspector.signalAgent(signalName: signalName, execute: false))
@@ -93,6 +95,7 @@ struct SPKMain {
               spelunk wallpaper-agent inventory
               spelunk wallpaper-agent xpc-ping-empty [mach-service]
               spelunk wallpaper-agent debug-xpc-probe [--extension identifier] [--request access-downloaded|access-all|download-state] [--asset-id id]
+              spelunk wallpaper-agent sip-validation-report
               spelunk wallpaper-agent signal-plan [--signal TERM]
               spelunk wallpaper-agent signal --execute [--signal TERM]
               spelunk wallpaper-agent redraw-static-plan
@@ -108,6 +111,7 @@ struct SPKMain {
               inventory
               xpc-ping-empty [mach-service]
               debug-xpc-probe [--extension identifier] [--request access-downloaded|access-all|download-state] [--asset-id id]
+              sip-validation-report
               signal-plan [--signal TERM]
               signal --execute [--signal TERM]
               redraw-static-plan
@@ -157,6 +161,48 @@ struct SPKMain {
             print("  imageURL: \(entry.imageURL ?? "<none>")")
             print("  optionKeys: \(entry.optionKeys.joined(separator: ", "))")
             print("  reapplied: \(entry.reapplied)")
+        }
+    }
+
+    @MainActor
+    private static func printSIPValidationReport(inspector: SPKWallpaperAgentInspector) throws {
+        let sipStatus = try inspector.sipStatus()
+        print("SIP validation report")
+        print("sipStatus: \(sipStatus.rawStatus)")
+        print("sipEnabled: \(sipStatus.isEnabled)")
+
+        print("")
+        print("inventory:")
+        printSnapshot(try inspector.snapshot())
+
+        print("")
+        print("debugXPCReadProbe:")
+        printDebugXPCProbe(
+            inspector.probeDebugXPCMessage(
+                SPKWallpaperDebugXPCProbeRequest(
+                    extensionIdentifier: "com.apple.wallpaper.extension.aerials",
+                    request: .accessDownloadedAssets
+                )
+            )
+        )
+
+        print("")
+        print("staticRedrawPlan:")
+        #if canImport(AppKit)
+        printRedrawResult(try SPKWallpaperStaticRedraw().reapplyCurrentDesktopImages(execute: false))
+        #else
+        print("error: Static desktop redraw planning requires AppKit.")
+        #endif
+
+        print("")
+        print("signalPlan:")
+        printSignalResult(try inspector.signalAgent(signalName: "TERM", execute: false))
+
+        print("")
+        if sipStatus.isEnabled {
+            print("sipProofClaim: eligible if the debug XPC probe succeeded and the non-mutating plans found the expected userland surfaces.")
+        } else {
+            print("sipProofClaim: not eligible because SIP is not enabled for this boot.")
         }
     }
 

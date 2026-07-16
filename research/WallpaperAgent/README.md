@@ -326,6 +326,43 @@ System Integrity Protection status: disabled.
 Therefore this proves the ordinary-user debug XPC wire shape and dispatch on
 the current boot, but it does not satisfy the SIP-enabled proof requirement.
 
+The SIP validation report command bundles the non-mutating proof set for a
+future SIP-enabled boot:
+
+```zsh
+.build/debug/spelunk wallpaper-agent sip-validation-report
+```
+
+Observed result on the current boot:
+
+```text
+SIP validation report
+sipStatus: System Integrity Protection status: disabled.
+sipEnabled: false
+...
+debugXPCReadProbe:
+succeeded: true
+decodedResponse: allAssets(count: 2)
+...
+staticRedrawPlan:
+execute: false
+screen: Built-in Retina Display
+  imageURL: file:///System/Library/CoreServices/DefaultDesktop.heic
+  reapplied: false
+...
+signalPlan:
+execute: false
+signal: 15
+targetedPIDs: 67606
+
+sipProofClaim: not eligible because SIP is not enabled for this boot.
+```
+
+On a SIP-enabled boot, this same command is the first validation gate. If it
+prints `sipEnabled: true` and the debug XPC read probe succeeds, it proves
+ordinary-user debug XPC reachability under SIP for the read/query surface. It
+still does not prove restart or redraw mutation.
+
 For focused receiver disassembly windows, use:
 
 ```zsh
@@ -481,6 +518,8 @@ Non-mutating commands:
 swift run spelunk wallpaper-agent inventory
 swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper
 swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper.debug.service
+swift run spelunk wallpaper-agent debug-xpc-probe
+swift run spelunk wallpaper-agent sip-validation-report
 swift run spelunk wallpaper-agent redraw-static-plan
 swift run spelunk wallpaper-agent signal-plan --signal TERM
 ```
@@ -499,6 +538,11 @@ Observed in this branch:
 - `xpc-ping-empty com.apple.wallpaper`: returned an empty dictionary reply.
 - `xpc-ping-empty com.apple.wallpaper.debug.service`: failed with
   `Underlying connection interrupted`.
+- `debug-xpc-probe`: decoded downloaded Aerial assets through
+  `WallpaperDebugRequestMessage` on this SIP-disabled boot.
+- `sip-validation-report`: collected SIP status, inventory, debug-XPC read
+  probe, static redraw plan, and signal plan; reported `sipProofClaim: not
+  eligible because SIP is not enabled for this boot.`
 - `redraw-static-plan`: reported the current desktop image URL without
   changing it.
 - `signal-plan --signal TERM`: reported the current target pid without sending
@@ -623,7 +667,7 @@ Do these only when visible desktop interruption is acceptable:
    - only after the private Swift/XPC envelope is solved
    - test safe refresh reasons before any mutating messages
 4. Debug XPC asset-list probe:
-   - only after `WallpaperDebugRequestMessage` can be encoded with the correct
-     metadata identity
+   - rerun `swift run spelunk wallpaper-agent sip-validation-report` on a
+     SIP-enabled boot
    - prefer `accessAllAssets(.downloaded)` before any download or removal
      request

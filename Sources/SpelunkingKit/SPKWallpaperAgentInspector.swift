@@ -36,6 +36,21 @@ public struct SPKWallpaperSignalResult: Equatable, Sendable {
     public var targetedPIDs: [Int32]
 }
 
+public struct SPKSIPStatus: Equatable, Sendable {
+    public enum State: Equatable, Sendable {
+        case enabled
+        case disabled
+        case unknown
+    }
+
+    public var state: State
+    public var rawStatus: String
+
+    public var isEnabled: Bool {
+        state == .enabled
+    }
+}
+
 public enum SPKWallpaperAgentError: Error, CustomStringConvertible {
     case commandFailed(String)
     case noWallpaperAgentProcess
@@ -131,6 +146,30 @@ public struct SPKWallpaperAgentInspector: Sendable {
         }
 
         return SPKWallpaperSignalResult(signal: signal, execute: execute, targetedPIDs: pids)
+    }
+
+    public func sipStatus() throws -> SPKSIPStatus {
+        let result = try runner.run("/usr/bin/csrutil", arguments: ["status"])
+        let combinedOutput = [result.standardOutput, result.standardError]
+            .filter { !$0.isEmpty }
+            .joined(separator: "\n")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard result.succeeded else {
+            throw SPKWallpaperAgentError.commandFailed("csrutil status returned \(result.exitCode): \(combinedOutput)")
+        }
+
+        let lowercased = combinedOutput.lowercased()
+        let state: SPKSIPStatus.State
+        if lowercased.contains("status: enabled") {
+            state = .enabled
+        } else if lowercased.contains("status: disabled") {
+            state = .disabled
+        } else {
+            state = .unknown
+        }
+
+        return SPKSIPStatus(state: state, rawStatus: combinedOutput)
     }
 
     private func currentUID() throws -> Int {
