@@ -43,10 +43,43 @@ typealias MRMediaRemoteGetNowPlayingInfoForObject = @convention(c) (
 
 typealias MRNowPlayingClientGetBundleIdentifier = @convention(c) (AnyObject) -> NSString?
 
+typealias MRMediaRemoteGetOrigin = @convention(c) (
+    DispatchQueue,
+    @escaping @convention(block) (Bool, AnyObject?) -> Void
+) -> Void
+
+typealias MRMediaRemoteGetOrigins = @convention(c) (
+    DispatchQueue,
+    @escaping @convention(block) (NSArray?) -> Void
+) -> Void
+
+typealias MRMediaRemoteGetObjectsForOrigin = @convention(c) (
+    AnyObject,
+    DispatchQueue,
+    @escaping @convention(block) (NSArray?) -> Void
+) -> Void
+
+typealias MRMediaRemoteGetObjectForOrigin = @convention(c) (
+    AnyObject,
+    DispatchQueue,
+    @escaping @convention(block) (AnyObject?) -> Void
+) -> Void
+
+typealias MROriginGetDisplayName = @convention(c) (AnyObject) -> CFString?
+typealias MROriginGetOriginType = @convention(c) (AnyObject) -> Int32
+typealias MROriginGetUniqueIdentifier = @convention(c) (AnyObject) -> Int32
+typealias MROriginIsLocalOrigin = @convention(c) (AnyObject) -> Bool
+typealias MRNowPlayingPlayerPathCopyStringRepresentation = @convention(c) (AnyObject) -> CFString?
+typealias MRNowPlayingPlayerPathGetObject = @convention(c) (AnyObject) -> AnyObject?
+typealias MRNowPlayingPlayerGetString = @convention(c) (AnyObject) -> CFString?
+typealias MRNowPlayingPlayerGetInt32 = @convention(c) (AnyObject) -> Int32
+typealias MRNowPlayingClientGetString = @convention(c) (AnyObject) -> CFString?
+typealias MRNowPlayingClientGetInt32 = @convention(c) (AnyObject) -> Int32
+
 enum SPKProbeError: Error, CustomStringConvertible {
     case frameworkLoadFailed([String])
     case missingSymbol(String)
-    case callbackTimedOut(seconds: Int)
+    case callbackTimedOut(operation: String, seconds: Int)
 
     var description: String {
         switch self {
@@ -54,8 +87,8 @@ enum SPKProbeError: Error, CustomStringConvertible {
             return "Could not load MediaRemote.framework from dyld cache or framework paths. Tried paths failed with: \(errors.joined(separator: " | "))"
         case let .missingSymbol(symbol):
             return "Could not find required MediaRemote symbol \(symbol). The active OS may have changed the private API surface."
-        case let .callbackTimedOut(seconds):
-            return "Timed out after \(seconds)s waiting for MRMediaRemoteGetNowPlayingInfo callback. mediaremoted may be unavailable or the private API signature may have changed."
+        case let .callbackTimedOut(operation, seconds):
+            return "Timed out after \(seconds)s waiting for \(operation). mediaremoted may be unavailable or the private API signature may have changed."
         }
     }
 }
@@ -78,6 +111,7 @@ struct SPKMRNowPlayingProbe {
         let shouldReadApplication = arguments.contains("--application") || arguments.contains("--all")
         let shouldReadClients = arguments.contains("--clients") || arguments.contains("--all")
         let shouldReadPlayer = arguments.contains("--player") || arguments.contains("--all")
+        let shouldReadOrigins = arguments.contains("--origins") || arguments.contains("--all")
         let observeSeconds = parseObserveSeconds(arguments: Array(CommandLine.arguments.dropFirst()))
 
         if shouldPrime {
@@ -98,6 +132,10 @@ struct SPKMRNowPlayingProbe {
 
         if shouldReadPlayer {
             try readNowPlayingPlayer(handle: handle)
+        }
+
+        if shouldReadOrigins {
+            try readOrigins(handle: handle)
         }
 
         try readNowPlayingInfo(handle: handle)
@@ -139,7 +177,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         guard semaphore.wait(timeout: .now() + .seconds(timeoutSeconds)) == .success else {
-            throw SPKProbeError.callbackTimedOut(seconds: timeoutSeconds)
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: timeoutSeconds)
         }
     }
 
@@ -223,7 +261,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
-            throw SPKProbeError.callbackTimedOut(seconds: 5)
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: 5)
         }
     }
 
@@ -260,7 +298,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
-            throw SPKProbeError.callbackTimedOut(seconds: 5)
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: 5)
         }
     }
 
@@ -284,7 +322,254 @@ struct SPKMRNowPlayingProbe {
         }
 
         guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
-            throw SPKProbeError.callbackTimedOut(seconds: 5)
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: 5)
+        }
+
+        return result
+    }
+
+    private static func readOrigins(handle: UnsafeMutableRawPointer) throws {
+        print("MediaRemote read-only origin probe")
+
+        readOriginIfAvailable(handle: handle, symbolName: "MRMediaRemoteGetLocalOrigin", label: "Local origin")
+        readOriginIfAvailable(handle: handle, symbolName: "MRMediaRemoteGetActiveOrigin", label: "Active origin")
+        readAvailableOriginsIfAvailable(handle: handle)
+    }
+
+    private static func readOriginIfAvailable(
+        handle: UnsafeMutableRawPointer,
+        symbolName: String,
+        label: String
+    ) {
+        do {
+            try readOrigin(handle: handle, symbolName: symbolName, label: label)
+        } catch {
+            print("\(label): \(error)")
+        }
+    }
+
+    private static func readAvailableOriginsIfAvailable(handle: UnsafeMutableRawPointer) {
+        do {
+            try readAvailableOrigins(handle: handle)
+        } catch {
+            print("Available origins: \(error)")
+        }
+    }
+
+    private static func readOrigin(
+        handle: UnsafeMutableRawPointer,
+        symbolName: String,
+        label: String
+    ) throws {
+        guard let symbol = dlsym(handle, symbolName) else {
+            throw SPKProbeError.missingSymbol(symbolName)
+        }
+
+        let function = unsafeBitCast(symbol, to: MRMediaRemoteGetOrigin.self)
+        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let semaphore = DispatchSemaphore(value: 0)
+
+        function(callbackQueue) { success, origin in
+            defer { semaphore.signal() }
+
+            guard let origin else {
+                print("\(label): <nil> success=\(success)")
+                return
+            }
+
+            print("\(label): success=\(success) \(summarizeOrigin(origin, handle: handle))")
+            readOriginDetails(handle: handle, origin: origin, label: label)
+        }
+
+        guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: 5)
+        }
+    }
+
+    private static func readAvailableOrigins(handle: UnsafeMutableRawPointer) throws {
+        let symbolName = "MRMediaRemoteGetAvailableOrigins"
+
+        guard let symbol = dlsym(handle, symbolName) else {
+            throw SPKProbeError.missingSymbol(symbolName)
+        }
+
+        let function = unsafeBitCast(symbol, to: MRMediaRemoteGetOrigins.self)
+        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let semaphore = DispatchSemaphore(value: 0)
+
+        function(callbackQueue) { origins in
+            defer { semaphore.signal() }
+
+            guard let origins else {
+                print("Available origins: <nil>")
+                return
+            }
+
+            print("Available origins: \(origins.count) item(s)")
+
+            for (index, item) in origins.enumerated() {
+                guard let origin = item as AnyObject? else {
+                    print("Origin[\(index)]: <nil>")
+                    continue
+                }
+
+                let label = "Origin[\(index)]"
+                print("\(label): \(summarizeOrigin(origin, handle: handle))")
+                readOriginDetails(handle: handle, origin: origin, label: label)
+            }
+        }
+
+        guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: 5)
+        }
+    }
+
+    private static func readOriginDetails(
+        handle: UnsafeMutableRawPointer,
+        origin: AnyObject,
+        label: String
+    ) {
+        if let info = try? readInfoForObject(
+            handle: handle,
+            symbolName: "MRMediaRemoteGetNowPlayingInfoForOrigin",
+            object: origin
+        ) {
+            printDictionary(info, prefix: "\(label) now-playing info")
+        }
+
+        do {
+            let client = try readObjectForOrigin(
+                handle: handle,
+                symbolName: "MRMediaRemoteGetNowPlayingClientForOrigin",
+                origin: origin
+            )
+            if let client {
+                print("\(label) now-playing client: \(summarizeObject(client, handle: handle))")
+            } else {
+                print("\(label) now-playing client: <nil>")
+            }
+        } catch {
+            print("\(label) now-playing client: \(error)")
+        }
+
+        do {
+            let clients = try readObjectsForOrigin(
+                handle: handle,
+                symbolName: "MRMediaRemoteGetNowPlayingClientsForOrigin",
+                origin: origin
+            )
+            print("\(label) now-playing clients: \(clients?.count ?? 0) item(s)")
+        } catch {
+            print("\(label) now-playing clients: \(error)")
+        }
+
+        do {
+            let playerPaths = try readObjectsForOrigin(
+                handle: handle,
+                symbolName: "MRMediaRemoteGetActivePlayerPathsForOrigin",
+                origin: origin
+            )
+            guard let playerPaths else {
+                print("\(label) active player paths: <nil>")
+                return
+            }
+
+            print("\(label) active player paths: \(playerPaths.count) item(s)")
+
+            for (index, item) in playerPaths.enumerated() {
+                guard let playerPath = item as AnyObject? else {
+                    print("\(label) playerPath[\(index)]: <nil>")
+                    continue
+                }
+
+                let playerPathLabel = "\(label) playerPath[\(index)]"
+                print("\(playerPathLabel): \(summarizePlayerPath(playerPath, handle: handle))")
+                readPlayerPathDetails(handle: handle, playerPath: playerPath, label: playerPathLabel)
+            }
+        } catch {
+            print("\(label) active player paths: \(error)")
+        }
+    }
+
+    private static func readPlayerPathDetails(
+        handle: UnsafeMutableRawPointer,
+        playerPath: AnyObject,
+        label: String
+    ) {
+        if let client = objectFromPlayerPath(handle: handle, playerPath: playerPath, symbolName: "MRNowPlayingPlayerPathGetClient") {
+            print("\(label) client: \(summarizeClient(client, handle: handle))")
+        }
+
+        if let player = objectFromPlayerPath(handle: handle, playerPath: playerPath, symbolName: "MRNowPlayingPlayerPathGetPlayer") {
+            print("\(label) player: \(summarizePlayer(player, handle: handle))")
+        }
+
+        if let origin = objectFromPlayerPath(handle: handle, playerPath: playerPath, symbolName: "MRNowPlayingPlayerPathGetOrigin") {
+            print("\(label) origin: \(summarizeOrigin(origin, handle: handle))")
+        }
+    }
+
+    private static func objectFromPlayerPath(
+        handle: UnsafeMutableRawPointer,
+        playerPath: AnyObject,
+        symbolName: String
+    ) -> AnyObject? {
+        guard let symbol = dlsym(handle, symbolName) else {
+            print("Player path detail: missing symbol \(symbolName)")
+            return nil
+        }
+
+        let function = unsafeBitCast(symbol, to: MRNowPlayingPlayerPathGetObject.self)
+        return function(playerPath)
+    }
+
+    private static func readObjectsForOrigin(
+        handle: UnsafeMutableRawPointer,
+        symbolName: String,
+        origin: AnyObject
+    ) throws -> NSArray? {
+        guard let symbol = dlsym(handle, symbolName) else {
+            throw SPKProbeError.missingSymbol(symbolName)
+        }
+
+        let function = unsafeBitCast(symbol, to: MRMediaRemoteGetObjectsForOrigin.self)
+        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let semaphore = DispatchSemaphore(value: 0)
+        var result: NSArray?
+
+        function(origin, callbackQueue) { objects in
+            result = objects
+            semaphore.signal()
+        }
+
+        guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: 5)
+        }
+
+        return result
+    }
+
+    private static func readObjectForOrigin(
+        handle: UnsafeMutableRawPointer,
+        symbolName: String,
+        origin: AnyObject
+    ) throws -> AnyObject? {
+        guard let symbol = dlsym(handle, symbolName) else {
+            throw SPKProbeError.missingSymbol(symbolName)
+        }
+
+        let function = unsafeBitCast(symbol, to: MRMediaRemoteGetObjectForOrigin.self)
+        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let semaphore = DispatchSemaphore(value: 0)
+        var result: AnyObject?
+
+        function(origin, callbackQueue) { object in
+            result = object
+            semaphore.signal()
+        }
+
+        guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: 5)
         }
 
         return result
@@ -347,7 +632,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
-            throw SPKProbeError.callbackTimedOut(seconds: 5)
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: 5)
         }
     }
 
@@ -370,7 +655,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
-            throw SPKProbeError.callbackTimedOut(seconds: 5)
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: 5)
         }
     }
 
@@ -396,7 +681,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         guard semaphore.wait(timeout: .now() + .seconds(5)) == .success else {
-            throw SPKProbeError.callbackTimedOut(seconds: 5)
+            throw SPKProbeError.callbackTimedOut(operation: symbolName, seconds: 5)
         }
     }
 
@@ -440,6 +725,102 @@ struct SPKMRNowPlayingProbe {
             if let bundleID = function(object) {
                 parts.append("bundleIdentifier=\(bundleID)")
             }
+        }
+
+        return parts.joined(separator: " ")
+    }
+
+    private static func summarizeOrigin(_ origin: AnyObject, handle: UnsafeMutableRawPointer) -> String {
+        var parts = ["\(type(of: origin))", "\(origin)"]
+
+        if let symbol = dlsym(handle, "MROriginGetDisplayName") {
+            let function = unsafeBitCast(symbol, to: MROriginGetDisplayName.self)
+            if let displayName = function(origin) {
+                parts.append("displayName=\(displayName)")
+            }
+        }
+
+        if let symbol = dlsym(handle, "MROriginGetUniqueIdentifier") {
+            let function = unsafeBitCast(symbol, to: MROriginGetUniqueIdentifier.self)
+            parts.append("uniqueIdentifier=\(function(origin))")
+        }
+
+        if let symbol = dlsym(handle, "MROriginGetOriginType") {
+            let function = unsafeBitCast(symbol, to: MROriginGetOriginType.self)
+            parts.append("originType=\(function(origin))")
+        }
+
+        if let symbol = dlsym(handle, "MROriginIsLocalOrigin") {
+            let function = unsafeBitCast(symbol, to: MROriginIsLocalOrigin.self)
+            parts.append("isLocal=\(function(origin))")
+        }
+
+        return parts.joined(separator: " ")
+    }
+
+    private static func summarizePlayerPath(_ playerPath: AnyObject, handle: UnsafeMutableRawPointer) -> String {
+        if let symbol = dlsym(handle, "MRNowPlayingPlayerPathCopyStringRepresentation") {
+            let function = unsafeBitCast(symbol, to: MRNowPlayingPlayerPathCopyStringRepresentation.self)
+            if let representation = function(playerPath) {
+                return "\(type(of: playerPath)) \(representation)"
+            }
+        }
+
+        return "\(type(of: playerPath)) \(playerPath)"
+    }
+
+    private static func summarizeClient(_ client: AnyObject, handle: UnsafeMutableRawPointer) -> String {
+        var parts = ["\(type(of: client))", "\(client)"]
+
+        if let symbol = dlsym(handle, "MRNowPlayingClientGetBundleIdentifier") {
+            let function = unsafeBitCast(symbol, to: MRNowPlayingClientGetString.self)
+            if let bundleIdentifier = function(client) {
+                parts.append("bundleIdentifier=\(bundleIdentifier)")
+            }
+        }
+
+        if let symbol = dlsym(handle, "MRNowPlayingClientGetDisplayName") {
+            let function = unsafeBitCast(symbol, to: MRNowPlayingClientGetString.self)
+            if let displayName = function(client) {
+                parts.append("displayName=\(displayName)")
+            }
+        }
+
+        if let symbol = dlsym(handle, "MRNowPlayingClientGetParentAppBundleIdentifier") {
+            let function = unsafeBitCast(symbol, to: MRNowPlayingClientGetString.self)
+            if let parentBundleIdentifier = function(client) {
+                parts.append("parentBundleIdentifier=\(parentBundleIdentifier)")
+            }
+        }
+
+        if let symbol = dlsym(handle, "MRNowPlayingClientGetProcessIdentifier") {
+            let function = unsafeBitCast(symbol, to: MRNowPlayingClientGetInt32.self)
+            parts.append("processIdentifier=\(function(client))")
+        }
+
+        return parts.joined(separator: " ")
+    }
+
+    private static func summarizePlayer(_ player: AnyObject, handle: UnsafeMutableRawPointer) -> String {
+        var parts = ["\(type(of: player))", "\(player)"]
+
+        if let symbol = dlsym(handle, "MRNowPlayingPlayerGetIdentifier") {
+            let function = unsafeBitCast(symbol, to: MRNowPlayingPlayerGetString.self)
+            if let identifier = function(player) {
+                parts.append("identifier=\(identifier)")
+            }
+        }
+
+        if let symbol = dlsym(handle, "MRNowPlayingPlayerGetDisplayName") {
+            let function = unsafeBitCast(symbol, to: MRNowPlayingPlayerGetString.self)
+            if let displayName = function(player) {
+                parts.append("displayName=\(displayName)")
+            }
+        }
+
+        if let symbol = dlsym(handle, "MRNowPlayingPlayerGetAudioSessionType") {
+            let function = unsafeBitCast(symbol, to: MRNowPlayingPlayerGetInt32.self)
+            parts.append("audioSessionType=\(function(player))")
         }
 
         return parts.joined(separator: " ")

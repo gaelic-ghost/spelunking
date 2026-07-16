@@ -20,6 +20,7 @@
 - [x] Build one small Swift helper that safely probes now-playing state without mutating playback.
 - [x] Test the read-only helper against active Spotify playback.
 - [x] Build a metadata-only now-playing fixture and test whether it appears through MediaRemote.
+- [x] Resolve active Spotify identity through origin and player-path APIs.
 - [ ] Confirm non-empty now-playing dictionary shape through origin/player-path APIs, daemon-facing inspection, or an app-bundle fixture.
 
 ## Phase 2: Media Control Experiments

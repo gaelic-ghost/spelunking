@@ -13,11 +13,18 @@ Locally evidenced safe signatures:
 - `MRMediaRemoteGetNowPlayingInfoForClient(id, dispatch_queue_t, block(CFDictionary?))`
 - `MRMediaRemoteGetNowPlayingInfoForPlayer(id, dispatch_queue_t, block(CFDictionary?))`
 - `MRMediaRemoteRegisterForNowPlayingNotifications(dispatch_queue_t)`
+- `MRMediaRemoteGetActiveOrigin(dispatch_queue_t, block(bool, id?))`
+- `MRMediaRemoteGetAvailableOrigins(dispatch_queue_t, block(NSArray?))`
+- `MRMediaRemoteGetActivePlayerPathsForOrigin(id, dispatch_queue_t, block(NSArray?))`
+- `MRNowPlayingPlayerPathGetClient(id) -> id?`
+- `MRNowPlayingPlayerPathGetPlayer(id) -> id?`
+- `MRNowPlayingPlayerPathGetOrigin(id) -> id?`
 
 Rejected until proven:
 
 - `MRMediaRemoteGetNowPlayingApplicationDisplayID`
 - `MRMediaRemoteGetNowPlayingApplicationDisplayName`
+- path-derived `MRClient` passed to `MRMediaRemoteGetNowPlayingInfoForClient`
 
 Those display-name/display-ID callbacks crashed when guessed as string callbacks.
 
@@ -32,6 +39,16 @@ Exported symbols show multiple ways to address now-playing state:
 - player-path concepts in logs and strings: `playerPath`, `MRPlayerPath`, active player path change notifications.
 
 Inference: the empty Spotify results from direct global APIs may mean the active state lives under an origin/player path that the simple global calls do not resolve for this process.
+
+Verified: Spotify was empty through the global now-playing calls but visible through `MRMediaRemoteGetActiveOrigin` plus `MRMediaRemoteGetActivePlayerPathsForOrigin`.
+
+Observed path:
+
+```text
+LOCL (Mac) -> com.spotify.client (Spotify, PID 37433) -> default player
+```
+
+The path-derived client exposes bundle identifier, display name, and process identifier through `MRNowPlayingClientGet*` helpers. The path-derived player exposes identifier `MediaRemote-DefaultPlayer`, display name `Default Player`, and audio session type `0`.
 
 ## Controller Generations
 
@@ -95,6 +112,16 @@ Static strings identify application, origin, and player variants:
 - `kMRMediaRemoteElectedPlayerDidChangeNotification`
 - `kMRMediaRemotePlaybackDidTimeoutNotification`
 - `kMRMediaRemoteLockScreenControlsPlayerPathDidChangeNotification`
+- `kMRMediaRemoteAvailableOriginsDidChangeNotification`
+- `kMRMediaRemoteActiveOriginDidChangeNotification`
+- `kMRMediaRemoteOriginDidRegisterNotification`
+- `kMRMediaRemoteOriginDidUnregisterNotification`
+- `kMRMediaRemoteOriginUserInfoKey`
+- `kMRMediaRemoteOriginDataUserInfoKey`
+- `kMRNowPlayingPlayerPathUserInfoKey`
+- `kMRNowPlayingPlayerPathDataUserInfoKey`
+- `kMROriginActiveNowPlayingPlayerPathUserInfoKey`
+- `kMROriginActiveNowPlayingPlayerPathDataUserInfoKey`
 
 User-info keys include:
 

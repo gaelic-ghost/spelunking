@@ -50,6 +50,7 @@ Useful current commands:
 
 ```sh
 swift run mr-now-playing-probe --all
+swift run mr-now-playing-probe --origins
 swift run mr-now-playing-probe --observe 10 --application
 tools/mediaremote-inventory.zsh
 ```
