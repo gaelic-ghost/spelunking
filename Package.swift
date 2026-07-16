@@ -15,6 +15,10 @@ let package = Package(
         .executable(
             name: "spelunk",
             targets: ["spelunk"]
+        ),
+        .executable(
+            name: "xpc-wire-format",
+            targets: ["xpc-wire-format"]
         )
     ],
     targets: [
@@ -24,6 +28,9 @@ let package = Package(
         .executableTarget(
             name: "spelunk",
             dependencies: ["SpelunkingKit"]
+        ),
+        .executableTarget(
+            name: "xpc-wire-format"
         ),
         .testTarget(
             name: "SpelunkingKitTests",

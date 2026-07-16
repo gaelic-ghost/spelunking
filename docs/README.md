@@ -16,3 +16,8 @@ Each target writeup should include:
 - experiments
 - open questions
 - references
+
+Current writeups:
+
+- [`MediaRemote`](frameworks/MediaRemote/README.md)
+- [`WallpaperAgent`](frameworks/WallpaperAgent/README.md)
