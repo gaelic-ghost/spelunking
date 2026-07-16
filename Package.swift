@@ -13,6 +13,10 @@ let package = Package(
             targets: ["SpelunkingKit"]
         ),
         .library(
+            name: "Wallpaper",
+            targets: ["Wallpaper"]
+        ),
+        .library(
             name: "WallpaperTypes",
             targets: ["WallpaperTypes"]
         ),
@@ -24,7 +28,10 @@ let package = Package(
     targets: [
         .target(
             name: "SpelunkingKit",
-            dependencies: ["WallpaperTypes"]
+            dependencies: ["Wallpaper", "WallpaperTypes"]
+        ),
+        .target(
+            name: "Wallpaper"
         ),
         .target(
             name: "WallpaperTypes"
@@ -35,7 +42,7 @@ let package = Package(
         ),
         .testTarget(
             name: "SpelunkingKitTests",
-            dependencies: ["SpelunkingKit", "WallpaperTypes"]
+            dependencies: ["SpelunkingKit", "Wallpaper", "WallpaperTypes"]
         )
     ],
     swiftLanguageModes: [.v6]

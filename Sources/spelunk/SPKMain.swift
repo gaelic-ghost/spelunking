@@ -47,6 +47,9 @@ struct SPKMain {
         case "xpc-ping-empty":
             let service = arguments.dropFirst().first ?? SPKWallpaperAgentInspector.normalMachService
             printXPCProbe(inspector.probeEmptyXPCMessage(machService: service))
+        case "normal-xpc-probe":
+            let request = try normalXPCProbeRequest(arguments: arguments)
+            printNormalXPCProbe(inspector.probeNormalXPCMessage(request))
         case "debug-xpc-probe":
             let request = try debugXPCProbeRequest(arguments: arguments)
             printDebugXPCProbe(inspector.probeDebugXPCMessage(request))
@@ -123,6 +126,7 @@ struct SPKMain {
               spelunk wallpaper-agent inventory
               spelunk wallpaper-agent log-snapshot [--last 10m] [--limit 80]
               spelunk wallpaper-agent xpc-ping-empty [mach-service]
+              spelunk wallpaper-agent normal-xpc-probe [--request diagnostic-state|snapshot-all-spaces|get-caches]
               spelunk wallpaper-agent debug-xpc-probe [--extension identifier] [--request access-downloaded|access-all|download-state] [--asset-id id]
               spelunk wallpaper-agent sip-validation-report
               spelunk wallpaper-agent signal-plan [--signal TERM]
@@ -144,6 +148,7 @@ struct SPKMain {
               inventory
               log-snapshot [--last 10m] [--limit 80]
               xpc-ping-empty [mach-service]
+              normal-xpc-probe [--request diagnostic-state|snapshot-all-spaces|get-caches]
               debug-xpc-probe [--extension identifier] [--request access-downloaded|access-all|download-state] [--asset-id id]
               sip-validation-report
               signal-plan [--signal TERM]
@@ -195,6 +200,21 @@ struct SPKMain {
         print("succeeded: \(result.succeeded)")
         if let replyDescription = result.replyDescription {
             print("reply: \(replyDescription)")
+        }
+        if let errorDescription = result.errorDescription {
+            print("error: \(errorDescription)")
+        }
+    }
+
+    private static func printNormalXPCProbe(_ result: SPKWallpaperNormalXPCProbeResult) {
+        print("machService: \(result.machService)")
+        print("request: \(result.requestDescription)")
+        print("succeeded: \(result.succeeded)")
+        if let decodedDataByteCount = result.decodedDataByteCount {
+            print("decodedDataByteCount: \(decodedDataByteCount)")
+        }
+        if let replyDescription = result.rawReplyDescription {
+            print("rawReply: \(replyDescription)")
         }
         if let errorDescription = result.errorDescription {
             print("error: \(errorDescription)")
@@ -352,6 +372,24 @@ struct SPKMain {
         }
 
         return SPKWallpaperDebugXPCProbeRequest(extensionIdentifier: extensionIdentifier, request: request)
+    }
+
+    private static func normalXPCProbeRequest(arguments: [String]) throws -> SPKWallpaperNormalXPCProbeRequest {
+        let requestName = optionValue("--request", in: arguments) ?? "diagnostic-state"
+
+        let request: SPKWallpaperNormalXPCProbeRequest.NormalRequest
+        switch requestName {
+        case "diagnostic-state":
+            request = .diagnosticState
+        case "snapshot-all-spaces":
+            request = .snapshotAllSpaces
+        case "get-caches":
+            request = .getCaches
+        default:
+            throw CLIError.invalidArgument("Unsupported normal-xpc-probe request '\(requestName)'. Use diagnostic-state, snapshot-all-spaces, or get-caches.")
+        }
+
+        return SPKWallpaperNormalXPCProbeRequest(request: request)
     }
 
     private static func optionValue(_ option: String, in arguments: [String]) -> String? {

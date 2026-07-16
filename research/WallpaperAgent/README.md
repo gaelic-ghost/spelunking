@@ -557,6 +557,46 @@ Prior ordinary-client probes reached the normal service and logged
 private envelope or metadata mismatch until receiver-side evidence proves a
 different cause.
 
+## Runtime Normal XPC Probe
+
+The branch now includes a minimal local SwiftPM target named `Wallpaper` with
+no-payload `AgentXPCMessage` cases for `diagnosticState`, `snapshotAllSpaces`,
+and `getCaches`.
+
+```zsh
+.build/debug/spelunk wallpaper-agent normal-xpc-probe --request diagnostic-state
+```
+
+Observed result:
+
+```text
+machService: com.apple.wallpaper
+request: diagnosticState
+succeeded: false
+rawReply: XPCReceivedMessage(dictionary: <dictionary: ...> { count = 0, transaction: 0, voucher = 0x0, contents =
+}, metadata: XPC.XPCReceivedMessage.XPCReceivedMessageMetadata)
+error: Normal XPC replied, but diagnosticState could not be decoded as Data: DecodingError.valueNotFound: Expected value of type Data but found null instead. Debug description: Received message from a process running old XPC coder
+```
+
+The other no-payload probes also returned empty replies:
+
+```zsh
+.build/debug/spelunk wallpaper-agent normal-xpc-probe --request snapshot-all-spaces
+.build/debug/spelunk wallpaper-agent normal-xpc-probe --request get-caches
+```
+
+Observed log evidence:
+
+```text
+Accepted XPC Connection
+Failed to Decode XPC Message: NSCocoaErrorDomain (4865) <private>
+```
+
+Interpretation: the normal Mach service is reachable, but local module/type
+identity alone is not enough for `Wallpaper.AgentXPCMessage`. The normal-agent
+Swift/XPC envelope remains unsolved, which keeps
+`ensureViewModelIsUpToDate` blocked as a private redraw probe.
+
 ## Repository Helper
 
 Non-mutating commands:
@@ -567,6 +607,7 @@ swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper
 swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper.debug.service
 swift run spelunk wallpaper-agent debug-xpc-probe
 swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80
+swift run spelunk wallpaper-agent normal-xpc-probe --request diagnostic-state
 swift run spelunk wallpaper-agent sip-validation-report
 swift run spelunk wallpaper-agent restart-probe-plan
 swift run spelunk wallpaper-agent redraw-static-plan
@@ -594,6 +635,10 @@ Observed in this branch:
   `WallpaperDebugRequestMessage` on this SIP-disabled boot.
 - `log-snapshot --last 10m --limit 12`: captured recent debug XPC peer
   connection activation and `handleDebugRequest` begin/end lines.
+- `normal-xpc-probe --request diagnostic-state`: reached
+  `com.apple.wallpaper` but received an empty old-coder reply; logs showed
+  `Accepted XPC Connection` followed by `Failed to Decode XPC Message:
+  NSCocoaErrorDomain (4865)`.
 - `sip-validation-report`: collected SIP status, inventory, debug-XPC read
   probe, static redraw plan, redraw probe plan, signal plan, restart probe
   plan, and bounded log snapshot; reported `sipProofClaim: not eligible

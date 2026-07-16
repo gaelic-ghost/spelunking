@@ -1,6 +1,7 @@
 import Foundation
 import SpelunkingKit
 import Testing
+import Wallpaper
 import WallpaperTypes
 
 @Suite("Research targets")
@@ -36,5 +37,16 @@ struct SPKResearchTargetTests {
         #expect(decoded == message)
         #expect(String(decoding: data, as: UTF8.self).contains("\"downloaded\""))
         #expect(!String(decoding: data, as: UTF8.self).contains("rawValue"))
+    }
+
+    @Test("Wallpaper normal mirror preserves no-payload enum coding")
+    func wallpaperNormalMirrorRoundTrips() throws {
+        let message = AgentXPCMessage.diagnosticState
+
+        let data = try JSONEncoder().encode(message)
+        let decoded = try JSONDecoder().decode(AgentXPCMessage.self, from: data)
+
+        #expect(decoded == message)
+        #expect(String(decoding: data, as: UTF8.self).contains("diagnosticState"))
     }
 }

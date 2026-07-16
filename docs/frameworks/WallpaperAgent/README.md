@@ -45,6 +45,7 @@ swift run spelunk wallpaper-agent debug-xpc-probe
 swift run spelunk wallpaper-agent debug-xpc-probe --request download-state --asset-id <asset-id>
 swift run spelunk wallpaper-agent log-snapshot --last 10m --limit 80
 swift run spelunk wallpaper-agent sip-validation-report
+swift run spelunk wallpaper-agent normal-xpc-probe --request diagnostic-state
 swift run spelunk wallpaper-agent restart-probe-plan
 swift run spelunk wallpaper-agent redraw-static-plan
 swift run spelunk wallpaper-agent redraw-probe-plan
@@ -74,6 +75,7 @@ Observed non-mutating results from this branch:
 | `debug-xpc-probe --request download-state` | Succeeded on the current boot and decoded `WallpaperAssetDownloadState` for a known asset id. Current boot has SIP disabled. |
 | `log-snapshot --last 10m --limit 12` | Captured recent `WallpaperAgent` unified log lines showing debug XPC peer connection activation and `handleDebugRequest` begin/end events. |
 | `sip-validation-report` | Collected SIP status, inventory, debug-XPC read probe, static redraw plan, redraw probe plan, signal plan, restart probe plan, and a bounded log snapshot; refused the SIP proof claim because SIP is disabled on this boot. |
+| `normal-xpc-probe --request diagnostic-state` | Reached `com.apple.wallpaper` but received an empty old-coder reply; logs showed `Accepted XPC Connection` followed by `Failed to Decode XPC Message: NSCocoaErrorDomain (4865)`. |
 | `restart-probe-plan` | Captured current target pid, planned `SIGTERM`, and left after/respawn evidence uncollected because it did not execute. |
 | `redraw-probe-plan` | Captured current desktop image URL and options, and left after/preserved-image evidence uncollected because it did not execute. |
 | `redraw-static-plan` | Found the current static desktop image URL without reapplying it. |
@@ -107,6 +109,8 @@ Observed non-mutating results from this branch:
       after `NSWorkspace` desktop image state
 - [x] SwiftPM unified-log snapshot command for bounded `WallpaperAgent`
       debug/reload/generation evidence
+- [x] SwiftPM local `Wallpaper` mirror and non-mutating normal XPC probe for
+      `diagnosticState`, `snapshotAllSpaces`, and `getCaches`
 - [x] Headless Ghidra string/data-reference pass for debug and redraw anchors
 - [x] Adjacent userland surface inventory for export daemon, Settings helper,
       diagnostic extension, WallpaperAgent plug-ins, ExtensionKit wallpaper
@@ -453,6 +457,39 @@ The closest normal-agent redraw candidates are:
 `ensureViewModelIsUpToDate` is the strongest private redraw candidate, but it
 still requires exact Swift/XPC envelope construction and may be blocked by
 `AgentXPCSecurityPolicy`.
+
+### Normal-Service Runtime Probe Results
+
+A local SwiftPM target named `Wallpaper` can encode no-payload
+`AgentXPCMessage` cases, but that mirror is not enough for the normal agent on
+this boot:
+
+```zsh
+swift run spelunk wallpaper-agent normal-xpc-probe --request diagnostic-state
+swift run spelunk wallpaper-agent normal-xpc-probe --request snapshot-all-spaces
+swift run spelunk wallpaper-agent normal-xpc-probe --request get-caches
+```
+
+Observed results:
+
+| Probe | Runtime result |
+| --- | --- |
+| `diagnosticState` | `com.apple.wallpaper` returned an empty XPC reply. Decoding as `Data` failed with `Received message from a process running old XPC coder`. |
+| `snapshotAllSpaces` | `com.apple.wallpaper` returned an empty XPC reply. No local mirror for `[AnnotatedSnapshot]` was attempted. |
+| `getCaches` | `com.apple.wallpaper` returned an empty XPC reply. No local mirror for `WallpaperCaches` was attempted. |
+
+The matching log evidence is stronger than the empty reply alone:
+
+```text
+Accepted XPC Connection
+Failed to Decode XPC Message: NSCocoaErrorDomain (4865) <private>
+```
+
+Interpretation: the normal Mach service is reachable, but a local module/type
+name mirror of `Wallpaper.AgentXPCMessage` does not satisfy the private
+Swift/XPC envelope expected by `AgentListener`. This keeps
+`ensureViewModelIsUpToDate` blocked on the exact normal-agent envelope and
+security policy; it does not disprove the redraw API itself.
 
 ### Supporting Enums
 
@@ -878,8 +915,8 @@ invalidation path. It does not prove any external trigger.
 | Same-user POSIX signal | Find `WallpaperAgent` owned by the active user and send `SIGTERM` or `SIGKILL` from a normal process. | Candidate. Same-UID signaling is ordinary userland and does not require task attach or code injection. Needs proof on SIP-enabled machine. | Visible desktop interruption; launchd respawn behavior must be measured. | Strong candidate for restart, unproven here |
 | `launchctl kill` | Ask launchd to signal `gui/<uid>/com.apple.wallpaper.agent`. | Candidate if allowed from the user bootstrap. It is not `kickstart`, but still uses launchd. Needs proof under SIP. | Visible interruption; may fail under policy. | Candidate only |
 | Public desktop-image reapply | Use AppKit `NSWorkspace` desktop image APIs to set the same current image URL for each screen. | Public userland API. Should be SIP-compatible. | Mutates wallpaper settings or timestamps; may not affect dynamic/video wallpaper. | Best public redraw candidate for static desktop pictures |
-| Private `ensureViewModelIsUpToDate` | Send normal `AgentXPCMessage.ensureViewModelIsUpToDate([ContentType], ViewModelRefreshReason)` to `com.apple.wallpaper`. | Mach lookup is visible, but message envelope and authorization are not solved. | Private protocol, may be entitlement-gated. | Best private redraw candidate |
-| Private `snapshotAllSpaces` | Send normal diagnostic request to `com.apple.wallpaper`. | Same as above. | Could be diagnostic-only. | Useful probe, not a redraw primitive |
+| Private `ensureViewModelIsUpToDate` | Send normal `AgentXPCMessage.ensureViewModelIsUpToDate([ContentType], ViewModelRefreshReason)` to `com.apple.wallpaper`. | Mach lookup is visible, but the local `Wallpaper.AgentXPCMessage` mirror fails decode with `NSCocoaErrorDomain (4865)`. | Private protocol, may be entitlement-gated. | Best private redraw candidate, envelope still blocked |
+| Private `snapshotAllSpaces` | Send normal diagnostic request to `com.apple.wallpaper`. | Local no-payload mirror reaches the service but fails decode and returns an empty reply. | Could be diagnostic-only. | Useful probe, not a redraw primitive |
 | Private debug asset service | Send `WallpaperDebugRequestMessage` to `com.apple.wallpaper.debug.service`. | Wire shape and read-only handler access are proven on this SIP-disabled boot. Needs identical proof on a SIP-enabled boot. | Asset mutations possible if using `downloadAsset` or `removeAsset`; current helper exposes only read/query requests. No generic redraw vocabulary. | Useful debug API surface, not a redraw candidate |
 | Wallpaper controls widget | Use `com.apple.wallpaper.agent.controls` / `com.apple.wallpaper.skip`. | WidgetKit/App Intents surface is discoverable. | Only advances shuffled content. | Narrow shuffle hook only |
 | Wallpaper App Intents | Use `SetWallpaperIntent` or `SetWallpaperPhotoIntent`. | App Intents extension is discoverable. Invocation path still needs a controlled Shortcuts/App Intents proof. | Changes wallpaper choices rather than refreshing the current runtime in place. | Automation surface, not reset |
@@ -980,7 +1017,9 @@ The most plausible redraw probes are:
 - desktop content type only, if the `ContentType` cases can be recovered
 
 The current blocker is not service visibility. It is exact private
-Swift/XPC encoding plus `AgentXPCSecurityPolicy`.
+Swift/XPC encoding plus `AgentXPCSecurityPolicy`. A local SwiftPM module named
+`Wallpaper` with mirrored no-payload `AgentXPCMessage` cases is not sufficient:
+the agent logs `Failed to Decode XPC Message: NSCocoaErrorDomain (4865)`.
 
 ## Accessibility From Userland With SIP Enabled
 
