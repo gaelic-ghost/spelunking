@@ -19,6 +19,7 @@
 - [x] First-pass classify notification delivery mechanisms from launchd and SDK symbol evidence.
 - [x] Generate first-pass class/protocol/selector inventory for `IMDPersistence`, `IMDaemonCore`, and `MessagesKit`.
 - [x] Capture bounded default-level log stream while opening Messages.
+- [x] Probe root URL schemes without recipients or message payloads.
 - [ ] Extract live dyld shared cache images for full IM private framework metadata.
 - [ ] Observe notification delivery with controlled read-only observers or log predicates.
 - [ ] Attach read-only logging predicates while manually using Messages.
@@ -29,7 +30,7 @@ Run only after read-only baselines are committed and a specific question needs m
 
 - [ ] Use AppleScript `send` to a controlled test recipient or local test chat.
 - [ ] Create a controlled test attachment send.
-- [ ] Exercise `sms:` and `imessage:` URL handling.
+- [ ] Exercise payload-bearing `sms:` and `imessage:` URL handling with controlled non-sensitive test recipients.
 - [ ] Trigger a scheduled message in a controlled test chat.
 
 ## Experiment Template

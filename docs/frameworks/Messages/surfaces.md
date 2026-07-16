@@ -14,6 +14,7 @@ Raw captures:
 - `research/Messages/surfaces/entitlements-macos-26.5.2.plist.txt`
 - `research/Messages/surfaces/messages-sdef-macos-26.5.2.xml`
 - `research/Messages/surfaces/signing-summary-macos-26.5.2.txt`
+- `research/Messages/surfaces/url-scheme-probes-macos-26.5.2.txt`
 
 ## App Entry Points
 
@@ -47,6 +48,27 @@ Verified URL schemes from the app manifest:
 | `im` | CPIM | Apple default for scheme. |
 
 Open question: which URL forms only open visible UI, which prefill compose state, and which require Apple-signed or private entitlement context.
+
+## URL Scheme Behavior Probe
+
+Verified with root URLs only:
+
+```sh
+/usr/bin/open -g -u '<scheme>:'
+```
+
+Privacy boundary: no recipients, handles, message bodies, attachment paths, or row data were used.
+
+| URL | `open` exit | Observed route | Notes |
+| --- | ---: | --- | --- |
+| `sms:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction` in the existing `com.apple.MobileSMS` scene | Triggered ChatKit `HistoryLoad`; no send occurred. |
+| `imessage:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction` | Triggered ChatKit `HistoryLoad`; no send occurred. |
+| `Messages:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction` | Triggered ChatKit `HistoryLoad`; no send occurred. |
+| `im:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction` | Triggered ChatKit `HistoryLoad`; no send occurred. |
+| `iChat:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction` | Did not show `HistoryLoad` in the short capture window. |
+| `sms-private:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction` | Triggered ChatKit `HistoryLoad`; root URL did not prove any special private behavior. |
+
+Inference: the root Messages URL schemes all enter the UIKit scene action path as open-URL actions. This proves app routing, not compose payload semantics. Payload-bearing forms still need controlled tests with non-sensitive test recipients.
 
 ## AppleScript Surface
 
@@ -138,7 +160,8 @@ Inference: the useful private surfaces are protected by Apple-only entitlements 
 
 ## Open Questions
 
-- Which `sms:`, `imessage:`, `Messages:`, and `im:` URL forms prefill visible compose state versus merely launch or route to existing UI?
+- Which payload-bearing `sms:`, `imessage:`, `Messages:`, and `im:` URL forms prefill visible compose state versus merely route to existing UI?
+- Does `sms-private:` differ from `sms:` only when Apple-private payload parameters or calling context are present?
 - What runtime class implements `MessagesActionExtension`, and what host invokes it?
 - Which Intents are user-invocable on macOS versus Siri/private/system-only?
 - What payload shape does `com.apple.messages.notification.customplugin.category` receive?

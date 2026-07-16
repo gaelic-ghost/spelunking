@@ -92,9 +92,12 @@ ls -la /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform
 mkdir -p research/Messages/runtime
 /usr/bin/log stream --style compact --level default --timeout 8 --predicate '(process == "Messages") OR (subsystem CONTAINS[c] "Messages") OR (subsystem CONTAINS[c] "MobileSMS") OR (subsystem CONTAINS[c] "IMDPersistence") OR (eventMessage CONTAINS[c] "Messages") OR (eventMessage CONTAINS[c] "MobileSMS")'
 open -a Messages
+mkdir -p research/Messages/surfaces
+/usr/bin/log stream --style compact --level default --timeout 4 --predicate '(process == "Messages") OR (subsystem CONTAINS[c] "Messages") OR (subsystem CONTAINS[c] "MobileSMS") OR (eventMessage CONTAINS[c] "MobileSMS") OR (eventMessage CONTAINS[c] "Messages") OR (eventMessage CONTAINS[c] "LaunchServices")'
+/usr/bin/open -g -u '<root Messages URL scheme>'
 ```
 
-Privacy note: the SQLite commands captured table and column names only. The log stream was bounded to app-open behavior. No row data, message text, handles, attachment names, or counts were intentionally captured.
+Privacy note: the SQLite commands captured table and column names only. The app-open and URL-scheme log streams were bounded to root URLs and activation behavior. No row data, message text, handles, recipients, attachment names, or counts were intentionally captured.
 
 ## Next Raw Captures
 

@@ -14,6 +14,7 @@ Raw captures:
 - `research/Phone/surfaces/entitlements-macos-26.5.2.plist.txt`
 - `research/Phone/surfaces/phone-sdef-error-macos-26.5.2.txt`
 - `research/Phone/surfaces/signing-summary-macos-26.5.2.txt`
+- `research/Phone/surfaces/url-scheme-probes-macos-26.5.2.txt`
 
 ## App Entry Points
 
@@ -44,6 +45,27 @@ Verified URL schemes from the app manifest:
 | `vmshow` | Telephony URL | Voicemail/show route; sensitive URL entitlement also appears on Phone. |
 
 Open question: which schemes open visible UI only, which can preselect Recents/Favorites/Voicemail, and which require Apple-signed or locked/background privileges.
+
+## URL Scheme Behavior Probe
+
+Verified with root URLs only:
+
+```sh
+/usr/bin/open -g -u '<scheme>:'
+```
+
+Privacy boundary: no phone numbers, contacts, voicemail identifiers, call rows, or call targets were used. Continuity Capture device identifiers and names were redacted from the raw transcript.
+
+| URL | `open` exit | Observed route | Notes |
+| --- | ---: | --- | --- |
+| `tel:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction`, then `com.apple.calls.facetime:AppController` | AppController attempted to treat the root URL as a dial request and failed safely because no target was present. |
+| `telephony:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction`, then `AppController` | Same root behavior as `tel:` in this capture. |
+| `facetime-audio:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction`, then `AppController` | Same root dial-request attempt and safe failure without target. |
+| `tel-phoneapp:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction`, then `AppController` | Same root dial-request attempt and safe failure without target. |
+| `phoneapp:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction`, then `AppController` | Same root dial-request attempt and safe failure without target. |
+| `vmshow:` | 0 | `GURL/GURL` AppleEvent to `UISOpenURLAction`, then `com.apple.calls.phone:SceneDelegate` | SceneDelegate reported no voicemail message UUID in the root URL. |
+
+Inference: root telephony-like schemes reach the visible Phone scene through UIKit open-URL action routing. The call-related schemes then enter FaceTime/AppController dial-request handling and fail without a call target; `vmshow:` enters a voicemail-specific scene-delegate path and needs a voicemail UUID payload to do more.
 
 ## AppleScript Surface
 
@@ -96,7 +118,8 @@ The signing summary records Apple system bundle identifiers and Mach-O formats. 
 
 ## Open Questions
 
-- What exact UI behavior do `tel:`, `tel-phoneapp:`, `phoneapp:`, and `vmshow:` produce on macOS 26.5.2?
+- What exact UI behavior do payload-bearing `tel:`, `tel-phoneapp:`, `phoneapp:`, and `vmshow:` URLs produce on macOS 26.5.2?
+- What parameter shape does `vmshow:` expect for a voicemail message UUID?
 - Which Phone intent handlers are Siri-user-invocable versus private/system-only?
 - What host invokes `RemotePeoplePicker.appex`, and which GroupActivities payloads does it expect?
 - Which FaceTimeMacHelper methods bridge AppKit behavior back into Phone or FaceTime UI?

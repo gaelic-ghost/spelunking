@@ -1,0 +1,356 @@
+Phone URL scheme probe
+Date: Thu Jul 16 04:38:05 EDT 2026
+Privacy: root schemes only; no phone numbers, contacts, voicemail metadata, call rows, or call targets.
+
+
+=== tel: ===
+Command: /usr/bin/open -g -u tel:
+Filtering the log data using "process == "Phone" OR subsystem CONTAINS[c] "Phone" OR subsystem CONTAINS[c] "mobilephone" OR subsystem CONTAINS[c] "CallHistory" OR subsystem CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "Phone" OR composedMessage CONTAINS[c] "CallHistory" OR composedMessage CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "LaunchServices""
+Timestamp               Ty Process[PID:TID]
+2026-07-16 04:38:05.638 A  open[12622:75b4f] (LaunchServices) LaunchServices.launchViaCSUA
+open exit status: 0
+2026-07-16 04:38:05.699 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get short BSD proc info for 12622: No such process
+2026-07-16 04:38:05.699 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get proc info for 12622: No such process
+2026-07-16 04:38:05.699 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to obtain a task name port right for pid 12622: (os/kern) failure (0x5)
+2026-07-16 04:38:05.699 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Checking AppleEvent for background launch data. (GURL/GURL)
+2026-07-16 04:38:05.700 Df Phone[6135:50e60] [com.apple.launchservices:default] LaunchServices: _LSOpenExtractBackgroundLaunchReasonFromAppleEvent() => false - <private>, err=Error Domain=NSOSStatusErrorDomain Code=-1701 UserInfo={_LSLine=1374, _LSFunction=<private>, _LSFile=<private>, _LSErrorMessage=<private>}
+2026-07-16 04:38:05.700 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] AppleEvent is NOT for background launch. (GURL/GURL)
+2026-07-16 04:38:05.700 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Enqueueing BSAction: <UISOpenURLAction> (for AppleEvent: GURL/GURL)
+2026-07-16 04:38:05.700 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] SendActions: Might use existing scene: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:05.700 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] UISceneActivationConditions told us to send action to scene: <UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:05.700 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Will send action to existing scene. (<UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB)
+2026-07-16 04:38:05.700 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Sending 1 action(s) to existing scene with sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:05.701 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:05.702 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ transitionNSAppToForegroundState (state: Running)
+2026-07-16 04:38:05.703 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:38:05.703 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:38:05.704 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:05.705 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Received action(s) in scene-update: UISOpenURLAction
+2026-07-16 04:38:05.705 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Scene received openURLContexts.
+2026-07-16 04:38:05.705 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Is launched to open url? <private>
+2026-07-16 04:38:05.705 Df Phone[6135:50e60] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements: failed to get cs_flags, error=3, pid=12622
+2026-07-16 04:38:05.705 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get entitlement com.apple.FaceTime.NoPrompt for security task. Error: Error Domain=NSPOSIXErrorDomain Code=3 "No such process"
+2026-07-16 04:38:05.705 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Has 'no prompt' entitlement? <private>
+2026-07-16 04:38:05.705 Df Phone[6135:50e60] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements: failed to get cs_flags, error=3, pid=12622
+2026-07-16 04:38:05.705 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get entitlement com.apple.FaceTime.NoPrompt for security task. Error: Error Domain=NSPOSIXErrorDomain Code=3 "No such process"
+2026-07-16 04:38:05.706 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB  persistentID: B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:05.707 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Open url: <private>
+2026-07-16 04:38:05.708 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Calling enableWakeScreenForInvitationIfNecessary
+2026-07-16 04:38:05.708 Df Phone[6135:50e60] [com.apple.login:SA_ScreenSaver] SACShieldWindowShowing:512: enter
+2026-07-16 04:38:05.709 Df Phone[6135:50e60] [com.apple.login:SA_ScreenSaver] SACShieldWindowShowing:521: exit: isShieldWindowShowing = 0
+2026-07-16 04:38:05.708 Df loginwindow[394:75874] [com.apple.loginwindow.logging:Standard] -[SessionAgentCom SACShieldWindowShowing:] | Enter,   sent by pid: 6135, name: Phone
+2026-07-16 04:38:05.711 Df Phone[6135:50e60] [com.apple.calls.facetime:FaceTimeMacHelper] Not enabling wake screen for invitation: isScreenShieldRaised: 0 Ringing calls: <private>
+2026-07-16 04:38:05.712 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Attempt to as a dial request url:<private>
+2026-07-16 04:38:05.713 Df Phone[6135:50e60] [com.apple.xpc:connection] [0xb01837a80] activating connection: mach=true listener=false peer=false name=com.apple.telephonyutilities.callservicesdaemon.callprovidermanager
+2026-07-16 04:38:05.716 Df callservicesd[642:7445b] [com.apple.calls.callservicesd:Default] machServiceName: com.apple.telephonyutilities.callservicesdaemon.callprovidermanager newConnection: <private>
+2026-07-16 04:38:05.720 Df callservicesd[642:7445b] [com.apple.calls.callservicesd:Default] Accepting XPC client for com.apple.telephonyutilities.callservicesdaemon.callprovidermanager: <private>
+2026-07-16 04:38:05.720 Df callservicesd[642:7445b] [com.apple.xpc:connection] [0x8a4ad9200] activating connection: mach=false listener=false peer=true name=com.apple.telephonyutilities.callservicesdaemon.callprovidermanager.peer[6135].0x8a4ad9200
+2026-07-16 04:38:05.723 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier providersByIdentifier,: <private>
+2026-07-16 04:38:05.723 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier localProvidersByIdentifier: <private>
+2026-07-16 04:38:05.723 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier pairedHostDeviceProvidersByIdentifier: <private>
+2026-07-16 04:38:05.723 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Uplevel to FTA is not needed.
+2026-07-16 04:38:05.724 A  Phone[6135:50e60] (libsystem_trace.dylib) Activity for state dumps
+2026-07-16 04:38:05.724 F  Phone[6135:50e60] [com.apple.calls.facetime:AppController] Failed to handle url <private>, error: <private>
+2026-07-16 04:38:05.724 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Updating presentation after handling URL: <private>
+2026-07-16 04:38:05.725 Df Phone[6135:62866] [com.apple.xpc:connection] [0xb01837a80] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-07-16 04:38:05.725 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Fetching current calls
+2026-07-16 04:38:05.725 Df Phone[6135:62866] [com.apple.calls.telephonyutilities:Default] XPC connection invalidated.
+2026-07-16 04:38:05.725 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Proxying fetch current calls
+2026-07-16 04:38:05.729 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Received current state with calls for synchronousServer: <private>
+2026-07-16 04:38:05.729 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _currentCalls: <private> currentCalls: <private>
+2026-07-16 04:38:05.729 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] MacPresentationManager: User is authenticated, computing presentation with calls <private>, wasExplicitlyLaunched <private>
+2026-07-16 04:38:05.730 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Requesting coordinator to transition to presentation: <private>
+2026-07-16 04:38:05.731 Df Phone[6135:50e60] [com.apple.calls.facetime:PresentationCoordinator] Transitioning from <private> to <private>.
+2026-07-16 04:38:05.731 Df Phone[6135:50e60] [com.apple.symptomdiagnosticreporter:framework] SDRDiagnosticReporter is disabled.
+2026-07-16 04:38:05.731 Df Phone[6135:50e60] [com.apple.calls.facetime:PresentationCoordinator] Updating window of type <private> with properties <private>
+2026-07-16 04:38:08.153 Df Phone[6135:50e60] [com.apple.calls.facetime:FaceTimeMacHelper] Delegate not handling clamshellOpened
+2026-07-16 04:38:08.153 Df Phone[6135:50e60] [com.apple.calls.facetime:VideoMenu] didSet isClamshellOpened to true
+2026-07-16 04:38:08.153 Df Phone[6135:50e60] [com.apple.calls.facetime:VideoMenu] Initial setup for audio input.
+2026-07-16 04:38:08.154 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Notifying AVAudioClient to follow system input setting: 1
+2026-07-16 04:38:08.154 UA Phone[6135:] (AVConference) @:@ AVAudioClient-setFollowSystemInputEnabled
+2026-07-16 04:38:08.155 Df Phone[6135:50e60] [com.apple.AVConference:ViceroyTrace] AVCAudioClient [NOTICE] +[AVAudioClient setFollowSystemInputEnabled:]:953 @:@ AVAudioClient-setFollowSystemInputEnabled (0xb04248180) enabled=1
+2026-07-16 04:38:08.155 Df Phone[6135:50e60] [com.apple.calls.facetime:VideoMenu] No audio device preference.
+2026-07-16 04:38:08.155 Df Phone[6135:50e60] [com.apple.calls.facetime:VideoMenu] Initial setup for audio output.
+2026-07-16 04:38:08.155 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Notifying AVAudioClient to follow system output setting: 1
+2026-07-16 04:38:08.155 UA Phone[6135:] (AVConference) @:@ AVAudioClient-setFollowSystemOutputEnabled
+2026-07-16 04:38:08.155 Df Phone[6135:50e60] [com.apple.AVConference:ViceroyTrace] AVCAudioClient [NOTICE] +[AVAudioClient setFollowSystemOutputEnabled:]:959 @:@ AVAudioClient-setFollowSystemOutputEnabled (0xb04248180) enabled=1
+2026-07-16 04:38:08.155 Df Phone[6135:50e60] [com.apple.calls.facetime:VideoMenu] No audio device preference.
+2026-07-16 04:38:08.505 Df corespeechd[733:5c038] [com.apple.corespeech:Framework] -[CSSyncKeywordAnalyzerQuasar _getAnalyzedResults:] 1, token = <_EARSpeechRecognitionToken> tokenName=JS1, start=0.000000, silenceStart=0.230000, end=0.230000, confidence=-21.829102, hasSpaceAfter=0, hasSpaceBefore=0, phoneSeq=, ipaPhoneSeq=, appendedAutoPunctuation=0, prependedAutoPunctuation=0, isModifiedByAutoPunctuation=0, graphCost=0.000000, acousticCost=0.000000, startSamples=(null), silenceStartSamples=(null), endSamples=(null)
+2026-07-16 04:38:08.505 Df corespeechd[733:5c038] [com.apple.corespeech:Framework] -[CSSyncKeywordAnalyzerQuasar _getAnalyzedResults:] 1, token = <_EARSpeechRecognitionToken> tokenName=JS2, start=0.000000, silenceStart=0.230000, end=0.230000, confidence=-21.985352, hasSpaceAfter=0, hasSpaceBefore=0, phoneSeq=, ipaPhoneSeq=, appendedAutoPunctuation=0, prependedAutoPunctuation=0, isModifiedByAutoPunctuation=0, graphCost=0.000000, acousticCost=0.000000, startSamples=(null), silenceStartSamples=(null), endSamples=(null)
+2026-07-16 04:38:08.505 Df corespeechd[733:5c038] [com.apple.corespeech:Framework] -[CSSyncKeywordAnalyzerQuasar _getAnalyzedResults:] 0, token = <_EARSpeechRecognitionToken> tokenName=HS2, start=0.000000, silenceStart=0.360000, end=0.360000, confidence=-27.236328, hasSpaceAfter=0, hasSpaceBefore=0, phoneSeq=, ipaPhoneSeq=, appendedAutoPunctuation=0, prependedAutoPunctuation=0, isModifiedByAutoPunctuation=0, graphCost=0.000000, acousticCost=0.000000, startSamples=(null), silenceStartSamples=(null), endSamples=(null)
+2026-07-16 04:38:08.505 Df corespeechd[733:5c038] [com.apple.corespeech:Framework] -[CSSyncKeywordAnalyzerQuasar _getAnalyzedResults:] 0, token = <_EARSpeechRecognitionToken> tokenName=HS1, start=0.000000, silenceStart=0.230000, end=0.230000, confidence=-27.353516, hasSpaceAfter=0, hasSpaceBefore=0, phoneSeq=, ipaPhoneSeq=, appendedAutoPunctuation=0, prependedAutoPunctuation=0, isModifiedByAutoPunctuation=0, graphCost=0.000000, acousticCost=0.000000, startSamples=(null), silenceStartSamples=(null), endSamples=(null)
+2026-07-16 04:38:08.508 Df Phone[6135:50e60] [com.apple.calls.facetime:FaceTimeMacHelper] Delegate not handling clamshellOpened
+2026-07-16 04:38:08.508 Df Phone[6135:50e60] [com.apple.calls.facetime:VideoMenu] didSet isClamshellOpened to true
+2026-07-16 04:38:08.508 Df Phone[6135:50e60] [com.apple.calls.facetime:VideoMenu] Initial setup for audio input.
+2026-07-16 04:38:08.509 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Notifying AVAudioClient to follow system input setting: 1
+2026-07-16 04:38:08.509 UA Phone[6135:] (AVConference) @:@ AVAudioClient-setFollowSystemInputEnabled
+2026-07-16 04:38:08.509 Df Phone[6135:50e60] [com.apple.AVConference:ViceroyTrace] AVCAudioClient [NOTICE] +[AVAudioClient setFollowSystemInputEnabled:]:953 @:@ AVAudioClient-setFollowSystemInputEnabled (0xb04248180) enabled=1
+2026-07-16 04:38:08.509 Df Phone[6135:50e60] [com.apple.calls.facetime:VideoMenu] No audio device preference.
+2026-07-16 04:38:08.509 Df Phone[6135:50e60] [com.apple.calls.facetime:VideoMenu] Initial setup for audio output.
+2026-07-16 04:38:08.509 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Notifying AVAudioClient to follow system output setting: 1
+2026-07-16 04:38:08.509 UA Phone[6135:] (AVConference) @:@ AVAudioClient-setFollowSystemOutputEnabled
+2026-07-16 04:38:08.509 Df Phone[6135:50e60] [com.apple.AVConference:ViceroyTrace] AVCAudioClient [NOTICE] +[AVAudioClient setFollowSystemOutputEnabled:]:959 @:@ AVAudioClient-setFollowSystemOutputEnabled (0xb04248180) enabled=1
+2026-07-16 04:38:08.509 Df Phone[6135:50e60] [com.apple.calls.facetime:VideoMenu] No audio device preference.
+log stream exit status: 0
+
+=== telephony: ===
+Command: /usr/bin/open -g -u telephony:
+Filtering the log data using "process == "Phone" OR subsystem CONTAINS[c] "Phone" OR subsystem CONTAINS[c] "mobilephone" OR subsystem CONTAINS[c] "CallHistory" OR subsystem CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "Phone" OR composedMessage CONTAINS[c] "CallHistory" OR composedMessage CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "LaunchServices""
+Timestamp               Ty Process[PID:TID]
+2026-07-16 04:38:10.373 A  open[13116:75ea7] (LaunchServices) LaunchServices.launchViaCSUA
+2026-07-16 04:38:10.426 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get short BSD proc info for 13116: No such process
+open exit status: 0
+2026-07-16 04:38:10.426 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to obtain a task name port right for pid 13116: (os/kern) failure (0x5)
+2026-07-16 04:38:10.427 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Checking AppleEvent for background launch data. (GURL/GURL)
+2026-07-16 04:38:10.427 Df Phone[6135:50e60] [com.apple.launchservices:default] LaunchServices: _LSOpenExtractBackgroundLaunchReasonFromAppleEvent() => false - <private>, err=Error Domain=NSOSStatusErrorDomain Code=-1701 UserInfo={_LSLine=1374, _LSFunction=<private>, _LSFile=<private>, _LSErrorMessage=<private>}
+2026-07-16 04:38:10.427 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] AppleEvent is NOT for background launch. (GURL/GURL)
+2026-07-16 04:38:10.427 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Enqueueing BSAction: <UISOpenURLAction> (for AppleEvent: GURL/GURL)
+2026-07-16 04:38:10.427 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] SendActions: Might use existing scene: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:10.427 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] UISceneActivationConditions told us to send action to scene: <UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:10.427 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Will send action to existing scene. (<UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB)
+2026-07-16 04:38:10.427 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Sending 1 action(s) to existing scene with sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:10.427 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:10.428 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ transitionNSAppToForegroundState (state: Running)
+2026-07-16 04:38:10.430 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:38:10.430 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:38:10.431 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:10.432 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Received action(s) in scene-update: UISOpenURLAction
+2026-07-16 04:38:10.432 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Scene received openURLContexts.
+2026-07-16 04:38:10.432 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Is launched to open url? <private>
+2026-07-16 04:38:10.432 Df Phone[6135:50e60] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements: failed to get cs_flags, error=3, pid=13116
+2026-07-16 04:38:10.432 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get entitlement com.apple.FaceTime.NoPrompt for security task. Error: Error Domain=NSPOSIXErrorDomain Code=3 "No such process"
+2026-07-16 04:38:10.432 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Has 'no prompt' entitlement? <private>
+2026-07-16 04:38:10.432 Df Phone[6135:50e60] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements: failed to get cs_flags, error=3, pid=13116
+2026-07-16 04:38:10.432 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get entitlement com.apple.FaceTime.NoPrompt for security task. Error: Error Domain=NSPOSIXErrorDomain Code=3 "No such process"
+2026-07-16 04:38:10.432 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB  persistentID: B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:10.433 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Open url: <private>
+2026-07-16 04:38:10.433 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Calling enableWakeScreenForInvitationIfNecessary
+2026-07-16 04:38:10.433 Df Phone[6135:50e60] [com.apple.calls.facetime:FaceTimeMacHelper] Not enabling wake screen for invitation: isScreenShieldRaised: 0 Ringing calls: <private>
+2026-07-16 04:38:10.433 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Attempt to as a dial request url:<private>
+2026-07-16 04:38:10.434 Df Phone[6135:50e60] [com.apple.xpc:connection] [0xb01836400] activating connection: mach=true listener=false peer=false name=com.apple.telephonyutilities.callservicesdaemon.callprovidermanager
+2026-07-16 04:38:10.435 Df callservicesd[642:75877] [com.apple.calls.callservicesd:Default] machServiceName: com.apple.telephonyutilities.callservicesdaemon.callprovidermanager newConnection: <private>
+2026-07-16 04:38:10.435 Df callservicesd[642:75877] [com.apple.calls.callservicesd:Default] Accepting XPC client for com.apple.telephonyutilities.callservicesdaemon.callprovidermanager: <private>
+2026-07-16 04:38:10.435 Df callservicesd[642:75877] [com.apple.xpc:connection] [0x8a4ad9200] activating connection: mach=false listener=false peer=true name=com.apple.telephonyutilities.callservicesdaemon.callprovidermanager.peer[6135].0x8a4ad9200
+2026-07-16 04:38:10.437 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier providersByIdentifier,: <private>
+2026-07-16 04:38:10.437 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier localProvidersByIdentifier: <private>
+2026-07-16 04:38:10.437 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier pairedHostDeviceProvidersByIdentifier: <private>
+2026-07-16 04:38:10.437 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Uplevel to FTA is not needed.
+2026-07-16 04:38:10.437 A  Phone[6135:50e60] (libsystem_trace.dylib) Activity for state dumps
+2026-07-16 04:38:10.437 F  Phone[6135:50e60] [com.apple.calls.facetime:AppController] Failed to handle url <private>, error: <private>
+2026-07-16 04:38:10.437 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Updating presentation after handling URL: <private>
+2026-07-16 04:38:10.438 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Fetching current calls
+2026-07-16 04:38:10.438 Df Phone[6135:6f512] [com.apple.xpc:connection] [0xb01836400] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-07-16 04:38:10.438 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Proxying fetch current calls
+2026-07-16 04:38:10.438 Df Phone[6135:62866] [com.apple.calls.telephonyutilities:Default] XPC connection invalidated.
+2026-07-16 04:38:10.438 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Received current state with calls for synchronousServer: <private>
+2026-07-16 04:38:10.439 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _currentCalls: <private> currentCalls: <private>
+2026-07-16 04:38:10.439 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] MacPresentationManager: User is authenticated, computing presentation with calls <private>, wasExplicitlyLaunched <private>
+2026-07-16 04:38:10.439 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Requesting coordinator to transition to presentation: <private>
+2026-07-16 04:38:10.440 Df Phone[6135:50e60] [com.apple.calls.facetime:PresentationCoordinator] Transitioning from <private> to <private>.
+2026-07-16 04:38:10.440 Df Phone[6135:50e60] [com.apple.symptomdiagnosticreporter:framework] SDRDiagnosticReporter is disabled.
+2026-07-16 04:38:12.774 Df ContinuityCaptureAgent[630:7567e] [com.apple.CMContinuityCapture:default] <private> Client Device Identifier:<redacted> Name:<redacted> Model:iPhone16,2 Wired:0 Wireless:1 Magic:0 Nearby:1 Capabilities:1 Version:26.5 devicePtr:0xa9f05fe40 status 8000880382
+2026-07-16 04:38:12.776 Df ContinuityCaptureAgent[630:7567e] [com.apple.CMContinuityCapture:default] <private> Client Device Identifier:<redacted> Name:<redacted> Model:iPhone16,2 Wired:0 Wireless:1 Magic:0 Nearby:1 Capabilities:1 Version:26.5 devicePtr:0xa9ec3d680 status:8000880382 isDedicated:0
+log stream exit status: 0
+
+=== facetime-audio: ===
+Command: /usr/bin/open -g -u facetime-audio:
+Filtering the log data using "process == "Phone" OR subsystem CONTAINS[c] "Phone" OR subsystem CONTAINS[c] "mobilephone" OR subsystem CONTAINS[c] "CallHistory" OR subsystem CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "Phone" OR composedMessage CONTAINS[c] "CallHistory" OR composedMessage CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "LaunchServices""
+Timestamp               Ty Process[PID:TID]
+2026-07-16 04:38:14.631 Df perl[13477:760a4] [com.apple.xpc:connection] [0xc75470140] activating connection: mach=true listener=false peer=false name=com.apple.coreservices.launchservicesd
+2026-07-16 04:38:14.631 Df launchservicesd[361:7586a] [com.apple.xpc:connection] [0x83333bc00] activating connection: mach=false listener=false peer=true name=com.apple.coreservices.launchservicesd.peer[13477].0x83333bc00
+2026-07-16 04:38:15.082 A  open[13511:760c4] (LaunchServices) LaunchServices.launchViaCSUA
+open exit status: 0
+2026-07-16 04:38:15.137 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Checking AppleEvent for background launch data. (GURL/GURL)
+2026-07-16 04:38:15.137 Df Phone[6135:50e60] [com.apple.launchservices:default] LaunchServices: _LSOpenExtractBackgroundLaunchReasonFromAppleEvent() => false - <private>, err=Error Domain=NSOSStatusErrorDomain Code=-1701 UserInfo={_LSLine=1374, _LSFunction=<private>, _LSFile=<private>, _LSErrorMessage=<private>}
+2026-07-16 04:38:15.137 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] AppleEvent is NOT for background launch. (GURL/GURL)
+2026-07-16 04:38:15.137 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Enqueueing BSAction: <UISOpenURLAction> (for AppleEvent: GURL/GURL)
+2026-07-16 04:38:15.140 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] SendActions: Might use existing scene: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:15.141 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] UISceneActivationConditions told us to send action to scene: <UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:15.141 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Will send action to existing scene. (<UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB)
+2026-07-16 04:38:15.141 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Sending 1 action(s) to existing scene with sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:15.141 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:15.141 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ transitionNSAppToForegroundState (state: Running)
+2026-07-16 04:38:15.141 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:38:15.141 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:38:15.142 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Received action(s) in scene-update: UISOpenURLAction
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Scene received openURLContexts.
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Is launched to open url? <private>
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements: failed to get cs_flags, error=3, pid=13511
+2026-07-16 04:38:15.143 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get entitlement com.apple.FaceTime.NoPrompt for security task. Error: Error Domain=NSPOSIXErrorDomain Code=3 "No such process"
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Has 'no prompt' entitlement? <private>
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements: failed to get cs_flags, error=3, pid=13511
+2026-07-16 04:38:15.143 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get entitlement com.apple.FaceTime.NoPrompt for security task. Error: Error Domain=NSPOSIXErrorDomain Code=3 "No such process"
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB  persistentID: B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Open url: <private>
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Calling enableWakeScreenForInvitationIfNecessary
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.calls.facetime:FaceTimeMacHelper] Not enabling wake screen for invitation: isScreenShieldRaised: 0 Ringing calls: <private>
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Attempt to as a dial request url:<private>
+2026-07-16 04:38:15.143 Df Phone[6135:50e60] [com.apple.xpc:connection] [0xb01836e80] activating connection: mach=true listener=false peer=false name=com.apple.telephonyutilities.callservicesdaemon.callprovidermanager
+2026-07-16 04:38:15.144 Df callservicesd[642:7445b] [com.apple.calls.callservicesd:Default] machServiceName: com.apple.telephonyutilities.callservicesdaemon.callprovidermanager newConnection: <private>
+2026-07-16 04:38:15.144 Df callservicesd[642:7445b] [com.apple.calls.callservicesd:Default] Accepting XPC client for com.apple.telephonyutilities.callservicesdaemon.callprovidermanager: <private>
+2026-07-16 04:38:15.144 Df callservicesd[642:7445b] [com.apple.xpc:connection] [0x8a4ad9200] activating connection: mach=false listener=false peer=true name=com.apple.telephonyutilities.callservicesdaemon.callprovidermanager.peer[6135].0x8a4ad9200
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier providersByIdentifier,: <private>
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier localProvidersByIdentifier: <private>
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier pairedHostDeviceProvidersByIdentifier: <private>
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Uplevel to FTA is not needed.
+2026-07-16 04:38:15.145 A  Phone[6135:50e60] (libsystem_trace.dylib) Activity for state dumps
+2026-07-16 04:38:15.145 F  Phone[6135:50e60] [com.apple.calls.facetime:AppController] Failed to handle url <private>, error: <private>
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Updating presentation after handling URL: <private>
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Fetching current calls
+2026-07-16 04:38:15.145 Df Phone[6135:62866] [com.apple.xpc:connection] [0xb01836e80] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Proxying fetch current calls
+2026-07-16 04:38:15.145 Df Phone[6135:6f512] [com.apple.calls.telephonyutilities:Default] XPC connection invalidated.
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Received current state with calls for synchronousServer: <private>
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _currentCalls: <private> currentCalls: <private>
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] MacPresentationManager: User is authenticated, computing presentation with calls <private>, wasExplicitlyLaunched <private>
+2026-07-16 04:38:15.145 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Requesting coordinator to transition to presentation: <private>
+2026-07-16 04:38:15.146 Df Phone[6135:50e60] [com.apple.calls.facetime:PresentationCoordinator] Transitioning from <private> to <private>.
+2026-07-16 04:38:15.146 Df Phone[6135:50e60] [com.apple.symptomdiagnosticreporter:framework] SDRDiagnosticReporter is disabled.
+2026-07-16 04:38:16.078 Df ContinuityCaptureAgent[630:7567e] [com.apple.CMContinuityCapture:default] <private> Client Device Identifier:<redacted> Name:<redacted> Model:iPhone16,2 Wired:0 Wireless:1 Magic:0 Nearby:1 Capabilities:1 Version:26.5 devicePtr:0xa9f05fe40 status 8000880382
+2026-07-16 04:38:16.080 Df ContinuityCaptureAgent[630:7567e] [com.apple.CMContinuityCapture:default] <private> Client Device Identifier:<redacted> Name:<redacted> Model:iPhone16,2 Wired:0 Wireless:1 Magic:0 Nearby:1 Capabilities:1 Version:26.5 devicePtr:0xa9ec3e080 status:8000880382 isDedicated:0
+log stream exit status: 0
+
+=== tel-phoneapp: ===
+Command: /usr/bin/open -g -u tel-phoneapp:
+Filtering the log data using "process == "Phone" OR subsystem CONTAINS[c] "Phone" OR subsystem CONTAINS[c] "mobilephone" OR subsystem CONTAINS[c] "CallHistory" OR subsystem CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "Phone" OR composedMessage CONTAINS[c] "CallHistory" OR composedMessage CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "LaunchServices""
+Timestamp               Ty Process[PID:TID]
+2026-07-16 04:38:19.637 Df perl[13945:76323] [com.apple.xpc:connection] [0x7cf488140] activating connection: mach=true listener=false peer=false name=com.apple.coreservices.launchservicesd
+2026-07-16 04:38:19.637 Df launchservicesd[361:72987] [com.apple.xpc:connection] [0x83333bc00] activating connection: mach=false listener=false peer=true name=com.apple.coreservices.launchservicesd.peer[13945].0x83333bc00
+2026-07-16 04:38:19.816 A  open[13947:7632e] (LaunchServices) LaunchServices.launchViaCSUA
+2026-07-16 04:38:19.870 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get short BSD proc info for 13947: No such process
+2026-07-16 04:38:19.871 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to obtain a task name port right for pid 13947: (os/kern) failure (0x5)
+2026-07-16 04:38:19.871 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Checking AppleEvent for background launch data. (GURL/GURL)
+open exit status: 0
+2026-07-16 04:38:19.871 Df Phone[6135:50e60] [com.apple.launchservices:default] LaunchServices: _LSOpenExtractBackgroundLaunchReasonFromAppleEvent() => false - <private>, err=Error Domain=NSOSStatusErrorDomain Code=-1701 UserInfo={_LSLine=1374, _LSFunction=<private>, _LSFile=<private>, _LSErrorMessage=<private>}
+2026-07-16 04:38:19.871 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] AppleEvent is NOT for background launch. (GURL/GURL)
+2026-07-16 04:38:19.871 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Enqueueing BSAction: <UISOpenURLAction> (for AppleEvent: GURL/GURL)
+2026-07-16 04:38:19.874 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] SendActions: Might use existing scene: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:19.875 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] UISceneActivationConditions told us to send action to scene: <UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:19.875 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Will send action to existing scene. (<UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB)
+2026-07-16 04:38:19.875 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Sending 1 action(s) to existing scene with sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:19.875 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:19.876 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ transitionNSAppToForegroundState (state: Running)
+2026-07-16 04:38:19.877 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:38:19.877 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:38:19.878 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:19.879 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Received action(s) in scene-update: UISOpenURLAction
+2026-07-16 04:38:19.879 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Scene received openURLContexts.
+2026-07-16 04:38:19.879 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Is launched to open url? <private>
+2026-07-16 04:38:19.879 Df Phone[6135:50e60] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements: failed to get cs_flags, error=3, pid=13947
+2026-07-16 04:38:19.879 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get entitlement com.apple.FaceTime.NoPrompt for security task. Error: Error Domain=NSPOSIXErrorDomain Code=3 "No such process"
+2026-07-16 04:38:19.879 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Has 'no prompt' entitlement? <private>
+2026-07-16 04:38:19.879 Df Phone[6135:50e60] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements: failed to get cs_flags, error=3, pid=13947
+2026-07-16 04:38:19.879 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get entitlement com.apple.FaceTime.NoPrompt for security task. Error: Error Domain=NSPOSIXErrorDomain Code=3 "No such process"
+2026-07-16 04:38:19.880 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB  persistentID: B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:19.880 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Open url: <private>
+2026-07-16 04:38:19.880 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Calling enableWakeScreenForInvitationIfNecessary
+2026-07-16 04:38:19.880 Df Phone[6135:50e60] [com.apple.calls.facetime:FaceTimeMacHelper] Not enabling wake screen for invitation: isScreenShieldRaised: 0 Ringing calls: <private>
+2026-07-16 04:38:19.880 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Attempt to as a dial request url:<private>
+2026-07-16 04:38:19.881 Df Phone[6135:50e60] [com.apple.xpc:connection] [0xb01834180] activating connection: mach=true listener=false peer=false name=com.apple.telephonyutilities.callservicesdaemon.callprovidermanager
+2026-07-16 04:38:19.881 Df callservicesd[642:75877] [com.apple.calls.callservicesd:Default] machServiceName: com.apple.telephonyutilities.callservicesdaemon.callprovidermanager newConnection: <private>
+2026-07-16 04:38:19.882 Df callservicesd[642:75877] [com.apple.calls.callservicesd:Default] Accepting XPC client for com.apple.telephonyutilities.callservicesdaemon.callprovidermanager: <private>
+2026-07-16 04:38:19.882 Df callservicesd[642:75877] [com.apple.xpc:connection] [0x8a4ad9200] activating connection: mach=false listener=false peer=true name=com.apple.telephonyutilities.callservicesdaemon.callprovidermanager.peer[6135].0x8a4ad9200
+2026-07-16 04:38:19.883 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier providersByIdentifier,: <private>
+2026-07-16 04:38:19.883 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier localProvidersByIdentifier: <private>
+2026-07-16 04:38:19.883 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _updateProvidersByIdentifier pairedHostDeviceProvidersByIdentifier: <private>
+2026-07-16 04:38:19.883 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Uplevel to FTA is not needed.
+2026-07-16 04:38:19.884 A  Phone[6135:50e60] (libsystem_trace.dylib) Activity for state dumps
+2026-07-16 04:38:19.884 F  Phone[6135:50e60] [com.apple.calls.facetime:AppController] Failed to handle url <private>, error: <private>
+2026-07-16 04:38:19.884 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Updating presentation after handling URL: <private>
+2026-07-16 04:38:19.885 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Fetching current calls
+2026-07-16 04:38:19.885 Df Phone[6135:6f512] [com.apple.xpc:connection] [0xb01834180] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-07-16 04:38:19.885 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Proxying fetch current calls
+2026-07-16 04:38:19.885 Df Phone[6135:6f512] [com.apple.calls.telephonyutilities:Default] XPC connection invalidated.
+2026-07-16 04:38:19.885 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Received current state with calls for synchronousServer: <private>
+2026-07-16 04:38:19.885 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _currentCalls: <private> currentCalls: <private>
+2026-07-16 04:38:19.885 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] MacPresentationManager: User is authenticated, computing presentation with calls <private>, wasExplicitlyLaunched <private>
+2026-07-16 04:38:19.886 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Requesting coordinator to transition to presentation: <private>
+2026-07-16 04:38:19.887 Df Phone[6135:50e60] [com.apple.calls.facetime:PresentationCoordinator] Transitioning from <private> to <private>.
+2026-07-16 04:38:19.887 Df Phone[6135:50e60] [com.apple.symptomdiagnosticreporter:framework] SDRDiagnosticReporter is disabled.
+log stream exit status: 0
+
+=== phoneapp: ===
+Command: /usr/bin/open -g -u phoneapp:
+Filtering the log data using "process == "Phone" OR subsystem CONTAINS[c] "Phone" OR subsystem CONTAINS[c] "mobilephone" OR subsystem CONTAINS[c] "CallHistory" OR subsystem CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "Phone" OR composedMessage CONTAINS[c] "CallHistory" OR composedMessage CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "LaunchServices""
+Timestamp               Ty Process[PID:TID]
+2026-07-16 04:38:24.539 A  open[14416:7657a] (LaunchServices) LaunchServices.launchViaCSUA
+2026-07-16 04:38:24.599 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get short BSD proc info for 14416: No such process
+2026-07-16 04:38:24.599 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to obtain a task name port right for pid 14416: (os/kern) failure (0x5)
+2026-07-16 04:38:24.599 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Checking AppleEvent for background launch data. (GURL/GURL)
+open exit status: 0
+2026-07-16 04:38:24.599 Df Phone[6135:50e60] [com.apple.launchservices:default] LaunchServices: _LSOpenExtractBackgroundLaunchReasonFromAppleEvent() => false - <private>, err=Error Domain=NSOSStatusErrorDomain Code=-1701 UserInfo={_LSLine=1374, _LSFunction=<private>, _LSFile=<private>, _LSErrorMessage=<private>}
+2026-07-16 04:38:24.599 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] AppleEvent is NOT for background launch. (GURL/GURL)
+2026-07-16 04:38:24.599 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Enqueueing BSAction: <UISOpenURLAction> (for AppleEvent: GURL/GURL)
+2026-07-16 04:38:24.600 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] SendActions: Might use existing scene: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:24.600 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] UISceneActivationConditions told us to send action to scene: <UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:24.600 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Will send action to existing scene. (<UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB)
+2026-07-16 04:38:24.600 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Sending 1 action(s) to existing scene with sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:24.600 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:24.601 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ transitionNSAppToForegroundState (state: Running)
+2026-07-16 04:38:24.602 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:38:24.602 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:38:24.602 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:24.603 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Received action(s) in scene-update: UISOpenURLAction
+2026-07-16 04:38:24.603 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Scene received openURLContexts.
+2026-07-16 04:38:24.603 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Is launched to open url? <private>
+2026-07-16 04:38:24.603 Df Phone[6135:50e60] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements: failed to get cs_flags, error=3, pid=14416
+2026-07-16 04:38:24.603 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get entitlement com.apple.FaceTime.NoPrompt for security task. Error: Error Domain=NSPOSIXErrorDomain Code=3 "No such process"
+2026-07-16 04:38:24.603 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Has 'no prompt' entitlement? <private>
+2026-07-16 04:38:24.603 Df Phone[6135:50e60] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements: failed to get cs_flags, error=3, pid=14416
+2026-07-16 04:38:24.603 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get entitlement com.apple.FaceTime.NoPrompt for security task. Error: Error Domain=NSPOSIXErrorDomain Code=3 "No such process"
+2026-07-16 04:38:24.603 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB  persistentID: B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:24.604 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Open url: <private>
+2026-07-16 04:38:24.604 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Calling enableWakeScreenForInvitationIfNecessary
+2026-07-16 04:38:24.604 Df Phone[6135:50e60] [com.apple.calls.facetime:FaceTimeMacHelper] Not enabling wake screen for invitation: isScreenShieldRaised: 0 Ringing calls: <private>
+2026-07-16 04:38:24.604 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Attempt to as a dial request url:<private>
+2026-07-16 04:38:24.604 E  Phone[6135:50e60] [com.apple.calls.facetime:AppController] Unable to create dial request from url.
+2026-07-16 04:38:24.604 A  Phone[6135:50e60] (libsystem_trace.dylib) Activity for state dumps
+2026-07-16 04:38:24.604 F  Phone[6135:50e60] [com.apple.calls.facetime:AppController] Failed to handle url <private>, error: <private>
+2026-07-16 04:38:24.604 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Updating presentation after handling URL: <private>
+2026-07-16 04:38:24.605 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Fetching current calls
+2026-07-16 04:38:24.605 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Proxying fetch current calls
+2026-07-16 04:38:24.605 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] Received current state with calls for synchronousServer: <private>
+2026-07-16 04:38:24.605 Df Phone[6135:50e60] [com.apple.calls.telephonyutilities:Default] _currentCalls: <private> currentCalls: <private>
+2026-07-16 04:38:24.605 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] MacPresentationManager: User is authenticated, computing presentation with calls <private>, wasExplicitlyLaunched <private>
+2026-07-16 04:38:24.606 Df Phone[6135:50e60] [com.apple.calls.facetime:AppController] Requesting coordinator to transition to presentation: <private>
+2026-07-16 04:38:24.606 Df Phone[6135:50e60] [com.apple.calls.facetime:PresentationCoordinator] Transitioning from <private> to <private>.
+2026-07-16 04:38:24.606 Df Phone[6135:50e60] [com.apple.symptomdiagnosticreporter:framework] SDRDiagnosticReporter is disabled.
+2026-07-16 04:38:24.630 Df perl[14417:76581] [com.apple.xpc:connection] [0xb3146c140] activating connection: mach=true listener=false peer=false name=com.apple.coreservices.launchservicesd
+2026-07-16 04:38:24.630 Df launchservicesd[361:72987] [com.apple.xpc:connection] [0x83333bc00] activating connection: mach=false listener=false peer=true name=com.apple.coreservices.launchservicesd.peer[14417].0x83333bc00
+2026-07-16 04:38:25.688 Df ContinuityCaptureAgent[630:7567e] [com.apple.CMContinuityCapture:default] <private> Client Device Identifier:<redacted> Name:<redacted> Model:iPhone16,2 Wired:0 Wireless:1 Magic:0 Nearby:1 Capabilities:1 Version:26.5 devicePtr:0xa9f05fe40 status 8000880382
+2026-07-16 04:38:25.690 Df ContinuityCaptureAgent[630:7567e] [com.apple.CMContinuityCapture:default] <private> Client Device Identifier:<redacted> Name:<redacted> Model:iPhone16,2 Wired:0 Wireless:1 Magic:0 Nearby:1 Capabilities:1 Version:26.5 devicePtr:0xa9ec3e1c0 status:8000880382 isDedicated:0
+log stream exit status: 0
+
+=== vmshow: ===
+Command: /usr/bin/open -g -u vmshow:
+Filtering the log data using "process == "Phone" OR subsystem CONTAINS[c] "Phone" OR subsystem CONTAINS[c] "mobilephone" OR subsystem CONTAINS[c] "CallHistory" OR subsystem CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "Phone" OR composedMessage CONTAINS[c] "CallHistory" OR composedMessage CONTAINS[c] "TelephonyUtilities" OR composedMessage CONTAINS[c] "LaunchServices""
+Timestamp               Ty Process[PID:TID]
+2026-07-16 04:38:29.259 A  open[14896:76851] (LaunchServices) LaunchServices.launchViaCSUA
+2026-07-16 04:38:29.315 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to get short BSD proc info for 14896: No such process
+2026-07-16 04:38:29.315 E  Phone[6135:50e60] [com.apple.BaseBoard:Common] Unable to obtain a task name port right for pid 14896: (os/kern) failure (0x5)
+open exit status: 0
+2026-07-16 04:38:29.315 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Checking AppleEvent for background launch data. (GURL/GURL)
+2026-07-16 04:38:29.315 Df Phone[6135:50e60] [com.apple.launchservices:default] LaunchServices: _LSOpenExtractBackgroundLaunchReasonFromAppleEvent() => false - <private>, err=Error Domain=NSOSStatusErrorDomain Code=-1701 UserInfo={_LSLine=1374, _LSFunction=<private>, _LSFile=<private>, _LSErrorMessage=<private>}
+2026-07-16 04:38:29.315 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] AppleEvent is NOT for background launch. (GURL/GURL)
+2026-07-16 04:38:29.315 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Enqueueing BSAction: <UISOpenURLAction> (for AppleEvent: GURL/GURL)
+2026-07-16 04:38:29.316 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] SendActions: Might use existing scene: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:29.316 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] UISceneActivationConditions told us to send action to scene: <UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:29.316 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Will send action to existing scene. (<UISOpenURLAction> -> FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB)
+2026-07-16 04:38:29.316 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] Sending 1 action(s) to existing scene with sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:29.316 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:29.317 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] @ transitionNSAppToForegroundState (state: Running)
+2026-07-16 04:38:29.318 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 4 from 1 - dropping
+2026-07-16 04:38:29.318 E  Phone[6135:50e60] [com.apple.coreanimation:API] cannot add handler to 3 from 1 - dropping
+2026-07-16 04:38:29.319 Df UIKitSystem[712:1aea] [com.apple.FrontBoard:Scene] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Sending action(s) in update: UISOpenURLAction
+2026-07-16 04:38:29.320 Df Phone[6135:50e60] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB] Received action(s) in scene-update: UISOpenURLAction
+2026-07-16 04:38:29.321 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Scene received openURLContexts.
+2026-07-16 04:38:29.321 Df Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] Is launched to open url? <private>
+2026-07-16 04:38:29.321 A  Phone[6135:50e60] (libsystem_trace.dylib) Activity for state dumps
+2026-07-16 04:38:29.321 F  Phone[6135:50e60] [com.apple.calls.phone:SceneDelegate] No VoiceMail message uuid in the url.
+2026-07-16 04:38:29.321 Df Phone[6135:50e60] [com.apple.UIKit.MacHelper:Lifecycle] sceneOfRecord: sceneID: FUScene|com.apple.mobilephone(6135)|B69E9873-363A-4421-AAA1-9AE4C3CD5FCB  persistentID: B69E9873-363A-4421-AAA1-9AE4C3CD5FCB
+2026-07-16 04:38:29.641 Df perl[14897:7685b] [com.apple.xpc:connection] [0x94d490500] activating connection: mach=true listener=false peer=false name=com.apple.coreservices.launchservicesd
+2026-07-16 04:38:29.642 Df launchservicesd[361:7586a] [com.apple.xpc:connection] [0x83333bc00] activating connection: mach=false listener=false peer=true name=com.apple.coreservices.launchservicesd.peer[14897].0x83333bc00
+2026-07-16 04:38:30.656 Df ContinuityCaptureAgent[630:7567e] [com.apple.CMContinuityCapture:default] <private> Client Device Identifier:<redacted> Name:<redacted> Model:iPhone16,2 Wired:0 Wireless:1 Magic:0 Nearby:1 Capabilities:1 Version:26.5 devicePtr:0xa9f05fe40 status 8000880382
+2026-07-16 04:38:30.659 Df ContinuityCaptureAgent[630:7567e] [com.apple.CMContinuityCapture:default] <private> Client Device Identifier:<redacted> Name:<redacted> Model:iPhone16,2 Wired:0 Wireless:1 Magic:0 Nearby:1 Capabilities:1 Version:26.5 devicePtr:0xa9ec3df40 status:8000880382 isDedicated:0
+log stream exit status: 0

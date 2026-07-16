@@ -19,6 +19,7 @@
 - [x] First-pass classify notification delivery mechanisms from launchd and SDK symbol evidence.
 - [x] Generate first-pass class/protocol/selector inventory for `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`.
 - [x] Capture bounded default-level log stream while opening Phone.
+- [x] Probe root URL schemes without phone numbers, voicemail IDs, or call targets.
 - [ ] Extract live dyld shared cache images for full call private framework metadata.
 - [ ] Observe notification delivery with controlled read-only observers or log predicates.
 - [ ] Attach read-only logging predicates while manually opening Phone.
@@ -27,8 +28,8 @@
 
 Run only after read-only baselines are committed and a specific question needs mutation.
 
-- [ ] Exercise `tel:` URL handling with a non-dialing or canceled flow.
-- [ ] Exercise `phoneapp:` or `vmshow:` URL handling in a controlled visible session.
+- [ ] Exercise payload-bearing `tel:` URL handling with a non-dialing or canceled flow.
+- [ ] Exercise payload-bearing `phoneapp:` or `vmshow:` URL handling in a controlled visible session.
 - [ ] Place a controlled test call only with explicit approval.
 - [ ] Trigger voicemail or call-record UI paths only with explicit approval.
 
