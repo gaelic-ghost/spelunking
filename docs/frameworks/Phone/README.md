@@ -32,6 +32,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Filtered dyld shared cache export probe
 - [x] LaunchAgent and XPC service inventory
 - [x] Call-history storage schema inventory without row data
+- [x] Call-history schema/index capture without row data
 - [x] Public iPhoneOS 27.0 SDK header/interface inventory for CallKit and LiveCommunicationKit
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for call-history, TelephonyUtilities, and CallKit surfaces
@@ -329,6 +330,7 @@ Inference: Phone’s user-facing app sits above a broad `callservicesd` broker p
 ## References
 
 - `research/Phone/README.md`
+- `docs/frameworks/Phone/storage.md`
 - `docs/frameworks/Phone/symbols.md`
 - `docs/frameworks/Phone/notifications.md`
 - `docs/frameworks/Phone/experiments.md`

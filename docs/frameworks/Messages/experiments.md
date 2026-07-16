@@ -5,6 +5,7 @@
 - [x] Verify app path and bundle metadata.
 - [x] Dump AppleScript dictionary.
 - [x] Inventory `chat.db` tables and columns without row data.
+- [x] Capture `chat.db` schema, indexes, and triggers without row data.
 - [x] Capture app entitlements.
 - [x] Capture app binary linked libraries.
 - [x] Skim SDK `.tbd` metadata for `IMCore`.

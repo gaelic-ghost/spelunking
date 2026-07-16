@@ -25,6 +25,10 @@ find /Applications /System/Applications -maxdepth 3 \( -iname '*Phone*.app' -o -
 find "$HOME/Library/Messages" -maxdepth 1 \( -name 'chat.db*' -o -name 'Attachments' \) -print 2>/dev/null
 sqlite3 "$HOME/Library/Messages/chat.db" ".tables"
 sqlite3 "$HOME/Library/Messages/chat.db" "SELECT m.name || ':' || group_concat(p.name || ' ' || p.type, ', ') FROM sqlite_schema AS m JOIN pragma_table_info(m.name) AS p WHERE m.type='table' GROUP BY m.name ORDER BY m.name;"
+mkdir -p research/Messages/storage
+sqlite3 "$HOME/Library/Messages/chat.db" "SELECT m.name || '|' || p.cid || '|' || p.name || '|' || p.type || '|' || p.\"notnull\" || '|' || COALESCE(p.dflt_value, '') || '|' || p.pk FROM sqlite_schema AS m JOIN pragma_table_info(m.name) AS p WHERE m.type='table' ORDER BY m.name, p.cid;"
+sqlite3 "$HOME/Library/Messages/chat.db" "SELECT type || '|' || name || '|' || tbl_name || '|' || COALESCE(sql, '') FROM sqlite_schema WHERE type IN ('index','trigger','view') ORDER BY type, tbl_name, name;"
+sqlite3 "$HOME/Library/Messages/chat.db" "SELECT type || '|' || name || '|' || tbl_name || '|' || COALESCE(sql, '') FROM sqlite_schema WHERE type='table' ORDER BY name;"
 sdef /System/Applications/Messages.app
 plutil -p /System/Applications/Messages.app/Contents/Info.plist
 codesign -d --entitlements :- /System/Applications/Messages.app

@@ -42,6 +42,10 @@ find "$HOME/Library/Containers" "$HOME/Library/Group Containers" -maxdepth 4 \( 
 sqlite3 "$HOME/Library/Application Support/CallHistoryDB/CallHistory.storedata" ".tables"
 sqlite3 "$HOME/Library/Application Support/CallHistoryDB/CallHistory.storedata" "SELECT m.name || ':' || group_concat(p.name || ' ' || p.type, ', ') FROM sqlite_schema AS m JOIN pragma_table_info(m.name) AS p WHERE m.type='table' GROUP BY m.name ORDER BY m.name;"
 plutil -p "$HOME/Library/Application Support/CallHistoryDB/com.apple.callhistory.databaseInfo.plist"
+mkdir -p research/Phone/storage
+sqlite3 "$HOME/Library/Application Support/CallHistoryDB/CallHistory.storedata" "SELECT m.name || '|' || p.cid || '|' || p.name || '|' || p.type || '|' || p.\"notnull\" || '|' || COALESCE(p.dflt_value, '') || '|' || p.pk FROM sqlite_schema AS m JOIN pragma_table_info(m.name) AS p WHERE m.type='table' ORDER BY m.name, p.cid;"
+sqlite3 "$HOME/Library/Application Support/CallHistoryDB/CallHistory.storedata" "SELECT type || '|' || name || '|' || tbl_name || '|' || COALESCE(sql, '') FROM sqlite_schema WHERE type IN ('index','trigger','view') ORDER BY type, tbl_name, name;"
+sqlite3 "$HOME/Library/Application Support/CallHistoryDB/CallHistory.storedata" "SELECT type || '|' || name || '|' || tbl_name || '|' || COALESCE(sql, '') FROM sqlite_schema WHERE type='table' ORDER BY name;"
 find /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/CallKit.framework -maxdepth 5 -type f
 sed -n '1,260p' /Applications/Xcode-beta.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS27.0.sdk/System/Library/Frameworks/LiveCommunicationKit.framework/Modules/LiveCommunicationKit.swiftmodule/arm64e-apple-ios.swiftinterface
 rg -o '_\$s[^,[:space:]]+' /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/PhoneAppIntents.framework/Versions/A/PhoneAppIntents.tbd | tr -d "'" | swift-demangle

@@ -27,6 +27,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] App entitlement snapshot
 - [x] AppleScript scripting dictionary
 - [x] `chat.db` table and column inventory without row data
+- [x] `chat.db` schema/index/trigger capture without row data
 - [x] Active and SDK framework constellation inventory
 - [x] App binary linked-library inventory
 - [x] SDK `.tbd` symbol skim for `IMCore`
@@ -341,6 +342,7 @@ Inference: database access is brokered through a privileged XPC service with a t
 ## References
 
 - `research/Messages/README.md`
+- `docs/frameworks/Messages/storage.md`
 - `docs/frameworks/Messages/symbols.md`
 - `docs/frameworks/Messages/notifications.md`
 - `docs/frameworks/Messages/experiments.md`
