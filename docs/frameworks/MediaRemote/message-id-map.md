@@ -149,7 +149,7 @@ Runtime correlation from `tools/mediaremote-xpc-trace-observe.zsh`:
 | `0x0200000000000031` | `handleSupportedCommandsRequestWithCompletion:` | completion result `nil` |
 | `0x020000000000000F` | `handlePlayerPropertiesRequestWithCompletion:` | local Code 3 |
 | `0x0200000000000007` | `enqueuePlaybackQueueRequest:completion:` | local Code 3; daemon `handlePlaybackQueueRequest` Code 3 with `entitlements=0` |
-| `0x0200000000000018` | `mr-route-probe` default endpoint setup | route probe side path before local endpoint identity prints |
+| `0x0200000000000018` | `mr-route-probe` `MRAVEndpointGetLocalEndpoint(NULL)` setup | route probe side path before class-only endpoint prints |
 
 ## Routes and Endpoints Domain `0x300`
 
@@ -176,7 +176,9 @@ Runtime route-probe correlation:
 
 | Message Type | Observed Runtime Context | Runtime Result |
 | --- | --- | --- |
-| `0x0300000000000004` | `mr-route-probe` default endpoint setup; unified log `volumeControlCapabilities` | request sent; no Code 3 observed |
+| `0x0300000000000004` | `mr-route-probe` `MRAVEndpointGetLocalEndpoint(NULL)` setup; unified log `volumeControlCapabilities` | request sent; no Code 3 observed |
+
+Endpoint getter isolation showed no extra message IDs beyond the class-only `MRAVEndpointGetLocalEndpoint(NULL)` baseline when separately enabling localized-name, UID, endpoint output-device copy, or shared output-context reads on this macOS 26.5.2 run.
 
 Mutating route/session examples:
 

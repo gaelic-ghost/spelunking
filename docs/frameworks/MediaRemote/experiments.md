@@ -227,18 +227,22 @@ Use the same interposed runner for narrower probes that isolate playback state, 
 
 ### Route and Output-Device Probe
 
-Status: baseline run complete
+Status: getter isolation complete
 
 Commands:
 
 ```sh
 swift run mr-route-probe
 tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe
+tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe --localized-name
+tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe --uid
+tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe --output-devices
+tools/mediaremote-xpc-trace-observe.zsh -- .build/arm64-apple-macosx/debug/mr-route-probe --contexts
 ```
 
 Observed behavior:
 
-Capture `research/MediaRemote/experiments/daemon-observation/20260716T092126Z` ran the default route probe with `MRXPCTraceInterpose` injected. The probe resolved the local endpoint as `MRAVLocalEndpoint` with UID `LOCAL`, skipped output-device copying, and skipped shared output-context queries.
+Capture `research/MediaRemote/experiments/daemon-observation/20260716T092557Z` ran the default route probe with `MRXPCTraceInterpose` injected. The probe resolved the local endpoint as `MRAVLocalEndpoint`, skipped localized-name and UID getters, skipped output-device copying, and skipped shared output-context queries.
 
 Observed XPC trace:
 
@@ -247,17 +251,24 @@ Observed XPC trace:
 - `0x0300000000000004`: picked route volume control capabilities
 - `0x0100000000000008`: system mute state by unified-log context, not yet mapped by static call-site extraction
 
+Getter isolation:
+
+- Capture `20260716T092614Z` with `--localized-name` returned an empty localized name and added no message IDs beyond the default run.
+- Capture `20260716T092620Z` with `--uid` returned UID `LOCAL` and added no message IDs beyond the default run.
+- Capture `20260716T092638Z` with `--output-devices` returned zero endpoint output devices and added no message IDs beyond the default run.
+- Capture `20260716T092644Z` with `--contexts` returned nil shared system audio/screen contexts and added no message IDs beyond the default run.
+
 Daemon/log evidence:
 
 `mediaremoted` added the probe as a client with `entitlements=0`, then invalidated and removed it after the process exited. The probe emitted route/volume read log entries but no Code 3 and no route-selection or output-device mutation.
 
 Permissions, entitlements, or SIP notes:
 
-This proves the default endpoint identity route probe is read-only in intent but daemon-visible in behavior. Keep output-device copying, output-context lookup, descriptions, route mutation, and volume mutation behind explicit flags.
+This proves endpoint creation is read-only in intent but daemon-visible in behavior. Keep endpoint detail getters, output-device copying, output-context lookup, descriptions, route mutation, and volume mutation behind explicit flags.
 
 Follow-up:
 
-Isolate which local endpoint getter triggers each volume/system-state request, then test `--output-devices` and `--contexts` separately when route/device state is needed.
+Map why `MRAVEndpointGetLocalEndpoint(NULL)` takes the now-playing player-path side path (`0x0200000000000018`), then compare the same endpoint behavior against the macOS 27 beta SDK.
 
 ## Mutating Experiments
 

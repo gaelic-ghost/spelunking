@@ -14,24 +14,27 @@ Default command:
 swift run mr-route-probe
 ```
 
-Observed result from capture `research/MediaRemote/experiments/daemon-observation/20260716T092126Z`:
+Observed result from capture `research/MediaRemote/experiments/daemon-observation/20260716T092557Z`:
 
 ```text
 MediaRemote read-only route/output-device probe
 Local endpoint endpoint: <MRAVLocalEndpoint>
-Local endpoint localizedName:
-Local endpoint uid: LOCAL
+Local endpoint localizedName: skipped; pass --localized-name to call MRAVEndpointGetLocalizedName
+Local endpoint uid: skipped; pass --uid to call MRAVEndpointGetUniqueIdentifier
 Local endpoint output devices: skipped; pass --output-devices to copy endpoint output devices
 Output context probe: skipped; pass --contexts to query shared output contexts
 ```
 
-The helper deliberately keeps output-device copying and shared output-context lookups behind explicit flags:
+The helper deliberately keeps endpoint identity getters, output-device copying, and shared output-context lookups behind explicit flags:
 
+- `--localized-name`: calls `MRAVEndpointGetLocalizedName`.
+- `--uid`: calls `MRAVEndpointGetUniqueIdentifier`.
+- `--endpoint-details`: calls both endpoint identity getters.
 - `--output-devices`: calls `MRAVEndpointCopyOutputDevices` and read-only getters for returned devices.
 - `--contexts`: calls shared output-context getters and `MRAVOutputContextCopyOutputDevices`.
 - `--describe`: prints Objective-C `description` for route objects, which can trigger additional lazy state reads.
 
-Important boundary: even the default endpoint-identity run is not purely local. With `MRXPCTraceInterpose` injected, the run observed these XPC message IDs before printing the local endpoint:
+Important boundary: even the class-only local endpoint run is not purely local. Capture `research/MediaRemote/experiments/daemon-observation/20260716T092557Z` skipped localized name, UID, output-device copying, shared contexts, and object descriptions, but still observed these XPC message IDs before printing the local endpoint:
 
 | Message Type | Known Meaning | Observed Log Context |
 | --- | --- | --- |
@@ -41,6 +44,18 @@ Important boundary: even the default endpoint-identity run is not purely local. 
 | `0x0100000000000008` | not mapped by static call-site extraction yet | `getSystemIsMuted` request by process log context |
 
 `mediaremoted` also added and removed the route probe as an `entitlements=0` client in the same capture window. No route-selection, output-device mutation, or volume mutation was requested by the helper.
+
+Getter isolation:
+
+| Capture | Flags | Probe Result | Added Message IDs |
+| --- | --- | --- | --- |
+| `20260716T092557Z` | none | endpoint class only | baseline set above |
+| `20260716T092614Z` | `--localized-name` | localized name returned empty string | none beyond baseline |
+| `20260716T092620Z` | `--uid` | UID returned `LOCAL` | none beyond baseline |
+| `20260716T092638Z` | `--output-devices` | `MRAVEndpointCopyOutputDevices` returned zero devices | none beyond baseline |
+| `20260716T092644Z` | `--contexts` | shared system audio and screen contexts returned nil | none beyond baseline |
+
+Interpretation: on this macOS 26.5.2 run, the first `MRAVEndpointGetLocalEndpoint(NULL)` call is enough to hydrate MediaRemote route/volume state. The endpoint localized-name, UID, output-device, and shared-context reads did not add distinct XPC message IDs in these captures.
 
 ## Endpoint Surface
 

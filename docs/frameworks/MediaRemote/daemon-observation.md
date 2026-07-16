@@ -105,12 +105,12 @@ Boundary: `MRXPCTraceInterpose` only observes local probe sends. It does not tra
 
 ### Route Probe
 
-Capture `research/MediaRemote/experiments/daemon-observation/20260716T092126Z` ran the default `mr-route-probe` with `MRXPCTraceInterpose` injected.
+Capture `research/MediaRemote/experiments/daemon-observation/20260716T092557Z` ran the default class-only `mr-route-probe` with `MRXPCTraceInterpose` injected.
 
 Observed probe result:
 
 - Local endpoint resolved as `MRAVLocalEndpoint`.
-- Local endpoint UID was `LOCAL`.
+- Localized-name and UID getters were skipped.
 - Output-device copying was skipped.
 - Shared output-context queries were skipped.
 
@@ -129,4 +129,13 @@ Observed daemon result:
 - No Code 3 denial was observed.
 - No route-selection, output-device mutation, or volume mutation was requested by the helper.
 
-Interpretation: local endpoint identity is a safe read-oriented probe, but not a zero-daemon-contact probe. MediaRemote lazily initializes route/volume state around this surface.
+Follow-up captures:
+
+| Capture | Flags | Result |
+| --- | --- | --- |
+| `20260716T092614Z` | `--localized-name` | returned an empty localized name and did not add message IDs beyond the default run |
+| `20260716T092620Z` | `--uid` | returned UID `LOCAL` and did not add message IDs beyond the default run |
+| `20260716T092638Z` | `--output-devices` | returned zero endpoint output devices and did not add message IDs beyond the default run |
+| `20260716T092644Z` | `--contexts` | returned nil shared system audio/screen contexts and did not add message IDs beyond the default run |
+
+Interpretation: local endpoint creation is a safe read-oriented probe, but not a zero-daemon-contact probe. MediaRemote lazily initializes route/volume state during `MRAVEndpointGetLocalEndpoint(NULL)` before the helper asks for localized name, UID, output devices, or shared contexts.

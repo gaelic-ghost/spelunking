@@ -13,6 +13,8 @@ typedef double (*MRDoubleWithObjectFunc)(id);
 typedef Boolean (*MRBoolWithObjectFunc)(id);
 
 static BOOL shouldPrintObjectDescriptions = NO;
+static BOOL shouldProbeEndpointLocalizedName = NO;
+static BOOL shouldProbeEndpointUniqueIdentifier = NO;
 static BOOL shouldProbeOutputContexts = NO;
 static BOOL shouldProbeOutputDevices = NO;
 
@@ -125,8 +127,18 @@ static void describeEndpoint(void *handle, id endpoint, NSString *label) {
     if (shouldPrintObjectDescriptions) {
         printf("%s endpoint description: %s\n", label.UTF8String, [[endpoint description] UTF8String]);
     }
-    printOptionalStringGetter(handle, "MRAVEndpointGetLocalizedName", endpoint, [label stringByAppendingString:@" localizedName"]);
-    printOptionalStringGetter(handle, "MRAVEndpointGetUniqueIdentifier", endpoint, [label stringByAppendingString:@" uid"]);
+
+    if (shouldProbeEndpointLocalizedName) {
+        printOptionalStringGetter(handle, "MRAVEndpointGetLocalizedName", endpoint, [label stringByAppendingString:@" localizedName"]);
+    } else {
+        printf("%s localizedName: skipped; pass --localized-name to call MRAVEndpointGetLocalizedName\n", label.UTF8String);
+    }
+
+    if (shouldProbeEndpointUniqueIdentifier) {
+        printOptionalStringGetter(handle, "MRAVEndpointGetUniqueIdentifier", endpoint, [label stringByAppendingString:@" uid"]);
+    } else {
+        printf("%s uid: skipped; pass --uid to call MRAVEndpointGetUniqueIdentifier\n", label.UTF8String);
+    }
 
     if (shouldProbeOutputDevices) {
         MRCopyArrayWithObjectFunc copyOutputDevices = (MRCopyArrayWithObjectFunc)dlsym(handle, "MRAVEndpointCopyOutputDevices");
@@ -176,6 +188,8 @@ int main(void) {
 
         NSArray<NSString *> *arguments = [[NSProcessInfo processInfo] arguments];
         shouldPrintObjectDescriptions = [arguments containsObject:@"--describe"];
+        shouldProbeEndpointLocalizedName = [arguments containsObject:@"--localized-name"] || [arguments containsObject:@"--endpoint-details"];
+        shouldProbeEndpointUniqueIdentifier = [arguments containsObject:@"--uid"] || [arguments containsObject:@"--endpoint-details"];
         shouldProbeOutputContexts = [arguments containsObject:@"--contexts"];
         shouldProbeOutputDevices = [arguments containsObject:@"--output-devices"];
 
