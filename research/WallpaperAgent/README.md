@@ -236,6 +236,96 @@ Observed static facts:
 runtime process-inspection tool, not a static extractor, so it was not used
 against `WallpaperAgent` in this pass.
 
+## Runtime Debug XPC Probe
+
+The first typed probe used local mirrored types in the `SpelunkingKit` module
+and modeled `WallpaperDebugAssetType` as a raw-string enum. It reached the
+debug service, but the receiver did not enter the reply path:
+
+```zsh
+.build/debug/spelunk wallpaper-agent debug-xpc-probe
+```
+
+Observed result:
+
+```text
+machService: com.apple.wallpaper.debug.service
+extensionIdentifier: com.apple.wallpaper.extension.aerials
+request: accessAllAssets(downloaded)
+succeeded: false
+error: Debug XPC replied, but the response could not be decoded as SPKWallpaperDebugResponse: Receiver didn't call reply(_) or handoffReply(_) before returning from the message handler for this sync IPC message
+```
+
+This matched the static receiver trace: decode failure returns before
+`handoffReply`.
+
+The working probe moved the mirrored debug wire types into a local SwiftPM
+target named `WallpaperTypes` and changed `WallpaperDebugAssetType` to a
+normal synthesized `Codable` enum, matching the exported symbols.
+
+```zsh
+swift build
+.build/debug/spelunk wallpaper-agent debug-xpc-probe
+```
+
+Observed result on the current boot:
+
+```text
+machService: com.apple.wallpaper.debug.service
+extensionIdentifier: com.apple.wallpaper.extension.aerials
+request: accessAllAssets(downloaded)
+succeeded: true
+decodedResponse: allAssets(count: 2)
+assets:
+  id=4C108785-A7BA-422E-9C79-B0129F1D5550 downloaded=true name=Tahoe Day
+  id=D8C8FC8B-9D11-4803-944F-DF284B35FE58 downloaded=true name=Mac Purple
+```
+
+Invalid extension probe:
+
+```zsh
+.build/debug/spelunk wallpaper-agent debug-xpc-probe \
+  --extension com.apple.wallpaper.extension.not-real
+```
+
+Observed result:
+
+```text
+succeeded: true
+decodedResponse: error(No valid extension)
+```
+
+Download-state probe for a known downloaded asset:
+
+```zsh
+.build/debug/spelunk wallpaper-agent debug-xpc-probe \
+  --extension com.apple.wallpaper.extension.aerials \
+  --request download-state \
+  --asset-id 4C108785-A7BA-422E-9C79-B0129F1D5550
+```
+
+Observed result:
+
+```text
+succeeded: true
+decodedResponse: downloadState(assetID: 4C108785-A7BA-422E-9C79-B0129F1D5550, progress: 1.0, isDownloaded: true)
+```
+
+SIP evidence from the same session:
+
+```zsh
+csrutil status
+```
+
+Observed result:
+
+```text
+System Integrity Protection status: disabled.
+```
+
+Therefore this proves the ordinary-user debug XPC wire shape and dispatch on
+the current boot, but it does not satisfy the SIP-enabled proof requirement.
+
 For focused receiver disassembly windows, use:
 
 ```zsh

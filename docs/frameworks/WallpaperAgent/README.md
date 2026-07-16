@@ -41,6 +41,8 @@ The `spelunk` executable now has a WallpaperAgent helper surface:
 swift run spelunk wallpaper-agent inventory
 swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper
 swift run spelunk wallpaper-agent xpc-ping-empty com.apple.wallpaper.debug.service
+swift run spelunk wallpaper-agent debug-xpc-probe
+swift run spelunk wallpaper-agent debug-xpc-probe --request download-state --asset-id <asset-id>
 swift run spelunk wallpaper-agent redraw-static-plan
 swift run spelunk wallpaper-agent signal-plan --signal TERM
 ```
@@ -61,6 +63,9 @@ Observed non-mutating results from this branch:
 | `inventory` | Found current-user `WallpaperAgent` and all four expected Mach services. |
 | `xpc-ping-empty com.apple.wallpaper` | Succeeded with an empty dictionary reply. |
 | `xpc-ping-empty com.apple.wallpaper.debug.service` | Failed with `Underlying connection interrupted`. |
+| `debug-xpc-probe` with `accessAllAssets(downloaded)` | Succeeded on the current boot and decoded two downloaded Aerial assets. Current boot has SIP disabled, so this is not SIP-enabled proof yet. |
+| `debug-xpc-probe --extension com.apple.wallpaper.extension.not-real` | Succeeded on the current boot and decoded `WallpaperDebugResponse.error("No valid extension")`, confirming the receiver dispatch/error path. Current boot has SIP disabled. |
+| `debug-xpc-probe --request download-state` | Succeeded on the current boot and decoded `WallpaperAssetDownloadState` for a known asset id. Current boot has SIP disabled. |
 | `redraw-static-plan` | Found the current static desktop image URL without reapplying it. |
 | `signal-plan --signal TERM` | Found the current `WallpaperAgent` pid and planned `SIGTERM` without executing it. |
 
@@ -82,6 +87,8 @@ Observed non-mutating results from this branch:
       `WallpaperDebugResponse`, and related payloads
 - [x] SwiftPM helper for safe inventory, empty XPC ping, static-redraw dry run,
       and same-user signal dry run
+- [x] SwiftPM local `WallpaperTypes` mirror and read-only debug XPC probe for
+      `accessAllAssets` and `downloadAssetState`
 - [x] Headless Ghidra string/data-reference pass for debug and redraw anchors
 - [x] Adjacent userland surface inventory for export daemon, Settings helper,
       diagnostic extension, WallpaperAgent plug-ins, ExtensionKit wallpaper
@@ -546,6 +553,18 @@ The initializer is exported as:
 init(extensionIdentifier: String, request: WallpaperDebugRequest)
 ```
 
+Runtime probing showed that a local mirror type in the `SpelunkingKit` module
+is not sufficient. The receiver returned XPC `_CodableError` with:
+
+```text
+Receiver didn't call reply(_) or handoffReply(_) before returning from the message handler for this sync IPC message
+```
+
+That matches the static decode-failure branch that returns before
+`handoffReply`. A local SwiftPM target named `WallpaperTypes`, with mirrored
+non-raw debug enums, produced messages that the receiver decoded successfully
+on the current SIP-disabled boot.
+
 The likely route is:
 
 1. A client connects to `com.apple.wallpaper.debug.service`.
@@ -582,6 +601,9 @@ Recovered `WallpaperDebugAssetType` cases:
 | `downloaded` | Include downloaded assets only. |
 
 The enum is `Codable`, `Hashable`, and `Equatable`.
+
+No `rawValue` symbols were recovered for `WallpaperDebugAssetType`; model it
+as a normal synthesized `Codable` enum, not a raw-string enum.
 
 ### Response Enum
 
@@ -735,6 +757,34 @@ Shared-cache strings name `AllowAllXPCSecurityPolicy`,
 exports `AgentXPCSecurityPolicy.checkAccess(message:for:)`. Current static
 evidence does not prove that any of those policies is attached to
 `WallpaperDebugServer`.
+
+### Runtime Probe Results
+
+The current SwiftPM probe sends read-only debug messages with a local module
+named `WallpaperTypes`:
+
+```zsh
+swift run spelunk wallpaper-agent debug-xpc-probe
+swift run spelunk wallpaper-agent debug-xpc-probe \
+  --extension com.apple.wallpaper.extension.not-real
+swift run spelunk wallpaper-agent debug-xpc-probe \
+  --request download-state \
+  --asset-id 4C108785-A7BA-422E-9C79-B0129F1D5550
+```
+
+Current observed results on macOS 26.5.2 build 25F84:
+
+| Probe | Decoded response |
+| --- | --- |
+| `accessAllAssets(downloaded)` against `com.apple.wallpaper.extension.aerials` | `allAssets(count: 2)`: `Tahoe Day`, `Mac Purple` |
+| `accessAllAssets(downloaded)` against `com.apple.wallpaper.extension.not-real` | `error(No valid extension)` |
+| `downloadAssetState(4C108785-A7BA-422E-9C79-B0129F1D5550)` against Aerials | `downloadState(... progress: 1.0, isDownloaded: true)` |
+
+These calls prove the ordinary-user wire shape and debug receiver dispatch on
+this boot. They do not prove SIP-enabled access because `csrutil status`
+reported `System Integrity Protection status: disabled.` during the probe.
+The exact same commands need to be rerun on a SIP-enabled boot before checking
+off the SIP-enabled access requirement.
 
 ### Extension Identifiers
 

@@ -43,6 +43,9 @@ struct SPKMain {
         case "xpc-ping-empty":
             let service = arguments.dropFirst().first ?? SPKWallpaperAgentInspector.normalMachService
             printXPCProbe(inspector.probeEmptyXPCMessage(machService: service))
+        case "debug-xpc-probe":
+            let request = try debugXPCProbeRequest(arguments: arguments)
+            printDebugXPCProbe(inspector.probeDebugXPCMessage(request))
         case "signal-plan":
             let signalName = optionValue("--signal", in: arguments) ?? "TERM"
             printSignalResult(try inspector.signalAgent(signalName: signalName, execute: false))
@@ -89,6 +92,7 @@ struct SPKMain {
               spelunk targets
               spelunk wallpaper-agent inventory
               spelunk wallpaper-agent xpc-ping-empty [mach-service]
+              spelunk wallpaper-agent debug-xpc-probe [--extension identifier] [--request access-downloaded|access-all|download-state] [--asset-id id]
               spelunk wallpaper-agent signal-plan [--signal TERM]
               spelunk wallpaper-agent signal --execute [--signal TERM]
               spelunk wallpaper-agent redraw-static-plan
@@ -103,6 +107,7 @@ struct SPKMain {
             WallpaperAgent commands:
               inventory
               xpc-ping-empty [mach-service]
+              debug-xpc-probe [--extension identifier] [--request access-downloaded|access-all|download-state] [--asset-id id]
               signal-plan [--signal TERM]
               signal --execute [--signal TERM]
               redraw-static-plan
@@ -155,6 +160,50 @@ struct SPKMain {
         }
     }
 
+    private static func printDebugXPCProbe(_ result: SPKWallpaperDebugXPCProbeResult) {
+        print("machService: \(result.machService)")
+        print("extensionIdentifier: \(result.extensionIdentifier)")
+        print("request: \(result.requestDescription)")
+        print("succeeded: \(result.succeeded)")
+        if let response = result.decodedResponse {
+            print("decodedResponse: \(response)")
+            if case .allAssets(let list) = response {
+                print("assets:")
+                for asset in list.assets {
+                    print("  id=\(asset.id) downloaded=\(asset.isDownloaded) name=\(asset.name)")
+                }
+            }
+        }
+        if let replyDescription = result.rawReplyDescription {
+            print("rawReply: \(replyDescription)")
+        }
+        if let errorDescription = result.errorDescription {
+            print("error: \(errorDescription)")
+        }
+    }
+
+    private static func debugXPCProbeRequest(arguments: [String]) throws -> SPKWallpaperDebugXPCProbeRequest {
+        let extensionIdentifier = optionValue("--extension", in: arguments) ?? "com.apple.wallpaper.extension.aerials"
+        let requestName = optionValue("--request", in: arguments) ?? "access-downloaded"
+
+        let request: SPKWallpaperDebugXPCProbeRequest.DebugRequest
+        switch requestName {
+        case "access-downloaded":
+            request = .accessDownloadedAssets
+        case "access-all":
+            request = .accessAllAssets
+        case "download-state":
+            guard let assetID = optionValue("--asset-id", in: arguments), !assetID.isEmpty else {
+                throw CLIError.invalidArgument("debug-xpc-probe --request download-state requires --asset-id.")
+            }
+            request = .downloadAssetState(assetID)
+        default:
+            throw CLIError.invalidArgument("Unsupported debug-xpc-probe request '\(requestName)'. Use access-downloaded, access-all, or download-state.")
+        }
+
+        return SPKWallpaperDebugXPCProbeRequest(extensionIdentifier: extensionIdentifier, request: request)
+    }
+
     private static func optionValue(_ option: String, in arguments: [String]) -> String? {
         guard let index = arguments.firstIndex(of: option) else {
             return nil
@@ -169,11 +218,12 @@ struct SPKMain {
 
 private enum CLIError: Error, CustomStringConvertible {
     case missingExecuteFlag(String)
+    case invalidArgument(String)
     case unsupportedPlatform(String)
 
     var description: String {
         switch self {
-        case .missingExecuteFlag(let message), .unsupportedPlatform(let message):
+        case .missingExecuteFlag(let message), .invalidArgument(let message), .unsupportedPlatform(let message):
             message
         }
     }
