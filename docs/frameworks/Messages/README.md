@@ -38,6 +38,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for IM private frameworks
 - [x] Read-only Objective-C runtime metadata capture for IMD persistence, daemon, and MessagesKit surfaces
+- [x] Bounded app-open log observation
 - [x] First-pass notification delivery classification from launchd and SDK symbol evidence
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
 - [ ] OS comparison against another macOS build
@@ -257,6 +258,8 @@ Observed selector/property examples:
 - `IMD*` classes line up with the `chat.db` schema and Spotlight/CloudKit lifecycle tables, supporting the persistence-agent model described above.
 
 Inference: Messages' local architecture has a visible split between user/app model classes (`IMAccount`, `IMChat`, `IMMessage`, attachments), daemon/persistence classes (`IMD*`), and explicit automation/testing hooks (`IMAutomation*`, `IMCoreAutomation*`). The runtime metadata confirms these names exist in the active OS runtime; it does not establish that third-party processes can call them safely or with sufficient entitlements.
+
+See `runtime.md` for app-open log observations covering `imagent`, `IMDPersistenceAgent`, mark-read database calls, App Intents focus filtering, Spotlight indexing, and the message-entry UI responder.
 
 ## SDK Symbol Notes
 

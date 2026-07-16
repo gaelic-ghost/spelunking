@@ -89,9 +89,12 @@ command -v otool || true
 ls -la /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMDPersistence.framework/Versions/A
 ls -la /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/IMDaemonCore.framework/Versions/A
 ls -la /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/MessagesKit.framework/Versions/A
+mkdir -p research/Messages/runtime
+/usr/bin/log stream --style compact --level default --timeout 8 --predicate '(process == "Messages") OR (subsystem CONTAINS[c] "Messages") OR (subsystem CONTAINS[c] "MobileSMS") OR (subsystem CONTAINS[c] "IMDPersistence") OR (eventMessage CONTAINS[c] "Messages") OR (eventMessage CONTAINS[c] "MobileSMS")'
+open -a Messages
 ```
 
-Privacy note: the SQLite commands captured table and column names only. No row data, message text, handles, attachment names, or counts were captured.
+Privacy note: the SQLite commands captured table and column names only. The log stream was bounded to app-open behavior. No row data, message text, handles, attachment names, or counts were intentionally captured.
 
 ## Next Raw Captures
 

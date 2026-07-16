@@ -85,6 +85,9 @@ command -v otool || true
 ls -la /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/CallsXPC.framework/Versions/A
 ls -la /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/CallsPersistence.framework/Versions/A
 ls -la /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk/System/Library/PrivateFrameworks/PhoneAppIntents.framework/Versions/A
+mkdir -p research/Phone/runtime
+/usr/bin/log stream --style compact --level default --timeout 8 --predicate '(process == "Phone") OR (subsystem CONTAINS[c] "Phone") OR (subsystem CONTAINS[c] "mobilephone") OR (subsystem CONTAINS[c] "CallHistory") OR (subsystem CONTAINS[c] "TelephonyUtilities") OR (eventMessage CONTAINS[c] "Phone") OR (eventMessage CONTAINS[c] "CallHistory") OR (eventMessage CONTAINS[c] "TelephonyUtilities")'
+open -a Phone
 ```
 
 Observed `sdef` result:
@@ -93,7 +96,7 @@ Observed `sdef` result:
 sdef: couldn't get sdef for /System/Applications/Phone.app (error -192)
 ```
 
-Privacy note: no call-history rows, phone numbers, contacts, voicemail metadata, or call content were captured.
+Privacy note: no call-history rows, phone numbers, contacts, voicemail metadata, or call content were intentionally captured. Continuity Capture device identifiers and names were redacted from the raw app-open log stream.
 
 ## Next Raw Captures
 

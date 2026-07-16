@@ -38,6 +38,7 @@ This is private, local-only reverse-engineering research. Do not treat private A
 - [x] Private `.tbd` notification and type-family inventory
 - [x] Read-only Objective-C runtime metadata capture for call-history, TelephonyUtilities, and CallKit surfaces
 - [x] Read-only Objective-C runtime metadata capture for CallsXPC, CallsPersistence, and PhoneAppIntents surfaces
+- [x] Bounded app-open log observation
 - [x] First-pass notification delivery classification from launchd and SDK symbol evidence
 - [ ] Generated Swift/Objective-C interfaces from dyld cache or SDK metadata
 - [ ] OS comparison against another macOS build
@@ -218,6 +219,8 @@ Observed selector/property examples:
 - `TU*` classes expose the call-services model layer around live calls, conversations, call providers, call history controllers, recording, translation, continuity, and collaboration.
 
 Inference: Phone's local architecture splits persisted recents (`CH*` and `CallDB*`) from live call/conversation services (`TU*`) and public integration (`CX*`). The runtime metadata supports the storage and service split; it does not prove third-party access to private call mutation or history APIs.
+
+See `runtime.md` for app-open log observations covering the FaceTime app controller, Calls recents controller, FaceTimeMac window, Spotlight indexing, and Continuity Capture touchpoints.
 
 ## SDK Symbol Notes
 

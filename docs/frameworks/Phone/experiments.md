@@ -18,6 +18,7 @@
 - [x] Capture read-only Objective-C runtime metadata for CallHistory, TelephonyUtilities, and CallKit with `spelunk objc-runtime`.
 - [x] First-pass classify notification delivery mechanisms from launchd and SDK symbol evidence.
 - [x] Generate first-pass class/protocol/selector inventory for `CallsXPC`, `CallsPersistence`, and `PhoneAppIntents`.
+- [x] Capture bounded default-level log stream while opening Phone.
 - [ ] Extract live dyld shared cache images for full call private framework metadata.
 - [ ] Observe notification delivery with controlled read-only observers or log predicates.
 - [ ] Attach read-only logging predicates while manually opening Phone.
