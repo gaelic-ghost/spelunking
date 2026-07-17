@@ -1,6 +1,6 @@
 # Spelunking
 
-Private Apple-platform framework and service research, durable evidence, and prototype Swift tooling.
+Public Apple-platform framework and service research, durable evidence, and prototype Swift tooling.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@ Private Apple-platform framework and service research, durable evidence, and pro
 
 ### Status
 
-Active private research repository; findings are environment-specific and not prepared for public distribution.
+Active public research repository. Findings are environment-specific, and experimental tools are not packaged as supported public products.
 
 ### What This Project Is
 
@@ -78,8 +78,8 @@ For research intake, local setup, validation, documentation boundaries, and revi
 
 ## Release Notes
 
-This private research workspace does not currently publish versioned releases. Notable planning changes are recorded in [`ROADMAP.md`](./ROADMAP.md), while research findings remain attached to their target writeups and Git history.
+This research workspace does not currently publish versioned releases. Notable planning changes are recorded in [`ROADMAP.md`](./ROADMAP.md), while research findings remain attached to their target writeups and Git history.
 
 ## License
 
-No open-source license is granted. This is a private research repository containing local observations of Apple-platform software and is not prepared for redistribution.
+A formal reuse license has not been selected yet. The repository is public because research knowledge should be available to learn from, verify, and extend; public visibility does not grant rights to redistribute Apple-owned code, private data, or third-party material captured during research.

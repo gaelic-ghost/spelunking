@@ -1,6 +1,6 @@
 # Contributing to Spelunking
 
-Use this guide to keep private Apple-platform research understandable, reproducible, and safe to revisit.
+Use this guide to keep public Apple-platform research understandable, reproducible, and safe to revisit.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@ Use this guide to keep private Apple-platform research understandable, reproduci
 
 ### Who This Guide Is For
 
-This guide serves invited collaborators and agents preparing documentation, evidence captures, Swift probes, or maintainer-tooling changes in this private repository.
+This guide serves contributors and agents preparing documentation, evidence captures, Swift probes, or maintainer-tooling changes in this public repository.
 
 ### Before You Start
 
@@ -97,4 +97,4 @@ Surface uncertain interpretation, risky mutation, public-facing implications, an
 
 ## License and Contribution Terms
 
-This private repository does not grant an open-source license. Contribution does not imply permission to publish or redistribute Apple code, generated interfaces, private API material, captured user data, or repository contents.
+A formal reuse license has not been selected yet. Contributions should advance the public research record without adding Apple-owned code, personal data, secrets, or third-party material that the repository cannot lawfully redistribute.

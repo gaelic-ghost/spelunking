@@ -17,7 +17,7 @@ This roadmap tracks durable research milestones without turning raw investigatio
 
 ## Vision
 
-Build a trustworthy private knowledge base and set of local tools for understanding Apple-platform frameworks and services from source evidence through safe runtime experiments.
+Build a trustworthy public knowledge base and set of local tools for understanding Apple-platform frameworks and services from source evidence through safe runtime experiments.
 
 ## Product Principles
 
@@ -25,7 +25,7 @@ Build a trustworthy private knowledge base and set of local tools for understand
 - Keep raw evidence separate from cleaned documentation.
 - Prefer read-only, repeatable experiments before mutation.
 - Record environment and permission boundaries with every claim they affect.
-- Keep public release and redistribution outside this private research lane unless explicitly reconsidered.
+- Keep research knowledge public while treating supported releases and redistribution of Apple-owned or third-party material as separate explicit decisions.
 
 ## Milestone Progress
 
@@ -42,12 +42,12 @@ Completed
 
 ### Scope
 
-- [x] Establish a SwiftPM-ready private research repository with durable documentation, evidence directories, agent guidance, and local maintenance entrypoints.
+- [x] Establish a SwiftPM-ready public research repository with durable documentation, evidence directories, agent guidance, and local maintenance entrypoints.
 
 ### Tickets
 
 - [x] Create a SwiftPM-ready research repository.
-- [x] Add local agent guidance for Apple docs, private research evidence, and Swift tooling.
+- [x] Add local agent guidance for Apple docs, private-framework research evidence, and Swift tooling.
 - [x] Establish durable documentation and raw research directories.
 - [x] Seed the first target outline for `MediaRemote.framework`.
 - [x] Install repo-owned validation, shared-sync, and release-maintenance entrypoints.
@@ -133,7 +133,7 @@ In Progress
 
 - [x] Add a Markdown link sanity check to repo-maintenance validation.
 - [ ] Normalize the existing Swift sources against the checked-in SwiftFormat profile; the initial lint audit found formatting drift while SwiftLint remained clean.
-- [ ] Decide whether the private repository should adopt an explicit proprietary license file.
+- [ ] Select and document an explicit reuse license for the repository's original code and research documentation.
 
 ## Backlog Candidates
 

@@ -6,7 +6,7 @@ Use this file for durable repo-local guidance before changing research, document
 
 ### What This File Covers
 
-This is Gale's private Apple-platform spelunking repository for SIP-disabled, local-only research, educational notes, and prototype Swift tooling. Keep public-release, App Store, marketplace, customer-facing, and redistributed use out of scope unless Gale explicitly opens that path.
+This is Gale's public Apple-platform spelunking repository for SIP-disabled, local-only experiments, educational notes, and prototype Swift tooling. Cleaned research knowledge is intentionally public; supported product releases, App Store or marketplace distribution, customer-facing deployment, and redistribution of Apple-owned or third-party material remain out of scope unless Gale explicitly opens that path.
 
 ### Where To Look First
 
@@ -23,7 +23,7 @@ This is Gale's private Apple-platform spelunking repository for SIP-disabled, lo
 - Keep raw captures, generated headers, command transcripts, and experimental notes in the target's named directory under `research/`.
 - Promote cleaned, stable documentation into the matching named directory under `docs/frameworks/`.
 - Preserve existing document structure and checklists unless the requested work includes a documentation normalization pass.
-- Surface any move toward public distribution or a materially broader research target before implementing it.
+- Surface any move from public research documentation into supported tool distribution or a materially broader research target before implementing it.
 
 ### Source of Truth
 
@@ -66,7 +66,7 @@ scripts/repo-maintenance/sync-shared.sh
 scripts/repo-maintenance/release.sh --help
 ```
 
-Use `sync-shared.sh` only for explicit repo-owned shared-sync steps. Use `release.sh` only when Gale explicitly requests release or publish choreography; this private research repo does not currently publish versioned releases.
+Use `sync-shared.sh` only for explicit repo-owned shared-sync steps. Use `release.sh` only when Gale explicitly requests release or publish choreography; this research repo does not currently publish versioned releases.
 
 ## Review and Delivery
 
@@ -94,7 +94,7 @@ Work is complete when the requested slice is coherent, raw evidence is stored un
 ### Ask Before
 
 - Mutating media state, playback state, routes, account state, system services, or user data.
-- Linking private frameworks into a new distributable surface or changing the repository's private/public boundary.
+- Linking private frameworks into a new distributable surface or changing the boundary between public knowledge and redistributable artifacts.
 - Adding a new queue, subsystem, storage model, dependency, or ownership boundary.
 - Starting release, tag, merge, or publication choreography.
 

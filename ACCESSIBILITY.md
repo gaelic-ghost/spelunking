@@ -112,7 +112,7 @@ Maintainers changing a project-owned user-facing surface are responsible for upd
 
 ### Feedback Path
 
-Use a private GitHub issue in this repository and identify the command, document, OS version, assistive technology when relevant, expected behavior, and observed barrier.
+Use a GitHub issue in this repository and identify the command, document, OS version, assistive technology when relevant, expected behavior, and observed barrier. Do not include personal notifications, messages, account data, or sensitive raw captures in a public issue.
 
 ### Triage Expectations
 
