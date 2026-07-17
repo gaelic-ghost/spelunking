@@ -86,6 +86,7 @@ Work is complete when the requested slice is coherent, raw evidence is stored un
 ### Never Do
 
 - Do not commit secrets, private tokens, personal account data, unrelated machine-local state, or ignored bulk captures.
+- Redact home-directory usernames, email addresses, phone numbers, device names, personal signing identities, certificate hashes, and developer-team identifiers from captures and documentation before committing them.
 - Do not imply a private API is safe for public distribution, App Store submission, or a public package without a separate explicit analysis.
 - Do not perform mutating framework experiments before a read-only boundary is understood and documented.
 - Do not run GUI validation, simulators, visible apps, or disruptive local service checks without approval.

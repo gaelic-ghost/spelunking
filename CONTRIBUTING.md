@@ -33,10 +33,10 @@ Choose one framework, service, daemon, or tightly related category. Define the e
 1. Record the host OS and relevant SDK or Xcode version.
 2. Store repeatable commands, raw captures, and generated interfaces under the target's named directory in `research/`.
 3. Put reusable Swift code under `Sources/` with Swift Testing coverage under `Tests/` where practical.
-4. Promote only cleaned, stable conclusions into `docs/frameworks/<Target>/`.
+4. Promote only cleaned, stable conclusions into the target's matching named directory under `docs/frameworks/`.
 5. Label inference explicitly and link conclusions to the evidence that supports them.
 
-Do not commit ignored bulk captures, personal account data, secrets, or unrelated machine state.
+Do not commit ignored bulk captures, personal account data, secrets, or unrelated machine state. Before committing a capture, redact home-directory usernames, email addresses, phone numbers, device names, personal signing identities, certificate hashes, and developer-team identifiers while preserving the technical result.
 
 ### Asking For Review
 
