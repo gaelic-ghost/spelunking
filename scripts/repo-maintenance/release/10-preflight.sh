@@ -15,13 +15,7 @@ case "${REPO_MAINTENANCE_RELEASE_MODE:-}" in
     ;;
 esac
 
-case "${RELEASE_TAG:-}" in
-  v[0-9]*.[0-9]*.[0-9]*|v[0-9]*.[0-9]*.[0-9]*-*)
-    ;;
-  *)
-    die "Release tag must use vX.Y.Z SemVer syntax."
-    ;;
-esac
+is_valid_semver_tag "${RELEASE_TAG:-}" || die "Release tag must use strict vX.Y.Z SemVer syntax, with optional prerelease and build metadata identifiers."
 
 branch_name="$(git -C "$REPO_ROOT" symbolic-ref --quiet --short HEAD || true)"
 [ -n "$branch_name" ] || die "Release workflow requires a named branch instead of detached HEAD."

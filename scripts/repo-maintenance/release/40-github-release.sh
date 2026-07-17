@@ -11,8 +11,7 @@ if [ "${REPO_MAINTENANCE_SKIP_GH_RELEASE:-false}" = "true" ]; then
 fi
 
 if ! command -v gh >/dev/null 2>&1; then
-  warn "gh is unavailable, so the release tag was pushed without creating a GitHub release object."
-  exit 0
+  die "GitHub release creation requires the GitHub CLI gh. Install gh or rerun with --skip-gh-release only when intentionally publishing the tag without a GitHub release object."
 fi
 
 if [ "${REPO_MAINTENANCE_DRY_RUN:-false}" = "true" ]; then

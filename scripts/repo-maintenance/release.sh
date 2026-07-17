@@ -14,7 +14,6 @@ skip_validate="false"
 skip_gh_release="false"
 skip_version_bump="false"
 base_branch="${REPO_MAINTENANCE_RELEASE_BRANCH:-main}"
-review_comments_addressed="false"
 skip_branch_cleanup="false"
 dry_run="false"
 remote_ci_mode="${REPO_MAINTENANCE_REMOTE_CI_MODE:-full}"
@@ -45,10 +44,6 @@ while [ "$#" -gt 0 ]; do
       base_branch="${2:-}"
       shift 2
       ;;
-    --review-comments-addressed)
-      review_comments_addressed="true"
-      shift
-      ;;
     --remote-ci-mode)
       remote_ci_mode="${2:-}"
       shift 2
@@ -64,7 +59,7 @@ while [ "$#" -gt 0 ]; do
     -h|--help)
       cat <<'USAGE'
 Usage:
-  release.sh --mode standard --version <vX.Y.Z> [--base-branch main] [--skip-validate] [--skip-version-bump] [--skip-gh-release] [--review-comments-addressed] [--remote-ci-mode full|defer] [--skip-branch-cleanup] [--dry-run]
+  release.sh --mode standard --version <vX.Y.Z> [--base-branch main] [--skip-validate] [--skip-version-bump] [--skip-gh-release] [--remote-ci-mode full|defer] [--skip-branch-cleanup] [--dry-run]
   release.sh --mode submodule --version <vX.Y.Z> [--skip-validate] [--skip-gh-release] [--dry-run]
 USAGE
       exit 0
@@ -93,13 +88,7 @@ ensure_gh_cli() {
 }
 
 ensure_semver_tag() {
-  case "$RELEASE_TAG" in
-    v[0-9]*.[0-9]*.[0-9]*|v[0-9]*.[0-9]*.[0-9]*-*)
-      ;;
-    *)
-      die "Release tag must use vX.Y.Z SemVer syntax."
-      ;;
-  esac
+  is_valid_semver_tag "$RELEASE_TAG" || die "Release tag must use strict vX.Y.Z SemVer syntax, with optional prerelease and build metadata identifiers."
 }
 
 ensure_remote_ci_mode() {
@@ -222,7 +211,7 @@ create_or_update_pr() {
 
 ## Review Loop
 
-Before merge and tagging, \`scripts/repo-maintenance/release.sh\` watches CI and stops on review comments unless the maintainer has already addressed or resolved them and reruns with \`--review-comments-addressed\`.
+Before merge and tagging, \`scripts/repo-maintenance/release.sh\` watches CI and stops until requested changes and unresolved review threads are cleared.
 EOF
 
   pr_number="$(gh pr list --head "$branch_name" --base "$base_branch" --json number --jq '.[0].number // empty' --limit 1)"
@@ -280,6 +269,12 @@ defer_remote_ci_if_requested() {
 
 wait_for_initial_pr_checks() {
   pr_number="$1"
+
+  if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
+    log "Would wait for GitHub to report initial checks on PR #$pr_number."
+    return 0
+  fi
+
   timeout_seconds="$(github_wait_timeout "${REPO_MAINTENANCE_INITIAL_CHECK_TIMEOUT_SECONDS:-}")"
   poll_seconds="$(github_wait_poll_seconds "${REPO_MAINTENANCE_INITIAL_CHECK_POLL_SECONDS:-}")"
   elapsed_seconds="0"
@@ -308,6 +303,38 @@ wait_for_initial_pr_checks() {
     sleep "$poll_seconds"
     elapsed_seconds=$((elapsed_seconds + poll_seconds))
   done
+}
+
+unresolved_review_thread_count() {
+  pr_number="$1"
+  repo_name_with_owner="$(gh repo view --json nameWithOwner --jq '.nameWithOwner')"
+  repo_owner="${repo_name_with_owner%/*}"
+  repo_name="${repo_name_with_owner#*/}"
+
+  unresolved_count="$(gh api graphql \
+    -f owner="$repo_owner" \
+    -f name="$repo_name" \
+    -F number="$pr_number" \
+    -f query='query($owner: String!, $name: String!, $number: Int!) {
+      repository(owner: $owner, name: $name) {
+        pullRequest(number: $number) {
+          reviewThreads(first: 100) {
+            pageInfo { hasNextPage }
+            nodes { isResolved }
+          }
+        }
+      }
+    }' \
+    --jq 'if .data.repository.pullRequest.reviewThreads.pageInfo.hasNextPage then "MORE_THAN_100" else ([.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false)] | length | tostring) end')"
+
+  [ "$unresolved_count" != "MORE_THAN_100" ] || die "PR #$pr_number has more than 100 review threads. Inspect and resolve the full review thread set manually before rerunning release.sh."
+  case "$unresolved_count" in
+    ''|*[!0-9]*)
+      die "GitHub returned an unreadable unresolved review-thread count for PR #$pr_number: $unresolved_count. Confirm gh can read pull-request review threads before rerunning release.sh."
+      ;;
+  esac
+
+  printf '%s\n' "$unresolved_count"
 }
 
 wait_for_pr_review_state() {
@@ -350,16 +377,16 @@ check_pr_comments() {
   wait_for_pr_review_state "$pr_number"
 
   review_decision="$(gh pr view "$pr_number" --json reviewDecision --jq '.reviewDecision // ""')"
-  comment_count="$(gh pr view "$pr_number" --json comments,reviews --jq '([.comments[]?, (.reviews[]? | select(.state == "COMMENTED"))] | length)')"
+  unresolved_thread_count="$(unresolved_review_thread_count "$pr_number")"
 
   if [ "$review_decision" = "CHANGES_REQUESTED" ]; then
     gh pr view "$pr_number" --comments
     die "PR #$pr_number has requested changes. Address valid concerns in code, or add out-of-scope concerns to ROADMAP.md, resolve the threads, push, and rerun release.sh."
   fi
 
-  if [ "$comment_count" != "0" ] && [ "$review_comments_addressed" != "true" ]; then
+  if [ "$unresolved_thread_count" != "0" ]; then
     gh pr view "$pr_number" --comments
-    die "PR #$pr_number has review or discussion comments. Address and resolve valid concerns, add out-of-scope concerns to ROADMAP.md, then rerun release.sh with --review-comments-addressed once the comment pass is intentionally complete."
+    die "PR #$pr_number has $unresolved_thread_count unresolved review thread(s). Address valid concerns, add intentionally deferred work to ROADMAP.md, resolve the threads, and rerun release.sh."
   fi
 
   log "PR #$pr_number has no blocking review state."
@@ -427,21 +454,13 @@ cleanup_merged_branches() {
   fi
 
   if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
-    log "Would prune origin and delete local branches already merged into $base_branch, including $release_branch_name when safe."
+    log "Would prune origin and delete the merged local release branch $release_branch_name when safe."
     return 0
   fi
 
   git -C "$REPO_ROOT" remote prune origin
-  for merged_branch in $(git -C "$REPO_ROOT" for-each-ref --format='%(refname:short)' --merged "$base_branch" refs/heads); do
-    case "$merged_branch" in
-      "$base_branch")
-        ;;
-      *)
-        git -C "$REPO_ROOT" branch -d "$merged_branch" >/dev/null 2>&1 || warn "Could not delete local merged branch $merged_branch; it may be checked out in another worktree."
-        ;;
-    esac
-  done
-  log "Cleaned up local branches already merged into $base_branch where safe."
+  git -C "$REPO_ROOT" branch -d "$release_branch_name" >/dev/null 2>&1 || warn "Could not delete merged local release branch $release_branch_name; it may be checked out in another worktree."
+  log "Cleaned up merged local release branch $release_branch_name where safe."
 }
 
 run_standard_release() {

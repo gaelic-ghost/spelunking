@@ -40,7 +40,10 @@ for markdown_path in sorted(repo_root.rglob("*.md")):
             if not path_text:
                 continue
 
-            target = (markdown_path.parent / path_text).resolve()
+            if path_text.startswith("/"):
+                target = (repo_root / path_text.lstrip("/")).resolve()
+            else:
+                target = (markdown_path.parent / path_text).resolve()
             if not target.exists():
                 missing.append(
                     f"{markdown_path.relative_to(repo_root)}:{line_number}: "

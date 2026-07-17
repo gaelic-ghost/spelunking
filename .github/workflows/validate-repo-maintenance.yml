@@ -16,6 +16,8 @@ jobs:
     steps:
       # This is a validated floor, not a ceiling; update to newer stable official versions when validated.
       - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
       - name: Report selected Xcode
         run: xcode-select --print-path
       - name: Report Swift toolchain

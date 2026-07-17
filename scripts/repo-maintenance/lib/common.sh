@@ -55,16 +55,17 @@ positive_integer_or_default() {
   esac
 }
 
+is_valid_semver_tag() {
+  tag_name="$1"
+  prerelease_identifier='(0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)'
+  printf '%s\n' "$tag_name" | grep -Eq "^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-${prerelease_identifier}(\.${prerelease_identifier})*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$"
+}
+
 is_semver_prerelease_tag() {
   tag_name="$1"
-  case "$tag_name" in
-    v[0-9]*.[0-9]*.[0-9]*-*)
-      return 0
-      ;;
-    *)
-      return 1
-      ;;
-  esac
+  is_valid_semver_tag "$tag_name" || return 1
+  tag_without_build_metadata="${tag_name%%+*}"
+  [ "${tag_without_build_metadata#*-}" != "$tag_without_build_metadata" ]
 }
 
 expected_github_prerelease_value() {

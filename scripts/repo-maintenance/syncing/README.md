@@ -12,7 +12,7 @@ It exists so a repository can keep local sync follow-up steps in one predictable
 
 ## Setup
 
-Add repo-specific executable `.sh` files here only when the repository needs deterministic shared-sync follow-up steps.
+Add repo-specific `.sh` files here only when the repository needs deterministic shared-sync follow-up steps. The dispatcher invokes each hook through `sh`, so executable permission is not required.
 
 ## Usage
 
