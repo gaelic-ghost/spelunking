@@ -15,7 +15,7 @@ The goal is to document types, functions, signatures, hooks, notifications, call
 | --- | --- |
 | Active OS | macOS 26.5.2, build 25F84 |
 | SDK comparison | Xcode 26.6 MacOSX26.5 SDK and Xcode 27.0 beta SDK |
-| Primary machine | GMBP16 |
+| Primary machine | Apple silicon MacBook Pro |
 | Swift toolchain at repo bootstrap | Apple Swift 6.3.3 |
 
 The first evidence capture is recorded in `../../../research/MediaRemote/baseline-2026-07-15.md`.

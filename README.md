@@ -1,90 +1,85 @@
 # Spelunking
 
-Private Apple platform research for local, user-consented accessibility and SIP-disabled "peer behind the curtain" exploration.
+Public Apple-platform framework and service research, durable evidence, and prototype Swift tooling.
 
-This repository is for focused investigations into macOS, iOS, and Apple-platform frameworks, services, daemons, private APIs, headers, symbols, and runtime behavior. Each pass should study one framework, service, subsystem, or tightly related category at a time, then leave behind documentation that is useful for future tools and projects.
+## Table of Contents
 
-The first research target is `MediaRemote.framework` on macOS 26.5 and the installed macOS 27 beta SDK, with related now-playing, media-control, route, and userland access surfaces in scope.
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+- [Usage](#usage)
+- [Development](#development)
+- [Repo Structure](#repo-structure)
+- [Release Notes](#release-notes)
+- [License](#license)
 
-## Repo Layout
+## Overview
 
-- `docs/`: durable writeups meant to be read later.
-- `docs/frameworks/<Name>/`: polished notes for one framework, service, or subsystem.
-- `research/<Name>/`: raw evidence, command notes, symbol dumps, generated headers, experiments, and local-only working material for one research target.
-- `Sources/`: Swift package sources for reusable research helpers and command-line tools.
-- `Tests/`: Swift package tests for reusable helpers.
-- `tools/`: standalone scripts and helper notes that are not SwiftPM targets yet.
+### Status
 
-## Current Tools
+Active public research repository. Findings are environment-specific, and experimental tools are not packaged as supported public products.
 
-- `spelunk`: prints the current seeded research target paths.
-- `mr-now-playing-probe`: read-only dynamic `MediaRemote.framework` probe for global now-playing info, app PID/is-playing/client state, client/player lists, and short notification observation windows.
-- `mr-internal-probe`: Objective-C helper for internal `MediaRemote.framework` wrapper experiments that need direct Objective-C runtime calls.
-- `mr-interface-probe`: Objective-C runtime interface describer for targeted `MediaRemote.framework` classes, methods, properties, ivars, and protocols.
-- `mr-route-probe`: read-oriented endpoint and output-device probe for route boundary experiments.
-- `MRXPCTraceInterpose`: private dynamic interposer for tracing MediaRemote XPC dictionary sends from local probe processes.
-- `now-playing-fixture`: metadata-only fixture for testing whether `MPNowPlayingInfoCenter` publication appears through MediaRemote.
-- `tools/mediaremote-inventory.zsh`: repeatable local capture script for dyld-cache exports, imports, strings, ObjC names, SDK diffs, support binaries, resources, and entitlements.
-- `tools/mediaremote-entitlement-experiment.zsh`: repeatable local runner that builds `mr-internal-probe`, signs copied variants with candidate private entitlements, and captures runtime differences.
-- `tools/mediaremote-daemon-observe.zsh`: repeatable local runner that executes a probe and captures focused `mediaremoted`/unified-log evidence for the same time window.
-- `tools/mediaremote-interface-capture.zsh`: repeatable local runner that captures selected Objective-C runtime interfaces from the loaded framework into ignored research output.
-- `tools/mediaremote-message-surfaces.zsh`: repeatable extractor for XPC keys, message logs, request handlers, protobuf/message symbols, and transport helpers from an inventory capture.
-- `tools/mediaremote-message-id-callsites.zsh`: repeatable disassembly parser for immediate MediaRemote XPC message type call sites.
-- `tools/mediaremote-xpc-trace-observe.zsh`: repeatable DYLD interposer runner that pairs XPC message-ID traces with focused daemon logs.
+### What This Project Is
 
-## Research Shape
+This repository is for focused investigations into macOS, iOS, and Apple-platform frameworks, services, daemons, private APIs, headers, symbols, and runtime behavior. Each pass studies one framework, service, subsystem, or tightly related category at a time.
 
-Every target should answer the same core questions:
+### Motivation
 
-- What public, private, and runtime-discovered entry points exist?
-- Which types, functions, notifications, constants, callbacks, and XPC or daemon edges look useful?
-- Which symbols are present in the active OS framework, and which appear in the installed beta SDK?
-- What can userland call directly, what needs entitlements or TCC, and what only works under SIP-disabled/private-lane conditions?
-- Which observations were verified locally, and which are still inferred from headers, symbols, strings, or behavior?
+Research should leave behind evidence and documentation that can support future local tools and projects. Raw captures remain separate from cleaned conclusions so later work can distinguish verified observations from inference.
 
-Keep raw captures in `research/<Name>/` and promote only cleaned, reusable knowledge into `docs/frameworks/<Name>/`.
+## Quick Start
 
-## Current Targets
+The package requires macOS 26 or later and Swift 6.2 or later. Build the research tools and run the non-mutating target index:
 
-`MediaRemote.framework` and related media-control surfaces:
+```sh
+swift build
+swift test
+swift run spelunk
+```
 
-- now-playing metadata and queues
-- playback state and command dispatch
-- origin, route, and destination discovery
-- app, daemon, XPC, notification, and private-framework boundaries
-- macOS 26.5 versus macOS 27 beta SDK differences
+Individual probes may require a particular macOS build, private frameworks, TCC permission, or SIP-disabled conditions. Read the relevant framework writeup before running one.
 
-See `docs/frameworks/MediaRemote/README.md` for the starting outline.
+## Usage
 
-`UserNotifications` and `NotificationCenter.app` accessibility research:
-
-- Notification Center's supported, app-scoped UserNotifications API boundary
-- read-only Accessibility inspection of the system Notification Center UI
-- observer capability evidence for the active macOS release
-- preview-privacy and TCC limitations
-
-Run the read-only probe with:
+The safest starting points are the read-only commands:
 
 ```sh
 swift run spelunk notifications --max-depth 6
-```
-
-It requests no interaction with the notification UI and performs no accessibility actions. The host process must already have Accessibility permission. See `docs/frameworks/UserNotifications/README.md` for the research boundary and `research/UserNotifications/README.md` for the evidence plan.
-
-Useful current commands:
-
-```sh
 swift run mr-now-playing-probe --all
-swift run mr-now-playing-probe --origins
-swift run mr-internal-probe
+swift run mr-now-playing-probe --observe 10 --application
 swift run mr-interface-probe
 swift run mr-route-probe
-swift run mr-now-playing-probe --observe 10 --application
-tools/mediaremote-inventory.zsh
-tools/mediaremote-entitlement-experiment.zsh
-tools/mediaremote-daemon-observe.zsh
-tools/mediaremote-interface-capture.zsh
-tools/mediaremote-message-surfaces.zsh
-tools/mediaremote-message-id-callsites.zsh
-tools/mediaremote-xpc-trace-observe.zsh
 ```
+
+The package also contains `mr-internal-probe`, `now-playing-fixture`, and the `MRXPCTraceInterpose` dynamic library for narrower experiments. Repeatable MediaRemote capture helpers live under [`tools/`](./tools/README.md).
+
+For each target, use:
+
+- Named target directories under [`docs/frameworks/`](./docs/README.md) for cleaned, durable findings.
+- Named target directories under `research/` for raw evidence, generated interfaces, command transcripts, and experiment notes.
+- `Sources/` and `Tests/` for reusable Swift helpers and probes.
+
+Every writeup should identify the active OS and SDK or Xcode version, distinguish verified behavior from inference, and document permissions, entitlements, sandbox, SIP, XPC, notification, or daemon boundaries that affect the result.
+
+## Development
+
+For research intake, local setup, validation, documentation boundaries, and review expectations, see [`CONTRIBUTING.md`](./CONTRIBUTING.md). Durable agent-facing rules live in [`AGENTS.md`](./AGENTS.md), and planned work lives in [`ROADMAP.md`](./ROADMAP.md).
+
+## Repo Structure
+
+```text
+.
+├── Sources/                 Swift libraries, executables, and probe targets
+├── Tests/                   Swift Testing coverage for reusable helpers
+├── docs/frameworks/         Cleaned framework and subsystem writeups
+├── research/                Raw captures and target-specific evidence
+├── scripts/repo-maintenance Local validation, sync, and release entrypoints
+└── tools/                   Standalone evidence-capture helpers
+```
+
+## Release Notes
+
+This research workspace does not currently publish versioned releases. Notable planning changes are recorded in [`ROADMAP.md`](./ROADMAP.md), while research findings remain attached to their target writeups and Git history.
+
+## License
+
+A formal reuse license has not been selected yet. The repository is public because research knowledge should be available to learn from, verify, and extend; public visibility does not grant rights to redistribute Apple-owned code, private data, or third-party material captured during research.

@@ -155,7 +155,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let getNowPlayingInfo = unsafeBitCast(symbol, to: MRMediaRemoteGetNowPlayingInfo.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.now-playing-probe")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.now-playing-probe")
         let semaphore = DispatchSemaphore(value: 0)
         let timeoutSeconds = 5
 
@@ -188,7 +188,7 @@ struct SPKMRNowPlayingProbe {
     }
 
     private static func primeNowPlayingNotifications(handle: UnsafeMutableRawPointer) throws {
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.now-playing-prime")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.now-playing-prime")
 
         if let symbol = dlsym(handle, "MRMediaRemoteRegisterForNowPlayingNotifications") {
             let register = unsafeBitCast(symbol, to: MRMediaRemoteRegisterForNowPlayingNotifications.self)
@@ -233,7 +233,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let function = unsafeBitCast(symbol, to: MRMediaRemoteGetNowPlayingClients.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.\(symbolName)")
         let semaphore = DispatchSemaphore(value: 0)
 
         print("MediaRemote read-only now-playing clients probe")
@@ -279,7 +279,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let function = unsafeBitCast(symbol, to: MRMediaRemoteGetNowPlayingPlayer.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.\(symbolName)")
         let semaphore = DispatchSemaphore(value: 0)
 
         print("MediaRemote read-only now-playing player probe")
@@ -318,7 +318,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let function = unsafeBitCast(symbol, to: MRMediaRemoteGetNowPlayingInfoForObject.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.\(symbolName)")
         let semaphore = DispatchSemaphore(value: 0)
         var result: NSDictionary?
 
@@ -410,7 +410,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let function = unsafeBitCast(symbol, to: MRMediaRemoteGetOrigin.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.\(symbolName)")
         let semaphore = DispatchSemaphore(value: 0)
 
         function(callbackQueue) { success, origin in
@@ -448,7 +448,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let function = unsafeBitCast(symbol, to: MRMediaRemoteGetOrigins.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.\(symbolName)")
         let semaphore = DispatchSemaphore(value: 0)
 
         function(callbackQueue) { origins in
@@ -618,7 +618,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let function = unsafeBitCast(symbol, to: MRMediaRemoteGetObjectsForOrigin.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.\(symbolName)")
         let semaphore = DispatchSemaphore(value: 0)
         var result: NSArray?
 
@@ -644,7 +644,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let function = unsafeBitCast(symbol, to: MRMediaRemoteGetObjectForOrigin.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.\(symbolName)")
         let semaphore = DispatchSemaphore(value: 0)
         var result: AnyObject?
 
@@ -708,7 +708,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let function = unsafeBitCast(symbol, to: MRMediaRemoteGetNowPlayingBool.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.\(symbolName)")
         let semaphore = DispatchSemaphore(value: 0)
 
         function(callbackQueue) { value in
@@ -731,7 +731,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let function = unsafeBitCast(symbol, to: MRMediaRemoteGetNowPlayingInt32.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.\(symbolName)")
         let semaphore = DispatchSemaphore(value: 0)
 
         function(callbackQueue) { value in
@@ -752,7 +752,7 @@ struct SPKMRNowPlayingProbe {
         }
 
         let function = unsafeBitCast(symbol, to: MRMediaRemoteGetNowPlayingClient.self)
-        let callbackQueue = DispatchQueue(label: "com.galewilliams.spelunking.mediaremote.\(symbolName)")
+        let callbackQueue = DispatchQueue(label: "org.gaelicghost.spelunking.mediaremote.\(symbolName)")
         let semaphore = DispatchSemaphore(value: 0)
 
         function(callbackQueue) { client in

@@ -425,7 +425,7 @@ int main(void) {
             return 1;
         }
 
-        dispatch_queue_t queue = dispatch_queue_create("com.galewilliams.spelunking.mediaremote.internal-probe", DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_t queue = dispatch_queue_create("org.gaelicghost.spelunking.mediaremote.internal-probe", DISPATCH_QUEUE_SERIAL);
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         __block id activeOrigin = nil;
 

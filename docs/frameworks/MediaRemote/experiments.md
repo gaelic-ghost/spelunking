@@ -73,15 +73,15 @@ Capture `research/MediaRemote/experiments/entitlements/20260716T083557Z`:
 
 - `--identity auto` resolved to a local Apple Development certificate hash.
 - `codesign` succeeded for the same four private-entitlement variants.
-- Signature details show `Authority=Apple Development: Gale Williams (AMRC3N39SQ)` and `TeamIdentifier=BC73766F69`.
+- Signature details confirmed a local Apple Development identity and team association; personal certificate and team identifiers are redacted.
 - Each candidate entitlement embedded successfully.
 - Each private-entitlement variant still exited with status 137 before probe output.
 - Unified log evidence reports taskgated `Unsatisfied entitlements: com.apple.mediaremote.now-playing-read-access`, restricted entitlement validation failure, and kernel `load code signature error 4`.
 
 Capture `research/MediaRemote/experiments/entitlements/20260716T083725Z`:
 
-- Explicit Developer ID signing with certificate hash `7C250E5B3750CAC924FD0960D224A7BA5E3E4399` succeeded for the same four private-entitlement variants.
-- Signature details show `Authority=Developer ID Application: Gale Williams (BC73766F69)` and `TeamIdentifier=BC73766F69`.
+- Explicit signing with a local Developer ID Application identity succeeded for the same four private-entitlement variants; the certificate hash is redacted.
+- Signature details confirmed a Developer ID Application chain and team association; personal certificate and team identifiers are redacted.
 - Each candidate entitlement embedded successfully.
 - Each private-entitlement variant still exited with status 137 before probe output.
 - Unified log evidence names all four unsatisfied entitlement keys and reports restricted entitlement validation failure plus kernel `load code signature error 4`.

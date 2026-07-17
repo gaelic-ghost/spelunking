@@ -151,15 +151,15 @@ Current Apple Development identity result from capture `20260716T083557Z`:
 
 - `--identity auto` resolved to a local Apple Development certificate hash.
 - `codesign` succeeded for all four private-entitlement variants.
-- Signature details show an Apple Development chain and team identifier `BC73766F69`.
+- Signature details show an Apple Development chain and team association; the personal team identifier is redacted.
 - Each requested private entitlement is embedded in the corresponding variant.
 - Every private-entitlement variant still exited with status 137 before running probe code.
 - Unified log evidence includes taskgated reporting `Unsatisfied entitlements: com.apple.mediaremote.now-playing-read-access`; AMFI still reports restricted-entitlement validation failure and kernel `load code signature error 4`.
 
 Current Developer ID identity result from capture `20260716T083725Z`:
 
-- Explicit Developer ID signing with certificate hash `7C250E5B3750CAC924FD0960D224A7BA5E3E4399` succeeded for all four private-entitlement variants.
-- Signature details show a Developer ID Application chain and team identifier `BC73766F69`.
+- Explicit signing with a local Developer ID Application identity succeeded for all four private-entitlement variants; the certificate hash is redacted.
+- Signature details show a Developer ID Application chain and team association; the personal team identifier is redacted.
 - Each requested private entitlement is embedded in the corresponding variant.
 - Every private-entitlement variant still exited with status 137 before running probe code.
 - Unified log evidence names all four unsatisfied entitlement keys: `com.apple.mediaremote.now-playing-read-access`, `com.apple.mediaremote.full-now-playing-read-access`, `com.apple.mediaremote.device-info`, and `com.apple.nowplaying.entitlement`.
