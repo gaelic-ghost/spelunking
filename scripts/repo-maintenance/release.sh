@@ -17,6 +17,7 @@ base_branch="${REPO_MAINTENANCE_RELEASE_BRANCH:-main}"
 skip_branch_cleanup="false"
 dry_run="false"
 remote_ci_mode="${REPO_MAINTENANCE_REMOTE_CI_MODE:-full}"
+resume_pr_number=""
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -48,6 +49,10 @@ while [ "$#" -gt 0 ]; do
       remote_ci_mode="${2:-}"
       shift 2
       ;;
+    --resume-pr)
+      resume_pr_number="${2:-}"
+      shift 2
+      ;;
     --skip-branch-cleanup)
       skip_branch_cleanup="true"
       shift
@@ -60,6 +65,7 @@ while [ "$#" -gt 0 ]; do
       cat <<'USAGE'
 Usage:
   release.sh --mode standard --version <vX.Y.Z> [--base-branch main] [--skip-validate] [--skip-version-bump] [--skip-gh-release] [--remote-ci-mode full|defer] [--skip-branch-cleanup] [--dry-run]
+  release.sh --mode standard --version <vX.Y.Z> --resume-pr <number> [--base-branch main] [--skip-validate] [--skip-gh-release] [--skip-branch-cleanup] [--dry-run]
   release.sh --mode submodule --version <vX.Y.Z> [--skip-validate] [--skip-gh-release] [--dry-run]
 USAGE
       exit 0
@@ -115,15 +121,15 @@ ensure_branch_release_context() {
 run_version_bump() {
   release_version="${RELEASE_TAG#v}"
   version_bump_script="$SELF_DIR/version-bump.sh"
-  head_subject="$(git -C "$REPO_ROOT" log -1 --format=%s 2>/dev/null || true)"
+  bump_subject="release: bump versions for $RELEASE_TAG"
 
   if [ "$skip_version_bump" = "true" ]; then
     log "Skipping repo version bump because --skip-version-bump was requested."
     return 0
   fi
 
-  if [ "$head_subject" = "release: bump versions for $RELEASE_TAG" ]; then
-    log "Version bump commit for $RELEASE_TAG is already at HEAD; continuing the release resume path."
+  if git -C "$REPO_ROOT" log --format=%s "$base_branch..HEAD" | grep -Fqx "$bump_subject"; then
+    log "Version bump commit for $RELEASE_TAG already exists on the release branch; continuing without running the bump hook again."
     return 0
   fi
 
@@ -146,23 +152,24 @@ run_version_bump() {
 }
 
 create_release_tag() {
-  head_sha="$(git -C "$REPO_ROOT" rev-parse HEAD)"
+  target_commit="${1:-HEAD}"
+  target_sha="$(git -C "$REPO_ROOT" rev-parse "$target_commit^{commit}")"
   tag_sha="$(git -C "$REPO_ROOT" rev-parse -q --verify "refs/tags/$RELEASE_TAG" 2>/dev/null || true)"
 
   if [ -n "$tag_sha" ]; then
     tag_commit_sha="$(git -C "$REPO_ROOT" rev-list -n 1 "$RELEASE_TAG")"
-    [ "$tag_commit_sha" = "$head_sha" ] || die "Tag $RELEASE_TAG already exists and does not point at HEAD."
-    log "Tag $RELEASE_TAG already points at HEAD."
+    [ "$tag_commit_sha" = "$target_sha" ] || die "Tag $RELEASE_TAG already exists and does not point at the intended release commit $target_sha."
+    log "Tag $RELEASE_TAG already points at intended release commit $target_sha."
     return 0
   fi
 
   if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
-    log "Would create annotated tag $RELEASE_TAG at HEAD."
+    log "Would create annotated tag $RELEASE_TAG at release commit $target_sha."
     return 0
   fi
 
-  git -C "$REPO_ROOT" tag -a "$RELEASE_TAG" -m "Release $RELEASE_TAG"
-  log "Created annotated tag $RELEASE_TAG."
+  git -C "$REPO_ROOT" tag -a "$RELEASE_TAG" "$target_sha" -m "Release $RELEASE_TAG"
+  log "Created annotated tag $RELEASE_TAG at release commit $target_sha."
 }
 
 push_release_branch() {
@@ -397,26 +404,27 @@ merge_pr() {
 
   if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
     log "Would merge PR #$pr_number into $base_branch with a merge commit and delete the remote branch."
+    MERGED_COMMIT_SHA="$(git -C "$REPO_ROOT" rev-parse HEAD)"
     return 0
   fi
 
   gh pr merge "$pr_number" --merge --delete-branch
+  MERGED_COMMIT_SHA="$(gh pr view "$pr_number" --json mergeCommit --jq '.mergeCommit.oid // empty')"
+  [ -n "$MERGED_COMMIT_SHA" ] || die "PR #$pr_number merged, but GitHub did not return its merge commit. Rerun with --resume-pr $pr_number after GitHub reports the merge commit."
   log "Merged PR #$pr_number into $base_branch."
 }
 
-fast_forward_base_branch() {
+fetch_merged_base_commit() {
+  merged_commit_sha="$1"
+
   if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
-    log "Would fast-forward local $base_branch from origin/$base_branch."
+    log "Would fetch origin/$base_branch and verify release commit $merged_commit_sha is reachable from it."
     return 0
   fi
 
   git -C "$REPO_ROOT" fetch origin "$base_branch"
-  if git -C "$REPO_ROOT" switch "$base_branch" 2>/dev/null || git -C "$REPO_ROOT" checkout "$base_branch" 2>/dev/null; then
-    git -C "$REPO_ROOT" pull --ff-only origin "$base_branch"
-    log "Fast-forwarded local $base_branch."
-  else
-    die "Could not check out local $base_branch, likely because another worktree owns it. Fast-forward $base_branch from origin/$base_branch in that checkout, then rerun release.sh so the release tag is created from the reviewed base branch."
-  fi
+  git -C "$REPO_ROOT" merge-base --is-ancestor "$merged_commit_sha" "origin/$base_branch" || die "Release commit $merged_commit_sha is not reachable from origin/$base_branch. Confirm PR merge state before tagging or rerun with the correct --resume-pr number."
+  log "Verified release commit $merged_commit_sha is reachable from origin/$base_branch."
 }
 
 create_github_release() {
@@ -463,11 +471,51 @@ cleanup_merged_branches() {
   log "Cleaned up merged local release branch $release_branch_name where safe."
 }
 
+resume_merged_release() {
+  case "$resume_pr_number" in
+    ''|*[!0-9]*)
+      die "--resume-pr requires a numeric merged pull-request number."
+      ;;
+  esac
+
+  ensure_clean_worktree
+  if [ "$skip_validate" != "true" ]; then
+    sh "$SELF_DIR/validate-all.sh"
+  fi
+
+  if [ "$REPO_MAINTENANCE_DRY_RUN" = "true" ]; then
+    merged_commit_sha="$(git -C "$REPO_ROOT" rev-parse HEAD)"
+    release_branch_name="$(current_branch)"
+    log "Would verify PR #$resume_pr_number is merged into $base_branch and read its exact merge commit."
+  else
+    pr_state="$(gh pr view "$resume_pr_number" --json state --jq '.state')"
+    pr_base_branch="$(gh pr view "$resume_pr_number" --json baseRefName --jq '.baseRefName')"
+    release_branch_name="$(gh pr view "$resume_pr_number" --json headRefName --jq '.headRefName')"
+    merged_commit_sha="$(gh pr view "$resume_pr_number" --json mergeCommit --jq '.mergeCommit.oid // empty')"
+    [ "$pr_state" = "MERGED" ] || die "PR #$resume_pr_number is $pr_state, not MERGED. Use the normal standard release path until the pull request has merged."
+    [ "$pr_base_branch" = "$base_branch" ] || die "PR #$resume_pr_number merged into $pr_base_branch, but this release expects base branch $base_branch. Pass the matching --base-branch value before resuming."
+    [ -n "$merged_commit_sha" ] || die "GitHub did not return the merge commit for merged PR #$resume_pr_number. Wait for GitHub to finish recording the merge, then rerun the resume command."
+  fi
+
+  fetch_merged_base_commit "$merged_commit_sha"
+  create_release_tag "$merged_commit_sha"
+  push_release_tag
+  create_github_release
+  cleanup_merged_branches "$release_branch_name"
+  log "Standard release resume completed successfully for $RELEASE_TAG from merged PR #$resume_pr_number."
+}
+
 run_standard_release() {
   ensure_git_repo
   ensure_gh_cli
   ensure_semver_tag
   ensure_remote_ci_mode
+
+  if [ -n "$resume_pr_number" ]; then
+    resume_merged_release
+    return 0
+  fi
+
   branch_name="$(ensure_branch_release_context)"
   ensure_clean_worktree
 
@@ -488,8 +536,8 @@ run_standard_release() {
   watch_ci "$pr_number"
   check_pr_comments "$pr_number"
   merge_pr "$pr_number"
-  fast_forward_base_branch
-  create_release_tag
+  fetch_merged_base_commit "$MERGED_COMMIT_SHA"
+  create_release_tag "$MERGED_COMMIT_SHA"
   push_release_tag
   create_github_release
   cleanup_merged_branches "$branch_name"
