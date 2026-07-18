@@ -87,6 +87,14 @@ scripts/repo-maintenance/validate-all.sh
 
 For documentation-only work, also inspect the changed Markdown structure and links. Do not run visible apps, simulators, GUI automation, or disruptive service checks without approval.
 
+Automated validation and runtime evidence prove different things:
+
+- Swift tests should cover deterministic parsing, target metadata, formatting, and reusable helper behavior.
+- Builds prove that the checked-in source compiles against the selected toolchain.
+- Runtime captures prove the observed private-framework, daemon, notification, Accessibility, permission, or entitlement behavior only for the recorded environment.
+
+Do not convert an environment-specific observation into a unit-test claim, and do not describe a passing build or test as proof that a private runtime surface is present, permitted, or stable across OS versions.
+
 ## Pull Request Expectations
 
 Summarize the target, evidence gathered, conclusions promoted, commands run, environment used, and any remaining inference or blocked runtime proof. Keep reviewable raw captures separate from generated or ignored bulk output.

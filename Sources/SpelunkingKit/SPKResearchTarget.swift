@@ -38,4 +38,11 @@ public extension SPKResearchTarget {
         documentationPath: "docs/frameworks/MediaRemote",
         researchPath: "research/MediaRemote"
     )
+
+    static let userNotifications = SPKResearchTarget(
+        name: "UserNotifications and Notification Center",
+        summary: "Read-only Notification Center accessibility, process, framework, and notification-delivery research.",
+        documentationPath: "docs/frameworks/UserNotifications",
+        researchPath: "research/UserNotifications"
+    )
 }

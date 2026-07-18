@@ -29,10 +29,15 @@ Build a trustworthy public knowledge base and set of local tools for understandi
 
 ## Milestone Progress
 
-- Milestone 0: Repository Foundation - Completed
-- Milestone 1: MediaRemote Baseline - In Progress
-- Milestone 2: Media Control Experiments - Planned
-- Milestone 3: Reusable Research Tooling - In Progress
+| Workstream | Status | Current Boundary |
+| --- | --- | --- |
+| Repository foundation | Completed | SwiftPM, documentation, evidence, validation, and maintenance structure established. |
+| MediaRemote | In Progress | Read-only baseline and runtime probes established; interface recovery and non-empty now-playing reproduction remain open. |
+| Messages | Baseline Established | Supported/private boundary, storage, runtime, notification, and XPC ownership maps captured; deeper interface and event proof remains open. |
+| Phone | Baseline Established | Supported/private boundary, storage, runtime, notification, and XPC ownership maps captured; deeper interface and event proof remains open. |
+| UserNotifications | Baseline Established | Read-only Notification Center Accessibility and runtime inventory established; broader state and OS comparisons remain open. |
+| Media control experiments | Planned | Mutating command and route experiments remain gated on explicit, bounded research slices. |
+| Reusable research tooling | In Progress | Target index, notification, Objective-C runtime, string-constant, and MediaRemote capture helpers exist; generalized capture and reporting remain open. |
 
 ## Milestone 0: Repository Foundation
 

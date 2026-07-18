@@ -31,6 +31,15 @@ struct SPKResearchTargetTests {
         #expect(target.researchPath == "research/MediaRemote")
     }
 
+    @Test("UserNotifications target points at the persisted documentation and research directories")
+    func userNotificationsPaths() {
+        let target = SPKResearchTarget.userNotifications
+
+        #expect(target.name == "UserNotifications and Notification Center")
+        #expect(target.documentationPath == "docs/frameworks/UserNotifications")
+        #expect(target.researchPath == "research/UserNotifications")
+    }
+
     @Test("Notification Center probe explains an absent Accessibility grant")
     func notificationProbeUntrustedResult() throws {
         let encoded = try JSONEncoder().encode(.accessibilityNotTrusted as SPKNotificationCenterAccessibilityProbeResult)
