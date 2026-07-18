@@ -30,7 +30,7 @@ struct SPKMain {
     }
 
     private static func printTargets() {
-        for target in [SPKResearchTarget.messages, .phone, .mediaRemote] {
+        for target in [SPKResearchTarget.messages, .phone, .mediaRemote, .userNotifications] {
             print(target.name)
             print(target.summary)
             print("Docs: \(target.documentationPath)")
